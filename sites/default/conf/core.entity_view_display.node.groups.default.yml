@@ -1,0 +1,39 @@
+uuid: 9651e189-e8e0-4226-828e-cc9638d6bc8f
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.groups.field_group_image
+    - field.field.node.groups.field_group_url
+    - node.type.groups
+  module:
+    - image
+    - link
+    - user
+id: node.groups.default
+targetEntityType: node
+bundle: groups
+mode: default
+content:
+  field_group_image:
+    weight: 102
+    label: above
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+    type: image
+  field_group_url:
+    weight: 103
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  links:
+    weight: 100
+hidden: {  }

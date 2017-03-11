@@ -1,0 +1,59 @@
+.error-403 {
+
+  .block-system-main-block {
+    font-size: 18px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 30px 10px 50px;
+
+    @include media($desk) {
+      padding: 80px 50px;
+    }
+
+    &:before {
+      content: "403";
+      color: $color-blue-e;
+      font-size: 120px;
+      line-height: 145px;
+      display: block;
+
+      @include media($desk) {
+        font-size: 180px;
+        display: inline-block;
+      }
+
+    }
+  }
+
+}
+
+.error-404 {
+
+  .block-system-main-block {
+    font-size: 18px;
+    line-height: 1.5;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 30px 10px 50px;
+
+    @include media($desk) {
+      padding: 80px 50px;
+    }
+
+    &:before {
+      content: "404";
+      color: $color-blue-e;
+      font-size: 120px;
+      line-height: 145px;
+      display: block;
+
+      @include media($desk) {
+        font-size: 180px;
+        display: inline-block;
+      }
+
+    }
+  }
+
+}

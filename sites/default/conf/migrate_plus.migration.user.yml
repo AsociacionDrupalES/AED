@@ -1,0 +1,44 @@
+uuid: 243a8991-630c-47d3-9821-3d8f6690bae0
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: jMSSzZq7790ydcZEocpKKF6SWfAu4p387oi8lcfQ0-E
+id: user
+migration_tags:
+  - 'Drupal 7'
+migration_group: aed
+label: 'User accounts'
+source:
+  plugin: d7_user
+process:
+  uid: uid
+  name: name
+  pass: pass
+  mail: mail
+  created: created
+  access: access
+  login: login
+  status: status
+  timezone: timezone
+  langcode: language
+  preferred_langcode: language
+  preferred_admin_langcode: language
+  init: init
+  roles:
+    plugin: migration
+    migration: upgrade_d7_user_role
+    source: roles
+  user_picture:
+    -
+      plugin: default_value
+      source: picture
+      default_value: null
+    -
+      plugin: migration
+      migration: upgrade_d7_file
+destination:
+  plugin: 'entity:user'
+migration_dependencies:
+  required:
+    - upgrade_d7_user_role

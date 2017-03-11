@@ -1,0 +1,35 @@
+uuid: 1b608898-d27c-42d7-84e6-69d3e6e4f33d
+langcode: en
+status: false
+dependencies:
+  module:
+    - ctools
+    - system
+  theme:
+    - aed_th
+_core:
+  default_config_hash: oXUb3JZR2WW5VOdw4HrhRicCsq51mCgLfRyvheG68ck
+id: aed_th_breadcrumbs
+theme: aed_th
+region: '-1'
+weight: -13
+provider: null
+plugin: system_breadcrumb_block
+settings:
+  id: system_breadcrumb_block
+  label: Breadcrumbs
+  provider: system
+  label_display: '0'
+visibility:
+  request_path:
+    id: request_path
+    pages: "/contact\r\n/contact/*\r\n/videos"
+    negate: true
+    context_mapping: {  }
+  'entity_bundle:node':
+    id: 'entity_bundle:node'
+    bundles:
+      videos: videos
+    negate: true
+    context_mapping:
+      node: '@node.node_route_context:node'

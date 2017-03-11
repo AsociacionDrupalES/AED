@@ -1,0 +1,37 @@
+uuid: bada6d73-6db2-49c8-9a79-c0cf25b5efe7
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: dJ0L2DNSj5q6XVZAGsuVDpJTh5UeYkIPwKrUOOpr8YI
+id: authenticated
+label: 'usuario autenticado'
+weight: 1
+is_admin: false
+permissions:
+  - 'access checkout'
+  - 'access comments'
+  - 'access content'
+  - 'access user profiles'
+  - 'flag video_visualizado'
+  - 'post comments'
+  - 'skip comment approval'
+  - 'unflag video_visualizado'
+  - 'use search_api_sorts'
+  - 'use text format filtered_html'
+  - 'view any partner_companies profile'
+  - 'view any socio profile'
+  - 'view company entities'
+  - 'view field_anos_que_ha_participado'
+  - 'view field_eslogan'
+  - 'view field_image'
+  - 'view field_logo_compacto'
+  - 'view field_name'
+  - 'view field_pagina_web'
+  - 'view field_partner_compact_logo'
+  - 'view field_partner_logo'
+  - 'view field_partner_web'
+  - 'view field_partner_year_sponsor'
+  - 'view field_web_page'
+  - 'view own commerce_order entities'
+  - 'view own socio profile'

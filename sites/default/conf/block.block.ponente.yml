@@ -1,0 +1,28 @@
+uuid: 54a06c3f-8cc6-4a99-ac77-763dbf6bca9a
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.ponente
+  module:
+    - facets
+    - system
+  theme:
+    - aed_th
+id: ponente
+theme: aed_th
+region: left
+weight: -8
+provider: null
+plugin: 'facet_block:ponente'
+settings:
+  id: 'facet_block:ponente'
+  label: Ponente
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /videos
+    negate: false
+    context_mapping: {  }

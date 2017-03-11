@@ -1,0 +1,20 @@
+uuid: 70d18e73-8237-4ec2-8316-7a49eed59062
+langcode: en
+status: true
+dependencies:
+  theme:
+    - aed_th
+_core:
+  default_config_hash: 13GQpeITIJsp1kyPniXtWZfyFH87vb1xxJCHifL4UeE
+id: aed_th_local_actions
+theme: aed_th
+region: content
+weight: -11
+provider: null
+plugin: local_actions_block
+settings:
+  id: local_actions_block
+  label: 'Primary admin actions'
+  provider: core
+  label_display: '0'
+visibility: {  }

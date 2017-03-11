@@ -1,0 +1,14 @@
+@mixin ul-li-reset() {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  img {
+    width: auto;
+  }
+
+}
+
+.ul-li-reset {
+  @include ul-li-reset();
+}

@@ -1,0 +1,20 @@
+uuid: 50ffc973-b8c5-4733-b3f8-df2f0ac3bb01
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_videos_nivel
+field_name: field_videos_nivel
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,0 +1,27 @@
+uuid: 54986e0e-7c7e-4b84-b509-ec063c7d3db1
+langcode: en
+status: false
+dependencies:
+  module:
+    - system
+    - user
+  theme:
+    - seven
+_core:
+  default_config_hash: IItlF4SKHgxduIysVQdvirDJ_v3HGuAviOkidAOJYRE
+id: seven_user_login
+theme: seven
+region: '-1'
+weight: -2
+provider: null
+plugin: user_login_block
+settings:
+  id: user_login_block
+  label: '<none>'
+  provider: user
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    negate: true
+    pages: "/cart\n/checkout/*"

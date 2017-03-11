@@ -1,0 +1,289 @@
+// @todo use a generic class.
+#block-aed-th-main-menu {
+  @include clearfix;
+  text-align: right;
+
+  * {
+    text-align: left;
+  }
+
+  .visible-menu-items {
+    @include ul-li-reset();
+    display: inline-block;
+
+    > li {
+      display: inline-block;
+      margin-left: 15px;
+
+      @include media ($desk) {
+        margin-left: 30px;
+      }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      a {
+        font-size: 14px;
+        text-transform: uppercase;
+
+        @include media ($desk) {
+          font-size: 12px;
+          font-weight: 100;
+          letter-spacing: 1px;
+        }
+
+      }
+    }
+
+  }
+
+  .menu-open {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    @include simple-button;
+    @include black-button;
+    padding: 11px 22px;
+    margin-left: 25px;
+
+    @include media ($desk) {
+      margin-left: 35px;
+    }
+
+    &:before {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: url(image-url('icon-menu-10x10.png')) no-repeat right center black;
+      display: inline-block;
+      margin-right: 7px;
+    }
+
+  }
+
+  .hidden-menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #fff;
+    display: none;
+    z-index: 1000;
+
+    &.open {
+      border-top: 7px solid $color-blue-c;
+      display: block;
+      overflow: auto;
+      padding-bottom: 20px;
+    }
+
+    > ul {
+      @include ul-li-reset();
+      clear: both;
+      padding-left: 10px;
+      padding-right: 10px;
+
+      @include media ($desk) {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+
+    }
+
+    a {
+      color: #fff;
+      display: block;
+
+      &:not(.menu-close) {
+        font-size: 26px;
+        font-weight: 300;
+        border-bottom: 1px solid $color-grey-d;
+        position: relative;
+        padding: 7px 10px 10px;
+
+        @include media ($desk) {
+          font-size: 33px;
+          padding: 25px 15px 23px;
+        }
+
+        &:after {
+          content: '';
+          display: inline-block;
+          width: 6px;
+          height: 5px;
+          background: $color-grey-d;
+          transition: all 250ms;
+          position: absolute;
+          left: 0;
+          bottom: -3px;
+        }
+
+      }
+
+      &.menu-close {
+        width: 25px;
+        height: 25px;
+        float: right;
+        display: inline-block;
+        position: relative;
+        text-indent: -10000em;
+        margin: 10px 10px 20px;
+
+        @include media ($desk) {
+          width: 33px;
+          height: 59px;
+          margin: 0 40px 35px;
+        }
+
+        &:before {
+          content: "";
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          background: url(image-url("icon-close-20x20.png")) no-repeat center;
+          position: absolute;
+          left: 0;
+          bottom: 0;
+        }
+
+      }
+
+      &:hover,
+      &:focus {
+        border-bottom-color: white;
+
+        &:after {
+          background: white;
+        }
+
+      }
+    }
+
+  }
+
+  // Keeps subelements hidden until really we are on this section.
+  .menu-item {
+    position: relative;
+
+    > ul {
+      display: none;
+
+      &.js-open {
+        display: block;
+        padding: 0;
+      }
+
+    }
+
+    &.menu-item--active-trail {
+
+      > ul {
+        position: relative;
+        display: block;
+        border-top: 5px solid black;
+        padding: 0;
+        margin: -3px 0 0;
+
+        + .open-submenu {
+          background: url(image-url("icon-chevron-up-21x11.png")) no-repeat center;
+          background-size: 30px;
+
+          @include media ($desk) {
+            background-size: 40px;
+          }
+
+        }
+
+        > li {
+
+          &:last-child a {
+            border-bottom: 1px solid #4C4C4C;
+          }
+
+          > a {
+            padding: 0 25px 8px;
+
+            @include media ($desk) {
+              border-bottom: none;
+              padding: 10px 48px 13px;
+
+              &:after {
+                left: 31px;
+                bottom: 50%;
+              }
+
+            }
+          }
+        }
+      }
+    }
+
+  }
+
+  .hidden-menu ul.js-open {
+    position: relative;
+    border-top: 5px solid black;
+    margin: -3px 0 0;
+
+    + .open-submenu {
+      background: url(image-url("icon-chevron-up-21x11.png")) no-repeat center;
+      background-size: 30px;
+
+      @include media ($desk) {
+        background-size: 40px;
+      }
+
+    }
+
+    > li {
+
+      &:last-child a {
+        border-bottom: 1px solid #4C4C4C;
+      }
+
+      > a {
+        padding: 0 25px 8px;
+
+        @include media ($desk) {
+          border-bottom: none;
+          padding: 10px 48px 13px;
+
+          &:after {
+            left: 31px;
+            bottom: 50%;
+          }
+
+        }
+      }
+
+    }
+
+  }
+
+  // JS generated link to allow users open sub menu elements.
+  .open-submenu {
+    width: 32px;
+    height: 22px;
+    background: url(image-url("icon-chevron-down-21x11.png")) no-repeat center;
+    background-size: 30px;
+    cursor: pointer;
+    display: block;
+    z-index: 1;
+    padding: 16px 30px;
+    position: absolute;
+    top: 9px;
+    right: 2px;
+
+    @include media ($desk) {
+      width: 40px;
+      background-size: 40px;
+      top: 33px;
+      right: 15px;
+    }
+
+  }
+
+}

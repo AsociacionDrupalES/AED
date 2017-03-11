@@ -1,0 +1,25 @@
+uuid: 62c4c189-b088-434f-a85b-25f86af9c038
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:fcffc4c7-f917-46e5-99a5-7b306c9544d9'
+  module:
+    - block_content
+  theme:
+    - aed_th
+id: blockcopyrightaed
+theme: aed_th
+region: footer
+weight: -13
+provider: null
+plugin: 'block_content:fcffc4c7-f917-46e5-99a5-7b306c9544d9'
+settings:
+  id: 'block_content:fcffc4c7-f917-46e5-99a5-7b306c9544d9'
+  label: 'Block Copyright AED'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

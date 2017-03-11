@@ -1,0 +1,13 @@
+uuid: 1cac2fe0-43a4-4827-aab4-bcad215d0341
+langcode: en
+status: true
+dependencies:
+  module:
+    - node
+id: content
+label: Content
+path: fideos
+weight: 0
+plugin: node_search
+configuration:
+  rankings: {  }

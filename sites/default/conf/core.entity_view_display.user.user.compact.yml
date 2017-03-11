@@ -1,0 +1,75 @@
+uuid: c763395f-7252-424b-b118-b05d6956c283
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.user.compact
+    - field.field.user.user.field_expose_my_profile
+    - field.field.user.user.field_name
+    - field.field.user.user.field_social_links
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - ds
+    - field_group
+    - image
+    - social_links_simple
+    - user
+third_party_settings:
+  field_group:
+    group_content:
+      children:
+        - field_name
+        - field_social_links
+      parent_name: ''
+      weight: 1
+      label: Content
+      format_type: html_element
+      format_settings:
+        label: Content
+        element: div
+        show_label: false
+        label_element: h3
+        attributes: ''
+        effect: none
+        speed: fast
+        id: ''
+        classes: user-details
+_core:
+  default_config_hash: C3k_McOy8bL8rTnIjspy5OfFdgqV1z6OdGZaI-tO5eM
+id: user.user.compact
+targetEntityType: user
+bundle: user
+mode: compact
+content:
+  field_name:
+    type: string
+    weight: 2
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+  field_social_links:
+    type: social_links_simple
+    weight: 3
+    label: hidden
+    settings:
+      target: _blank
+      url_only: false
+      url_plain: false
+      rel: 0
+      trim_length: '80'
+    third_party_settings:
+      ds:
+        ds_limit: ''
+  user_picture:
+    type: image
+    weight: 0
+    settings:
+      image_style: thumbnail
+      image_link: content
+    third_party_settings: {  }
+    label: hidden
+hidden:
+  field_expose_my_profile: true
+  member_for: true

@@ -1,0 +1,14 @@
+uuid: 5c57bad4-5b79-4ee5-84e4-f3963f24519e
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.control_de_usuarios
+  module:
+    - user
+id: user_remove_role_action.control_de_usuarios
+label: 'Remove the Control de usuarios role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: control_de_usuarios

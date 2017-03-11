@@ -1,0 +1,28 @@
+uuid: 885d58f6-c00e-496c-817c-b803e9f439d1
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.idioma
+  module:
+    - facets
+    - system
+  theme:
+    - aed_th
+id: idioma
+theme: aed_th
+region: left
+weight: -11
+provider: null
+plugin: 'facet_block:idioma'
+settings:
+  id: 'facet_block:idioma'
+  label: Idioma
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /videos
+    negate: false
+    context_mapping: {  }

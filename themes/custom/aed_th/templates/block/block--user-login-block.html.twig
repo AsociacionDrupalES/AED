@@ -1,0 +1,16 @@
+<div class="user-login-overlay overlay visually-hidden">
+    <div{{ attributes }}>
+        <div>
+            {{ title_prefix }}
+            {% if label %}
+                <h2{{ title_attributes }}>{{ label }}</h2>
+            {% endif %}
+            {{ title_suffix }}
+
+            {% block content %}
+                <a href="#" class="close">X</a>
+                {{ content }}
+            {% endblock %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+unprotected_forms:
+  - user_login_form
+  - search_form
+  - search_block_form
+  - views_exposed_form
+  - honeypot_settings_form
+protect_all_forms: false
+log: false
+element_name: url_user
+time_limit: 5
+expire: 300
+form_settings:
+  user_register_form: true
+  user_pass: true
+  contact_message_feedback_form: true
+  contact_message_personal_form: false
+  node_type_node_form: false
+  comment_comment_form: false
+  comment_comment_node_article_form: false
+  comment_comment_node_page_form: false
+  comment_comment_node_product_display_form: false
+  comment_comment_node_resources_form: false
+  comment_comment_node_videos_form: false
+_core:
+  default_config_hash: jEhrePho9bAz_8-E-zPMXvlx4knpphzUdaiQJX-xc8Q

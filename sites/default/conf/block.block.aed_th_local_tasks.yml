@@ -1,0 +1,22 @@
+uuid: 2d3d4405-70bf-419f-b8c1-663f943ea2b8
+langcode: en
+status: true
+dependencies:
+  theme:
+    - aed_th
+_core:
+  default_config_hash: X9I1OB0W3WlWtrK-CNcg6hNWwa8wficanpH8pYnDZDE
+id: aed_th_local_tasks
+theme: aed_th
+region: content
+weight: -14
+provider: null
+plugin: local_tasks_block
+settings:
+  id: local_tasks_block
+  label: Tabs
+  provider: core
+  label_display: '0'
+  primary: true
+  secondary: true
+visibility: {  }

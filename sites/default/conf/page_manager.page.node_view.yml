@@ -1,0 +1,17 @@
+uuid: e69164cb-6ff4-4e14-8751-df440705b24c
+langcode: en
+status: false
+dependencies: {  }
+_core:
+  default_config_hash: 1rbdWeEeBjGARzFlodw9zcw3FlX6WQD83Rsckxl9_3o
+id: node_view
+label: 'Node view'
+use_admin_theme: false
+path: '/node/{node}'
+access_logic: and
+access_conditions: {  }
+parameters:
+  node:
+    machine_name: node
+    type: 'entity:node'
+    label: Node

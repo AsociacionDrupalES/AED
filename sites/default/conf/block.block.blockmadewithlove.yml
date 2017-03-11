@@ -1,0 +1,25 @@
+uuid: a413970d-2911-4df8-94d5-5d258b9c04cb
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:7f323fe5-e469-45a4-b278-8cf88d659775'
+  module:
+    - block_content
+  theme:
+    - aed_th
+id: blockmadewithlove
+theme: aed_th
+region: footer
+weight: -11
+provider: null
+plugin: 'block_content:7f323fe5-e469-45a4-b278-8cf88d659775'
+settings:
+  id: 'block_content:7f323fe5-e469-45a4-b278-8cf88d659775'
+  label: 'Block made with love'
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

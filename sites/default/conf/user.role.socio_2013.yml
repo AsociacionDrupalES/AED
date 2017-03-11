@@ -1,0 +1,10 @@
+uuid: 5b09bae5-f4d0-4055-8df2-c8214ae900f8
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2013
+label: 'Socio 2013'
+weight: 8
+is_admin: null
+permissions:
+  - 'change own username'

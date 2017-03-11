@@ -1,0 +1,74 @@
+#block-aed-th-aed-menu-menu-recursos-aed {
+
+  ul {
+    @include ul-li-reset;
+    @include clearfix;
+
+    @include media ($desk) {
+      display: table;
+      width: 100%;
+      border-left: 1px solid white;
+      border-right: 1px solid white;
+    }
+
+    li {
+      width: 50%;
+      float: left;
+      background: white;
+      border: 1px solid white;
+      padding-top: 0;
+
+      @include media ($desk) {
+        width: 16.666666667%;
+        float: none;
+        vertical-align: middle;
+        display: table-cell;
+        border-top: none;
+        border-bottom: none;
+      }
+
+      a {
+        height: 75px;
+        display: block;
+        text-align: center;
+        text-indent: -10000em;
+        padding: 13%;
+
+        @include media ($desk) {
+          height: 164px;
+        }
+
+        &.vimeo {
+          background: url(image-url("icon-vimeo-39x35.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.meetup {
+          background: url(image-url("icon-meetup-122x51.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.youtube {
+          background: url(image-url("icon-youtube-39x46.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.google {
+          background: url(image-url("icon-google-41x38.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.twitter {
+          background: url(image-url("icon-twitter-42x34.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.github {
+          background: url(image-url("icon-github-45x40.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &:hover, &:focus {
+          background-color: rgba(233, 233, 243, 0.7);
+        }
+
+      }
+
+    }
+  }
+
+}

@@ -1,0 +1,9 @@
+uuid: 21ffe2a3-846d-4168-afeb-929fcc4e970f
+langcode: en
+status: true
+dependencies: {  }
+name: Años
+vid: anios
+description: 'Utilizado internamente para indicar los periodos en los que una empresa ha participado.'
+hierarchy: 0
+weight: 0

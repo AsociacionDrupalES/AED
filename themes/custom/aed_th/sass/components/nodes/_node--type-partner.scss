@@ -1,0 +1,133 @@
+.node--type-partner {
+
+  // Home
+  &.node--view-mode-teaser {
+    text-align: center;
+
+    img {
+      width: 80%;
+      display: inline-block;
+      vertical-align: top;
+
+      @include media ($tab) {
+        width: auto;
+        max-width: 400px;
+        max-height: 150px;
+      }
+
+    }
+
+    .field--name-field-slogan {
+      font-size: 14px;
+      font-weight: 300;
+      text-transform: uppercase;
+      position: relative;
+      padding-top: 34px;
+      margin-top: 130px;
+
+      &:before {
+        content: "";
+        width: 64px;
+        height: 4px;
+        background: black;
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        margin-left: -32px;
+      }
+
+    }
+
+  }
+
+  // Partners page
+  &.node--view-mode-views-teaser {
+
+    a {
+      display: inline-block;
+    }
+
+    img {
+      width: auto;
+      height: auto;
+      max-width: 215px;
+      max-height: 155px;
+    }
+
+  }
+
+  // Full
+  &.node--view-mode-full {
+
+    > div > div {
+      margin-bottom: 20px;
+    }
+
+    .field--name-field-logo {
+      max-width: 500px;
+    }
+
+    .field--name-field-webpage {
+
+      a {
+        color: $color-blue-e;
+
+        &:hover, &:focus {
+          color: $color-blue-a;
+        }
+
+      }
+
+    }
+
+    .field--name-field-slogan {
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .field--name-field-anos-patrocinados {
+
+      .field__label {
+        font-weight: 300;
+      }
+
+      .field__items {
+        float: none;
+        padding: 0;
+
+        > div {
+          display: inline-block;
+          margin-right: 5px;
+
+          &:before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: $color-blue-e;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 7px;
+            position: relative;
+            top: -1px;
+          }
+
+          &:first-child {
+
+            &:before {
+              content: none;
+            }
+
+          }
+
+          a {
+            font-weight: 300;
+            display: inline-block;
+          }
+
+        }
+      }
+    }
+  }
+
+}

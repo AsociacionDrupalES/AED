@@ -1,0 +1,20 @@
+uuid: a2ed34e1-5d64-4a24-a788-8e446e881be6
+langcode: und
+status: true
+dependencies:
+  module:
+    - node
+    - taxonomy
+id: node.field_videos_evento
+field_name: field_videos_evento
+entity_type: node
+type: entity_reference
+settings:
+  target_type: taxonomy_term
+module: core
+locked: false
+cardinality: 1
+translatable: false
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

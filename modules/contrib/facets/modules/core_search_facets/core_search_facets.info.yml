@@ -1,0 +1,14 @@
+name: 'Core Search Facets'
+type: module
+description: 'Facets integration for Core.'
+# core: 8.x
+package: Search
+dependencies:
+ - facets:facets
+ - drupal:search
+
+# Information added by Drupal.org packaging script on 2016-12-20
+version: '8.x-1.0-alpha7'
+core: '8.x'
+project: 'facets'
+datestamp: 1482263590

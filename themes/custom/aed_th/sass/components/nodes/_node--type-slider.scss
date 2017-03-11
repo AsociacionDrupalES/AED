@@ -1,0 +1,99 @@
+.node--type-slider {
+  position: relative;
+  background: white;
+  overflow: hidden;
+
+  @include media ($tab) {
+    max-height: 400px;
+  }
+
+  @include media ($desk) {
+    max-height: 600px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  .content-wrapper {
+    position: relative;
+    z-index: 5;
+    padding: 10px;
+
+    @include media ($tab) {
+      width: 50%;
+      transform: translate(0, 50%);
+      -webkit-transform: translate(0, 50%);
+      padding: 0;
+      position: absolute;
+      bottom: 50%;
+      left: 0;
+    }
+
+  }
+
+  .field--name-field-image-slide {
+    z-index: 0;
+    opacity: .4;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    @include media ($tab) {
+      float: right;
+      position: relative;
+    }
+
+    @include media ($desk) {
+      opacity: 1;
+    }
+
+    img {
+      width: 100%;
+
+      @include media ($desk) {
+        width: auto;
+      }
+
+    }
+
+  }
+
+  .field--name-body {
+
+    h2 {
+      font-size: 30px;
+      line-height: 1;
+      font-weight: 100;
+      margin: 0 0 10px;
+
+      @include media ($desk) {
+        font-size: 48px;
+        line-height: normal;
+        margin: 0 0 25px;
+      }
+
+    }
+
+    p {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0;
+
+      @include media ($desk) {
+        line-height: 1.8;
+      }
+
+    }
+
+    a {
+      margin-top: 20px;
+
+      @include media ($desk) {
+        margin-top: 30px;
+      }
+
+    }
+  }
+
+}

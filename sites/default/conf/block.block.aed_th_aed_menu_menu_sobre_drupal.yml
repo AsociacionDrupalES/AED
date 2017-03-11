@@ -1,0 +1,24 @@
+uuid: 5d4409a7-4de8-42b6-b010-289e8d64a200
+langcode: en
+status: true
+dependencies:
+  config:
+    - system.menu.menu--sobre-drupal
+  module:
+    - system
+  theme:
+    - aed_th
+id: aed_th_aed_menu_menu_sobre_drupal
+theme: aed_th
+region: drupal_social
+weight: -9
+provider: null
+plugin: 'system_menu_block:menu--sobre-drupal'
+settings:
+  id: broken
+  label: ''
+  provider: core
+  label_display: '0'
+  level: 1
+  depth: 0
+visibility: {  }

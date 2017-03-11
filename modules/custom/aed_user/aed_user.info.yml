@@ -1,0 +1,5 @@
+name: aed_user
+type: module
+description: Gestion de usuarios
+core: 8.x
+package: Custom

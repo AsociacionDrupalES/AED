@@ -1,0 +1,184 @@
+.path-user {
+
+  .region--content {
+    min-height: 240px;
+    padding-bottom: 30px;
+
+    @include media ($desk) {
+      padding-bottom: 80px;
+    }
+
+  }
+
+  .block-local-tasks-block {
+    margin-bottom: 30px;
+  }
+
+  form {
+
+    .form-item,
+    .form-actions {
+      padding: 0;
+    }
+
+    .form-actions {
+      margin-top: 40px;
+    }
+
+  }
+
+  &.user-logged-in {
+
+    .user-form {
+
+      h3 {
+        font-size: 30px;
+        font-weight: 100;
+        margin: 0 0 25px;
+      }
+
+      .form-wrapper {
+
+        > div {
+          margin-bottom: 30px;
+        }
+
+        .form-item.form-item-pass {
+
+          > .form-item {
+
+            @include media($desk) {
+              width: 50%;
+
+              &:nth-child(odd) {
+                float: left;
+              }
+
+              &:nth-child(odd) {
+                float: right;
+              }
+
+            }
+          }
+        }
+
+      }
+
+      .field--type-image {
+
+        .form-item {
+
+          label {
+            display: none;
+          }
+
+        }
+
+        .image-widget {
+
+          @include media($desk) {
+            width: 100%;
+            display: table;
+
+            > div {
+              display: table-cell;
+              vertical-align: middle;
+
+              img {
+                padding-right: 15px;
+                margin-bottom: 8px;
+              }
+
+            }
+          }
+
+        }
+
+        .image-preview {
+          max-width: 200px;
+          margin-bottom: 30px;
+        }
+
+      }
+
+      .field--type-link {
+
+        table {
+          width: 100%;
+
+          th {
+            padding-bottom: 15px;
+          }
+
+          tr {
+            border-bottom: 1px solid $color-grey-c;
+          }
+
+          td {
+            padding-top: 10px;
+            padding-bottom: 10px;
+          }
+
+        }
+
+      }
+
+      .form-actions {
+
+        input {
+          @include black-button;
+        }
+
+      }
+
+    }
+  }
+
+  article {
+
+    .field--name-user-picture {
+      margin-bottom: 20px;
+
+      @include media($tab) {
+        width: 200px;
+        float: left;
+        margin-right: 20px;
+        margin-bottom: 0;
+      }
+
+    }
+
+    .field--name-field-name {
+      font-size: 26px;
+      font-weight: 100;
+      margin-bottom: 10px;
+    }
+
+    .field--name-field-social-links {
+
+      .field__label {
+        margin-bottom: 5px;
+      }
+
+      .field__item {
+        margin-bottom: 5px;
+      }
+
+      a {
+        word-break: break-all;
+
+        &:before {
+          content: '';
+          width: 8px;
+          height: 8px;
+          display: inline-block;
+          background: $color-grey-c;
+          border-radius: 50%;
+          margin-right: 5px;
+        }
+
+      }
+    }
+  }
+
+}

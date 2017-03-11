@@ -1,0 +1,26 @@
+uuid: fb157b42-98d3-4bbe-9e82-cc89a4c14117
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_video_ponente
+    - node.type.videos
+id: node.videos.field_video_ponente
+field_name: field_video_ponente
+entity_type: node
+bundle: videos
+label: Ponente
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles: {  }
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

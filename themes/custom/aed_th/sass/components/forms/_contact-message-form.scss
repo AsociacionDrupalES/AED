@@ -1,0 +1,51 @@
+.contact-message-form {
+  overflow: hidden;
+
+  h2 {
+    font-size: 38px;
+    font-weight: 100;
+    margin: 0 0 20px;
+
+    @include media($desk) {
+      margin: 0 0 50px;
+    }
+
+  }
+
+  > .form-wrapper {
+
+    > div {
+
+      @include media($desk) {
+        width: calc(50% - 7.5px);
+        float: left;
+
+        &:nth-child(even) {
+          margin-right: 7.5px;
+        }
+
+        &:nth-child(odd) {
+          margin-left: 7.5px;
+        }
+
+      }
+    }
+
+  }
+
+  .form-actions {
+    display: block;
+    text-align: right;
+    clear: both;
+
+    input.button {
+      margin: 0 15px 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+
+    }
+  }
+
+}

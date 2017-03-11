@@ -1,0 +1,103 @@
+html body {
+  color: black;
+  font-family: $base-font-family;
+  font-size: 16px;
+  line-height: $base-line-height;
+
+  @include media($desk) {
+    font-size: 14px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+}
+
+a {
+  color: black;
+  text-decoration: none;
+  transition: all .3s;
+  cursor: pointer;
+  outline: none;
+
+  &:focus,
+  &:hover {
+    color: dimgrey;
+    text-decoration: none;
+  }
+
+}
+
+img {
+  width: 100%;
+  height: auto;
+  vertical-align: top;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: normal;
+  margin-bottom: 1em;
+}
+
+h1 {
+  font-size: 35px;
+}
+
+h2 {
+  font-size: 30px;
+}
+
+h3 {
+  font-size: 24px;
+}
+
+h4 {
+  font-size: 20px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+h6 {
+  font-size: 14px;
+}
+
+.page-title {
+  font-weight: 100;
+
+  * {
+    font-weight: 100;
+  }
+
+}
+
+strong {
+  font-weight: bold;
+}
+
+#l10n-client {
+  z-index: 99999;
+}
+
+// Titles
+.block-views-blockpartners-block-1 + .block + .block,
+.block-views-blockarticles-block-articles,
+.block-views-blockpartners-block-1 {
+
+  > h2 {
+    font-size: 17px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+  }
+
+}
+
+.block-page-title-block h1 {
+  font-size: 35px;
+  font-weight: 300;
+  margin: 0 0 30px;
+}

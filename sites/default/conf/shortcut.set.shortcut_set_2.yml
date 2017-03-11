@@ -1,0 +1,6 @@
+uuid: 3df86b65-1255-406a-ab07-8db50b164528
+langcode: en
+status: true
+dependencies: {  }
+id: shortcut_set_2
+label: 'Store administration'

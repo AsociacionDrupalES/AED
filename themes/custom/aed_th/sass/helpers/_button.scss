@@ -1,0 +1,22 @@
+@mixin simple-button {
+  color: white;
+  text-transform: uppercase;
+  transition: all 250ms;
+  display: inline-block;
+  border-radius: 3px;
+
+  &:hover, &:focus {
+    color: white;
+    outline: none;
+  }
+
+}
+
+@mixin black-button {
+  background: black;
+
+  &:hover, &:focus {
+    background: #424242;
+  }
+
+}

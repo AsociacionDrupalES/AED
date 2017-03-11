@@ -1,0 +1,54 @@
+#block-aed-th-aed-menu-menu-sobre-drupal {
+
+  ul {
+    @include ul-li-reset;
+    @include clearfix;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+
+    @include media ($desk) {
+      width: 100%;
+      display: table;
+    }
+
+    li {
+      width: 50%;
+      float: left;
+      background: white;
+      border-top: 1px solid white;
+      border-bottom: 1px solid white;
+      border-left: 1px solid white;
+      border-right: 1px solid white;
+      padding-top: 0;
+
+      @include media ($desk) {
+        width: 25%;
+        float: none;
+        display: table-cell;
+        border-bottom: none;
+        border-top: none;
+      }
+
+      a {
+        color: white;
+        font-weight: 900;
+        background: rgba(168, 174, 186, 1);
+        text-transform: uppercase;
+        text-align: center;
+        min-height: 65px;
+        display: block;
+        padding: 12px 10px;
+
+        @include media ($desk) {
+          min-height: inherit;
+        }
+
+        &:hover, &:focus {
+          background: rgba(168, 174, 186, 0.85);
+        }
+
+      }
+    }
+  }
+
+}

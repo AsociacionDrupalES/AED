@@ -1,0 +1,28 @@
+uuid: 38aac117-887b-4f07-b334-4ca73b18d3e5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_videos_idioma
+    - node.type.videos
+    - taxonomy.vocabulary.video_idioma
+id: node.videos.field_videos_idioma
+field_name: field_videos_idioma
+entity_type: node
+bundle: videos
+label: Idioma
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      video_idioma: video_idioma
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

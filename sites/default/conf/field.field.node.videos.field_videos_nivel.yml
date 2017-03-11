@@ -1,0 +1,28 @@
+uuid: f02871c1-cf7a-4e37-9b88-cc6869316d01
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_videos_nivel
+    - node.type.videos
+    - taxonomy.vocabulary.video_nivel
+id: node.videos.field_videos_nivel
+field_name: field_videos_nivel
+entity_type: node
+bundle: videos
+label: Nivel
+description: ''
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      video_nivel: video_nivel
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

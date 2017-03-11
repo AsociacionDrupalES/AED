@@ -1,0 +1,38 @@
+#block-userlogin {
+  background: black;
+  display: inline-block;
+  padding: 30px;
+
+  // Center div
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+
+
+  .close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: blue;
+    padding: 10px;
+  }
+
+  .form-item {
+    margin-bottom: 10px;
+
+    label {
+      display: block;
+      color: grey;
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+
+  a {
+    color: #fff;
+  }
+}

@@ -1,0 +1,126 @@
+.user-login-overlay {
+
+  > div {
+    text-align: center;
+    position: relative;
+
+    h2 {
+      padding: 0 34px;
+      margin: 0 0 26px;
+    }
+
+    > div {
+      width: 90%;
+      background: black;
+      display: inline-block;
+      text-align: left;
+      position: relative;
+      padding-top: 35px;
+
+      @include media ($desk) {
+        width: 485px;
+      }
+
+      .close {
+        width: 35px;
+        height: 35px;
+        background: url(image-url('icon-close-35x35.png')) no-repeat 0 0;
+        background-size: contain;
+        padding: 5px;
+        cursor: pointer;
+        text-indent: -10000em;
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        &:hover, &:focus {
+          opacity: .8;
+        }
+
+      }
+    }
+  }
+
+}
+
+.user-login-form {
+
+  .form-item {
+    padding: 0 34px;
+    margin: 0 0 22px;
+
+    &.form-type-password {
+      margin-bottom: 28px;
+    }
+
+    label {
+      color: $color-grey-e;
+      font-size: 15px;
+      font-weight: 500;
+      text-transform: capitalize;
+      display: inline-block;
+      margin: 0 0 6px 0;
+
+      a {
+        color: white;
+        font-size: 15px;
+        font-weight: 900;
+        display: inline-block;
+        margin-left: 5px;
+      }
+
+    }
+
+    input {
+      background: $color-grey-e;
+      padding: 12px 11px 14px;
+    }
+
+  }
+
+  .form-actions {
+    background: white;
+    text-align: center;
+    padding: 18px 34px 17px;
+    margin: 0;
+
+    @include media ($tab) {
+      text-align: left;
+    }
+
+    input {
+      @include simple-button;
+      background: $color-blue-e;
+      padding: 15px 75px 13px;
+      margin-bottom: 15px;
+
+      @include media ($tab) {
+        margin-bottom: 0;
+      }
+
+      &:hover, &:focus {
+        background: $color-blue-a;
+      }
+
+    }
+
+    a {
+      color: $color-blue-e;
+      font-size: 13px;
+      font-weight: 900;
+      display: block;
+
+      @include media ($tab) {
+        display: inline-block;
+        margin-left: 46px;
+      }
+
+      &:hover, &:focus {
+        color: $color-blue-a;
+      }
+
+    }
+
+  }
+
+}

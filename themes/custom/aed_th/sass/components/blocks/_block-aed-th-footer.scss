@@ -1,0 +1,44 @@
+#block-aed-th-footer {
+  margin-bottom: 15px;
+
+  @include media ($desk) {
+    width: 49%;
+    float: left;
+    clear: left;
+    margin-bottom: 0;
+  }
+
+  ul {
+    @include ul-li-reset;
+
+    li {
+      display: inline-block;
+      padding-top: 0;
+
+      &:last-child a {
+        border-right: none;
+        padding-right: 0;
+        margin-right: 0;
+      }
+
+      a {
+        color: white;
+        font-size: 12px;
+        line-height: 10px;
+        font-weight: 300;
+        text-transform: uppercase;
+        display: block;
+        border-right: 1px solid white;
+        padding-right: 10px;
+        margin-right: 6px;
+
+        &:hover {
+          opacity: .8;
+        }
+
+      }
+
+    }
+  }
+
+}

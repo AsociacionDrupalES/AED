@@ -1,0 +1,8 @@
+#block-sitebranding {
+
+  @include media ($desk) {
+    width: 200px;
+    float: left;
+  }
+
+}

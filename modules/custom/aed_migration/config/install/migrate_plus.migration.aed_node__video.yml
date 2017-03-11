@@ -1,0 +1,82 @@
+# Migration configuration videos.
+id: node_videos
+label: Videos migration
+migration_group: aed
+langcode: und
+status: true
+deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
+source:
+  plugin: node_videos
+  node_type: videos
+destination:
+  plugin: entity:node
+  default_bundle: videos
+process:
+  type:
+    plugin: default_value
+    default_value: videos
+  title: title
+  langcode:
+    plugin: default_value
+    default_value: und
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/value: body_value
+  body/teaser: body_teaser
+  body/format: body_format
+  field_videos_audiencia:
+     plugin: iterator
+     source: field_videos_audiencia
+     process:
+       target_id: tid
+  field_videos_ano:
+     plugin: iterator
+     source: field_videos_ano
+     process:
+       target_id: tid
+  field_videos_evento:
+     plugin: iterator
+     source: field_videos_evento
+     process:
+       target_id: tid
+  field_videos_idioma:
+     plugin: iterator
+     source: field_videos_idioma
+     process:
+       target_id: tid
+  field_videos_nivel:
+     plugin: iterator
+     source: field_videos_nivel
+     process:
+       target_id: tid
+  field_video_ponente:
+     plugin: iterator
+     source: field_video_ponente
+     process:
+       target_id: tid
+  field_videos_version:
+     plugin: iterator
+     source: field_videos_version
+     process:
+       target_id: tid
+  field_slides:
+    plugin: iterator
+    source: field_slides
+    process:
+      uri: url
+      title: title
+      options: attributes
+  field_video_url:
+    plugin: iterator
+    source: field_videos_video
+    process:
+      value: video_url
+migration_dependencies:
+    required:
+      - user
+
+

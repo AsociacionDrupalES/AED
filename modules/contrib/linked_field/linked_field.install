@@ -1,0 +1,17 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update functions for Linked Field.
+ */
+
+/**
+ * Update module weight to run at last.
+ */
+function linked_field_update_8001(&$sandbox) {
+  // We have to change the weight so we run at last.
+  db_update('system')
+    ->fields(array('weight' => '100'))
+    ->condition('name', 'linked_field')
+    ->execute();
+}

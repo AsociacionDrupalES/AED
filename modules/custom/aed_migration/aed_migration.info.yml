@@ -1,0 +1,11 @@
+name: aed_migration
+type: module
+description: Migrate data from previous version
+core: 8.x
+package: Custom
+
+dependencies:
+  - drupal:migrate
+  - migrate_plus
+  - migrate_tools
+  - migrate_drupal

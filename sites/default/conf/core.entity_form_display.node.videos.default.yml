@@ -1,0 +1,103 @@
+uuid: ce1fbdab-73d3-4e6e-ac1a-6fd3bc2e57f2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.videos.body
+    - field.field.node.videos.comment_node_videos
+    - field.field.node.videos.field_slides
+    - field.field.node.videos.field_video_ponente
+    - field.field.node.videos.field_video_url
+    - field.field.node.videos.field_videos_ano
+    - field.field.node.videos.field_videos_audiencia
+    - field.field.node.videos.field_videos_evento
+    - field.field.node.videos.field_videos_idioma
+    - field.field.node.videos.field_videos_nivel
+    - field.field.node.videos.field_videos_version
+    - node.type.videos
+  module:
+    - link
+    - text
+    - video_embed_field
+id: node.videos.default
+targetEntityType: node
+bundle: videos
+mode: default
+content:
+  body:
+    weight: 2
+    type: text_textarea_with_summary
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+  comment:
+    type: comment_default
+    weight: 20
+    settings: {  }
+    third_party_settings: {  }
+  field_slides:
+    weight: 10
+    type: link_default
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+  field_video_ponente:
+    weight: 5
+    type: entity_reference_autocomplete
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  field_video_url:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+    type: video_embed_field_textfield
+  field_videos_ano:
+    weight: 7
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+  field_videos_audiencia:
+    weight: 8
+    type: options_buttons
+    settings: {  }
+    third_party_settings: {  }
+  field_videos_evento:
+    weight: 4
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+  field_videos_idioma:
+    weight: 6
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+  field_videos_nivel:
+    weight: 3
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+  field_videos_version:
+    weight: 9
+    type: options_select
+    settings: {  }
+    third_party_settings: {  }
+  title:
+    type: string_textfield
+    weight: 0
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+hidden:
+  comment_node_videos: true
+  created: true
+  path: true
+  promote: true
+  sticky: true
+  uid: true

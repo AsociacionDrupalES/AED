@@ -1,0 +1,21 @@
+#block-blocklogofooter {
+  text-align: center;
+
+  @include media ($desk) {
+    width: 49%;
+    float: left;
+    clear: left;
+    text-align: left;
+    margin-bottom: 41px;
+  }
+
+  p {
+    width: 130px;
+    display: inline-block;
+  }
+
+  img {
+    vertical-align: top;
+  }
+
+}

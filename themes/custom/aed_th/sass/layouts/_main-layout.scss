@@ -1,0 +1,51 @@
+.region-wrapper {
+  > * {
+    @include outer-container;
+    max-width: 1100px;
+  }
+}
+
+> .region--header {
+}
+
+body .region--content-wrapper > .region--content > div {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 30px;
+
+  @include media($desk) {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 80px;
+  }
+
+}
+
+.region--content {
+
+  .region--left-wrapper {
+
+    @include media($desk) {
+      @include span-columns(3);
+    }
+
+    + .region-content {
+
+      @include media($desk) {
+        @include span-columns(9);
+        @include omega;
+      }
+
+    }
+
+  }
+}
+
+> .region--social {
+}
+
+> .region--drupal-social {
+}
+
+> .region--footer {
+}

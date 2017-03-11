@@ -1,0 +1,14 @@
+uuid: 4ab2008d-5cbd-49af-8202-77f638b8293f
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio
+  module:
+    - user
+id: user_add_role_action.socio
+label: 'Add the Socio role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio

@@ -1,0 +1,8 @@
+uuid: null
+langcode: en
+status: true
+dependencies: {  }
+id: search_api_views__videos__page_video
+name: 'search_api_views:videos:page_video'
+filter_key: null
+url_processor: query_string

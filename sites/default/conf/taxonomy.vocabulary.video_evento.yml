@@ -1,0 +1,9 @@
+uuid: 28e14ec5-eab8-4a5d-9b3b-d88522b02343
+langcode: en
+status: true
+dependencies: {  }
+name: Evento
+vid: video_evento
+description: 'Video - evento'
+hierarchy: 0
+weight: 0

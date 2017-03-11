@@ -1,0 +1,226 @@
+<?php
+
+/**
+ * @file
+ * Functions to support theming in the aed_th theme.
+ */
+use Drupal\Core\Template\Attribute;
+use Drupal\Core\Url;
+use Drupal\Core\Link;
+
+/**
+ * Implements hook_preprocess_HOOK() for html.html.twig.
+ */
+function aed_th_preprocess_html(array &$variables) {
+  /* Add class to html tag */
+  //$vars['html_attributes']->addClass('no-js');
+
+  // Don't display the site name twice on the front page (and potentially others)
+  /*if (isset($vars['head_title_array']['title']) && isset($vars['head_title_array']['name']) && ($vars['head_title_array']['title'] == $vars['head_title_array']['name'])) {
+    $vars['head_title'] = $vars['head_title_array']['name'];
+  }*/
+}
+
+/**
+ * Implements hook_page_attachments_alter().
+ */
+function aed_th_page_attachments_alter(array &$page) {
+  // Tell IE to use latest rendering engine (not to use compatibility mode).
+  /*$ie_edge = [
+    '#type' => 'html_tag',
+    '#tag' => 'meta',
+    '#attributes' => [
+    'http-equiv' => 'X-UA-Compatible',
+    'content' => 'IE=edge',
+    ],
+  ];
+  $page['#attached']['html_head'][] = [$ie_edge, 'ie_edge'];*/
+}
+
+/**
+ * Implements hook_preprocess_page() for page.html.twig.
+ */
+function aed_th_preprocess_page(array &$variables) {
+
+}
+
+/**
+ * Implements hook_theme_suggestions_page_alter().
+ */
+function aed_th_theme_suggestions_page_alter(array &$suggestions, array $variables) {
+
+}
+
+/**
+ * Implements hook_theme_suggestions_node_alter().
+ */
+function aed_th_theme_suggestions_node_alter(array &$suggestions, array $variables) {
+  /*$node = $vars['elements']['#node'];
+
+  if ($vars['elements']['#view_mode'] == "full") {
+
+  }*/
+}
+
+/**
+ * Implements hook_preprocess_HOOK() for Block document templates.
+ */
+function aed_th_preprocess_block(array &$variables) {
+  if ($variables['plugin_id'] == 'user_login_block') {
+    unset($variables['content']['user_links']);
+  }
+}
+
+/**
+ * Implements hook_theme_suggestions_field_alter().
+ */
+function aed_th_theme_suggestions_field_alter(array &$suggestions, array $variables) {
+  /*$element = $vars['element'];
+  $suggestions[] = 'field__' . $element['#view_mode'];
+  $suggestions[] = 'field__' . $element['#view_mode'] . '__' . $element['#field_name'];*/
+}
+
+/**
+ * Implements hook_theme_suggestions_field_alter().
+ */
+function aed_th_theme_suggestions_fieldset_alter(array &$suggestions, array $variables) {
+  /*$element = $vars['element'];
+  if (isset($element['#attributes']['class']) && in_array('form-composite', $element['#attributes']['class'])) {
+    $suggestions[] = 'fieldset__form_composite';
+  }*/
+}
+
+/**
+ * Implements hook_preprocess_node().
+ */
+function aed_th_preprocess_node(array &$variables) {
+  /** @var $node \Drupal\node\Entity\Node */
+  $node = $variables['node'];
+}
+
+/**
+ * Implements hook_theme_suggestions_views_view_alter().
+ */
+function aed_th_theme_suggestions_views_view_alter(array &$suggestions, array $variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_form().
+ */
+function aed_th_preprocess_form(array &$variables) {
+  //$vars['attributes']['novalidate'] = 'novalidate';
+  $a = 0;
+}
+
+/**
+ * Implements hook_preprocess_form().
+ */
+function aed_th_form_alter(&$form, $form_state, $form_id) {
+
+  if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-partners-page-1') {
+    $form['anyos_patrocinados']['#chosen'] = TRUE;
+  }
+
+  if ($form_id == "user_login_form") {
+
+    $request_password = \Drupal::l(t('Have you forgotten?'), new Url('user.pass', array(), array(
+      'attributes' => array(
+        'title' => t('Send password reset instructions via email.'),
+        'class' => array('request-password-link'),
+        'tabindex' => "-1"
+      ),
+    )));
+
+    $pass_label = t($form['pass']['#title'] . ' ' . $request_password);
+    $form['pass']['#title'] = $pass_label;
+
+    $still_not_subscribed_url = Link::fromTextAndUrl(t('Still not a member?'), Url::fromUri('internal:/node/322'))->toString();
+
+    $form['actions']['still_not_subscribed'] = [
+      '#type' => 'markup',
+      '#markup' => $still_not_subscribed_url
+    ];
+  }
+}
+
+/**
+ * Implements hook_preprocess_select().
+ */
+function aed_th_preprocess_select(array &$variables) {
+  //$vars['attributes']['class'][] = 'select-chosen';
+}
+
+/**
+ * Implements hook_preprocess_field().
+ */
+function aed_th_preprocess_field(array &$variables, $hook) {
+  /*switch ($vars['element']['#field_name']) {
+  }*/
+}
+
+/**
+ * Implements hook_preprocess_details().
+ */
+function aed_th_preprocess_details(array &$variables) {
+  /*$vars['attributes']['class'][] = 'details';
+  $vars['summary_attributes']['class'] = 'summary';*/
+}
+
+/**
+ * Implements hook_theme_suggestions_details_alter().
+ */
+function aed_th_theme_suggestions_details_alter(array &$suggestions, array $variables) {
+
+}
+
+/**
+ * Implements hook_preprocess_menu_local_task().
+ */
+function aed_th_preprocess_menu_local_task(array &$variables) {
+  //$vars['element']['#link']['url']->setOption('attributes', ['class'=>'rounded']);
+}
+
+
+/**
+ * Implements hook_preprocess_details().
+ * @param array $variables
+ */
+function aed_th_preprocess_menu__main(array &$variables) {
+  $variables['outside_attributes_menu'] = new Attribute();
+  $variables['outside_attributes_menu']->addClass('visible-menu-items');
+}
+
+
+/**
+ * Implements hook_preprocess_details().
+ * @param array $variables
+ */
+function aed_th_preprocess_userlogin(array &$variables) {
+  $a = 0;
+}
+
+/**
+ * Implements hook_preprocess_details().
+ * @param array $variables
+ */
+function aed_th_preprocess(array &$variables, $hook) {
+  $a = 0;
+}
+
+function aed_th_preprocess_user(array &$vars, $hook) {
+  $vars['attributes']['class'][] = 'user--view-mode-' . $vars['elements']['#view_mode'];
+}
+
+
+/**
+ * Implements hook_theme().
+ */
+function aed_th_theme($existing, $type, $theme, $path) {
+  return [
+    'contact_message_feedback_form' => [
+      'render element' => 'form',
+      'template' => 'form/contact-message-feedback-form',
+    ],
+  ];
+}

@@ -1,0 +1,57 @@
+uuid: 03c2bcea-9dcc-4f86-a5d3-2a88ad911931
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.partner.field_anos_patrocinados
+    - field.field.node.partner.field_logo
+    - field.field.node.partner.field_slogan
+    - field.field.node.partner.field_webpage
+    - node.type.partner
+  module:
+    - image
+    - link
+    - user
+id: node.partner.default
+targetEntityType: node
+bundle: partner
+mode: default
+content:
+  field_anos_patrocinados:
+    weight: 4
+    label: inline
+    settings:
+      link: true
+    third_party_settings: {  }
+    type: entity_reference_label
+  field_logo:
+    weight: 1
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: field_webpage
+    third_party_settings: {  }
+    type: image
+  field_slogan:
+    weight: 3
+    label: hidden
+    settings:
+      link_to_entity: false
+    third_party_settings: {  }
+    type: string
+  field_webpage:
+    weight: 2
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
+  links:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

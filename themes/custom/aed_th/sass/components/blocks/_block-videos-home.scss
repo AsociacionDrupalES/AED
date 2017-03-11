@@ -1,0 +1,131 @@
+.block-block-content45f8374d-0894-41f3-a347-66fa860ff729 {
+  text-align: center;
+  margin-bottom: 30px;
+
+  @include media ($desk) {
+    margin-bottom: 250px;
+  }
+
+  h2 {
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 40px;
+    }
+
+  }
+
+  .field--name-body {
+
+    p {
+      font-weight: 100;
+      margin: 0;
+    }
+
+  }
+
+  ul {
+    @include clearfix;
+    list-style: none;
+    padding: 0;
+    margin: 30px auto 0;
+
+    @include media ($desk) {
+      width: 1050px;
+      margin: 113px auto 77px;
+    }
+
+    li {
+      margin-bottom: 40px;
+
+      @include media ($tab) {
+        width: 33.33333%;
+        float: left;
+      }
+
+      @include media ($desk) {
+        margin-bottom: 0;
+      }
+
+      a {
+        width: 200px;
+        display: inline-block;
+        position: relative;
+        padding-top: 215px;
+        padding-bottom: 14px;
+
+        @include media ($desk) {
+          width: 298px;
+          padding-top: 330px;
+        }
+
+        &:hover, &:focus {
+          opacity: .9;
+        }
+
+        &.beginner {
+          background: url(image-url("circle-video-001.png")) no-repeat top center;
+          background-size: contain;
+
+          @include media ($desk) {
+            background-size: auto;
+          }
+
+        }
+
+        &.intermediate {
+          background: url(image-url("circle-video-002.png")) no-repeat top center;
+          background-size: contain;
+
+          @include media ($desk) {
+            background-size: auto;
+          }
+
+        }
+
+        &.advanced {
+          background: url(image-url("circle-video-003.png")) no-repeat top center;
+          background-size: contain;
+
+          @include media ($desk) {
+            background-size: auto;
+          }
+
+        }
+
+        &:before {
+          content: "";
+          display: inline-block;
+          width: 103px;
+          height: 104px;
+          border-radius: 50%;
+          background: url(image-url("icon-play-103x104.png")) no-repeat 0 0;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          margin-left: -50px;
+          margin-top: -75px;
+
+          @include media ($desk) {
+            margin-top: -85px;
+          }
+
+        }
+
+        &:after {
+          content: "";
+          display: inline-block;
+          width: 25px;
+          height: 1px;
+          background: black;
+          margin-left: -12.5px;
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+        }
+
+      }
+    }
+  }
+
+}

@@ -1,0 +1,42 @@
+.pager {
+  margin: 10px 0 40px;
+
+  > h4 {
+    display: none;
+  }
+
+  ul.pager__items {
+    padding: 0;
+
+    li.pager__item {
+      padding: 0;
+      margin: 0 3px;
+
+      // Active item
+      &.is-active {
+
+        a {
+          background: #323337;
+        }
+
+      }
+
+      a {
+        color: white;
+        font-size: 16px;
+        font-weight: 300;
+        background: #009baf;
+        display: inline-block;
+        border-radius: 4px;
+        padding: 4px 11px 5px;
+
+        &:hover, &:focus {
+          background: #323337;
+        }
+
+      }
+
+    }
+  }
+
+}

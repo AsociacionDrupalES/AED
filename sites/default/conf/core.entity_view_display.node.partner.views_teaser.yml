@@ -1,0 +1,54 @@
+uuid: 6922dbb1-c728-4168-9ef0-0483cddb8a1d
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.views_teaser
+    - field.field.node.partner.field_anos_patrocinados
+    - field.field.node.partner.field_logo
+    - field.field.node.partner.field_slogan
+    - field.field.node.partner.field_webpage
+    - image.style.large
+    - node.type.partner
+  module:
+    - ds
+    - linked_image_field
+    - user
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      path: modules/contrib/ds
+      library: ''
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+    regions:
+      ds_content:
+        - field_logo
+id: node.partner.views_teaser
+targetEntityType: node
+bundle: partner
+mode: views_teaser
+content:
+  field_logo:
+    weight: 0
+    label: hidden
+    settings:
+      image_style: large
+      image_link: content
+    third_party_settings: {  }
+    type: field_linked_image
+hidden:
+  field_anos_patrocinados: true
+  field_slogan: true
+  field_webpage: true
+  links: true

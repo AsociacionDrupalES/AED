@@ -1,0 +1,122 @@
+.path-frontpage {
+
+  .region--header-wrapper {
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      margin-bottom: 90px;
+    }
+
+  }
+
+  > .region--content-wrapper > * {
+    max-width: 100%;
+  }
+
+  .view-header {
+    font-size: 22px;
+    font-weight: 900;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      font-size: 17px;
+      margin-bottom: 75px;
+    }
+
+  }
+
+  // Slider
+  .view-home-slider {
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      margin-bottom: 83px;
+    }
+
+    *:focus {
+      outline: none;
+    }
+
+  }
+
+  .block-views-blockhome-slider-block-1 {
+    max-width: 78.5em;
+    margin: 0 auto;
+  }
+
+  // News
+  .block-views-blockarticles-block-articles {
+    max-width: 100%;
+    background: #eee;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      padding-top: 65px;
+      padding-bottom: 95px;
+      margin-bottom: 130px;
+    }
+
+    > div {
+      max-width: 78.5em;
+      margin: 0 auto;
+    }
+
+  }
+
+  // Grupos locales
+  .block-views-blocklocal-groups-block-1 {
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      margin-bottom: 145px;
+    }
+
+  }
+
+  // Empresas colaboradoras
+  .block-views-blockpartners-block-1 {
+    background: #eee;
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    @include media($desk) {
+      padding-top: 72px;
+      padding-bottom: 96px;
+    }
+
+    > h2 {
+      margin-bottom: 30px;
+
+      @include media($desk) {
+        margin-bottom: 50px;
+      }
+
+    }
+
+    .view-partners {
+      max-width: 78.5em;
+      margin: 0 auto;
+    }
+
+    .view-header,
+    .view-footer {
+      display: none;
+    }
+
+  }
+
+  .view-local-groups .more-link {
+    margin-top: 10px;
+
+    @include media($desk) {
+      margin-top: 65px;
+    }
+
+  }
+
+}

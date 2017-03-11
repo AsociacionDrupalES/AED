@@ -1,0 +1,46 @@
+.slick--view--home-slider {
+  position: relative;
+
+  .slick-dots {
+    width: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: inherit;
+
+    li {
+      width: 14px;
+      height: 15px;
+      vertical-align: top;
+      margin: 0 2px;
+
+      &.slick-active {
+
+        button:before {
+          color: $color-blue-b;
+        }
+
+      }
+
+      button {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+
+        &:hover:before {
+          color: $color-blue-b;
+        }
+
+        &:before {
+          color: rgba(0, 0, 0, .7);
+          font-size: 14px;
+          width: 100%;
+          height: 100%;
+          transition: all 250ms;
+        }
+
+      }
+    }
+  }
+
+}

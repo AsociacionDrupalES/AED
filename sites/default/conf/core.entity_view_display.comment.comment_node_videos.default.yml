@@ -1,0 +1,23 @@
+uuid: b5578c7d-85ac-45f6-8195-d6b2348bbeea
+langcode: en
+status: true
+dependencies:
+  config:
+    - comment.type.comment_node_videos
+    - field.field.comment.comment_node_videos.comment_body
+  module:
+    - text
+id: comment.comment_node_videos.default
+targetEntityType: comment
+bundle: comment_node_videos
+mode: default
+content:
+  comment_body:
+    label: hidden
+    weight: 0
+    type: text_default
+    settings: {  }
+    third_party_settings: {  }
+  links:
+    weight: 100
+hidden: {  }

@@ -1,0 +1,20 @@
+uuid: 935bf452-c0b0-4718-994f-ee6876770122
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - adaptivetheme_admin
+id: adaptivetheme_admin_system_powered_by
+theme: adaptivetheme_admin
+region: footer
+weight: 10
+provider: null
+plugin: system_powered_by_block
+settings:
+  id: system_powered_by_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility: {  }

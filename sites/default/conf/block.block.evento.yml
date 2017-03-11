@@ -1,0 +1,28 @@
+uuid: 4e7cd1d9-3e97-4506-92fa-fe908a317954
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.evento
+  module:
+    - facets
+    - system
+  theme:
+    - aed_th
+id: evento
+theme: aed_th
+region: left
+weight: -12
+provider: null
+plugin: 'facet_block:evento'
+settings:
+  id: 'facet_block:evento'
+  label: Evento
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /videos
+    negate: false
+    context_mapping: {  }

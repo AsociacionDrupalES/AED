@@ -1,0 +1,14 @@
+uuid: abaaef3b-db16-47e9-b23b-02dd8a52fcaa
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2015
+  module:
+    - user
+id: user_add_role_action.socio_2015
+label: 'Add the Socio 2015 role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio_2015

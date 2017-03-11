@@ -1,0 +1,10 @@
+uuid: 3a624c86-71e6-473f-b243-6e8572a3e669
+langcode: en
+status: true
+dependencies: {  }
+id: control_de_usuarios
+label: 'Control de usuarios'
+weight: 5
+is_admin: null
+permissions:
+  - 'administer users'

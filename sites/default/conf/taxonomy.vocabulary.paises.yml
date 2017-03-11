@@ -1,0 +1,9 @@
+uuid: 72c9cc01-e51e-4114-84bb-18a6b6ab361e
+langcode: en
+status: true
+dependencies: {  }
+name: 'Países y regiones'
+vid: paises
+description: 'Estructura todos los países, comunidades, provincias'
+hierarchy: 1
+weight: 0

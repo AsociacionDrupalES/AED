@@ -1,0 +1,111 @@
+body.path-videos {
+
+  .region--content {
+    margin-bottom: 30px;
+
+    @include media ($desk) {
+      margin-bottom: 80px;
+    }
+
+  }
+
+  .region--left-wrapper {
+
+    .trigger-button {
+      color: white;
+      font-size: 26px;
+      text-transform: uppercase;
+      background: url(image-url('icon-chevron-down-21x11.png')) no-repeat black;
+      background-position: 94% center;
+      display: none;
+      cursor: pointer;
+      padding: 10px 15px;
+
+      @include media($tab) {
+        background-position: 98% center;
+      }
+
+      &.active {
+        background: url(image-url('icon-chevron-up-21x11.png')) no-repeat black;
+        background-position: 94% center;
+
+        @include media($tab) {
+          background-position: 98% center;
+        }
+
+      }
+
+      &:first-child {
+        display: block;
+
+        @include media($desk) {
+          display: none;
+        }
+
+      }
+
+    }
+
+    .facet-wrapper {
+      display: none;
+
+      @include media($desk) {
+        display: block;
+      }
+
+      &.open {
+        display: block;
+      }
+
+    }
+
+    .block-facets {
+      color: white;
+      text-transform: uppercase;
+      background: black;
+      border-radius: 3px;
+      padding: 10px 0;
+      margin-bottom: 15px;
+
+      h2 {
+        font-size: 18px;
+        font-weight: 300;
+        padding: 0 10px;
+        margin: 0 0 10px;
+      }
+
+      ul {
+        @include ul-li-reset;
+      }
+
+      li {
+        list-style: none;
+        margin: 0 0 10px;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+      }
+
+      a {
+        color: white;
+        display: block;
+        padding: 3px 10px 3px 20px;
+
+        &:hover, &:focus {
+          color: black;
+          background: white;
+        }
+
+      }
+
+      .item-list {
+
+      }
+
+    }
+
+  }
+
+}

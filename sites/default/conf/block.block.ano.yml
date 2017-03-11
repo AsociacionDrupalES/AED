@@ -1,0 +1,28 @@
+uuid: 65e2ee50-f3f2-4b17-8f1d-89be41e1fc91
+langcode: en
+status: true
+dependencies:
+  config:
+    - facets.facet.ano
+  module:
+    - facets
+    - system
+  theme:
+    - aed_th
+id: ano
+theme: aed_th
+region: left
+weight: -13
+provider: null
+plugin: 'facet_block:ano'
+settings:
+  id: 'facet_block:ano'
+  label: Año
+  provider: facets
+  label_display: visible
+visibility:
+  request_path:
+    id: request_path
+    pages: /videos
+    negate: false
+    context_mapping: {  }

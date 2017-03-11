@@ -1,0 +1,24 @@
+uuid: 7645c682-9a76-4f70-9281-e09ec3fd0299
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_expose_my_profile
+  module:
+    - user
+id: user.user.field_expose_my_profile
+field_name: field_expose_my_profile
+entity_type: user
+bundle: user
+label: 'Expose my profile'
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: 1
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean

@@ -1,0 +1,23 @@
+uuid: 09136716-afd9-40e3-8f7c-24c3abfecd5e
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_group_url
+    - node.type.groups
+  module:
+    - link
+id: node.groups.field_group_url
+field_name: field_group_url
+entity_type: node
+bundle: groups
+label: 'Group URL'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 16
+  title: 0
+field_type: link

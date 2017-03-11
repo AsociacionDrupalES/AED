@@ -1,0 +1,240 @@
+// Page partners
+.view-partners {
+
+  // Page
+  &.view-display-id-page_1 {
+    margin-bottom: 30px;
+
+    @include media($desk) {
+      margin-bottom: 139px;
+    }
+
+    .view-header {
+      margin-bottom: 30px;
+
+      @include media($desk) {
+        line-height: 1.7;
+        margin-bottom: 66px;
+      }
+
+      h2 {
+        font-size: 36px;
+        font-weight: 100;
+        line-height: 1;
+        margin: 0 0 28px;
+      }
+
+      p {
+        font-weight: 300;
+        margin: 0;
+      }
+
+    }
+
+    .view-filters {
+      width: 100%;
+      display: table;
+      margin-bottom: 30px;
+
+      @include media($desk) {
+        margin-bottom: 100px;
+      }
+
+      .form--inline > div {
+        display: table-cell;
+        vertical-align: top;
+      }
+
+      select {
+        width: 200px;
+      }
+
+      .form-type-select {
+        float: none;
+        padding-right: 10px;
+        margin: 0;
+
+        .chosen-container {
+          font-size: 16px;
+
+          .chosen-single {
+            color: white;
+            line-height: 1;
+            height: auto;
+            background: black;
+            border: none;
+            border-radius: 3px;
+            outline: none;
+            box-shadow: none;
+            padding: 15px 10px 16px;
+          }
+
+        }
+
+      }
+
+      .form-actions {
+        margin: 0;
+
+        input {
+          height: 47px;
+          padding: 8px 10px;
+        }
+
+      }
+
+    }
+
+    .item-list {
+      margin-bottom: 30px;
+
+      @include media($desk) {
+        margin-bottom: 80px;
+      }
+
+      ul {
+        @include clearfix;
+        @include ul-li-reset;
+
+        li {
+          font-weight: 300;
+          position: relative;
+          box-sizing: border-box;
+          text-align: center;
+          padding: 0 15px;
+          // Litle reset
+          margin: 0 0 20px;
+
+          @include media($desk) {
+            width: 25%;
+            float: left;
+            text-align: left;
+            min-height: 160px;
+
+            &:nth-child(4n+1) {
+              clear: left;
+            }
+
+            &:nth-child(4n+4) {
+              clear: right;
+            }
+
+            > div {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              -webkit-transform: translate(-50%, -50%);
+            }
+
+          }
+        }
+      }
+
+    }
+
+    .view-footer {
+      font-weight: 300;
+      line-height: 1.7;
+
+      ul {
+        @include ul-li-reset;
+
+        li {
+
+          &:before {
+            content: '';
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: black;
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 11px;
+            margin-right: 8px;
+          }
+
+        }
+
+      }
+
+      p a {
+        @include simple-button;
+        font-size: 12px;
+        font-weight: 700;
+        border: none;
+        padding: 14px 22px 15px;
+        margin-top: 25px;
+      }
+
+    }
+
+  }
+
+  // Block
+  &.view-display-id-block_1 {
+
+    .slick-track {
+      width: 100%;
+      display: table;
+      position: relative;
+
+      // Slider items
+      .slick__slide {
+        float: none;
+        display: table-cell;
+        vertical-align: middle;
+        overflow: hidden;
+        padding: 0 20px;
+      }
+
+    }
+
+    .slick__arrow {
+      /* */
+
+      button {
+        border-radius: 0;
+        width: 20px;
+        height: 28px;
+        cursor: pointer;
+
+        &:hover {
+          opacity: 0.4;
+        }
+
+        &.slick-prev {
+          background: url(image-url('icon-chevron-left.png')) no-repeat center;
+        }
+
+        &.slick-next {
+          background: url(image-url('icon-chevron-right.png')) no-repeat center;
+        }
+
+        &:before {
+          content: none;
+        }
+
+      }
+
+    }
+
+    .more-link {
+      text-align: center;
+      margin-top: 20px;
+
+      @include media ($desk) {
+        margin-top: 80px;
+      }
+
+      a {
+        @include simple-button;
+        @include black-button;
+      }
+
+    }
+
+  }
+
+}
+

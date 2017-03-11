@@ -1,0 +1,24 @@
+#block-slogan {
+  margin-bottom: 15px;
+
+  @include media ($desk) {
+    width: 47%;
+    float: right;
+    margin-bottom: 0;
+  }
+
+  p {
+    color: white;
+    font-size: 16px;
+    font-weight: 100;
+    text-transform: uppercase;
+    margin: 0;
+
+    @include media($desk) {
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+  }
+
+}

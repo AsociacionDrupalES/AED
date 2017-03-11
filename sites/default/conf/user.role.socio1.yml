@@ -1,0 +1,13 @@
+uuid: 6bc5f0c9-bbbf-4ad4-a746-55c4abce682b
+langcode: en
+status: true
+dependencies: {  }
+id: socio1
+label: Socio
+weight: 7
+is_admin: null
+permissions:
+  - 'create field_pagina_web'
+  - 'edit own field_pagina_web'
+  - 'edit own socio profile'
+  - 'view own socio profile'

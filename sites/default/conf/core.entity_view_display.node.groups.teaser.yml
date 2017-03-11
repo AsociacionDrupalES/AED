@@ -1,0 +1,69 @@
+uuid: 33d3efcf-b091-46b7-9d75-f9b72f1bfd94
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.groups.field_group_image
+    - field.field.node.groups.field_group_url
+    - image.style.local_group_image_style
+    - node.type.groups
+  module:
+    - ds
+    - image
+    - link
+    - user
+third_party_settings:
+  ds:
+    layout:
+      id: ds_1col
+      path: modules/contrib/ds
+      library: ''
+      disable_css: false
+      entity_classes: all_classes
+      settings:
+        wrappers:
+          ds_content: div
+        outer_wrapper: div
+        attributes: ''
+        link_attribute: ''
+        link_custom: ''
+        classes:
+          layout_class: {  }
+    regions:
+      ds_content:
+        - field_group_url
+        - node_title
+        - field_group_image
+    fields:
+      node_title:
+        plugin_id: node_title
+        weight: 1
+        label: hidden
+        formatter: default
+id: node.groups.teaser
+targetEntityType: node
+bundle: groups
+mode: teaser
+content:
+  field_group_image:
+    type: image
+    weight: 2
+    label: hidden
+    settings:
+      image_style: local_group_image_style
+      image_link: ''
+    third_party_settings: {  }
+  field_group_url:
+    type: link
+    weight: 0
+    label: hidden
+    settings:
+      trim_length: 80
+      url_only: true
+      url_plain: false
+      rel: '0'
+      target: '0'
+    third_party_settings: {  }
+hidden:
+  links: true

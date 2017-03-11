@@ -1,0 +1,8 @@
+uuid: 8041205b-20d0-4c28-b69c-8320663969f2
+langcode: en
+status: true
+dependencies: {  }
+id: menu-recursos-aed
+label: 'Recursos AED'
+description: ''
+locked: false

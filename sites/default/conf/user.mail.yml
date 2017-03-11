@@ -1,0 +1,30 @@
+cancel_confirm:
+  body: "[user:name],\r\n\r\nYour account on [site:name] has been canceled.\r\n\r\n--  [site:name] team"
+  subject: 'Account details for [user:name] at [site:name] (canceled)'
+password_reset:
+  body: "[user:name],\r\n\r\nUna solicitud para restablecer la contraseña de su cuenta se ha hecho en [site:name]. \r\n\r\nAhora puede ingresar haciendo clic en este enlace o copiándolo y pegándolo en su navegador: \r\n\r\n[user:one-time-login-url]\r\n\r\nEste enlace sólo puede utilizarse una vez para iniciar sesión y le llevará a una página donde se puede establecer la contraseña que prefiera. Caduca después de un día y no pasará nada si no se utiliza.\r\n\r\nEl equipo de la Asociación Española de Drupal."
+  subject: 'Reemplazo de información de acceso a [user:name] en [site:name]'
+register_admin_created:
+  body: "[user:name],\r\n\r\nUn administrador de [site:name] ha creado una cuenta para usted. Ahora puede ingresar en ella haciendo clic en este enlace o copiándolo y pegándolo en su navegador:\r\n\r\n[user:one-time-login-url]\r\n\r\nEste enlace sólo puede utilizarse una vez para iniciar sesión y le llevará a una página donde podrá establecer la contraseña que prefiera.\r\n\r\nDespués de establecer la contraseña, usted será capaz de iniciar sesión en [site:login-url] en el futuro usando:\r\n\r\nusuario: [user:name]\r\ncontraseña: su contraseña\r\n\r\nEl equipo de la Asociación Española de Drupal."
+  subject: 'Un administrador creó una cuenta para usted en [site:name]'
+register_no_approval_required:
+  body: "Hola [user:name],\r\n\r\nMuchas gracias por darte de alta en la Asociación Española de Drupal. Puedes acceder a la web de la Asociación a través de este enlace:\r\n\r\n[user:one-time-login-url]\r\n\r\nEste enlace solo puede usarse una vez y te llevará a una página donde puedes configurar tu contraseña.\r\n\r\nDespués de configurar tu contraseña, podrás acceder a través de la página [site:login-url] utilizando los siguientes detalles:\r\n\r\nUsuario: [user:name]\r\nContraseña: Tu contraseña.\r\n\r\nEn breve se te enviará otro e-mail dándote acceso a la lista de correo de la Asociación, donde se lleva a cabo la gran mayoría de la comunicación interna de la Asociación.\r\n\r\nUn saludo y gracias de nuevo por asociarte.\r\n\r\nEl equipo de la Asociación Española de Drupal."
+  subject: 'Detalles de la cuenta de [user:name] en [site:name]'
+register_pending_approval:
+  body: "[user:name],\r\n\r\nGracias por registrarse en [site:name]. Su solicitud de cuenta está pendiente de aprobación. Una vez que haya sido aprobada, recibirá un e-mail con información detallada acerca de cómo iniciar sesión, establecer su contraseña, y otros detalles.\r\n\r\n\r\nEl equipo de la Asociación Española de Drupal."
+  subject: 'Detalles de la cuenta [user:name] en [site:name] (Estado: pendiente de aprobación por administrador)'
+register_pending_approval_admin:
+  body: "[user:display-name] has applied for an account.\r\n\r\n[user:edit-url]"
+  subject: 'Account details for [user:display-name] at [site:name] (pending admin approval)'
+status_activated:
+  body: "[user:name],\r\n\r\nSu cuenta en [site:name] ha sido activada. \r\n\r\nAhora puede ingresar haciendo clic en este enlace o copiándolo y pegándolo en su navegador: \r\n\r\n[user:one-time-login-url]\r\n\r\nEste enlace sólo puede utilizarse una vez para iniciar sesión y le llevará a una página donde podrá establecer la contraseña que prefiera. \r\n\r\nDespués de establecer su contraseña, podrá iniciar sesión en [site:login-url] en el futuro usando: \r\n\r\nnombre de usuario: [user:name] \r\ncontraseña: Tu contraseña\r\n\r\nEl equipo de la Asociación Española de Drupal."
+  subject: 'Detalles de la cuenta de [user:name] en [site:name] (aprobado)'
+status_blocked:
+  body: "[user:name],\r\n\r\nYour account on [site:name] has been blocked.\r\n\r\n--  [site:name] team"
+  subject: 'Account details for [user:name] at [site:name] (blocked)'
+status_canceled:
+  body: "[user:display-name],\r\n\r\nYour account on [site:name] has been canceled.\r\n\r\n--  [site:name] team"
+  subject: 'Account details for [user:display-name] at [site:name] (canceled)'
+langcode: en
+_core:
+  default_config_hash: m4J3ROov32OEquRYGLbx3SpdDGuqx9l_zJtNvihqdCg

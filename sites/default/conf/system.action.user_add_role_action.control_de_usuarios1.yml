@@ -1,0 +1,14 @@
+uuid: dbbad4f8-644f-463f-9196-3d09432f89a2
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.control_de_usuarios1
+  module:
+    - user
+id: user_add_role_action.control_de_usuarios1
+label: 'Add the Control de usuarios role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: control_de_usuarios1

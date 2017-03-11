@@ -1,0 +1,14 @@
+{
+  "name": "drupal/aed_user",
+  "type": "drupal-module",
+  "description": "Gestion de usuarios",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/aed_user",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "https://www.drupal.org/project/issues/aed_user",
+    "source": "http://cgit.drupalcode.org/aed_user"
+  },
+  "require": { }
+}

@@ -1,0 +1,19 @@
+.tabs {
+
+  li {
+
+    a {
+      background: $color-grey-a;
+
+      &:focus, &:hover {
+        background: $color-grey-b;
+      }
+
+      &.is-active {
+        background: $color-grey-c;
+      }
+
+    }
+  }
+
+}

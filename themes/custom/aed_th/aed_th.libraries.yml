@@ -1,0 +1,11 @@
+global-aed-theme:
+  css:
+    theme:
+      css/styles.css: {}
+  js:
+    js/main-menu.js: {}
+    js/aed_th.behaviors.js: {}
+  dependencies:
+    - core/drupal
+    - core/jquery
+    - core/jquery.once

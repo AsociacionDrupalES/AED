@@ -1,0 +1,7 @@
+.btn-black {
+  @include simple-button;
+  @include black-button;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 14px 24px 15px;
+}

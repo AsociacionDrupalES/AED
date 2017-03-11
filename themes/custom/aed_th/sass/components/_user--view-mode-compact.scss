@@ -1,0 +1,115 @@
+.user--view-mode-compact {
+  width: 100%;
+  display: table;
+
+  > div {
+    display: table-cell;
+  }
+
+  .field--name-user-picture {
+    max-width: 100px;
+    vertical-align: top;
+    padding-top: 5px;
+    padding-right: 10px;
+
+    @include media ($desk) {
+      vertical-align: middle;
+      padding-top: 0;
+      padding-right: 30px;
+    }
+
+    a {
+      display: block;
+    }
+
+    img {
+      width: 50px;
+      height: 50px;
+      vertical-align: top;
+    }
+
+  }
+
+  .user-details {
+    width: 100%;
+    position: relative;
+    vertical-align: top;
+
+    .field--name-field-name {
+      font-size: 26px;
+      font-weight: 100;
+      line-height: 26px;
+      margin-bottom: 10px;
+
+      @include media($desk) {
+        line-height: 1;
+        margin-bottom: 25px;
+      }
+
+    }
+
+    .field--name-field-social-links {
+
+      @include media($desk) {
+        width: 100%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+
+      .field__item {
+        margin-bottom: 5px;
+
+        @include media($desk) {
+          display: inline-block;
+          margin-right: 30px;
+          margin-bottom: 0;
+        }
+
+        a {
+          font-size: 12px;
+          font-weight: 400;
+          text-transform: uppercase;
+          position: relative;
+
+          &:before {
+            content: "";
+            width: 20px;
+            height: 16px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-top: -5px;
+            margin-right: 6px;
+          }
+
+          &.social-google-plus:before {
+            background: url(image-url("icon-bo-18x16.png")) no-repeat center;
+          }
+
+          &.social-drupal-plus:before {
+            background: url(image-url("icon-drupal-11x16.png")) no-repeat center;
+          }
+
+          &.social-twitter-plus:before {
+            background: url(image-url("icon-tw-20x16.png")) no-repeat center;
+          }
+
+          &.social-facebook-plus:before {
+            background: url(image-url("icon-fa-9x16.png")) no-repeat center;
+          }
+
+          &.social-linkedin-plus:before {
+            background: url(image-url("icon-linkedin-15x16.png")) no-repeat center;
+          }
+
+          &:hover, &focus {
+            color: $color-blue-b;
+          }
+
+        }
+
+      }
+    }
+  }
+
+}

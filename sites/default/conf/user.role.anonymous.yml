@@ -1,0 +1,33 @@
+uuid: d71925fc-9dc6-433e-9391-69b3b42be14c
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
+id: anonymous
+label: 'usuario anónimo'
+weight: 0
+is_admin: false
+permissions:
+  - 'access checkout'
+  - 'access comments'
+  - 'access content'
+  - 'access user profiles'
+  - 'use search_api_sorts'
+  - 'use text format filtered_html'
+  - 'view any partner_companies profile'
+  - 'view any socio profile'
+  - 'view company entities'
+  - 'view field_anos_que_ha_participado'
+  - 'view field_eslogan'
+  - 'view field_image'
+  - 'view field_logo_compacto'
+  - 'view field_name'
+  - 'view field_pagina_web'
+  - 'view field_partner_compact_logo'
+  - 'view field_partner_logo'
+  - 'view field_partner_web'
+  - 'view field_partner_year_sponsor'
+  - 'view field_web_page'
+  - 'view own commerce_order entities'
+  - 'view own socio profile'

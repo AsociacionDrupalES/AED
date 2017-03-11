@@ -1,0 +1,8 @@
+# Ignore configuration files that may contain sensitive information.
+sites/*/settings.local.php
+
+# Ignore SimpleTest multi-site environment.
+sites/simpletest
+
+# IDE's
+.idea

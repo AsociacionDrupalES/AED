@@ -1,0 +1,28 @@
+uuid: 1e87adc5-dbf5-4989-a2cc-dce519ec2126
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_anos_patrocinados
+    - node.type.partner
+    - taxonomy.vocabulary.anios
+id: node.partner.field_anos_patrocinados
+field_name: field_anos_patrocinados
+entity_type: node
+bundle: partner
+label: 'Años patrocinados'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:taxonomy_term'
+  handler_settings:
+    target_bundles:
+      anios: anios
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

@@ -1,0 +1,11 @@
+name: Linked Field
+type: module
+description: 'Adds the functionality to link fields to a specific destination.'
+# core: 8.x
+configure: linked_field.config
+
+# Information added by Drupal.org packaging script on 2015-10-15
+version: '8.x-1.0-beta1'
+core: '8.x'
+project: 'linked_field'
+datestamp: 1444916044

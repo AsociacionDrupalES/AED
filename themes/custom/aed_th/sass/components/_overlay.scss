@@ -1,0 +1,23 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.7);
+  width: 100%;
+  height: 100%;
+  display: table;
+  z-index: 99999;
+
+  > div {
+    display: table-cell;
+    vertical-align: middle;
+  }
+
+  h2 {
+    color: white;
+    font-size: 42px;
+    font-weight: 100;
+    margin: 0 0 20px;
+  }
+
+}

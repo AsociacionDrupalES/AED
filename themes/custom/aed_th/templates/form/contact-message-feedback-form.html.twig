@@ -1,0 +1,20 @@
+<div class="form-wrapper clearfix">
+
+    <h2>Contact</h2>
+
+    <div class="user-data">
+        {{ form.mail }}
+        {{ form.name }}
+        {{ form.subject }}
+    </div>
+
+    <div class="message">
+        {{ form.message }}
+    </div>
+
+</div>
+
+{{ form.actions }}
+
+{# Renders the rest of the form #}
+{{ form|without('name','subject', 'mail','message','actions') }}

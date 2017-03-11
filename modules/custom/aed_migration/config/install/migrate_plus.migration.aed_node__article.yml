@@ -1,0 +1,40 @@
+# Migration configuration articles.
+id: node_article
+label: Blog migration
+migration_group: aed
+langcode: und
+status: true
+deriver: Drupal\node\Plugin\migrate\D7NodeDeriver
+source:
+  plugin: node_article
+  node_type: article
+destination:
+  plugin: entity:node
+  default_bundle: article
+process:
+  type:
+    plugin: default_value
+    default_value: article
+  title: title
+  langcode:
+    plugin: default_value
+    default_value: und
+  uid: node_uid
+  status: status
+  created: created
+  changed: changed
+  promote: promote
+  sticky: sticky
+  body/value: body_value
+  body/teaser: body_teaser
+  body/format: body_format
+  field_tags:
+     plugin: iterator
+     source: field_tags
+     process:
+       target_id: tid
+migration_dependencies:
+    required:
+      - user
+
+

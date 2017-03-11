@@ -1,0 +1,12 @@
+.path-local-groups {
+
+  .region-content {
+    margin-bottom: 30px;
+
+    @include media ($desk) {
+      margin-bottom: 80px;
+    }
+
+  }
+
+}

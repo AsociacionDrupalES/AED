@@ -1,0 +1,14 @@
+uuid: d33a6c4a-3d3a-4e54-9112-9e6556d50a5b
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: c4zaT5cyPxuTXI6JOWt3qRtMvICT9tHB6d9a5VG-CmQ
+id: feedback
+label: Contact
+recipients:
+  - capy.net@gmail.com
+reply: ''
+weight: 0
+message: 'Your message has been sent.'
+redirect: ''

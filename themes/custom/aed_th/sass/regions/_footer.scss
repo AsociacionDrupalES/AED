@@ -1,0 +1,34 @@
+.region--footer-wrapper {
+  background: #000;
+
+  .region--footer {
+    padding: 5px 15px 25px;
+
+    @include media($desk) {
+      padding: 57px 0 40px;
+    }
+
+    #block-aed-th-footer {
+
+      @include media($desk) {
+        float: left;
+      }
+
+    }
+
+    #block-slogan {
+
+      @include media($desk) {
+        float: right;
+      }
+
+    }
+
+  }
+
+}
+
+.region-wrapper footer {
+  @include clearfix;
+  max-width: 78.857em;
+}

@@ -1,0 +1,22 @@
+uuid: 0c0f3e5b-5a67-4c7f-92be-b9c47c3b9d19
+langcode: en
+status: true
+dependencies:
+  module:
+    - help
+  theme:
+    - aed_th
+_core:
+  default_config_hash: 8I8iACSa0sKO3k3jlvUG1ge52rfcKX7USJAQYnzuBgg
+id: aed_th_help
+theme: aed_th
+region: content
+weight: -12
+provider: null
+plugin: help_block
+settings:
+  id: help_block
+  label: Help
+  provider: help
+  label_display: '0'
+visibility: {  }

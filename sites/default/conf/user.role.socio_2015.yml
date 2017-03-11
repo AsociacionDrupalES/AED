@@ -1,0 +1,9 @@
+uuid: 5aaafffa-471c-4e11-9016-7b5d782af748
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2015
+label: 'Socio 2015'
+weight: 10
+is_admin: null
+permissions: {  }

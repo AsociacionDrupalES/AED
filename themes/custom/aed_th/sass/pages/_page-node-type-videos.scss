@@ -1,0 +1,21 @@
+.page-node-type-videos {
+
+  h1 {
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 40px;
+    }
+
+  }
+
+  .field--name-field-video-url {
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 40px;
+    }
+
+  }
+
+}

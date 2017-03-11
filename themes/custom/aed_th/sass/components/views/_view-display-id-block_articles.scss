@@ -1,0 +1,45 @@
+.view-display-id-block_articles {
+
+  .view-content {
+    @include clearfix;
+    max-width: 78.5em;
+    padding: 0 10px;
+    margin-left: auto;
+    margin-right: auto;
+
+    @include media ($tab) {
+      padding: 0;
+    }
+
+    .views-row {
+      margin-bottom: 30px;
+
+      @include media ($tab) {
+        @include span-columns(6);
+        margin-bottom: 0;
+      }
+
+    }
+
+  }
+
+  .more-link {
+    text-align: center;
+
+    @include media ($tab) {
+      margin-top: 50px;
+    }
+
+    @include media ($desk) {
+      margin-top: 121px;
+    }
+
+    a {
+      @include simple-button;
+      @include black-button;
+      display: inline-block;
+    }
+
+  }
+
+}

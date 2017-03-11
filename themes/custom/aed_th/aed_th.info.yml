@@ -1,0 +1,23 @@
+name: AED th
+type: theme
+description: My Awesome theme
+package: Other
+core: 8.x
+base theme: classy
+
+libraries:
+  - aed_th/global-aed-theme
+
+ckeditor_stylesheets:
+  - css/styles.css
+
+regions:
+  header: Header
+  left: Left
+  content: Content
+  right: Right
+  social: Social
+  drupal_social: Drupal social
+  footer: Footer
+
+

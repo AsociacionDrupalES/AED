@@ -1,0 +1,4 @@
+// Replacement form image-url()
+@function image-url($img) {
+  @return $image_base_path + $img;
+}

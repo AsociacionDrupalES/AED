@@ -1,0 +1,130 @@
+Search API 1.0, Beta 3 (2016-10-24):
+------------------------------------
+- #2839981 by borisson_, drunken monkey: Fixed search ID for non-page views.
+- #2834350 by alan-ps: Fixed missing field restriction in DB backend
+  autocomplete code.
+- #2809469 by StryKaizer, borisson_, drunken monkey, pfrenssen: Fixed
+  incompatible cache modes used for Search API views.
+- #2839142 by borisson_, drunken monkey: Added new test for Defaults module
+  index creation.
+- #2831436 by borisson_, drunken monkey: Added dependency information to
+  display plugins.
+- #2836994 by dermario: Fixed order of facets in DB backend unreliable.
+- #2839445 by borisson_: Fixed test failure in for some Core versions.
+- #2833229 by timcosgrove: Removed array type hinting for batch contexts.
+- #2656052 by drunken monkey: Removed the "plugin_id"/"settings" sub-level of
+  index plugin settings.
+- #2837099 by drunken monkey: Fixed the tests in latest Drupal 8.3 dev version.
+- #2709351 by drunken monkey: Fixed invalid processor configurations when field
+  configuration changes.
+- #2829351 by SchnWalter, drunken monkey, borisson_: Fixed
+  $entity->search_api_skip_tracking for nodes.
+- #2827961 by drunken monkey, Steven Jones: Fixed problems with giant scores in
+  DB backend.
+- #2823985 by felribeiro, dermario, borisson_: Added an integration test for
+  the "Role filter" processor.
+- #2832015 by mkalkbrenner: Removed translations from functional tests.
+- #2828184 by ekes: Fixed bug in Stemmer config form validation.
+- #2828848 by mkalkbrenner, drunken monkey, borisson_: Prepared IntegrationTest
+  to be executed with different backends.
+- #2828148 by ekes, borisson_, drunken monkey: Fixed problem when stemming
+  multiple words at once.
+- #2826822 by drunken monkey: Fixed use of illegal typed data type "text".
+- #2826308 by drunken monkey, mkalkbrenner: Fixed unwanted filter in Views
+  tests.
+- #2734897 by niko-, drunken monkey: Added tests for preIndexSave()
+  implementations.
+- #2650364 by drunken monkey: Added a "skip access checks" option to the Views
+  relationship plugin.
+- #2826160 by keboca, drunken monkey: Fixed config form of "Role filter"
+  processor to be more robust.
+- #2753815 by niko-, drunken monkey, itsekhmistro, borisson_: Ported Simpletest
+  web tests to BrowserTestBase tests.
+- #2358065 by tstoeckler: Added the option for highlighting of partial matches
+  to the processor.
+- #2470837 by sinn, drunken monkey: Added documentation on why to disable Core
+  Search.
+- #2767609 by drunken monkey, borisson_: Added backend tests for empty value
+  conditions.
+- #2789431 by phenaproxima, drunken monkey: Added possibility to display
+  processor-generated fields in Views.
+- #2822553 by niko-: Removed a test assertion that failed when run via GUI.
+- #2821445 by drunken monkey: Fixed warning in HTML filter for non-HTML fields.
+- #2733185 by sinn, drunken monkey: Added documentation and tests for tracker
+  and display plugin alter hooks.
+- #2824326 by Jo Fitzgerald: Fixed generated autocomplete suggestions of the DB
+  backend.
+- #2824932 by mkalkbrenner: Fixed incorrect indexing call in backend tests.
+- #2821498 by stBorchert: Increased our required minimum Core version to 8.2.
+- #2816979 by drunken monkey: Added click-sorting for indexed fields in Views.
+- #2779159 by mark_fullmer, drunken monkey, borisson_: Added a Stemmer
+  processor.
+- #2799497 by drunken monkey: Added a getter for the Views query's "where"
+  property.
+- #2574583 by drunken monkey: Fixed loading of entities from excluded bundles.
+- #2795861 by sinn: Removed some deprecated methods.
+- #2748323 by sinn: Fixed comment reference to removed method
+  alterPropertyDefinitions().
+- #2809753 by drunken monkey: Fixed issues with multiple OR facets.
+- #2821955 by mkalkbrenner: Adapted processor test base for use with other
+  backends.
+- #2819637 by alan-ps: Renamed use of the DB layer rollback() method to
+  rollBack().
+
+Search API 1.0, Beta 3 (2016-10-24):
+------------------------------------
+- #2625152 by jhedstrom, drunken monkey, borisson_, mpp, stijn.blomme,
+  Rodlangh: Added an "Index hierarchy" processor.
+- #2818621 by alan-ps: Fixed overly accurate index status percentage.
+- #2792277 by drunken monkey: Fixed issues during config syncing of our
+  entities.
+- #2813525 by drunken monkey, alan-ps: Fixed incorrect indexing of
+  nodes/comments with excluded bundle.
+- #2803701 by drunken monkey, rbayliss: Fixed strict warnings from
+  UnsavedConfigurationFormTrait.
+- #2711017 by drunken monkey: Adapted Core's UncacheableDependencyTrait.
+- #2690229 by drunken monkey: Adapted Core's SubformState solution.
+- #2575641 by rbayliss, dazz, drunken monkey: Fixed behavior of "Save and edit"
+  button for indexes.
+- #2769021 by drunken monkey: Added the generated Search API query to the Views
+  preview.
+- #2817341 by mkalkbrenner, drunken monkey: Added PluginDependencyTrait to
+  ConfigurablePluginBase.
+- #2809211 by cristiroma: Fixed size of text fields on "Fields" tab.
+- #2684465 by Dropa, david.gil, drunken monkey: Fixed indexing of
+  non-translated entity references.
+- #2695627 by dermario, drunken monkey: Added support for (NOT) IN and (NOT)
+  BETWEEN operators to Views.
+- #2782577 by drunken monkey, zuhair_ak: Fixed extraction of configurable
+  properties in processors.
+
+Search API 1.0, Beta 2 (2016-09-28):
+------------------------------------
+- #2798643 by drunken monkey, Berdir: Fixed handling of enforced dependencies
+  for search indexes.
+- #2799475 by borisson_, drunken monkey: Added support for Views block and REST
+  displays in the Views search display deriver.
+- #2763161 by drunken monkey, borisson_: Fixed cache issues with Views search
+  display plugins.
+- #2800011 by drunken monkey, borisson_: Fixed display of hidden properties
+  when adding fields.
+- #2794093 by drunken monkey, borisson_, kamalrajsahu21: Fixed the processor
+  reordering CSS.
+- #2640982 by drunken monkey, borisson_: Fixed "unsaved changes" code in the
+  Fields UI.
+- #2727697 by drunken monkey, borisson_: Fixed serialization of modified
+  indexes.
+- #2747767 by joachim: Changed the "Aggregation type" form element to radios.
+- #2565621 by LKS90, drunken monkey: Added a test for the database defaults
+  submodule.
+- #2684465 by drunken monkey, marthinal: Fixed indexing of related entities on
+  multilingual sites.
+- #2566241 by drunken monkey: Fixed index tracker select default value.
+- #2555177 by drunken monkey: Fixed empty bundle selects in datasource config
+  forms.
+
+Search API 1.0, Beta 1 (2016-09-05):
+------------------------------------
+First Beta release of the project's Drupal 8 version. The API can be considered
+mostly stable and an upgrade path will be provided for all data structure
+changes from this point forward.

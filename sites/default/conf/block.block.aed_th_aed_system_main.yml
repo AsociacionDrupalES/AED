@@ -1,0 +1,22 @@
+uuid: b3357151-f0df-4d40-8f9c-ebe4b6a031f0
+langcode: en
+status: true
+dependencies:
+  module:
+    - system
+  theme:
+    - aed_th
+_core:
+  default_config_hash: 9EoWV2Lot6FVSr50t4hoKgiz1LIXYWNG-IIPYsWxBqo
+id: aed_th_aed_system_main
+theme: aed_th
+region: content
+weight: -9
+provider: null
+plugin: system_main_block
+settings:
+  id: system_main_block
+  label: ''
+  provider: system
+  label_display: '0'
+visibility: {  }

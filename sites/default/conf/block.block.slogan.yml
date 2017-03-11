@@ -1,0 +1,25 @@
+uuid: ce523b31-bc80-4661-8ed3-b9a5e15d97c6
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:4409cc2c-7a5b-47fb-8acc-34042982b215'
+  module:
+    - block_content
+  theme:
+    - aed_th
+id: slogan
+theme: aed_th
+region: footer
+weight: -14
+provider: null
+plugin: 'block_content:4409cc2c-7a5b-47fb-8acc-34042982b215'
+settings:
+  id: 'block_content:4409cc2c-7a5b-47fb-8acc-34042982b215'
+  label: Slogan
+  provider: block_content
+  label_display: '0'
+  status: true
+  info: ''
+  view_mode: full
+visibility: {  }

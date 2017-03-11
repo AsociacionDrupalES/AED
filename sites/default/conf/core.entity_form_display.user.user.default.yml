@@ -1,0 +1,112 @@
+uuid: afc45272-12a1-4ac2-a817-8f8c04a78f08
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.user.user.field_expose_my_profile
+    - field.field.user.user.field_name
+    - field.field.user.user.field_social_links
+    - field.field.user.user.user_picture
+    - image.style.thumbnail
+  module:
+    - field_group
+    - image
+    - link
+    - user
+third_party_settings:
+  field_group:
+    group_basic_data:
+      children:
+        - account
+        - language
+        - contact
+        - timezone
+      parent_name: group_data_accordion
+      weight: 1
+      label: 'Basic data'
+      format_type: accordion_item
+      format_settings:
+        description: ''
+        classes: ''
+        id: ''
+        required_fields: true
+        formatter: closed
+    group_personal_data:
+      children:
+        - user_picture
+        - field_name
+        - field_social_links
+        - field_expose_my_profile
+      parent_name: group_data_accordion
+      weight: 2
+      label: 'Personal data'
+      format_type: accordion_item
+      format_settings:
+        label: 'Personal data'
+        formatter: open
+        required_fields: true
+        id: ''
+        classes: perdonal-data
+    group_data_accordion:
+      children:
+        - group_basic_data
+        - group_personal_data
+      parent_name: ''
+      weight: 0
+      label: Data
+      format_type: accordion
+      format_settings:
+        effect: none
+        classes: ''
+        id: ''
+_core:
+  default_config_hash: LLAieeozVsoZDb-2PbFxRJpQqnKmpR7-4OoRJnduz-U
+id: user.user.default
+targetEntityType: user
+bundle: user
+mode: default
+content:
+  account:
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
+  contact:
+    weight: 3
+    settings: {  }
+    third_party_settings: {  }
+  field_expose_my_profile:
+    weight: 5
+    settings:
+      display_label: true
+    third_party_settings: {  }
+    type: boolean_checkbox
+  field_name:
+    weight: 3
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+  field_social_links:
+    weight: 4
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
+  language:
+    weight: 2
+    settings: {  }
+    third_party_settings: {  }
+  timezone:
+    weight: 4
+    settings: {  }
+    third_party_settings: {  }
+  user_picture:
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
+    type: image_image
+    weight: 2
+    third_party_settings: {  }
+hidden: {  }

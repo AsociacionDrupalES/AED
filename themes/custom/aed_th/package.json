@@ -1,0 +1,21 @@
+{
+  "name": "aed_th",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "*",
+    "gulp-filter": "*",
+    "gulp-sass": "*",
+    "gulp-sass-glob": "*",
+    "gulp-shell": "*",
+    "gulp-sourcemaps": "*",
+    "node-bourbon": "*",
+    "node-neat": "*"
+  }
+}

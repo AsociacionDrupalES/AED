@@ -1,0 +1,19 @@
+#block-blockcopyrightaed {
+  margin-bottom: 9px;
+
+  @include media ($desk) {
+    width: 49%;
+    float: left;
+    clear: left;
+  }
+
+  p {
+    color: white;
+    font-size: 12px;
+    line-height: 10px;
+    font-weight: 300;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+}

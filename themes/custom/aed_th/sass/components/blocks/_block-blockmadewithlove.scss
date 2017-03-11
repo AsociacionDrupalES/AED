@@ -1,0 +1,18 @@
+#block-blockmadewithlove {
+
+  @include media ($desk) {
+    width: 49%;
+    float: right;
+    clear: right;
+  }
+
+  p {
+    color: white;
+    font-size: 12px;
+    font-weight: 300;
+    text-transform: uppercase;
+    text-align: right;
+    margin: 0;
+  }
+
+}

@@ -1,0 +1,119 @@
+uuid: 5edc80ef-4b88-42e3-95fa-384d20acc9b2
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_video_ponente
+    - field.storage.node.field_videos_audiencia
+    - field.storage.node.field_videos_version
+    - field.storage.node.field_videos_nivel
+    - field.storage.node.field_videos_idioma
+    - field.storage.node.field_videos_evento
+    - field.storage.node.field_videos_ano
+    - search_api.server.videos
+  module:
+    - search_api
+    - node
+id: ct_videos
+name: 'CT Videos'
+description: ''
+read_only: false
+field_settings:
+  title:
+    label: Title
+    datasource_id: 'entity:node'
+    property_path: title
+    type: string
+  field_video_ponente:
+    label: Ponente
+    datasource_id: 'entity:node'
+    property_path: field_video_ponente
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_video_ponente
+  field_videos_audiencia:
+    label: Audiencia
+    datasource_id: 'entity:node'
+    property_path: field_videos_audiencia
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_audiencia
+  field_videos_version:
+    label: Versión
+    datasource_id: 'entity:node'
+    property_path: field_videos_version
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_version
+  field_videos_nivel:
+    label: Nivel
+    datasource_id: 'entity:node'
+    property_path: field_videos_nivel
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_nivel
+  field_videos_idioma:
+    label: Idioma
+    datasource_id: 'entity:node'
+    property_path: field_videos_idioma
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_idioma
+  field_videos_evento:
+    label: Evento
+    datasource_id: 'entity:node'
+    property_path: field_videos_evento
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_evento
+  field_videos_ano:
+    label: Año
+    datasource_id: 'entity:node'
+    property_path: field_videos_ano
+    type: integer
+    dependencies:
+      config:
+        - field.storage.node.field_videos_ano
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: false
+      selected:
+        - videos
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  ignorecase:
+    fields:
+      - title
+      - name
+      - name_1
+    weights:
+      preprocess_index: -10
+      preprocess_query: -10
+  rendered_item: {  }
+  aggregated_field: {  }
+  highlight:
+    highlight: always
+    excerpt: true
+    excerpt_length: 256
+    exclude_fields: {  }
+    prefix: '<strong>'
+    suffix: '</strong>'
+    weights:
+      postprocess_query: 0
+  node_status: {  }
+tracker_settings:
+  default: {  }
+options:
+  index_directly: true
+  cron_limit: 50
+server: videos

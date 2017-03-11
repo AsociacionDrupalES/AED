@@ -1,0 +1,160 @@
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+  width: 100%;
+  background: #E7E7E7;
+  border: none;
+  padding: 9px 11px 12px;
+
+  &:focus {
+    outline: none;
+  }
+
+}
+
+.form-type-password,
+.form-type-textarea,
+.form-type-textfield,
+.form-type-email {
+
+  label {
+    @include font-size(14px, 14px, 12px);
+    font-weight: bold;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 9px;
+  }
+
+}
+
+// Link more
+.more-link {
+  text-align: center;
+
+  a {
+    @include simple-button;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 18px 30px 16px;
+  }
+
+}
+
+.see-all {
+  @include simple-button;
+  @include black-button;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 18px 18px 16px;
+}
+
+input[type="submit"] {
+  @include simple-button;
+  @include black-button;
+  font-size: 12px;
+  font-weight: 700;
+  border: none;
+  padding: 18px 22px 16px;
+}
+
+input[value="Apply"] {
+  @include simple-button;
+  @include black-button;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.form-type-checkbox {
+  position: relative;
+}
+
+input[type="checkbox"]:not(old) {
+  border: 1px solid $color-grey-c;
+  background: transparent;
+  border-radius: 0;
+  opacity: 0;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  &:checked + label:before {
+    box-shadow: inset 0 0 5px white;
+    background: $color-grey-c;
+  }
+
+  + label {
+    cursor: pointer;
+
+    &:before {
+      content: '';
+      width: 15px;
+      height: 15px;
+      border: 1px solid $color-grey-c;
+      cursor: pointer;
+      vertical-align: top;
+      display: inline-block;
+      margin-right: 5px;
+    }
+
+  }
+
+}
+
+// Selects de chosen
+div.form-select.chosen-enable {
+
+  &.chosen-with-drop {
+
+    a.chosen-single div b {
+      background: url(image-url("icon-chevron-up-21x11.png")) no-repeat center;
+    }
+
+  }
+
+  a.chosen-single {
+
+    span {
+      margin-right: 36px;
+    }
+
+    div {
+      width: 40px;
+
+      b {
+        background: url(image-url("icon-chevron-down-21x11.png")) no-repeat center;
+      }
+
+    }
+  }
+
+  .chosen-drop {
+    background: black;
+    border: none;
+
+    input {
+      color: white;
+    }
+
+    li {
+      color: white;
+
+      &.result-selected {
+        outline: none;
+      }
+
+      &.highlighted {
+        color: black;
+        background: white;
+      }
+
+      &.no-results {
+        background: black;
+      }
+
+    }
+
+  }
+
+}

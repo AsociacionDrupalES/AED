@@ -1,0 +1,18 @@
+uuid: ce7e6ead-0848-4958-9eb1-f7aff40427af
+langcode: en
+status: true
+dependencies:
+  theme:
+    - bartik
+id: aed_menu_menu_recursos_aed
+theme: bartik
+region: sidebar_second
+weight: -9
+provider: null
+plugin: 'system_menu_block:menu-recursos-aed'
+settings:
+  id: broken
+  label: ''
+  provider: core
+  label_display: '0'
+visibility: {  }

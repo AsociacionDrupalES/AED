@@ -1,0 +1,54 @@
+.view-local-groups {
+
+  .view-content {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+    @include clearfix;
+  }
+
+  .views-row {
+
+    @include media ($tab) {
+      width: 50%;
+      float: left;
+
+      &:nth-child(odd) {
+
+      }
+
+      &:nth-child(even) {
+
+      }
+
+    }
+
+    @include media ($desk) {
+      width: 33.333333%;
+
+      &:nth-child(3n+3) {
+        clear: right;
+      }
+
+      &:nth-child(3n+4) {
+        clear: left;
+      }
+
+    }
+
+  }
+
+  .more-link {
+    margin-top: 65px;
+
+    a {
+      @include simple-button;
+      @include black-button;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 18px 18px 16px;
+    }
+
+  }
+
+}

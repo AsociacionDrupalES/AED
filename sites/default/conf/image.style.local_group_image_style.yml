@@ -1,0 +1,14 @@
+uuid: f300df19-cb75-4f70-b068-7fd75c818b0a
+langcode: en
+status: true
+dependencies: {  }
+name: local_group_image_style
+label: 'Local group image style'
+effects:
+  3318e42e-8f6d-4e84-a6fc-9525083001e5:
+    uuid: 3318e42e-8f6d-4e84-a6fc-9525083001e5
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 467
+      height: 317

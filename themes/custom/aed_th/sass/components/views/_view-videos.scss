@@ -1,0 +1,28 @@
+.view-videos {
+
+  .view-content {
+    @include clearfix;
+  }
+
+  .views-row {
+    margin-bottom: 30px;
+
+    @include media($tab) {
+      width: calc(33.333333333% - 26.666666667px);
+      float: left;
+      margin-right: 40px;
+      margin-bottom: 70px;
+
+      &:nth-child(3n+1) {
+        clear: left;
+      }
+
+      &:nth-child(3n+3) {
+        clear: right;
+        margin-right: 0;
+      }
+
+    }
+  }
+
+}
