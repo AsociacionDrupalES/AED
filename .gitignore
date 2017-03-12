@@ -6,3 +6,6 @@ sites/simpletest
 
 # IDE's
 .idea
+
+# Fuera el dir files.-
+sites/default/files
