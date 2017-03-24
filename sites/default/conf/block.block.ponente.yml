@@ -12,7 +12,7 @@ dependencies:
 id: ponente
 theme: aed_th
 region: left
-weight: -8
+weight: 0
 provider: null
 plugin: 'facet_block:ponente'
 settings:

@@ -4,6 +4,11 @@
   args:
     chdir: "{{ ansistrano_release_path.stdout }}{{ drupal_rel_path }}"
 
+- name: 'drush cim conf'
+  shell: 'drush cim conf -y {{ drush_args }}'
+  args:
+    chdir: "{{ ansistrano_release_path.stdout }}{{ drupal_rel_path }}"
+
 - name: 'drush cr'
   shell: 'drush cr {{ drush_args }}' 
   args: 

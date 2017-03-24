@@ -12,7 +12,7 @@ dependencies:
 id: idioma
 theme: aed_th
 region: left
-weight: -11
+weight: 0
 provider: null
 plugin: 'facet_block:idioma'
 settings:

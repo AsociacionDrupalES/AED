@@ -4,13 +4,13 @@ status: true
 dependencies:
   module:
     - node
-    - taxonomy
+    - user
 id: node.field_video_ponente
 field_name: field_video_ponente
 entity_type: node
 type: entity_reference
 settings:
-  target_type: taxonomy_term
+  target_type: user
 module: core
 locked: false
 cardinality: -1

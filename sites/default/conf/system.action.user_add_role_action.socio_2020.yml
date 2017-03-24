@@ -1,0 +1,14 @@
+uuid: 17c5e5b4-5334-4095-a84d-63f29885e8c8
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2020
+  module:
+    - user
+id: user_add_role_action.socio_2020
+label: 'Add the Socio 2020 role to the selected users'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio_2020

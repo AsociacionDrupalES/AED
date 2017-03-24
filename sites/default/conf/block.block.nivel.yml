@@ -12,7 +12,7 @@ dependencies:
 id: nivel
 theme: aed_th
 region: left
-weight: -10
+weight: 0
 provider: null
 plugin: 'facet_block:nivel'
 settings:

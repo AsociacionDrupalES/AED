@@ -19,7 +19,7 @@ widget:
   config:
     show_numbers: true
     soft_limit: 0
-query_operator: or
+query_operator: and
 use_hierarchy: false
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true

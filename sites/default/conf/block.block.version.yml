@@ -12,7 +12,7 @@ dependencies:
 id: version
 theme: aed_th
 region: left
-weight: -9
+weight: 0
 provider: null
 plugin: 'facet_block:version'
 settings:

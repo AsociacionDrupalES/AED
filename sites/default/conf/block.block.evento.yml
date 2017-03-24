@@ -12,7 +12,7 @@ dependencies:
 id: evento
 theme: aed_th
 region: left
-weight: -12
+weight: 0
 provider: null
 plugin: 'facet_block:evento'
 settings:

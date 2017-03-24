@@ -1,0 +1,9 @@
+uuid: 6b14b5f1-5990-4e54-8b8d-de1e536df942
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2018
+label: 'Socio 2018'
+weight: 14
+is_admin: null
+permissions: {  }

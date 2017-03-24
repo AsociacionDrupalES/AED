@@ -375,7 +375,19 @@ display:
           entity_type: node
           plugin_id: search_api_field
       filters: {  }
-      sorts: {  }
+      sorts:
+        field_videos_ano:
+          id: field_videos_ano
+          table: search_api_index_ct_videos
+          field: field_videos_ano
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
       title: Videos
       header: {  }
       footer: {  }
