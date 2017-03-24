@@ -49,6 +49,10 @@ class SlickForm extends SlickFormBase {
         if ($element['type'] != 'hidden') {
           $form['settings'][$name]['#attributes'] = $tooltip;
         }
+        else {
+          // Ensures hidden element doesn't screw up the states.
+          unset($element['states']);
+        }
 
         if ($element['type'] == 'textfield') {
           $form['settings'][$name]['#size'] = 20;

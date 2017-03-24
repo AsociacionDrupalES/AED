@@ -214,7 +214,7 @@ abstract class SlickFormBase extends EntityForm {
 
     $status        = $slick->save();
     $label         = $slick->label();
-    $edit_link     = $slick->link($this->t('Edit'));
+    $edit_link     = $slick->toLink($this->t('Edit'), 'edit-form')->toString();
     $config_prefix = $slick->getEntityType()->getConfigPrefix();
     $message       = ['@config_prefix' => $config_prefix, '%label' => $label];
 

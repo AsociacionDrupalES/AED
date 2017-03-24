@@ -1,4 +1,8 @@
 
+Slick views 8.x-1.0-dev, 2017-02-10
+-----------------------------------
+- Fixed for regression with Overridables option not being respected.
+
 Slick views 8.x-1.0-dev, 2017-01-24
 -----------------------------------
 - Fixed for whitespace.

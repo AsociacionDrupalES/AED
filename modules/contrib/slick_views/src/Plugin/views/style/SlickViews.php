@@ -131,7 +131,7 @@ class SlickViews extends BlazyStylePluginBase {
     $settings['caption']      = array_filter($settings['caption']);
     $settings['namespace']    = 'slick';
     $settings['nav']          = !$settings['vanilla'] && $settings['optionset_thumbnail'] && isset($view->result[1]);
-    $settings['overridables'] = array_filter($settings['overridables']);
+    $settings['overridables'] = empty($settings['override']) ? array_filter($settings['overridables']) : $settings['overridables'];
 
     $elements = [];
     foreach ($this->renderGrouping($view->result, $settings['grouping']) as $rows) {

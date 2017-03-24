@@ -78,6 +78,13 @@ class SlickAdmin implements SlickAdminInterface {
     $definition['skins']            = isset($definition['skins']) ? $definition['skins'] : $this->getSkinsByGroupOptions('main');
     $definition['responsive_image'] = isset($definition['responsive_image']) ? $definition['responsive_image'] : TRUE;
 
+    foreach (['optionsets', 'skins'] as $key) {
+      if (isset($definition[$key]['default'])) {
+        ksort($definition[$key]);
+        $definition[$key] = ['default' => $definition[$key]['default']] + $definition[$key];
+      }
+    }
+
     if (empty($definition['no_layouts'])) {
       $definition['layouts'] = isset($definition['layouts']) ? array_merge($this->getLayoutOptions(), $definition['layouts']) : $this->getLayoutOptions();
     }

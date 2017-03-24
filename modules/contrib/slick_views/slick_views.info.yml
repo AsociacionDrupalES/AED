@@ -8,8 +8,8 @@ dependencies:
   - slick:slick
   - drupal:views
 
-# Information added by Drupal.org packaging script on 2017-01-23
-version: '8.x-1.0-rc1'
+# Information added by Drupal.org packaging script on 2017-02-10
+version: '8.x-1.0-rc2'
 core: '8.x'
 project: 'slick_views'
-datestamp: 1485194590
+datestamp: 1486728186
