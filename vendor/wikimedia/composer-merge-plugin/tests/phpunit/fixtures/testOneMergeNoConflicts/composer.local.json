@@ -1,0 +1,17 @@
+{
+    "require": {
+        "monolog/monolog": "~1.0"
+    },
+    "conflict": {
+        "conflict/conflict": "*"
+    },
+    "replace": {
+        "replace/replace": "*"
+    },
+    "provide": {
+        "provide/provide": "*"
+    },
+    "suggest": {
+        "suggest/suggest": "good for stuff"
+    }
+}

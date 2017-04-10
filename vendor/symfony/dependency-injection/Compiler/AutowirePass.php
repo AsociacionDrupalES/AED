@@ -28,6 +28,7 @@ class AutowirePass implements CompilerPassInterface
     private $definedTypes = array();
     private $types;
     private $notGuessableTypes = array();
+    private $autowired = array();
 
     /**
      * {@inheritdoc}
@@ -56,6 +57,7 @@ class AutowirePass implements CompilerPassInterface
         $this->definedTypes = array();
         $this->types = null;
         $this->notGuessableTypes = array();
+        $this->autowired = array();
 
         if (isset($e)) {
             throw $e;
@@ -72,6 +74,10 @@ class AutowirePass implements CompilerPassInterface
      */
     private function completeDefinition($id, Definition $definition)
     {
+        if ($definition->getFactory() || $definition->getFactoryClass(false) || $definition->getFactoryService(false)) {
+            throw new RuntimeException(sprintf('Service "%s" can use either autowiring or a factory, not both.', $id));
+        }
+
         if (!$reflectionClass = $this->getReflectionClass($id, $definition)) {
             return;
         }
@@ -81,15 +87,23 @@ class AutowirePass implements CompilerPassInterface
         if (!$constructor = $reflectionClass->getConstructor()) {
             return;
         }
+        $parameters = $constructor->getParameters();
+        if (method_exists('ReflectionMethod', 'isVariadic') && $constructor->isVariadic()) {
+            array_pop($parameters);
+        }
 
         $arguments = $definition->getArguments();
-        foreach ($constructor->getParameters() as $index => $parameter) {
+        foreach ($parameters as $index => $parameter) {
             if (array_key_exists($index, $arguments) && '' !== $arguments[$index]) {
                 continue;
             }
 
             try {
                 if (!$typeHint = $parameter->getClass()) {
+                    if (isset($arguments[$index])) {
+                        continue;
+                    }
+
                     // no default value? Then fail
                     if (!$parameter->isOptional()) {
                         throw new RuntimeException(sprintf('Unable to autowire argument index %d ($%s) for the service "%s". If this is an object, give it a type-hint. Otherwise, specify this argument\'s value explicitly.', $index, $parameter->name, $id));
@@ -99,6 +113,10 @@ class AutowirePass implements CompilerPassInterface
                     $arguments[$index] = $parameter->getDefaultValue();
 
                     continue;
+                }
+
+                if (isset($this->autowired[$typeHint->name])) {
+                    return $this->autowired[$typeHint->name] ? new Reference($this->autowired[$typeHint->name]) : null;
                 }
 
                 if (null === $this->types) {
@@ -111,13 +129,14 @@ class AutowirePass implements CompilerPassInterface
                     try {
                         $value = $this->createAutowiredDefinition($typeHint, $id);
                     } catch (RuntimeException $e) {
-                        if ($parameter->allowsNull()) {
-                            $value = null;
-                        } elseif ($parameter->isDefaultValueAvailable()) {
+                        if ($parameter->isDefaultValueAvailable()) {
                             $value = $parameter->getDefaultValue();
+                        } elseif ($parameter->allowsNull()) {
+                            $value = null;
                         } else {
                             throw $e;
                         }
+                        $this->autowired[$typeHint->name] = false;
                     }
                 }
             } catch (\ReflectionException $e) {
@@ -131,6 +150,16 @@ class AutowirePass implements CompilerPassInterface
             }
 
             $arguments[$index] = $value;
+        }
+
+        if ($parameters && !isset($arguments[++$index])) {
+            while (0 <= --$index) {
+                $parameter = $parameters[$index];
+                if (!$parameter->isDefaultValueAvailable() || $parameter->getDefaultValue() !== $arguments[$index]) {
+                    break;
+                }
+                unset($arguments[$index]);
+            }
         }
 
         // it's possible index 1 was set, then index 0, then 2, etc
@@ -167,6 +196,7 @@ class AutowirePass implements CompilerPassInterface
         foreach ($definition->getAutowiringTypes() as $type) {
             $this->definedTypes[$type] = true;
             $this->types[$type] = $id;
+            unset($this->notGuessableTypes[$type]);
         }
 
         if (!$reflectionClass = $this->getReflectionClass($id, $definition)) {
@@ -236,12 +266,10 @@ class AutowirePass implements CompilerPassInterface
             throw new RuntimeException(sprintf('Unable to autowire argument of type "%s" for the service "%s". No services were found matching this %s and it cannot be auto-registered.', $typeHint->name, $id, $classOrInterface));
         }
 
-        $argumentId = sprintf('autowired.%s', $typeHint->name);
+        $this->autowired[$typeHint->name] = $argumentId = sprintf('autowired.%s', $typeHint->name);
 
         $argumentDefinition = $this->container->register($argumentId, $typeHint->name);
         $argumentDefinition->setPublic(false);
-
-        $this->populateAvailableType($argumentId, $argumentDefinition);
 
         try {
             $this->completeDefinition($argumentId, $argumentDefinition);

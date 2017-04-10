@@ -1,0 +1,20 @@
+{
+	"autoload": {
+		"psr-4": {
+			"Kittens\\": "everywhere/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Dev\\Kittens\\": "everywhere/"
+		}
+	},
+	"extra": {
+		"merge-plugin": {
+			"include": [
+				"composer.local.json",
+				"extensions/*/composer.json"
+			]
+		}
+	}
+}

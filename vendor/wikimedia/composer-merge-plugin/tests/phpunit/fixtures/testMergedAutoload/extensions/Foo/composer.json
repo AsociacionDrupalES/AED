@@ -1,0 +1,36 @@
+{
+	"autoload": {
+		"psr-4": {
+			"Kittens\\": [ "a/", "b/" ],
+			"Cats\\": "src/"
+		},
+		"psr-0": {
+			"UniqueGlobalClass": "",
+			"": "fallback/"
+		},
+		"files" : [
+			"SemanticMediaWiki.php"
+		],
+		"classmap": [
+			"SemanticMediaWiki.hooks.php",
+			"includes/"
+		]
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Dev\\Kittens\\": [ "a/", "b/" ],
+			"Dev\\Cats\\": "src/"
+		},
+		"psr-0": {
+			"DevUniqueGlobalClass": "",
+			"": "dev/fallback/"
+		},
+		"files" : [
+			"DevSemanticMediaWiki.php"
+		],
+		"classmap": [
+			"DevSemanticMediaWiki.hooks.php",
+			"dev/includes/"
+		]
+	}
+}
