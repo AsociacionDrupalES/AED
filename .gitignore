@@ -9,3 +9,5 @@ sites/simpletest
 
 # Fuera el dir files.-
 sites/default/files
+
+docker-runtime
