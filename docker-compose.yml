@@ -2,12 +2,11 @@ version: "2"
 
 services:
 
+# No hace falta exponer el puerto. simplemente mete 172.20.0.3	ecoembes.local en /etc/hosts
   front:
     build: Dockerfiles/php7-apache2
     volumes:
       - ./:/var/www/html
-    labels:
-      - "traefik.frontend.rule=Host:aed.localhost"
 
  # https://www.drupal.org/node/2754539 --> implementar esto
   mysql:
@@ -16,8 +15,6 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./docker-runtime/mysql:/var/lib/mysql
-    ports:
-      - "3308:3306"
 
   pma:
     image: phpmyadmin/phpmyadmin
@@ -28,10 +25,5 @@ services:
       PHP_POST_MAX_SIZE: 1G
       UPLOAD_SIZE: 1G
       PHP_MAX_INPUT_VARS: 1G
-    labels:
-      - "traefik.frontend.rule=Host:aed-db.localhost"
-
-  mailhog:
-    image: mailhog/mailhog
     ports:
-      - "8002:8025"
+      - "8002:80"
