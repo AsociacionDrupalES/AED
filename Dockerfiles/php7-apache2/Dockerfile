@@ -17,8 +17,6 @@ RUN apt-get install zip unzip -y
 COPY ./composer.sh /tmp/composer.sh
 RUN sh /tmp/composer.sh
 
-RUN apt-get install php7.0-zip
-
 # xdebug
 RUN pecl install xdebug
 RUN docker-php-ext-enable xdebug
@@ -59,13 +57,13 @@ RUN docker-php-ext-install xsl
 RUN docker-php-ext-install xmlrpc
 
 RUN apt-get update
-RUN apt-get install wget -y
 RUN echo 'deb http://packages.dotdeb.org jessie all' >> /etc/apt/sources.list
 RUN wget https://www.dotdeb.org/dotdeb.gpg
 RUN apt-key add dotdeb.gpg -y
 RUN apt-get update
 RUN apt-get install mysql-client -y
 RUN apt-get install php7.0-mysql -y
+RUN apt-get install php7.0-zip -y
 RUN docker-php-ext-install pdo_mysql
 RUN a2enmod rewrite headers expires
 RUN /etc/init.d/apache2 restart
