@@ -1,8 +1,0 @@
-{
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/furgas/composer-merge-plugin.git"
-        }
-    ]
-}

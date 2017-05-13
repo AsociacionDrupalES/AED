@@ -3,16 +3,17 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @see       http://github.com/zendframework/zend-diactoros for the canonical source repository
- * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
 
 namespace Zend\Diactoros;
 
 use InvalidArgumentException;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\MessageInterface;
 use Psr\Http\Message\UploadedFileInterface;
 use stdClass;
-use UnexpectedValueException;
 
 /**
  * Class for marshaling a request object from the current PHP environment.
@@ -59,23 +60,19 @@ abstract class ServerRequestFactory
         $server  = static::normalizeServer($server ?: $_SERVER);
         $files   = static::normalizeFiles($files ?: $_FILES);
         $headers = static::marshalHeaders($server);
-
-        if (null === $cookies && array_key_exists('cookie', $headers)) {
-            $cookies = self::parseCookieHeader($headers['cookie']);
-        }
-
-        return new ServerRequest(
+        $request = new ServerRequest(
             $server,
             $files,
             static::marshalUriFromServer($server, $headers),
             static::get('REQUEST_METHOD', $server, 'GET'),
             'php://input',
-            $headers,
-            $cookies ?: $_COOKIE,
-            $query ?: $_GET,
-            $body ?: $_POST,
-            static::marshalProtocolVersion($server)
+            $headers
         );
+
+        return $request
+            ->withCookieParams($cookies ?: $_COOKIE)
+            ->withQueryParams($query ?: $_GET)
+            ->withParsedBody($body ?: $_POST);
     }
 
     /**
@@ -199,26 +196,24 @@ abstract class ServerRequestFactory
     {
         $headers = [];
         foreach ($server as $key => $value) {
-            // Apache prefixes environment variables with REDIRECT_
-            // if they are added by rewrite rules
-            if (strpos($key, 'REDIRECT_') === 0) {
-                $key = substr($key, 9);
-
-                // We will not overwrite existing variables with the
-                // prefixed versions, though
-                if (array_key_exists($key, $server)) {
-                    continue;
-                }
+            if (strpos($key, 'HTTP_COOKIE') === 0) {
+                // Cookies are handled using the $_COOKIE superglobal
+                continue;
             }
 
             if ($value && strpos($key, 'HTTP_') === 0) {
-                $name = strtr(strtolower(substr($key, 5)), '_', '-');
+                $name = strtr(substr($key, 5), '_', ' ');
+                $name = strtr(ucwords(strtolower($name)), ' ', '-');
+                $name = strtolower($name);
+
                 $headers[$name] = $value;
                 continue;
             }
 
             if ($value && strpos($key, 'CONTENT_') === 0) {
-                $name = 'content-' . strtolower(substr($key, 8));
+                $name = substr($key, 8); // Content-
+                $name = 'Content-' . (($name == 'MD5') ? $name : ucfirst(strtolower($name)));
+                $name = strtolower($name);
                 $headers[$name] = $value;
                 continue;
             }
@@ -272,15 +267,8 @@ abstract class ServerRequestFactory
             $query = ltrim($server['QUERY_STRING'], '?');
         }
 
-        // URI fragment
-        $fragment = '';
-        if (strpos($path, '#') !== false) {
-            list($path, $fragment) = explode('#', $path, 2);
-        }
-
         return $uri
             ->withPath($path)
-            ->withFragment($fragment)
             ->withQuery($query);
     }
 
@@ -466,57 +454,5 @@ abstract class ServerRequestFactory
             $normalizedFiles[$key] = self::createUploadedFileFromSpec($spec);
         }
         return $normalizedFiles;
-    }
-
-    /**
-     * Return HTTP protocol version (X.Y)
-     *
-     * @param array $server
-     * @return string
-     */
-    private static function marshalProtocolVersion(array $server)
-    {
-        if (! isset($server['SERVER_PROTOCOL'])) {
-            return '1.1';
-        }
-
-        if (! preg_match('#^(HTTP/)?(?P<version>[1-9]\d*(?:\.\d)?)$#', $server['SERVER_PROTOCOL'], $matches)) {
-            throw new UnexpectedValueException(sprintf(
-                'Unrecognized protocol version (%s)',
-                $server['SERVER_PROTOCOL']
-            ));
-        }
-
-        return $matches['version'];
-    }
-
-    /**
-     * Parse a cookie header according to RFC 6265.
-     *
-     * PHP will replace special characters in cookie names, which results in other cookies not being available due to
-     * overwriting. Thus, the server request should take the cookies from the request header instead.
-     *
-     * @param $cookieHeader
-     * @return array
-     */
-    private static function parseCookieHeader($cookieHeader)
-    {
-        preg_match_all('(
-            (?:^\\n?[ \t]*|;[ ])
-            (?P<name>[!#$%&\'*+-.0-9A-Z^_`a-z|~]+)
-            =
-            (?P<DQUOTE>"?)
-                (?P<value>[\x21\x23-\x2b\x2d-\x3a\x3c-\x5b\x5d-\x7e]*)
-            (?P=DQUOTE)
-            (?=\\n?[ \t]*$|;[ ])
-        )x', $cookieHeader, $matches, PREG_SET_ORDER);
-
-        $cookies = [];
-
-        foreach ($matches as $match) {
-            $cookies[$match['name']] = urldecode($match['value']);
-        }
-
-        return $cookies;
     }
 }

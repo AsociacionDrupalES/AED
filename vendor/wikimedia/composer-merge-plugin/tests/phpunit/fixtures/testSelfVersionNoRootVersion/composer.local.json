@@ -1,7 +1,0 @@
-{
-  "name": "foo/bar",
-  "replace": {
-    "foo/baz": "self.version",
-    "foo/xyzzy": "~1.0"
-  }
-}

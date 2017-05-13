@@ -201,11 +201,6 @@ class Response
         $this->setContent($content);
         $this->setStatusCode($status);
         $this->setProtocolVersion('1.0');
-
-        /* RFC2616 - 14.18 says all Responses need to have a Date */
-        if (!$this->headers->has('Date')) {
-            $this->setDate(new \DateTime(null, new \DateTimeZone('UTC')));
-        }
     }
 
     /**
@@ -334,7 +329,6 @@ class Response
             return $this;
         }
 
-        /* RFC2616 - 14.18 says all Responses need to have a Date */
         if (!$this->headers->has('Date')) {
             $this->setDate(\DateTime::createFromFormat('U', time()));
         }
@@ -618,11 +612,6 @@ class Response
      */
     public function getDate()
     {
-        /*
-            RFC2616 - 14.18 says all Responses need to have a Date.
-            Make sure we provide one even if it the header
-            has been removed in the meantime.
-         */
         if (!$this->headers->has('Date')) {
             $this->setDate(\DateTime::createFromFormat('U', time()));
         }

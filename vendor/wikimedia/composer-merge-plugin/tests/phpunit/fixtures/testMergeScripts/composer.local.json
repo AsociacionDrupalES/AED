@@ -1,9 +1,0 @@
-{
-    "scripts": {
-        "example-script": [
-            "echo 'hello world'",
-            "echo 'hello again world'"
-        ],
-        "example-script2": "echo 'hello world'"
-    }
-}

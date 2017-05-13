@@ -4,6 +4,7 @@
 namespace Egulias\EmailValidator\Parser;
 
 use Egulias\EmailValidator\EmailLexer;
+use Egulias\EmailValidator\Parser\Parser;
 use Egulias\EmailValidator\EmailValidator;
 
 class DomainPart extends Parser
@@ -102,34 +103,23 @@ class DomainPart extends Parser
     protected function doParseDomainPart()
     {
         $domain = '';
-        $openedParenthesis = 0;
-        $openBrackets = false;
         do {
+
             $prev = $this->lexer->getPrevious();
 
-            $this->checkNotAllowedChars($this->lexer->token);
+            if ($this->lexer->token['type'] === EmailLexer::S_SLASH) {
+                throw new \InvalidArgumentException('ERR_DOMAIN_CHAR_NOT_ALLOWED');
+            }
 
             if ($this->lexer->token['type'] === EmailLexer::S_OPENPARENTHESIS) {
                 $this->parseComments();
-                $openedParenthesis += $this->getOpenedParenthesis();
                 $this->lexer->moveNext();
-                $tmpPrev = $this->lexer->getPrevious();
-                if ($tmpPrev['type'] === EmailLexer::S_CLOSEPARENTHESIS) {
-                    $openedParenthesis--;
-                }
-            }
-            if ($this->lexer->token['type'] === EmailLexer::S_CLOSEPARENTHESIS) {
-                if ($openedParenthesis === 0) {
-                    throw new \InvalidArgumentException('ERR_UNOPENEDCOMMENT');
-                } else {
-                    $openedParenthesis--;
-                }
             }
 
             $this->checkConsecutiveDots();
             $this->checkDomainPartExceptions($prev);
 
-            if ($openBrackets = $this->hasBrackets($openBrackets)) {
+            if ($this->hasBrackets()) {
                 $this->parseDomainLiteral();
             }
 
@@ -144,14 +134,6 @@ class DomainPart extends Parser
         } while ($this->lexer->token);
 
         return $domain;
-    }
-
-    private function checkNotAllowedChars($token)
-    {
-        $notAllowed = array(EmailLexer::S_BACKSLASH => true, EmailLexer::S_SLASH=> true);
-        if (isset($notAllowed[$token['type']])) {
-            throw new \InvalidArgumentException('ERR_DOMAIN_CHAR_NOT_ALLOWED');
-        }
     }
 
     protected function parseDomainLiteral()
@@ -198,7 +180,7 @@ class DomainPart extends Parser
             }
 
             if ($this->lexer->isNextToken(EmailLexer::S_CR)) {
-                throw new \InvalidArgumentException('ERR_CR_NO_LF');
+                throw new \InvalidArgumentException("ERR_CR_NO_LF");
             }
             if ($this->lexer->token['type'] === EmailLexer::S_BACKSLASH) {
                 $this->warnings[] = EmailValidator::RFC5322_DOMLIT_OBSDTEXT;
@@ -294,12 +276,8 @@ class DomainPart extends Parser
         }
     }
 
-    protected function hasBrackets($openBrackets)
+    protected function hasBrackets()
     {
-        if ($this->lexer->token['type'] === EmailLexer::S_CLOSEBRACKET && !$openBrackets) {
-            throw new \InvalidArgumentException('ERR_EXPECTING_OPENBRACKET');
-        }
-
         if ($this->lexer->token['type'] !== EmailLexer::S_OPENBRACKET) {
             return false;
         }

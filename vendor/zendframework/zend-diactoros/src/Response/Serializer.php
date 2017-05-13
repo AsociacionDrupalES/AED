@@ -3,7 +3,7 @@
  * Zend Framework (http://framework.zend.com/)
  *
  * @see       http://github.com/zendframework/zend-diactoros for the canonical source repository
- * @copyright Copyright (c) 2015-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2015 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   https://github.com/zendframework/zend-diactoros/blob/master/LICENSE.md New BSD License
  */
 
@@ -37,7 +37,7 @@ final class Serializer extends AbstractSerializer
      * Parse a response from a stream.
      *
      * @param StreamInterface $stream
-     * @return Response
+     * @return ResponseInterface
      * @throws InvalidArgumentException when the stream is not readable.
      * @throws UnexpectedValueException when errors occur parsing the message.
      */
@@ -54,7 +54,7 @@ final class Serializer extends AbstractSerializer
 
         return (new Response($body, $status, $headers))
             ->withProtocolVersion($version)
-            ->withStatus((int) $status, $reasonPhrase);
+            ->withStatus($status, $reasonPhrase);
     }
 
     /**
@@ -73,8 +73,9 @@ final class Serializer extends AbstractSerializer
         if (! empty($headers)) {
             $headers = "\r\n" . $headers;
         }
-
-        $headers .= "\r\n\r\n";
+        if (! empty($body)) {
+            $headers .= "\r\n\r\n";
+        }
 
         return sprintf(
             $format,

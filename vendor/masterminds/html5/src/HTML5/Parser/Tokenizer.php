@@ -43,10 +43,6 @@ class Tokenizer
     protected $textMode = 0; // TEXTMODE_NORMAL;
     protected $untilTag = null;
 
-    const CONFORMANT_XML = 'xml';
-    const CONFORMANT_HTML = 'html';
-    protected $mode = self::CONFORMANT_HTML;
-
     const WHITE = "\t\n\f ";
 
     /**
@@ -61,13 +57,11 @@ class Tokenizer
      * @param \Masterminds\HTML5\Parser\EventHandler $eventHandler
      *            An event handler, initialized and ready to receive
      *            events.
-     * @param string $mode
      */
-    public function __construct($scanner, $eventHandler, $mode = self::CONFORMANT_HTML)
+    public function __construct($scanner, $eventHandler)
     {
         $this->scanner = $scanner;
         $this->events = $eventHandler;
-        $this->mode = $mode;
     }
 
     /**
@@ -341,8 +335,7 @@ class Tokenizer
             return $this->bogusComment('</');
         }
 
-        $name = $this->scanner->charsUntil("\n\f \t>");
-        $name = $this->mode === self::CONFORMANT_XML ? $name: strtolower($name);
+        $name = strtolower($this->scanner->charsUntil("\n\f \t>"));
         // Trash whitespace.
         $this->scanner->whitespace();
 
@@ -369,8 +362,7 @@ class Tokenizer
         }
 
         // We know this is at least one char.
-        $name = $this->scanner->charsWhile(":_-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-        $name = $this->mode === self::CONFORMANT_XML ? $name : strtolower($name);
+        $name = strtolower($this->scanner->charsWhile(":_-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"));
         $attributes = array();
         $selfClose = false;
 

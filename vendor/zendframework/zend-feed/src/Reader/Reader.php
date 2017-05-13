@@ -14,7 +14,6 @@ use DOMXPath;
 use Zend\Cache\Storage\StorageInterface as CacheStorage;
 use Zend\Http as ZendHttp;
 use Zend\Stdlib\ErrorHandler;
-use Zend\Feed\Reader\Exception\InvalidHttpClientException;
 
 /**
 */
@@ -58,7 +57,7 @@ class Reader implements ReaderImportInterface
     /**
      * HTTP client object to use for retrieving feeds
      *
-     * @var Http\ClientInterface
+     * @var ZendHttp\Client
      */
     protected static $httpClient = null;
 
@@ -118,30 +117,23 @@ class Reader implements ReaderImportInterface
      *
      * Sets the HTTP client object to use for retrieving the feeds.
      *
-     * @param  ZendHttp\Client | Http\ClientInterface $httpClient
+     * @param  ZendHttp\Client $httpClient
      * @return void
      */
-    public static function setHttpClient($httpClient)
+    public static function setHttpClient(ZendHttp\Client $httpClient)
     {
-        if ($httpClient instanceof ZendHttp\Client) {
-            $httpClient = new Http\ZendHttpClientDecorator($httpClient);
-        }
-
-        if (! $httpClient instanceof Http\ClientInterface) {
-            throw new InvalidHttpClientException();
-        }
         static::$httpClient = $httpClient;
     }
 
     /**
      * Gets the HTTP client object. If none is set, a new ZendHttp\Client will be used.
      *
-     * @return Http\ClientInterface
+     * @return ZendHttp\Client
      */
     public static function getHttpClient()
     {
-        if (! static::$httpClient) {
-            static::$httpClient = new Http\ZendHttpClientDecorator(new ZendHttp\Client());
+        if (!static::$httpClient instanceof ZendHttp\Client) {
+            static::$httpClient = new ZendHttp\Client();
         }
 
         return static::$httpClient;
@@ -197,16 +189,17 @@ class Reader implements ReaderImportInterface
      */
     public static function import($uri, $etag = null, $lastModified = null)
     {
-        $cache   = self::getCache();
-        $client  = self::getHttpClient();
+        $cache       = self::getCache();
+        $client      = self::getHttpClient();
+        $client->resetParameters();
+        $headers = new ZendHttp\Headers();
+        $client->setHeaders($headers);
+        $client->setUri($uri);
         $cacheId = 'Zend_Feed_Reader_' . md5($uri);
 
         if (static::$httpConditionalGet && $cache) {
-            $headers = [];
-            $data    = $cache->getItem($cacheId);
-            if ($data && $client instanceof Http\HeaderAwareClientInterface) {
-                // Only check for ETag and last modified values in the cache
-                // if we have a client capable of emitting headers in the first place.
+            $data = $cache->getItem($cacheId);
+            if ($data) {
                 if ($etag === null) {
                     $etag = $cache->getItem($cacheId . '_etag');
                 }
@@ -214,31 +207,26 @@ class Reader implements ReaderImportInterface
                     $lastModified = $cache->getItem($cacheId . '_lastmodified');
                 }
                 if ($etag) {
-                    $headers['If-None-Match'] = [$etag];
+                    $headers->addHeaderLine('If-None-Match', $etag);
                 }
                 if ($lastModified) {
-                    $headers['If-Modified-Since'] = [$lastModified];
+                    $headers->addHeaderLine('If-Modified-Since', $lastModified);
                 }
             }
-            $response = $client->get($uri, $headers);
+            $response = $client->send();
             if ($response->getStatusCode() !== 200 && $response->getStatusCode() !== 304) {
-                throw new Exception\RuntimeException(
-                    'Feed failed to load, got response code ' . $response->getStatusCode()
-                );
+                throw new Exception\RuntimeException('Feed failed to load, got response code ' . $response->getStatusCode());
             }
             if ($response->getStatusCode() == 304) {
                 $responseXml = $data;
             } else {
                 $responseXml = $response->getBody();
                 $cache->setItem($cacheId, $responseXml);
-
-                if ($response instanceof Http\HeaderAwareResponseInterface) {
-                    if ($response->getHeaderLine('ETag', false)) {
-                        $cache->setItem($cacheId . '_etag', $response->getHeaderLine('ETag'));
-                    }
-                    if ($response->getHeaderLine('Last-Modified', false)) {
-                        $cache->setItem($cacheId . '_lastmodified', $response->getHeaderLine('Last-Modified'));
-                    }
+                if ($response->getHeaders()->get('ETag')) {
+                    $cache->setItem($cacheId . '_etag', $response->getHeaders()->get('ETag')->getFieldValue());
+                }
+                if ($response->getHeaders()->get('Last-Modified')) {
+                    $cache->setItem($cacheId . '_lastmodified', $response->getHeaders()->get('Last-Modified')->getFieldValue());
                 }
             }
             return static::importString($responseXml);
@@ -247,21 +235,17 @@ class Reader implements ReaderImportInterface
             if ($data) {
                 return static::importString($data);
             }
-            $response = $client->get($uri);
+            $response = $client->send();
             if ((int) $response->getStatusCode() !== 200) {
-                throw new Exception\RuntimeException(
-                    'Feed failed to load, got response code ' . $response->getStatusCode()
-                );
+                throw new Exception\RuntimeException('Feed failed to load, got response code ' . $response->getStatusCode());
             }
             $responseXml = $response->getBody();
             $cache->setItem($cacheId, $responseXml);
             return static::importString($responseXml);
         } else {
-            $response = $client->get($uri);
+            $response = $client->send();
             if ((int) $response->getStatusCode() !== 200) {
-                throw new Exception\RuntimeException(
-                    'Feed failed to load, got response code ' . $response->getStatusCode()
-                );
+                throw new Exception\RuntimeException('Feed failed to load, got response code ' . $response->getStatusCode());
             }
             $reader = static::importString($response->getBody());
             $reader->setOriginalSourceUri($uri);
@@ -286,7 +270,7 @@ class Reader implements ReaderImportInterface
     public static function importRemoteFeed($uri, Http\ClientInterface $client)
     {
         $response = $client->get($uri);
-        if (! $response instanceof Http\ResponseInterface) {
+        if (!$response instanceof Http\ResponseInterface) {
             throw new Exception\RuntimeException(sprintf(
                 'Did not receive a %s\Http\ResponseInterface from the provided HTTP client; received "%s"',
                 __NAMESPACE__,
@@ -295,9 +279,7 @@ class Reader implements ReaderImportInterface
         }
 
         if ((int) $response->getStatusCode() !== 200) {
-            throw new Exception\RuntimeException(
-                'Feed failed to load, got response code ' . $response->getStatusCode()
-            );
+            throw new Exception\RuntimeException('Feed failed to load, got response code ' . $response->getStatusCode());
         }
         $reader = static::importString($response->getBody());
         $reader->setOriginalSourceUri($uri);
@@ -315,7 +297,7 @@ class Reader implements ReaderImportInterface
     public static function importString($string)
     {
         $trimmed = trim($string);
-        if (! is_string($string) || empty($trimmed)) {
+        if (!is_string($string) || empty($trimmed)) {
             throw new Exception\InvalidArgumentException('Only non empty strings are allowed as input');
         }
 
@@ -333,7 +315,7 @@ class Reader implements ReaderImportInterface
         libxml_disable_entity_loader($oldValue);
         libxml_use_internal_errors($libxmlErrflag);
 
-        if (! $status) {
+        if (!$status) {
             // Build error message
             $error = libxml_get_last_error();
             if ($error && $error->message) {
@@ -389,12 +371,11 @@ class Reader implements ReaderImportInterface
      */
     public static function findFeedLinks($uri)
     {
-        $client   = static::getHttpClient();
-        $response = $client->get($uri);
+        $client = static::getHttpClient();
+        $client->setUri($uri);
+        $response = $client->send();
         if ($response->getStatusCode() !== 200) {
-            throw new Exception\RuntimeException(
-                "Failed to access $uri, got response code " . $response->getStatusCode()
-            );
+            throw new Exception\RuntimeException("Failed to access $uri, got response code " . $response->getStatusCode());
         }
         $responseHtml = $response->getBody();
         $libxmlErrflag = libxml_use_internal_errors(true);
@@ -403,7 +384,7 @@ class Reader implements ReaderImportInterface
         $status = $dom->loadHTML(trim($responseHtml));
         libxml_disable_entity_loader($oldValue);
         libxml_use_internal_errors($libxmlErrflag);
-        if (! $status) {
+        if (!$status) {
             // Build error message
             $error = libxml_get_last_error();
             if ($error && $error->message) {
@@ -435,8 +416,8 @@ class Reader implements ReaderImportInterface
             $dom = $feed->getDomDocument();
         } elseif ($feed instanceof DOMDocument) {
             $dom = $feed;
-        } elseif (is_string($feed) && ! empty($feed)) {
-            ErrorHandler::start(E_NOTICE | E_WARNING);
+        } elseif (is_string($feed) && !empty($feed)) {
+            ErrorHandler::start(E_NOTICE|E_WARNING);
             ini_set('track_errors', 1);
             $oldValue = libxml_disable_entity_loader(true);
             $dom = new DOMDocument;
@@ -451,8 +432,8 @@ class Reader implements ReaderImportInterface
             libxml_disable_entity_loader($oldValue);
             ini_restore('track_errors');
             ErrorHandler::stop();
-            if (! $status) {
-                if (! isset($phpErrormsg)) {
+            if (!$status) {
+                if (!isset($phpErrormsg)) {
                     if (function_exists('xdebug_is_enabled')) {
                         $phpErrormsg = '(error message not available, when XDebug is running)';
                     } else {
@@ -562,7 +543,7 @@ class Reader implements ReaderImportInterface
      */
     public static function getExtensionManager()
     {
-        if (! isset(static::$extensionManager)) {
+        if (!isset(static::$extensionManager)) {
             static::setExtensionManager(new StandaloneExtensionManager());
         }
         return static::$extensionManager;
@@ -586,7 +567,7 @@ class Reader implements ReaderImportInterface
             }
         }
 
-        if (! $manager->has($feedName) && ! $manager->has($entryName)) {
+        if (!$manager->has($feedName) && !$manager->has($entryName)) {
             throw new Exception\RuntimeException('Could not load extension: ' . $name
                 . ' using Plugin Loader. Check prefix paths are configured and extension exists.');
         }

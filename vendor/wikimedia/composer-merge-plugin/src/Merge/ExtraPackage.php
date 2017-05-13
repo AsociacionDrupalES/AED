@@ -59,11 +59,6 @@ class ExtraPackage
     protected $package;
 
     /**
-     * @var VersionParser $versionParser
-     */
-    protected $versionParser;
-
-    /**
      * @param string $path Path to composer.json file
      * @param Composer $composer
      * @param Logger $logger
@@ -75,7 +70,6 @@ class ExtraPackage
         $this->logger = $logger;
         $this->json = $this->readPackageJson($path);
         $this->package = $this->loadPackage($this->json);
-        $this->versionParser = new VersionParser();
     }
 
     /**
@@ -126,10 +120,10 @@ class ExtraPackage
     }
 
     /**
-     * @param array $json
+     * @param string $json
      * @return CompletePackage
      */
-    protected function loadPackage(array $json)
+    protected function loadPackage($json)
     {
         $loader = new ArrayLoader();
         $package = $loader->load($json);
@@ -152,9 +146,12 @@ class ExtraPackage
      */
     public function mergeInto(RootPackageInterface $root, PluginState $state)
     {
-        $this->prependRepositories($root);
+        $this->addRepositories($root);
 
         $this->mergeRequires('require', $root, $state);
+        if ($state->isDevMode()) {
+            $this->mergeRequires('require-dev', $root, $state);
+        }
 
         $this->mergePackageLinks('conflict', $root);
         $this->mergePackageLinks('replace', $root);
@@ -163,29 +160,11 @@ class ExtraPackage
         $this->mergeSuggests($root);
 
         $this->mergeAutoload('autoload', $root);
+        if ($state->isDevMode()) {
+            $this->mergeAutoload('devAutoload', $root);
+        }
 
         $this->mergeExtra($root, $state);
-
-        $this->mergeScripts($root, $state);
-
-        if ($state->isDevMode()) {
-            $this->mergeDevInto($root, $state);
-        } else {
-            $this->mergeReferences($root);
-        }
-    }
-
-    /**
-     * Merge just the dev portion into a RootPackageInterface
-     *
-     * @param RootPackageInterface $root
-     * @param PluginState $state
-     */
-    public function mergeDevInto(RootPackageInterface $root, PluginState $state)
-    {
-        $this->mergeRequires('require-dev', $root, $state);
-        $this->mergeAutoload('devAutoload', $root);
-        $this->mergeReferences($root);
     }
 
     /**
@@ -194,7 +173,7 @@ class ExtraPackage
      *
      * @param RootPackageInterface $root
      */
-    protected function prependRepositories(RootPackageInterface $root)
+    protected function addRepositories(RootPackageInterface $root)
     {
         if (!isset($this->json['repositories'])) {
             return;
@@ -206,12 +185,12 @@ class ExtraPackage
             if (!isset($repoJson['type'])) {
                 continue;
             }
-            $this->logger->info("Prepending {$repoJson['type']} repository");
+            $this->logger->info("Adding {$repoJson['type']} repository");
             $repo = $repoManager->createRepository(
                 $repoJson['type'],
                 $repoJson
             );
-            $repoManager->prependRepository($repo);
+            $repoManager->addRepository($repo);
             $newRepos[] = $repo;
         }
 
@@ -423,68 +402,23 @@ class ExtraPackage
 
         if ($state->replaceDuplicateLinks()) {
             $unwrapped->setExtra(
-                self::mergeExtraArray($state->shouldMergeExtraDeep(), $rootExtra, $extra)
+                array_merge($rootExtra, $extra)
             );
+
         } else {
-            if (!$state->shouldMergeExtraDeep()) {
-                foreach (array_intersect(
-                    array_keys($extra),
-                    array_keys($rootExtra)
-                ) as $key) {
-                    $this->logger->info(
-                        "Ignoring duplicate <comment>{$key}</comment> in ".
-                        "<comment>{$this->path}</comment> extra config."
-                    );
-                }
+            foreach (array_intersect(
+                array_keys($extra),
+                array_keys($rootExtra)
+            ) as $key) {
+                $this->logger->info(
+                    "Ignoring duplicate <comment>{$key}</comment> in ".
+                    "<comment>{$this->path}</comment> extra config."
+                );
             }
             $unwrapped->setExtra(
-                self::mergeExtraArray($state->shouldMergeExtraDeep(), $extra, $rootExtra)
+                array_merge($extra, $rootExtra)
             );
         }
-    }
-
-    /**
-     * Merge scripts config into a RootPackageInterface
-     *
-     * @param RootPackageInterface $root
-     * @param PluginState $state
-     */
-    public function mergeScripts(RootPackageInterface $root, PluginState $state)
-    {
-        $scripts = $this->package->getScripts();
-        if (!$state->shouldMergeScripts() || empty($scripts)) {
-            return;
-        }
-
-        $rootScripts = $root->getScripts();
-        $unwrapped = self::unwrapIfNeeded($root, 'setScripts');
-
-        if ($state->replaceDuplicateLinks()) {
-            $unwrapped->setScripts(
-                array_merge($rootScripts, $scripts)
-            );
-        } else {
-            $unwrapped->setScripts(
-                array_merge($scripts, $rootScripts)
-            );
-        }
-    }
-
-    /**
-     * Merges two arrays either via arrayMergeDeep or via array_merge.
-     *
-     * @param bool $mergeDeep
-     * @param array $array1
-     * @param array $array2
-     * @return array
-     */
-    public static function mergeExtraArray($mergeDeep, $array1, $array2)
-    {
-        if ($mergeDeep) {
-            return NestedArray::mergeDeep($array1, $array2);
-        }
-
-        return array_merge($array1, $array2);
     }
 
     /**
@@ -504,7 +438,7 @@ class ExtraPackage
         $linkType = BasePackage::$supportedLinkTypes[$type];
         $version = $root->getVersion();
         $prettyVersion = $root->getPrettyVersion();
-        $vp = $this->versionParser;
+        $vp = new VersionParser();
 
         $method = 'get' . ucfirst($linkType['method']);
         $packages = $root->$method();
@@ -568,54 +502,6 @@ class ExtraPackage
         }
         // @codeCoverageIgnoreEnd
         return $root;
-    }
-
-    /**
-     * Update the root packages reference information.
-     *
-     * @param RootPackageInterface $root
-     */
-    protected function mergeReferences(RootPackageInterface $root)
-    {
-        // Merge source reference information for merged packages.
-        // @see RootPackageLoader::load
-        $references = array();
-        $unwrapped = $this->unwrapIfNeeded($root, 'setReferences');
-        foreach (array('require', 'require-dev') as $linkType) {
-            $linkInfo = BasePackage::$supportedLinkTypes[$linkType];
-            $method = 'get'.ucfirst($linkInfo['method']);
-            $links = array();
-            foreach ($unwrapped->$method() as $link) {
-                $links[$link->getTarget()] = $link->getConstraint()->getPrettyString();
-            }
-            $references = $this->extractReferences($links, $references);
-        }
-        $unwrapped->setReferences($references);
-    }
-
-    /**
-     * Extract vcs revision from version constraint (dev-master#abc123.
-     *
-     * @param array $requires
-     * @param array $references
-     * @return array
-     * @see RootPackageLoader::extractReferences()
-     */
-    protected function extractReferences(array $requires, array $references)
-    {
-        foreach ($requires as $reqName => $reqVersion) {
-            $reqVersion = preg_replace('{^([^,\s@]+) as .+$}', '$1', $reqVersion);
-            $stabilityName = VersionParser::parseStability($reqVersion);
-            if (
-                preg_match('{^[^,\s@]+?#([a-f0-9]+)$}', $reqVersion, $match) &&
-                $stabilityName === 'dev'
-            ) {
-                $name = strtolower($reqName);
-                $references[$name] = $match[1];
-            }
-        }
-
-        return $references;
     }
 }
 // vim:sw=4:ts=4:sts=4:et:

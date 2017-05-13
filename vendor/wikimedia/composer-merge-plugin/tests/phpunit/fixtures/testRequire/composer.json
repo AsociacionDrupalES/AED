@@ -1,7 +1,0 @@
-{
-    "extra": {
-        "merge-plugin": {
-            "require": "composer.local.json"
-        }
-    }
-}
