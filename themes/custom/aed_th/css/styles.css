@@ -2128,7 +2128,7 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   vertical-align: top;
 }
 
-.node--type-videos.node--view-mode-teaser .field--name-node-title h2 {
+.node--type-videos.node--view-mode-teaser h2 {
   font-size: 16px;
   font-weight: 300;
   margin: 0;
