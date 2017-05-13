@@ -1,0 +1,141 @@
+// VM Full
+.node--type-article.node--view-mode-full {
+  max-width: 621px;
+  margin: 0 auto 30px;
+
+  @include media ($desk) {
+    margin: 0 auto 80px;
+  }
+
+  .field--name-node-post-date {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 7px;
+  }
+
+  h2 {
+    font-size: 32px;
+    font-weight: 100;
+    line-height: 1;
+    margin: 0 0 21px;
+
+    @include media ($desk) {
+      font-size: 40px;
+      line-height: normal;
+    }
+
+  }
+
+  .field--name-node-submitted-by {
+    font-weight: 100;
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 30px;
+    }
+
+    * {
+      font-weight: 100;
+    }
+
+    .username {
+      font-weight: 900;
+    }
+
+  }
+
+  .field--name-field-header-image {
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 45px;
+    }
+
+  }
+
+  .field--name-body {
+    margin-bottom: 20px;
+
+    @include media ($desk) {
+      margin-bottom: 40px;
+    }
+
+    p {
+      line-height: 1.8;
+      font-weight: 300;
+      margin: 0 0 15px;
+    }
+
+    a {
+      text-decoration: underline;
+    }
+
+    ul {
+      li {
+        margin: 6px 0;
+      }
+    }
+
+  }
+
+  .field--name-field-tags {
+    border-top: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+    padding: 20px 0;
+
+    @include media ($desk) {
+      padding: 46px 0;
+    }
+
+    .field__label {
+      font-size: 13px;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 22px;
+    }
+
+    .field__item {
+      display: inline-block;
+      margin-right: 7px;
+      margin-bottom: 5px;
+
+      @include media ($desk) {
+        margin-right: 1px;
+      }
+
+      a {
+        display: inline-block;
+        background: #e3e3e3;
+        padding: 10px 25px 11px;
+      }
+
+    }
+  }
+
+  .field--name-field-attachments {
+    table {
+      width: 100%;
+
+      thead {
+        tr {
+          th {
+            padding: 10px;
+            background: #e9e9f3;
+            text-align: left;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          td {
+            padding: 10px;
+
+          }
+        }
+      }
+
+    }
+  }
+
+}
