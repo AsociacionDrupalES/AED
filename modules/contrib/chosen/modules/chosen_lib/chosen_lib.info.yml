@@ -4,8 +4,8 @@ description: Add <a href="http://harvesthq.github.com/chosen/">chosen</a> librar
 package: User interface
 # core: 8.x
 
-# Information added by Drupal.org packaging script on 2017-03-11
-version: '8.x-2.2'
+# Information added by Drupal.org packaging script on 2017-05-02
+version: '8.x-2.3'
 core: '8.x'
 project: 'chosen'
-datestamp: 1489233486
+datestamp: 1493719252

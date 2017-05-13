@@ -84,7 +84,7 @@
 
 -- TROUBLE SHOOTING --
 
-  How to exlude a select field from becoming a chosen select.
+  How to exclude a select field from becoming a chosen select.
     - go to the configuration page and add your field using the jquery "not"
       operator to the textarea with the comma separated values.
       For date fields this could look like:

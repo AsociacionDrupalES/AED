@@ -18,6 +18,11 @@ use Drupal\migrate_plus\Event\MigratePrepareRowEvent;
 function migrate_plus_migration_plugins_alter(array &$migrations) {
   /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
   foreach ($migrations as $id => $migration) {
+    // Add the default class where empty.
+    if (empty($migration['class'])) {
+      $migrations[$id]['class'] = 'Drupal\migrate\Plugin\Migration';
+    }
+
     if (empty($migration['migration_group'])) {
       $migration['migration_group'] = 'default';
     }
