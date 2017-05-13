@@ -85,24 +85,18 @@ view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
     {{ title_prefix }}
     {{ title_suffix }}
 
-    <div class="image-wrapper">
-        <div class="field--name-node-post-date">
-            {{ node.getCreatedTime()|date("d/m/Y - H:i") }}
-        </div>
-
-        {{ content.field_header_image }}
+    <div class="field--type-link">
+        {{ content.field_group_url }}
     </div>
 
-    <h2{{ title_attributes }}>
-        <a href="{{ url }}" rel="bookmark">{{ label }}</a>
-    </h2>
-
-    <div class="field--name-node-submitted-by">
-        {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
+    <div class="field--name-node-title">
+        <h2{{ title_attributes }}>
+            {{ label }}
+        </h2>
     </div>
 
-    <div{{ content_attributes.addClass('node__content') }}>
-        {{ content|without('field_header_image') }}
+    <div class="field--name-field-group-image">
+        {{ content.field_group_image }}
     </div>
 
 </article>

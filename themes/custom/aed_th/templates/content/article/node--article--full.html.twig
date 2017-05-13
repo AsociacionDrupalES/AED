@@ -78,18 +78,20 @@ node.isSticky() ? 'node--sticky',
 not node.isPublished() ? 'node--unpublished',
 view_mode ? 'node--view-mode-' ~ view_mode|clean_class,
 ] %}
+
 {{ attach_library('classy/node') }}
+
 <article{{ attributes.addClass(classes) }}>
+    {{ title_prefix }}
+    {{ title_suffix }}
 
     <div class="field--name-node-post-date">
         {{ node.getCreatedTime()|date("l, F d, Y - H:i") }}
     </div>
 
-    {{ title_prefix }}
     <h2{{ title_attributes }}>
         <a href="{{ url }}" rel="bookmark">{{ label }}</a>
     </h2>
-    {{ title_suffix }}
 
     <div class="field--name-node-submitted-by">
         {% trans %}Submitted by {{ author_name }} on {{ date }}{% endtrans %}
