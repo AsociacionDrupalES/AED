@@ -1761,26 +1761,12 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   margin: 0 0 15px;
 }
 
-.node--type-article.node--view-mode-full .field--name-body ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+.node--type-article.node--view-mode-full .field--name-body a {
+  text-decoration: underline;
 }
 
-.node--type-article.node--view-mode-full .field--name-body ul img {
-  width: auto;
-}
-
-.node--type-article.node--view-mode-full .field--name-body ul li:before {
-  content: '';
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: black;
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 11px;
-  margin-right: 8px;
+.node--type-article.node--view-mode-full .field--name-body ul li {
+  margin: 6px 0;
 }
 
 .node--type-article.node--view-mode-full .field--name-field-tags {
@@ -1818,6 +1804,20 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   display: inline-block;
   background: #e3e3e3;
   padding: 10px 25px 11px;
+}
+
+.node--type-article.node--view-mode-full .field--name-field-attachments table {
+  width: 100%;
+}
+
+.node--type-article.node--view-mode-full .field--name-field-attachments table thead tr th {
+  padding: 10px;
+  background: #e9e9f3;
+  text-align: left;
+}
+
+.node--type-article.node--view-mode-full .field--name-field-attachments table tbody tr td {
+  padding: 10px;
 }
 
 .node--type-groups.node--view-mode-teaser {
@@ -2747,7 +2747,7 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
 }
 
 .region-wrapper > * {
-  max-width: 68.75em;
+  max-width: 68em;
   margin-left: auto;
   margin-right: auto;
   max-width: 1100px;
