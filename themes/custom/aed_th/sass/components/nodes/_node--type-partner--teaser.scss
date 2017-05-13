@@ -1,0 +1,39 @@
+.node--type-partner.node--view-mode-teaser {
+  text-align: center;
+
+  img {
+    width: 80%;
+    display: inline-block;
+    vertical-align: top;
+
+    @include media ($tab) {
+      width: auto;
+      max-width: 400px;
+      max-height: 150px;
+    }
+
+  }
+
+  .field--name-field-slogan {
+    font-size: 14px;
+    font-weight: 300;
+    text-transform: uppercase;
+    position: relative;
+    padding-top: 34px;
+    margin-top: 130px;
+
+    &:before {
+      content: "";
+      width: 64px;
+      height: 4px;
+      background: black;
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 50%;
+      margin-left: -32px;
+    }
+
+  }
+
+}

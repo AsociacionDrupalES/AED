@@ -1,0 +1,71 @@
+.node--type-partner.node--view-mode-full {
+  > div > div {
+    margin-bottom: 20px;
+  }
+
+  .field--name-field-logo {
+    max-width: 500px;
+  }
+
+  .field--name-field-webpage {
+
+    a {
+      color: $color-blue-e;
+
+      &:hover, &:focus {
+        color: $color-blue-a;
+      }
+
+    }
+
+  }
+
+  .field--name-field-slogan {
+    font-weight: 300;
+    line-height: 1.8;
+  }
+
+  .field--name-field-anos-patrocinados {
+
+    .field__label {
+      font-weight: 300;
+    }
+
+    .field__items {
+      float: none;
+      padding: 0;
+
+      > div {
+        display: inline-block;
+        margin-right: 5px;
+
+        &:before {
+          content: "";
+          width: 8px;
+          height: 8px;
+          background: $color-blue-e;
+          border-radius: 50%;
+          display: inline-block;
+          margin-right: 7px;
+          position: relative;
+          top: -1px;
+        }
+
+        &:first-child {
+
+          &:before {
+            content: none;
+          }
+
+        }
+
+        a {
+          font-weight: 300;
+          display: inline-block;
+        }
+
+      }
+    }
+  }
+}
+
