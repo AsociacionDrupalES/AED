@@ -65,9 +65,9 @@ class FieldTemplateTest extends FastTestBase {
     $body_field = $node->body->value;
 
     // Reset theming function.
-    $edit = array(
+    $edit = [
       'fs1[ft-default]' => 'reset',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/settings', $edit, t('Save configuration'));
 
     // As long as we don't change anything in the UI, the default template will
@@ -104,9 +104,9 @@ class FieldTemplateTest extends FastTestBase {
     $xpath = $this->xpath('//div[@class="group-right"]/div[@class="field-label-inline"]');
     $this->assertTrimEqual($xpath[0], 'My body');
 
-    $edit = array(
+    $edit = [
       'fs1[ft-show-colon]' => 'reset',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/settings', $edit, t('Save configuration'));
     // Clear node cache to get the colon.
     $tags = $node->getCacheTags();
@@ -133,11 +133,11 @@ class FieldTemplateTest extends FastTestBase {
     $body_field = $node->body->value;
 
     // Custom field function with outer wrapper.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'expert',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -148,11 +148,11 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->div->p, $body_field);
 
     // With outer div wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -161,11 +161,11 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With outer span wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class-2',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -184,13 +184,13 @@ class FieldTemplateTest extends FastTestBase {
     $body_field = $node->body->value;
 
     // With outer wrapper and field items wrapper.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'expert',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'div',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
 
     drupal_flush_all_caches();
@@ -199,54 +199,54 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With outer wrapper and field items div wrapper with class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     $this->drupalGet('node/' . $node->id());
     $xpath = $this->xpath('//div[@class="group-right"]/div/div[@class="fi-class"]');
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With outer wrapper and field items span wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     $this->drupalGet('node/' . $node->id());
     $xpath = $this->xpath('//div[@class="group-right"]/div/span[@class="fi-class"]');
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With outer wrapper class and field items span wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     $this->drupalGet('node/' . $node->id());
     $xpath = $this->xpath('//div[@class="group-right"]/div[@class="ow-class"]/span[@class="fi-class"]');
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With outer wrapper span class and field items span wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'fi-class-2',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     $this->drupalGet('node/' . $node->id());
     $xpath = $this->xpath('//div[@class="group-right"]/span[@class="ow-class"]/span[@class="fi-class-2"]');
@@ -262,10 +262,10 @@ class FieldTemplateTest extends FastTestBase {
     $body_field = $node->body->value;
 
     // With field item div wrapper.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'expert',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -274,10 +274,10 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->div->p, $body_field);
 
     // With field item span wrapper.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'span',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -287,11 +287,11 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->span->p, $body_field);
 
     // With field item span wrapper and class.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -300,14 +300,14 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With fis and fi.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'fi-class-2',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -316,7 +316,7 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With all wrappers.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
@@ -326,7 +326,7 @@ class FieldTemplateTest extends FastTestBase {
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'fi-class',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -335,7 +335,7 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // With all wrappers and attributes.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
@@ -348,7 +348,7 @@ class FieldTemplateTest extends FastTestBase {
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'fi-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-at]' => 'name="fi-at"',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -357,7 +357,7 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // Remove attributes.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
@@ -370,7 +370,7 @@ class FieldTemplateTest extends FastTestBase {
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => 'span',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'fi-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-at]' => '',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
 
     // Label tests with custom function.
@@ -419,12 +419,12 @@ class FieldTemplateTest extends FastTestBase {
     // Test default classes on outer wrapper.
     // @todo figure out a way to actually test this as the default cases don't
     // have classes anymore.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-def-cl]' => '1',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -433,12 +433,12 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // Test default attributes on field item.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-el]' => 'div',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-cl]' => 'ow-class',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow-def-at]' => '1',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -448,9 +448,9 @@ class FieldTemplateTest extends FastTestBase {
 
     // Use the test field theming function to test that this function is
     // registered in the theme registry through ds_extras_theme().
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'ds_test_template',
-    );
+    ];
 
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
@@ -467,14 +467,14 @@ class FieldTemplateTest extends FastTestBase {
     // Get a node.
     $node = $this->entitiesTestSetup('hidden');
 
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'expert',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
 
     // Inject XSS everywhere and see if it brakes.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][prefix]' => '<div class="not-stripped"><script>alert("XSS")</script>',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][suffix]' => '</div><script>alert("XSS")</script>',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][ow]' => '1',
@@ -489,7 +489,7 @@ class FieldTemplateTest extends FastTestBase {
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-el]' => '<script>alert("XSS")</script>',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => '<script>alert("XSS")</script>',
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][fi-at]' => "name=\"<script>alert('XSS')</script>\"",
-    );
+    ];
     $this->dsEditFormatterSettings($edit);
     drupal_flush_all_caches();
 
@@ -508,28 +508,28 @@ class FieldTemplateTest extends FastTestBase {
     // Get a node.
     $node = $this->entitiesTestSetup('hidden');
 
-    $edit = array(
+    $edit = [
       'fields[field_tags][region]' => 'right',
       'fields[field_tags][type]' => 'entity_reference_label',
-    );
+    ];
     $this->dsConfigureUi($edit, 'admin/structure/types/manage/article/display');
 
     // Set expert field on.
-    $edit = array(
+    $edit = [
       'fields[field_tags][settings_edit_form][third_party_settings][ds][ft][id]' => 'expert',
       'fields[field_tags][settings_edit_form][third_party_settings][ds][ft][settings][fis]' => '1',
       'fields[field_tags][settings_edit_form][third_party_settings][ds][ft][settings][fis-cl]' => 'tags',
       'fields[field_tags][settings_edit_form][third_party_settings][ds][ft][settings][fi]' => '1',
       'fields[field_tags][settings_edit_form][third_party_settings][ds][ft][settings][fi-cl]' => 'tag',
-    );
+    ];
     $this->dsEditFormatterSettings($edit, 'field_tags');
     drupal_flush_all_caches();
 
     // Add multiple tags.
-    $edit = array(
+    $edit = [
       'field_tags[0][target_id]' => 'Tag 1',
       'field_tags[1][target_id]' => 'Tag 2',
-    );
+    ];
     $this->drupalPostForm('node/' . $node->id() . '/edit', $edit, t('Save and keep published'));
 
     // Count the found tags.
@@ -546,15 +546,15 @@ class FieldTemplateTest extends FastTestBase {
     $node = $this->entitiesTestSetup('hidden');
     $body_field = $node->body->value;
 
-    $edit = array(
+    $edit = [
       'fields[body][region]' => 'right',
-    );
+    ];
     $this->dsConfigureUi($edit, 'admin/structure/types/manage/article/display');
 
     // Set minimal template on.
-    $edit = array(
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][id]' => 'minimal',
-    );
+    ];
     $this->dsEditFormatterSettings($edit, 'body');
     drupal_flush_all_caches();
 
@@ -563,13 +563,13 @@ class FieldTemplateTest extends FastTestBase {
     $this->assertTrimEqual($xpath[0]->p, $body_field);
 
     // Choose field classes.
-    $classes = array(
+    $classes = [
       'test_field_class',
       '[node:nid]',
-    );
-    $edit = array(
+    ];
+    $edit = [
       'fields[body][settings_edit_form][third_party_settings][ds][ft][settings][classes][]' => $classes,
-    );
+    ];
     $this->dsEditFormatterSettings($edit, 'body');
     drupal_flush_all_caches();
 
@@ -577,6 +577,20 @@ class FieldTemplateTest extends FastTestBase {
     $classes = 'test_field_class ' . $node->id() . ' field field-name-body';
     $xpath = $this->xpath('//div[@class="group-right"]/div[@class="' . $classes . '"]');
     $this->assertTrimEqual($xpath[0]->p, $body_field);
+
+    // Switch theme.
+    $this->container->get('theme_installer')->install(['ds_test_layout_theme']);
+    $config = \Drupal::configFactory()->getEditable('system.theme');
+    $config->set('default', 'ds_test_layout_theme')->save();
+    drupal_flush_all_caches();
+
+    // Go to the node.
+    $this->drupalGet('node/' . $node->id());
+    $this->assertRaw('minimal overridden in test theme!');
+    $classes = 'test_field_class ' . $node->id() . ' field field-name-body';
+    $xpath = $this->xpath('//div[@class="group-right"]/div[@class="' . $classes . '"]');
+    $this->assertTrimEqual($xpath[0]->p, $body_field);
+
   }
 
 }

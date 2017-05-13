@@ -15,7 +15,7 @@ class RouteSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[RoutingEvents::ALTER][] = array('alterRoutes', 100);
+    $events[RoutingEvents::ALTER][] = ['alterRoutes', 100];
     return $events;
   }
 

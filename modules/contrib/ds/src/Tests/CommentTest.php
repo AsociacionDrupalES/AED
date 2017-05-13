@@ -18,15 +18,14 @@ class CommentTest extends CommentTestBase {
    *
    * @var array
    */
-  public static $modules = array(
+  public static $modules = [
     'node',
     'user',
     'comment',
     'field_ui',
     'block',
     'ds',
-    'layout_plugin',
-  );
+  ];
 
   /**
    * The created user.
@@ -42,7 +41,7 @@ class CommentTest extends CommentTestBase {
     parent::setUp();
 
     // Create a test user.
-    $this->adminUser = $this->drupalCreateUser(array(
+    $this->adminUser = $this->drupalCreateUser([
       'access content',
       'admin classes',
       'admin display suite',
@@ -71,7 +70,7 @@ class CommentTest extends CommentTestBase {
       // Usernames aren't shown in comment edit form autocomplete unless this
       // permission is granted.
       'access user profiles',
-    ));
+    ]);
     $this->drupalLogin($this->adminUser);
   }
 
@@ -80,15 +79,15 @@ class CommentTest extends CommentTestBase {
    */
   public function testComments() {
     // Create a node.
-    $settings = array('type' => 'article', 'promote' => 1);
+    $settings = ['type' => 'article', 'promote' => 1];
     $node = $this->drupalCreateNode($settings);
 
-    $this->dsSelectLayout(array(), array(), 'admin/structure/comment/manage/comment/display');
+    $this->dsSelectLayout([], [], 'admin/structure/comment/manage/comment/display');
 
-    $fields = array(
+    $fields = [
       'fields[comment_title][region]' => 'left',
       'fields[comment_body][region]' => 'left',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/structure/comment/manage/comment/display');
 
     // Post comment.
@@ -106,9 +105,9 @@ class CommentTest extends CommentTestBase {
     // Test that hidden fields aren't exposed in the config.
     $this->dsSelectLayout();
 
-    $fields = array(
+    $fields = [
       'fields[comment][region]' => 'hidden',
-    );
+    ];
     $this->dsConfigureUi($fields);
 
     $display = entity_get_display('node', 'article', 'default');
@@ -124,26 +123,26 @@ class CommentTest extends CommentTestBase {
    */
   public function testCommentUser() {
     // Create a node.
-    $settings = array('type' => 'article', 'promote' => 1);
+    $settings = ['type' => 'article', 'promote' => 1];
     $node = $this->drupalCreateNode($settings);
 
     // User compact display settings.
-    $this->dsSelectLayout(array(), array(), 'admin/config/people/accounts/display');
+    $this->dsSelectLayout([], [], 'admin/config/people/accounts/display');
 
-    $fields = array(
+    $fields = [
       'fields[username][region]' => 'left',
       'fields[member_for][region]' => 'left',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/config/people/accounts/display');
 
     // Comment display settings.
-    $this->dsSelectLayout(array(), array(), 'admin/structure/comment/manage/comment/display');
+    $this->dsSelectLayout([], [], 'admin/structure/comment/manage/comment/display');
 
-    $fields = array(
+    $fields = [
       'fields[comment_title][region]' => 'left',
       'fields[comment_user][region]' => 'left',
       'fields[comment_body][region]' => 'left',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/structure/comment/manage/comment/display');
 
     // Post comment.

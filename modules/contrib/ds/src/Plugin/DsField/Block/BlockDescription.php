@@ -27,7 +27,7 @@ class BlockDescription extends DsFieldBase {
     $output = $this->entity()->label();
 
     if (empty($output)) {
-      return array();
+      return [];
     }
 
     $output = Html::escape($output);
@@ -39,9 +39,9 @@ class BlockDescription extends DsFieldBase {
       $output = '<' . $wrapper . $class . '>' . $output . '</' . $wrapper . '>';
     }
 
-    return array(
+    return [
       '#markup' => $output,
-    );
+    ];
   }
 
   /**
@@ -50,18 +50,18 @@ class BlockDescription extends DsFieldBase {
   public function settingsForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
 
-    $settings['wrapper'] = array(
+    $settings['wrapper'] = [
       '#type' => 'textfield',
       '#title' => 'Wrapper',
       '#default_value' => $config['wrapper'],
       '#description' => $this->t('Eg: h1, h2, p'),
-    );
-    $settings['class'] = array(
+    ];
+    $settings['class'] = [
       '#type' => 'textfield',
       '#title' => 'Class',
       '#default_value' => $config['class'],
       '#description' => $this->t('Put a class on the wrapper. Eg: block-title'),
-    );
+    ];
 
     return $settings;
   }
@@ -72,7 +72,7 @@ class BlockDescription extends DsFieldBase {
   public function settingsSummary($settings) {
     $config = $this->getConfiguration();
 
-    $summary = array();
+    $summary = [];
     $summary[] = 'Wrapper: ' . $config['wrapper'];
 
     if (!empty($config['class'])) {
@@ -87,10 +87,10 @@ class BlockDescription extends DsFieldBase {
    */
   public function defaultConfiguration() {
 
-    $configuration = array(
+    $configuration = [
       'wrapper' => 'h2',
       'class' => '',
-    );
+    ];
 
     return $configuration;
   }

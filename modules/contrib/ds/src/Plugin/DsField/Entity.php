@@ -46,18 +46,18 @@ abstract class Entity extends DsFieldBase {
     $entity = $this->linkedEntity();
     $view_modes = $this->entityDisplayRepository->getViewModes($entity);
 
-    $options = array();
+    $options = [];
     foreach ($view_modes as $id => $view_mode) {
       $options[$id] = $view_mode['label'];
     }
 
     $config = $this->getConfiguration();
-    $form['entity_view_mode'] = array(
+    $form['entity_view_mode'] = [
       '#type' => 'select',
       '#title' => 'View mode',
       '#default_value' => $config['entity_view_mode'],
       '#options' => $options,
-    );
+    ];
 
     return $form;
   }
@@ -91,9 +91,9 @@ abstract class Entity extends DsFieldBase {
     reset($view_modes);
     $default_view_mode = key($view_modes);
 
-    $configuration = array(
+    $configuration = [
       'entity_view_mode' => $default_view_mode,
-    );
+    ];
 
     return $configuration;
   }

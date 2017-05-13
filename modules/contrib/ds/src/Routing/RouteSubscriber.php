@@ -41,23 +41,23 @@ class RouteSubscriber extends RouteSubscriberBase {
         if ($display = $entity_type->getLinkTemplate('display')) {
           $route = new Route(
             $display,
-            array(
+            [
               '_controller' => '\Drupal\ds\Controller\DsController::contextualTab',
               '_title' => 'Manage display',
               'entity_type_id' => $entity_type_id,
-            ),
-            array(
+            ],
+            [
               '_field_ui_view_mode_access' => 'administer ' . $entity_type_id . ' display',
-            ),
-            array(
+            ],
+            [
               '_admin_route' => TRUE,
               '_ds_entity_type_id' => $entity_type_id,
-              'parameters' => array(
-                $entity_type_id => array(
+              'parameters' => [
+                $entity_type_id => [
                   'type' => 'entity:' . $entity_type_id,
-                ),
-              ),
-            )
+                ],
+              ],
+            ]
           );
 
           $collection->add("entity.$entity_type_id.display", $route);
@@ -71,7 +71,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   public static function getSubscribedEvents() {
     $events = parent::getSubscribedEvents();
-    $events[RoutingEvents::ALTER] = array('onAlterRoutes', 100);
+    $events[RoutingEvents::ALTER] = ['onAlterRoutes', 100];
     return $events;
   }
 

@@ -1,5 +1,11 @@
-layout.2col:
+dstest_2col:
   version: VERSION
   css:
     theme:
       css/dstest-2col.css: {}
+
+dstest_2col_fluid:
+  version: VERSION
+  css:
+    theme:
+      css/dstest-2col-fluid.css: {}

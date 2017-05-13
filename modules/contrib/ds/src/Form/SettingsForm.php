@@ -95,28 +95,28 @@ class SettingsForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('ds.settings');
 
-    $form['additional_settings'] = array(
+    $form['additional_settings'] = [
       '#type' => 'vertical_tabs',
-      '#attached' => array(
-        'library' => array('ds/admin'),
-      ),
-    );
+      '#attached' => [
+        'library' => ['ds/admin'],
+      ],
+    ];
 
-    $form['fs1'] = array(
+    $form['fs1'] = [
       '#type' => 'details',
       '#title' => $this->t('Field Templates'),
       '#group' => 'additional_settings',
       '#weight' => 1,
       '#tree' => TRUE,
       '#collapsed' => FALSE,
-    );
+    ];
 
-    $form['fs1']['field_template'] = array(
+    $form['fs1']['field_template'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Enable Field Templates'),
       '#description' => $this->t('Customize the labels and the HTML output of your fields.'),
       '#default_value' => $config->get('field_template'),
-    );
+    ];
 
     $theme_functions = Ds::getFieldLayoutOptions();
     $url = new Url('ds.classes');
@@ -128,47 +128,47 @@ class SettingsForm extends ConfigFormBase {
       '<strong>Template suggestions</strong><br/>' .
       'You can create .html.twig files as well for these field theme functions, e.g. field--reset.html.twig, field--minimal.html.twig<br/><br/>' .
       '<label>CSS classes</label>You can add custom CSS classes on the <a href=":url">classes form</a>. These classes can be added to fields using the Default Field Template.<br/><br/>' .
-      '<label>Advanced</label>You can create your own custom field templates plugin. See Drupal\ds_test\Plugin\DsFieldTemplate for an example.', array(':url' => $url->toString()));
+      '<label>Advanced</label>You can create your own custom field templates plugin. See Drupal\ds_test\Plugin\DsFieldTemplate for an example.', [':url' => $url->toString()]);
 
-    $form['fs1']['ft-default'] = array(
+    $form['fs1']['ft-default'] = [
       '#type' => 'select',
-      '#title' =>$this->t('Default Field Template'),
+      '#title' => $this->t('Default Field Template'),
       '#options' => $theme_functions,
       '#default_value' => $config->get('ft-default'),
       '#description' => $description,
-      '#states' => array(
-        'visible' => array(
-          'input[name="fs1[field_template]"]' => array('checked' => TRUE),
-        ),
-      ),
-    );
+      '#states' => [
+        'visible' => [
+          'input[name="fs1[field_template]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
 
-    $form['fs1']['ft-show-colon'] = array(
+    $form['fs1']['ft-show-colon'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show colon'),
       '#default_value' => $config->get('ft-show-colon'),
       '#description' => $this->t('Show the colon on the reset field template.'),
-      '#states' => array(
-        'visible' => array(
-          'select[name="fs1[ft-default]"]' => array('value' => 'reset'),
-          'input[name="fs1[field_template]"]' => array('checked' => TRUE),
-        ),
-      ),
-    );
+      '#states' => [
+        'visible' => [
+          'select[name="fs1[ft-default]"]' => ['value' => 'reset'],
+          'input[name="fs1[field_template]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
 
-    $form['fs3'] = array(
+    $form['fs3'] = [
       '#type' => 'details',
       '#title' => $this->t('Other'),
       '#group' => 'additional_settings',
       '#weight' => 3,
       '#tree' => TRUE,
-    );
-    $form['fs3']['use_field_names'] = array(
+    ];
+    $form['fs3']['use_field_names'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use field names in templates'),
       '#default_value' => $config->get('use_field_names'),
       '#description' => $this->t('Use field names in twig templates instead of the key'),
-    );
+    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -202,9 +202,9 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return array(
+    return [
       'ds.settings',
-    );
+    ];
   }
 
 }

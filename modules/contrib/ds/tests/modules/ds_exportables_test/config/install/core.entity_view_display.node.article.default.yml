@@ -14,7 +14,6 @@ third_party_settings:
   ds:
     layout:
       id: ds_2col
-      path: modules/ds
       library: ds/layout.2col
       disable_css: FALSE
       entity_classes: all_classes

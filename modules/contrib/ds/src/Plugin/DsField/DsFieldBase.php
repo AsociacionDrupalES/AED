@@ -12,9 +12,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 abstract class DsFieldBase extends PluginBase implements DsFieldInterface {
 
   /**
-   * Constructs a Display Suite field plugin.
+   * {@inheritdoc}
    */
-  public function __construct($configuration, $plugin_id, $plugin_definition) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
 
     $this->configuration += $this->defaultConfiguration();
@@ -35,28 +35,28 @@ abstract class DsFieldBase extends PluginBase implements DsFieldInterface {
    * {@inheritdoc}
    */
   public function build() {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm($form, FormStateInterface $form_state) {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsSummary($settings) {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array();
+    return [];
   }
 
   /**
@@ -77,7 +77,7 @@ abstract class DsFieldBase extends PluginBase implements DsFieldInterface {
    * {@inheritdoc}
    */
   public function formatters() {
-    return array();
+    return [];
   }
 
   /**
@@ -168,7 +168,7 @@ abstract class DsFieldBase extends PluginBase implements DsFieldInterface {
    */
   public function calculateDependencies() {
     // By default there are no dependencies.
-    return array();
+    return [];
   }
 
   /**

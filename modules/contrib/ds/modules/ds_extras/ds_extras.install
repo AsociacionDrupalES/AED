@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Installs the Display Suite Extras module.
+ */
+
+/**
  * Implements hook_install().
  */
 function ds_extras_install() {
@@ -8,13 +13,13 @@ function ds_extras_install() {
 }
 
 /**
- * Copy config to new structure
+ * Copy config to new structure.
  */
 function ds_extras_update_8001() {
-  // Load the original config file
+  // Load the original config file.
   $original_config = \Drupal::configFactory()->getEditable('ds.extras');
 
-  // Copy to the new location
+  // Copy to the new location.
   $config = \Drupal::configFactory()->getEditable('ds_extras.settings')
     ->set('fields_extra', $original_config->get('fields_extra'))
     ->set('fields_extra_list', $original_config->get('fields_extra'))
@@ -29,6 +34,6 @@ function ds_extras_update_8001() {
 
   $config->save();
 
-  // Delete the old config file
+  // Delete the old config file.
   $original_config->delete();
 }

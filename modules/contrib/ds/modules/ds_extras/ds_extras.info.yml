@@ -5,10 +5,10 @@ description: 'Contains additional features for Display Suite.'
 package: 'Display Suite'
 configure: admin/structure/ds/settings
 dependencies:
-  - ds
+  - ds:ds
 
-# Information added by Drupal.org packaging script on 2016-09-29
-version: '8.x-2.6'
+# Information added by Drupal.org packaging script on 2017-05-04
+version: '8.x-3.0-rc1'
 core: '8.x'
 project: 'ds'
-datestamp: 1475152442
+datestamp: 1493926390

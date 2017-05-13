@@ -18,7 +18,7 @@ class ExportablesTest extends FastTestBase {
     /* @var $display EntityViewDisplay */
     $display = EntityViewDisplay::load('node.article.default');
     $display->delete();
-    \Drupal::service('module_installer')->install(array('ds_exportables_test'));
+    \Drupal::service('module_installer')->install(['ds_exportables_test']);
   }
 
   /**
@@ -33,45 +33,45 @@ class ExportablesTest extends FastTestBase {
     $this->drupalGet('admin/structure/types/manage/article/display');
     $this->assertText('Exportable field');
 
-    $settings = array(
+    $settings = [
       'type' => 'article',
       'title' => 'Exportable',
-    );
+    ];
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
     $this->assertRaw('group-left', 'Left region found');
     $this->assertRaw('group-right', 'Right region found');
     $this->assertNoRaw('group-header', 'No header region found');
     $this->assertNoRaw('group-footer', 'No footer region found');
-    $link = $this->xpath('//h3/a[text()=:text]', array(
+    $link = $this->xpath('//h3/a[text()=:text]', [
       ':text' => 'Exportable',
-    ));
+    ]);
     $this->assertEqual(count($link), 1, 'Default title with h3 found');
-    $link = $this->xpath('//a[text()=:text]', array(
+    $link = $this->xpath('//a[text()=:text]', [
       ':text' => 'Read more',
-    ));
+    ]);
     $this->assertEqual(count($link), 1, 'Default read more found');
 
     // Override default layout.
-    $layout = array(
+    $layout = [
       'layout' => 'ds_2col_stacked',
-    );
+    ];
 
-    $assert = array(
-      'regions' => array(
+    $assert = [
+      'regions' => [
         'header' => '<td colspan="8">' . t('Header') . '</td>',
         'left' => '<td colspan="8">' . t('Left') . '</td>',
         'right' => '<td colspan="8">' . t('Right') . '</td>',
         'footer' => '<td colspan="8">' . t('Footer') . '</td>',
-      ),
-    );
+      ],
+    ];
 
-    $fields = array(
+    $fields = [
       'fields[node_post_date][region]' => 'header',
       'fields[node_author][region]' => 'left',
       'fields[node_link][region]' => 'left',
       'fields[body][region]' => 'right',
-    );
+    ];
 
     $this->dsSelectLayout($layout, $assert);
     $this->dsConfigureUi($fields);

@@ -28,16 +28,16 @@ class CommentUserSignature extends UserSignature {
     $key = $this->key();
     if (isset($user->{$key}->value)) {
       $format = $this->format();
-      return array(
+      return [
         '#type' => 'processed_text',
         '#text' => $user->{$key}->value,
         '#format' => $user->{$format}->value,
-        '#filter_types_to_skip' => array(),
+        '#filter_types_to_skip' => [],
         '#langcode' => '',
-      );
+      ];
     }
 
-    return array();
+    return [];
   }
 
 }

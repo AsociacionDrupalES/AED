@@ -5,12 +5,13 @@ description: 'Extend the display options for every entity type.'
 package: 'Display Suite'
 configure: ds.structure
 dependencies:
-  - layout_plugin
+  - drupal:layout_discovery
+  - drupal:system (>= 8.3.x)
 test_dependencies:
-  - field_group
+  - field_group:field_group
 
-# Information added by Drupal.org packaging script on 2016-09-29
-version: '8.x-2.6'
+# Information added by Drupal.org packaging script on 2017-05-04
+version: '8.x-3.0-rc1'
 core: '8.x'
 project: 'ds'
-datestamp: 1475152442
+datestamp: 1493926390

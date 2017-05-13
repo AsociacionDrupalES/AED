@@ -7,13 +7,13 @@
   margin-bottom: 1em;
 }
 
-#field-display-overview .ft-settings .ft-group {
+.ft-settings .ft-group {
   border-top: 1px solid #aaa;
   padding: 5px 0;
   overflow: auto;
 }
 
-#field-display-overview .field-formatter-settings-edit-form .ft-group .form-item {
+.field-formatter-settings-edit-form .ft-group .form-item {
   margin: 0;
 }
 
@@ -50,7 +50,7 @@
 /**
  * Displays list
  */
-table th.ds-display-list-options {
+.ds-display-list-options {
   width: 300px;
 }
 
@@ -60,19 +60,6 @@ table th.ds-display-list-options {
 .limit-float {
   float: left;
   margin-right: 5px;
-}
-
-/**
- * Fieldset in vertical tabs.
- */
-.vertical-tabs fieldset#edit-additional-settings-ds-page-title-options-page-option-contexts {
-  margin: 1em 0;
-  padding: 2.5em 0 0;
-  border: 1px solid #cccccc;
-}
-
-#edit-additional-settings-ds-page-title-options-page-option-contexts legend {
-  display: block;
 }
 
 /**

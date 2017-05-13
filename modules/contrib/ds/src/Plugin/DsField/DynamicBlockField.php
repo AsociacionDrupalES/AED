@@ -27,7 +27,7 @@ class DynamicBlockField extends BlockBase {
    * {@inheritdoc}
    */
   protected function blockConfig() {
-    $block_config = array();
+    $block_config = [];
     $definition = $this->getPluginDefinition();
     if (isset($definition['properties']['config'])) {
       $block_config = $definition['properties']['config'];

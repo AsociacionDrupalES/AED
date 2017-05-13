@@ -15,13 +15,12 @@ class JavascriptTest extends JavascriptTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = array(
+  public static $modules = [
     'node',
     'user',
     'field_ui',
     'ds',
-    'layout_plugin',
-  );
+  ];
 
   /**
    * The created user.
@@ -37,7 +36,7 @@ class JavascriptTest extends JavascriptTestBase {
     parent::setUp();
 
     // Create a test user.
-    $this->adminUser = $this->drupalCreateUser(array(
+    $this->adminUser = $this->drupalCreateUser([
       'access content',
       'admin display suite',
       'admin fields',
@@ -46,13 +45,13 @@ class JavascriptTest extends JavascriptTestBase {
       'administer node fields',
       'administer node form display',
       'administer node display',
-    ));
+    ]);
     $this->drupalLogin($this->adminUser);
 
-    $this->drupalCreateContentType(array(
+    $this->drupalCreateContentType([
       'type' => 'article',
       'name' => 'Article',
-    ));
+    ]);
 
   }
 
@@ -71,11 +70,25 @@ class JavascriptTest extends JavascriptTestBase {
     $this->assertSession()->pageTextContains('ds-2col--node.html.twig');
     $page->pressButton('Save');
 
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->assertSession()->fieldValueEquals('fields[body][region]', 'left');
+
     // Check that all settings are saved.
     /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
     $display = EntityViewDisplay::load('node.article.default');
     $settings = $display->getThirdPartySetting('ds', 'layout');
     $this->assertSame($settings['id'], 'ds_2col');
+
+    // Switch back to not using a layout.
+    $page->selectFieldOption('layout', '');
+    $this->assertSession()->assertWaitOnAjaxRequest();
+    $page->pressButton('Save');
+
+    $this->drupalGet('admin/structure/types/manage/article/display');
+    $this->assertSession()->fieldValueEquals('fields[body][region]', 'content');
+
+    $display = EntityViewDisplay::load('node.article.default');
+    $this->assertSame('content', $display->getComponent('body')['region']);
   }
 
 }

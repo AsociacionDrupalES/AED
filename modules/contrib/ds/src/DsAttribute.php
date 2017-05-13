@@ -12,7 +12,7 @@ class DsAttribute extends Attribute {
   /**
    * Merges Attributes objects into another one.
    *
-   * @return \Drupal\ds\DsAttribute;
+   * @return \Drupal\ds\DsAttribute
    *   Merged attributes.
    */
   public function mergeAttributes() {

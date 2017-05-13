@@ -17,7 +17,7 @@ class CopyFieldForm extends FieldFormBase {
   /**
    * {@inheritdoc}
    */
-  public function getFormID() {
+  public function getFormId() {
     return 'ds_field_form';
   }
 
@@ -30,7 +30,7 @@ class CopyFieldForm extends FieldFormBase {
 
     $manager = \Drupal::service('plugin.manager.ds');
 
-    $fields = array();
+    $fields = [];
     foreach ($manager->getDefinitions() as $plugin_id => $plugin_definition) {
       $entity_label = '';
       if (isset($plugin_definition['entity_type'])) {
@@ -40,13 +40,13 @@ class CopyFieldForm extends FieldFormBase {
     }
     asort($fields);
 
-    $form['ds_field_identity']['ds_plugin'] = array(
+    $form['ds_field_identity']['ds_plugin'] = [
       '#type' => 'select',
       '#options' => $fields,
       '#title' => $this->t('Fields'),
       '#required' => TRUE,
       '#default_value' => isset($field['properties']['ds_plugin']) ? $field['properties']['ds_plugin'] : '',
-    );
+    ];
 
     return $form;
   }
@@ -55,9 +55,9 @@ class CopyFieldForm extends FieldFormBase {
    * {@inheritdoc}
    */
   public function getProperties(FormStateInterface $form_state) {
-    return array(
+    return [
       'ds_plugin' => $form_state->getValue('ds_plugin'),
-    );
+    ];
   }
 
   /**

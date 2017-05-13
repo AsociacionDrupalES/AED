@@ -54,7 +54,7 @@ class FieldDeleteForm extends ConfirmFormBase implements ContainerInjectionInter
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return $this->t('Are you sure you want to delete @field ?', array('@field' => $this->field['label']));
+    return $this->t('Are you sure you want to delete @field ?', ['@field' => $this->field['label']]);
   }
 
   /**
@@ -94,7 +94,7 @@ class FieldDeleteForm extends ConfirmFormBase implements ContainerInjectionInter
 
     // Remove field and clear caches.
     $this->config('ds.field.' . $field['id'])->delete();
-    $this->cacheInvalidator->invalidateTags(array('ds_fields_info'));
+    $this->cacheInvalidator->invalidateTags(['ds_fields_info']);
 
     // Also clear the ds plugin cache.
     \Drupal::service('plugin.manager.ds')->clearCachedDefinitions();
@@ -102,16 +102,16 @@ class FieldDeleteForm extends ConfirmFormBase implements ContainerInjectionInter
     // Redirect.
     $url = new Url('ds.fields_list');
     $form_state->setRedirectUrl($url);
-    drupal_set_message(t('The field @field has been deleted.', array('@field' => $field['label'])));
+    drupal_set_message(t('The field @field has been deleted.', ['@field' => $field['label']]));
   }
 
   /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return array(
+    return [
       'ds.field.' . $this->field['id'],
-    );
+    ];
   }
 
 }

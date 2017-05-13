@@ -19,14 +19,14 @@ class TestMultipleField extends DsFieldBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array(
-      0 => array(
+    return [
+      0 => [
         '#markup' => 'Test row one of multiple field plugin on node ' . $this->entity()->id(),
-      ),
-      1 => array(
+      ],
+      1 => [
         '#markup' => 'Test row two of multiple field plugin on node ' . $this->entity()->id(),
-      ),
-    );
+      ],
+    ];
   }
 
   /**

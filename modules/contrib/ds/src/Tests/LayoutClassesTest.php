@@ -21,7 +21,7 @@ class LayoutClassesTest extends FastTestBase {
     \Drupal::configFactory()->getEditable('ds_extras.settings')
       ->set('region_to_block', TRUE)
       ->set('fields_extra', TRUE)
-      ->set('fields_extra_list', array('node|article|ds_extras_extra_test_field', 'node|article|ds_extras_second_field'))
+      ->set('fields_extra_list', ['node|article|ds_extras_extra_test_field', 'node|article|ds_extras_second_field'])
       ->save();
 
     \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
@@ -40,20 +40,20 @@ class LayoutClassesTest extends FastTestBase {
     $this->dsCreateTokenField();
     $this->dsCreateBlockField();
 
-    $layout = array(
+    $layout = [
       'layout' => 'ds_2col_stacked',
-    );
+    ];
 
-    $assert = array(
-      'regions' => array(
+    $assert = [
+      'regions' => [
         'header' => '<td colspan="8">' . t('Header') . '</td>',
         'left' => '<td colspan="8">' . t('Left') . '</td>',
         'right' => '<td colspan="8">' . t('Right') . '</td>',
         'footer' => '<td colspan="8">' . t('Footer') . '</td>',
-      ),
-    );
+      ],
+    ];
 
-    $fields = array(
+    $fields = [
       'fields[node_post_date][region]' => 'header',
       'fields[node_author][region]' => 'left',
       'fields[node_links][region]' => 'left',
@@ -62,7 +62,7 @@ class LayoutClassesTest extends FastTestBase {
       'fields[dynamic_block_field:node-test_block_field][region]' => 'left',
       'fields[node_submitted_by][region]' => 'left',
       'fields[ds_extras_extra_test_field][region]' => 'header',
-    );
+    ];
 
     // Setup first layout.
     $this->dsSelectLayout($layout, $assert);
@@ -76,7 +76,8 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertRaw('ds_extras_second_field');
 
     // Assert we have configuration.
-    $entity_display = entity_load('entity_view_display', 'node.article.default');
+    $entity_manager = \Drupal::entityTypeManager();
+    $entity_display = $entity_manager->getStorage('entity_view_display')->load('node.article.default');
     $data = $entity_display->getThirdPartySettings('ds');
 
     $this->assertTrue(!empty($data), t('Configuration found for layout settings for node article'));
@@ -93,9 +94,9 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertTrue(in_array('class_name_2', $data['layout']['settings']['classes']['footer']), t('Class name 2 is in header'));
 
     // Create a article node and verify settings.
-    $settings = array(
+    $settings = [
       'type' => 'article',
-    );
+    ];
     $node = $this->drupalCreateNode($settings);
     $this->drupalGet('node/' . $node->id());
 
@@ -121,11 +122,11 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertNoRaw('<header class="class_name_1 group-header', 'Header not found.');
     $this->assertNoRaw('<footer class="group-right', 'Footer not found.');
     $this->assertNoRaw('<article', 'Article not found.');
-    $wrappers = array(
+    $wrappers = [
       'layout_configuration[region_wrapper][header]' => 'header',
       'layout_configuration[region_wrapper][right]' => 'footer',
       'layout_configuration[region_wrapper][outer_wrapper]' => 'article',
-    );
+    ];
     $this->dsConfigureUi($wrappers);
     $this->drupalGet('node/' . $node->id());
     $this->assertRaw('<header class="class_name_1 group-header', 'Header found.');
@@ -133,7 +134,7 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertRaw('<article', 'Article found.');
 
     // Remove all the node classes.
-    $edit = array('entity_classes' => 'no_classes');
+    $edit = ['entity_classes' => 'no_classes'];
     $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
     $this->drupalGet('node/' . $node->id());
 
@@ -141,7 +142,7 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertNoRaw('node node--type-article node--view-mode-full', 'Default node classes are not added');
 
     // Only show view mode (deprecated).
-    $edit = array('entity_classes' => 'old_view_mode');
+    $edit = ['entity_classes' => 'old_view_mode'];
     $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
     $this->drupalGet('node/' . $node->id());
 
@@ -149,37 +150,37 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertRaw('view-mode-full', 'Only view mode is printed');
 
     // Let's create a block field, enable the full mode first.
-    $edit = array('display_modes_custom[full]' => '1');
+    $edit = ['display_modes_custom[full]' => '1'];
     $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
 
     // Select layout.
-    $layout = array(
+    $layout = [
       'layout' => 'ds_2col',
-    );
+    ];
 
-    $assert = array(
-      'regions' => array(
+    $assert = [
+      'regions' => [
         'left' => '<td colspan="8">' . t('Left') . '</td>',
         'right' => '<td colspan="8">' . t('Right') . '</td>',
-      ),
-    );
+      ],
+    ];
     $this->dsSelectLayout($layout, $assert, 'admin/structure/types/manage/article/display/full');
 
     // Create new block field.
-    $edit = array(
+    $edit = [
       'new_block_region' => 'Block region',
       'new_block_region_key' => 'block_region',
-    );
+    ];
     $this->drupalPostForm('admin/structure/types/manage/article/display/full', $edit, t('Save'));
     $this->assertRaw('<td colspan="9">' . t('Block region') . '</td>', 'Block region found');
 
     // Configure fields.
-    $fields = array(
+    $fields = [
       'fields[node_author][region]' => 'left',
       'fields[node_links][region]' => 'left',
       'fields[body][region]' => 'right',
       'fields[dynamic_token_field:node-test_field][region]' => 'block_region',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/structure/types/manage/article/display/full');
 
     // Change layout via admin/structure/ds/layout-change.
@@ -189,11 +190,11 @@ class LayoutClassesTest extends FastTestBase {
     $this->assertNoRaw('<td colspan="8">' . t('Footer') . '</td>', 'Footer region not found');
 
     // Remap the regions.
-    $edit = array(
+    $edit = [
       'ds_left' => 'header',
       'ds_right' => 'footer',
       'ds_block_region' => 'footer',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/change-layout/node/article/full/ds_2col_stacked', $edit, t('Save'));
     $this->drupalGet('admin/structure/types/manage/article/display/full');
 
@@ -212,11 +213,12 @@ class LayoutClassesTest extends FastTestBase {
 
     // Test that a default view mode with no layout is not affected by a
     // disabled view mode.
-    $edit = array(
-      'layout' => '',
+    $edit = [
+      'layout' => '_none',
       'display_modes_custom[full]' => FALSE,
-    );
+    ];
     $this->drupalPostForm('admin/structure/types/manage/article/display', $edit, t('Save'));
+    $this->assertFieldsByValue($this->xpath('//*[@id="edit-fields-body-region"]'), 'content', 'Body field is in the content region');
     $this->drupalGet('node/' . $node->id());
     $this->assertNoText('Test code field on node 1', 'No ds field from full view mode layout');
   }

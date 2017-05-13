@@ -17,28 +17,28 @@ class LayoutFluidTest extends FastTestBase {
     $this->drupalGet('admin/structure/types/manage/article/display');
     $this->assertRaw('Test Fluid two column', 'Test Fluid two column layout found');
 
-    $layout = array(
+    $layout = [
       'layout' => 'dstest_2col_fluid',
-    );
+    ];
 
-    $assert = array(
-      'regions' => array(
+    $assert = [
+      'regions' => [
         'left' => '<td colspan="8">' . t('Left') . '</td>',
         'right' => '<td colspan="8">' . t('Right') . '</td>',
-      ),
-    );
+      ],
+    ];
 
-    $fields = array(
+    $fields = [
       'fields[node_author][region]' => 'left',
       'fields[node_links][region]' => 'left',
       'fields[body][region]' => 'left',
-    );
+    ];
 
     $this->dsSelectLayout($layout, $assert);
     $this->dsConfigureUi($fields);
 
     // Create a node.
-    $settings = array('type' => 'article');
+    $settings = ['type' => 'article'];
     $node = $this->drupalCreateNode($settings);
 
     $this->drupalGet('node/' . $node->id());
@@ -48,11 +48,11 @@ class LayoutFluidTest extends FastTestBase {
     $this->assertRaw('dstest-2col-fluid.css', 'Css file included');
 
     // Add fields to the right column.
-    $fields = array(
+    $fields = [
       'fields[node_author][region]' => 'left',
       'fields[node_links][region]' => 'left',
       'fields[body][region]' => 'right',
-    );
+    ];
 
     $this->dsSelectLayout($layout, $assert);
     $this->dsConfigureUi($fields);
@@ -63,12 +63,12 @@ class LayoutFluidTest extends FastTestBase {
     $this->assertNoRaw('group-one-column', 'Group one column class not set');
 
     // Move all fields to the right column.
-    $fields = array(
+    $fields = [
       'fields[node_author][region]' => 'right',
       'fields[node_links][region]' => 'right',
       'fields[heavy_field][region]' => 'right',
       'fields[body][region]' => 'right',
-    );
+    ];
 
     $this->dsSelectLayout($layout, $assert);
     $this->dsConfigureUi($fields);
@@ -78,6 +78,16 @@ class LayoutFluidTest extends FastTestBase {
     $this->assertRaw('group-right', 'Template found (region right)');
     $this->assertRaw('group-one-column', 'Group one column class set');
 
+    // Remove the css
+    $fields = [
+      'disable_css' => TRUE,
+    ];
+
+    $this->dsSelectLayout($layout, $assert);
+    $this->dsConfigureUi($fields);
+
+    $this->drupalGet('node/' . $node->id());
+    $this->assertNoRaw('dstest-2col-fluid.css', 'Css file not included');
   }
 
 }

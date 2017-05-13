@@ -30,7 +30,7 @@ class TranslationLanguageRenderer extends DefaultLanguageRenderer {
     // language, otherwise we fall back to the default entity language, which is
     // stored in the revision table for revisionable entity types.
     $langcode_key = $this->entityType->getKey('langcode');
-    foreach (array('data_table', 'revision_table', 'base_table') as $key) {
+    foreach (['data_table', 'revision_table', 'base_table'] as $key) {
       if ($table = $this->entityType->get($key)) {
         $table_alias = $query->ensureTable($table);
         $this->langcodeAlias = $query->addField($table_alias, $langcode_key);

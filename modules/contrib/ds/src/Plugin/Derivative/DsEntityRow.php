@@ -21,7 +21,7 @@ class DsEntityRow implements ContainerDeriverInterface {
    *
    * @var array
    */
-  protected $derivatives = array();
+  protected $derivatives = [];
 
   /**
    * The base plugin ID that the derivative is for.
@@ -89,16 +89,16 @@ class DsEntityRow implements ContainerDeriverInterface {
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       // Just add support for entity types which have a views integration.
       if (($base_table = $entity_type->getBaseTable()) && $this->viewsData->get($base_table) && $this->entityTypeManager->hasHandler($entity_type_id, 'view_builder')) {
-        $this->derivatives[$entity_type_id] = array(
+        $this->derivatives[$entity_type_id] = [
           'id' => 'ds_entity:' . $entity_type_id,
           'provider' => 'ds',
           'title' => 'Display Suite: ' . $entity_type->getLabel(),
-          'help' => t('Display the @label', array('@label' => $entity_type->getLabel())),
-          'base' => array($entity_type->getDataTable() ?: $entity_type->getBaseTable()),
+          'help' => t('Display the @label', ['@label' => $entity_type->getLabel()]),
+          'base' => [$entity_type->getDataTable() ?: $entity_type->getBaseTable()],
           'entity_type' => $entity_type_id,
-          'display_types' => array('normal'),
+          'display_types' => ['normal'],
           'class' => $base_plugin_definition['class'],
-        );
+        ];
       }
     }
 

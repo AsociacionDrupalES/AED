@@ -8,8 +8,6 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Url;
 use Drupal\field_ui\FieldUI;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 
 /**
  * Returns responses for Display Suite UI routes.
@@ -23,7 +21,7 @@ class DsController extends ControllerBase {
    *   The Views fields report page.
    */
   public function listDisplays() {
-    $build = array();
+    $build = [];
 
     // All entities.
     $entity_info = $this->entityTypeManager()->getDefinitions();
@@ -32,15 +30,15 @@ class DsController extends ControllerBase {
     if (isset($entity_info['node'])) {
       $node_entity = $entity_info['node'];
       unset($entity_info['node']);
-      $entity_info = array_merge(array('node' => $node_entity), $entity_info);
+      $entity_info = array_merge(['node' => $node_entity], $entity_info);
     }
 
     $field_ui_enabled = $this->moduleHandler()->moduleExists('field_ui');
     if (!$field_ui_enabled) {
-      $build['no_field_ui'] = array(
+      $build['no_field_ui'] = [
         '#markup' => '<p>' . $this->t('You need to enable Field UI to manage the displays of entities.') . '</p>',
         '#weight' => -10,
-      );
+      ];
     }
 
     if (isset($entity_info['comment'])) {
@@ -52,58 +50,58 @@ class DsController extends ControllerBase {
     foreach ($entity_info as $entity_type => $info) {
       $base_table = $info->getBaseTable();
       if ($info->get('field_ui_base_route') && !empty($base_table)) {
-        $rows = array();
+        $rows = [];
         $bundles = \Drupal::service('entity_type.bundle.info')->getBundleInfo($entity_type);
         foreach ($bundles as $bundle_type => $bundle) {
-          $row = array();
-          $operations = array();
-          $row[] = array(
-            'data' => array(
+          $row = [];
+          $operations = [];
+          $row[] = [
+            'data' => [
               '#plain_text' => $bundle['label'],
-            ),
-          );
+            ],
+          ];
 
           if ($field_ui_enabled) {
             // Get the manage display URI.
             $route = FieldUI::getOverviewRouteInfo($entity_type, $bundle_type);
             if ($route) {
-              $operations['manage_display'] = array(
+              $operations['manage_display'] = [
                 'title' => $this->t('Manage display'),
                 'url' => new Url("entity.entity_view_display.$entity_type.default", $route->getRouteParameters()),
-              );
+              ];
             }
           }
 
           // Add operation links.
           if (!empty($operations)) {
-            $row[] = array(
-              'data' => array(
+            $row[] = [
+              'data' => [
                 '#type' => 'operations',
                 '#subtype' => 'ds',
                 '#links' => $operations,
-              ),
-            );
+              ],
+            ];
           }
           else {
-            $row[] = array('data' => '');
+            $row[] = ['data' => ''];
           }
 
           $rows[] = $row;
         }
 
         if (!empty($rows)) {
-          $header = array(
-            array('data' => $info->getLabel()),
-            array(
+          $header = [
+            ['data' => $info->getLabel()],
+            [
               'data' => $field_ui_enabled ? $this->t('operations') : '',
               'class' => 'ds-display-list-options',
-            ),
-          );
-          $build['list_' . $entity_type] = array(
+            ],
+          ];
+          $build['list_' . $entity_type] = [
             '#theme' => 'table',
             '#header' => $header,
             '#rows' => $rows,
-          );
+          ];
         }
       }
     }
@@ -116,10 +114,10 @@ class DsController extends ControllerBase {
   /**
    * Adds a contextual tab to entities.
    *
-   * @param RouteMatchInterface $route_match
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
    *   The route information.
    *
-   * @return RedirectResponse
+   * @return \Symfony\Component\HttpFoundation\RedirectResponse
    *   A redirect response pointing to the corresponding display.
    */
   public function contextualTab(RouteMatchInterface $route_match) {
@@ -150,7 +148,7 @@ class DsController extends ControllerBase {
     else {
       $admin_route_name = "entity.entity_view_display.$entity_type_id.default";
     }
-    $route->setOption('query', array('destination' => $destination->toString()));
+    $route->setOption('query', ['destination' => $destination->toString()]);
 
     $url = new Url($admin_route_name, $route_parameters, $route->getOptions());
 

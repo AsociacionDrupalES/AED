@@ -20,28 +20,28 @@ class ExampleField extends DsFieldBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function settingsForm($form, FormStateInterface $form_state) {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array();
+    return [];
   }
 
   /**
    * {@inheritdoc}
    */
   public function formatters() {
-    return array();
+    return [];
   }
 
   /**

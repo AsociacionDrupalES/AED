@@ -3,8 +3,8 @@
 namespace Drupal\ds;
 
 use Drupal\Component\Utility\Html;
+use Drupal\Core\Entity\Display\EntityDisplayInterface;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\layout_plugin\Layout;
 
 /**
  * Helper class that holds all the main Display Suite helper functions.
@@ -31,7 +31,7 @@ class Ds {
       }
     }
 
-    return isset($static_fields[$entity_type]) ? $static_fields[$entity_type] : array();
+    return isset($static_fields[$entity_type]) ? $static_fields[$entity_type] : [];
   }
 
   /**
@@ -45,20 +45,22 @@ class Ds {
    *   The current entity.
    * @param string $view_mode
    *   The name of the view mode.
+   * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
+   *   The entity display object.
    * @param array $build
    *   The current built of the entity.
    *
    * @return \Drupal\ds\Plugin\DsField\DsFieldInterface
    *   Field instance.
    */
-  public static function getFieldInstance($key, $field, EntityInterface $entity, $view_mode, $display, $build = array()) {
-    $configuration = array(
+  public static function getFieldInstance($key, array $field, EntityInterface $entity, $view_mode, EntityDisplayInterface $display, array $build = []) {
+    $configuration = [
       'field' => $field,
       'field_name' => $key,
       'entity' => $entity,
       'build' => $build,
       'view_mode' => $view_mode,
-    );
+    ];
 
     // Load the plugin.
     /* @var $field_instance \Drupal\ds\Plugin\DsField\DsFieldInterface */
@@ -66,7 +68,7 @@ class Ds {
 
     /* @var $display \Drupal\Core\Entity\Display\EntityDisplayInterface */
     if ($field_settings = $display->getThirdPartySetting('ds', 'fields')) {
-      $settings = isset($field_settings[$key]['settings']) ? $field_settings[$key]['settings'] : array();
+      $settings = isset($field_settings[$key]['settings']) ? $field_settings[$key]['settings'] : [];
       // Unset field template settings.
       if (isset($settings['ft'])) {
         unset($settings['ft']);
@@ -80,12 +82,20 @@ class Ds {
 
   /**
    * Gets Display Suite layouts.
+   *
+   * @return \Drupal\Core\Layout\LayoutDefinition[]
+   *   A list of layouts.
    */
   public static function getLayouts() {
     static $layouts = FALSE;
 
     if (!$layouts) {
-      $layouts = Layout::layoutPluginManager()->getDefinitions();
+      // This can be called before ds_update_8003() has run. If that is the case
+      // return an empty array and don't static cache anything.
+      if (!\Drupal::hasService('plugin.manager.core.layout')) {
+        return [];
+      }
+      $layouts = \Drupal::service('plugin.manager.core.layout')->getDefinitions();
     }
 
     return $layouts;
@@ -103,12 +113,13 @@ class Ds {
    * @param bool $fallback
    *   Whether to fallback to default or not.
    *
-   * @return array|bool $layout
+   * @return array|bool
    *   The display.
    */
   public static function getDisplay($entity_type, $bundle, $view_mode, $fallback = TRUE) {
     /* @var $entity_display \Drupal\Core\Entity\Display\EntityDisplayInterface */
-    $entity_display = entity_load('entity_view_display', $entity_type . '.' . $bundle . '.' . $view_mode);
+    $entity_manager = \Drupal::entityTypeManager();
+    $entity_display = $entity_manager->getStorage('entity_view_display')->load($entity_type . '.' . $bundle . '.' . $view_mode);
     if ($entity_display) {
       $overridden = $entity_display->status();
     }
@@ -124,7 +135,8 @@ class Ds {
     // but only if the view mode settings aren't overridden for this view mode.
     if ($view_mode != 'default' && !$overridden && $fallback) {
       /* @var $entity_default_display \Drupal\Core\Entity\Display\EntityDisplayInterface */
-      $entity_default_display = entity_load('entity_view_display', $entity_type . '.' . $bundle . '.default');
+      $entity_manager = \Drupal::entityTypeManager();
+      $entity_default_display = $entity_manager->getStorage('entity_view_display')->load($entity_type . '.' . $bundle . '.default');
       if ($entity_default_display) {
         return $entity_default_display;
       }
@@ -158,7 +170,7 @@ class Ds {
    *   List of field layouts.
    */
   public static function getFieldLayoutOptions() {
-    $options = array();
+    $options = [];
     foreach (\Drupal::service('plugin.manager.ds.field.layout')->getDefinitions() as $plugin_id => $plugin) {
       $options[$plugin_id] = $plugin['title'];
     }
@@ -169,10 +181,10 @@ class Ds {
    * Utility function to return CSS classes.
    */
   public static function getClasses($name = 'region') {
-    static $classes = array();
+    static $classes = [];
 
     if (!isset($classes[$name])) {
-      $classes[$name] = array();
+      $classes[$name] = [];
       $custom_classes = \Drupal::config('ds.settings')->get('classes.' . $name);
       if (!empty($custom_classes)) {
         $classes[$name][''] = t('None');

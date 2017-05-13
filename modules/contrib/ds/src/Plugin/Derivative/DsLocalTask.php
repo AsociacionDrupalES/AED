@@ -50,16 +50,16 @@ class DsLocalTask extends DeriverBase implements ContainerDeriverInterface {
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
-    $this->derivatives = array();
+    $this->derivatives = [];
 
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type->hasLinkTemplate('display')) {
-        $this->derivatives["$entity_type_id.display_tab"] = array(
+        $this->derivatives["$entity_type_id.display_tab"] = [
           'route_name' => "entity.$entity_type_id.display",
           'weight' => 10,
           'title' => $this->t('Manage display'),
           'base_route' => "entity.$entity_type_id.canonical",
-        );
+        ];
       }
     }
 

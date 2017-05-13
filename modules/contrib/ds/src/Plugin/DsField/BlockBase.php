@@ -88,6 +88,24 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
 
       $block_elements = $block->build();
 
+      // Merge cache contexts, tags and max-age.
+      if ($contexts = $block->getCacheContexts()) {
+        $block_elements['#cache']['contexts'] = (is_array($block_elements['#cache']['contexts']) ? $block_elements['#cache']['contexts'] : []);
+        $block_elements['#cache']['contexts'] = array_unique(array_merge($block_elements['#cache']['contexts'], $contexts));
+      }
+
+      if ($tags = $block->getCacheTags()) {
+        $block_elements['#cache']['tags'] = (is_array($block_elements['#cache']['tags']) ? $block_elements['#cache']['tags'] : []);
+        $block_elements['#cache']['tags'] = array_unique(array_merge($block_elements['#cache']['tags'], $tags));
+      }
+
+      // Add the block base config cache tag.
+      $block_elements['#cache']['tags'][] = 'config:ds.block_base';
+
+      if ($max_age = $block->getCacheMaxAge()) {
+        $block_elements['#cache']['max-age'] = $max_age;
+      }
+
       // Return an empty array if there is nothing to render.
       return Element::isEmpty($block_elements) ? [] : $block_elements;
     }
@@ -106,7 +124,7 @@ abstract class BlockBase extends DsFieldBase implements ContainerFactoryPluginIn
    * Returns the config of the block.
    */
   protected function blockConfig() {
-    return array();
+    return [];
   }
 
   /**

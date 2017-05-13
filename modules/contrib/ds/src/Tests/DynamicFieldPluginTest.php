@@ -14,12 +14,12 @@ class DynamicFieldPluginTest extends FastTestBase {
    */
   public function testDsFields() {
 
-    $edit = array(
+    $edit = [
       'name' => 'Test field',
       'id' => 'test_field',
       'entities[node]' => '1',
       'content[value]' => 'Test field',
-    );
+    ];
 
     $this->dsCreateTokenField($edit);
 
@@ -38,18 +38,18 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field not found on user.'));
 
     // Update testing label.
-    $edit = array(
+    $edit = [
       'name' => 'Test field 2',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit, t('Save'));
     $this->assertText(t('The field Test field 2 has been saved'), t('Test field label updated'));
 
     // Use the Field UI limit option.
-    $this->dsSelectLayout(array(), array(), 'admin/structure/types/manage/page/display');
-    $this->dsSelectLayout(array(), array(), 'admin/structure/types/manage/article/display/teaser');
-    $edit = array(
+    $this->dsSelectLayout([], [], 'admin/structure/types/manage/page/display');
+    $this->dsSelectLayout([], [], 'admin/structure/types/manage/article/display/teaser');
+    $edit = [
       'ui_limit' => 'article|default',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit, t('Save'));
 
     $this->drupalGet('admin/structure/types/manage/article/display');
@@ -59,9 +59,9 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field field not found on node article, teaser.'));
     $this->drupalGet('admin/structure/types/manage/page/display');
     $this->assertNoRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field field not found on node page, default.'));
-    $edit = array(
+    $edit = [
       'ui_limit' => 'article|*',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_token/test_field', $edit, t('Save'));
     $this->drupalGet('admin/structure/types/manage/article/display');
     $this->assertRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field field found on node article, default.'));
@@ -69,7 +69,7 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field field found on node article, teaser.'));
 
     // Remove the field.
-    $this->drupalPostForm('admin/structure/ds/fields/delete/test_field', array(), t('Confirm'));
+    $this->drupalPostForm('admin/structure/ds/fields/delete/test_field', [], t('Confirm'));
     $this->assertText(t('The field Test field 2 has been deleted'), t('Test field removed'));
 
     // Assert the field is gone at the manage display screen.
@@ -77,12 +77,12 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_token_field:node-test_field][weight]', t('Test field field not found on node article.'));
 
     // Block fields.
-    $edit = array(
+    $edit = [
       'name' => 'Test block field',
       'id' => 'test_block_field',
       'entities[node]' => '1',
       'block' => 'system_powered_by_block',
-    );
+    ];
 
     $this->dsCreateBlockField($edit);
 
@@ -101,14 +101,14 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_block_field:node-test_block_field][weight]', t('Test block field not found on user.'));
 
     // Update testing label.
-    $edit = array(
+    $edit = [
       'name' => 'Test block field 2',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_field', $edit, t('Save'));
     $this->assertText(t('The field Test block field 2 has been saved'), t('Test field label updated'));
 
     // Remove the block field.
-    $this->drupalPostForm('admin/structure/ds/fields/delete/test_block_field', array(), t('Confirm'));
+    $this->drupalPostForm('admin/structure/ds/fields/delete/test_block_field', [], t('Confirm'));
     $this->assertText(t('The field Test block field 2 has been deleted'), t('Test field removed'));
 
     // Assert the block field is gone at the manage display screen.
@@ -116,19 +116,19 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_block_field:node-test_block_field][weight]', t('Test block field not found on node article.'));
 
     // Create a configurable block field.
-    $edit = array(
+    $edit = [
       'name' => 'Configurable block',
       'id' => 'test_block_configurable',
       'entities[node]' => '1',
       'block' => 'system_menu_block:tools',
-    );
+    ];
 
     $this->dsCreateBlockField($edit);
 
     // Try to set the depth to 3, to ensure we can save the block.
-    $edit = array(
+    $edit = [
       'depth' => '3',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_configurable/block_config', $edit, t('Save'));
 
     // Assert it's found on the Field UI for article.
@@ -140,9 +140,9 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertNoRaw('fields[dynamic_block_field:node-test_block_configurable][weight]', t('Test configurable block field not found on user.'));
 
     // Add block to display.
-    $fields = array(
+    $fields = [
       'fields[dynamic_block_field:node-test_block_configurable][region]' => 'left',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/structure/types/manage/article/display');
 
     /* @var \Drupal\node\NodeInterface $node */
@@ -153,9 +153,9 @@ class DynamicFieldPluginTest extends FastTestBase {
     $this->assertRaw('Add content', t('Tools menu found.'));
 
     // Try to set the depth to 3, to ensure we can save the block.
-    $edit = array(
+    $edit = [
       'level' => '2',
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/fields/manage_block/test_block_configurable/block_config', $edit, t('Save'));
 
     // Look at node and verify the menu is not visible.

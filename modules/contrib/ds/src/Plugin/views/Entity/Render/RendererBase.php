@@ -27,7 +27,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
       $view_builder = $this->view->rowPlugin->entityManager->getViewBuilder($this->entityType->id());
 
       $i = 0;
-      $grouping = array();
+      $grouping = [];
       $rendered = FALSE;
 
       foreach ($result as $row) {
@@ -66,7 +66,7 @@ abstract class RendererBase extends EntityTranslationRendererBase {
         if ($this->view->rowPlugin->options['advanced_fieldset']['advanced']) {
           $modules = \Drupal::moduleHandler()->getImplementations('ds_views_row_render_entity');
           foreach ($modules as $module) {
-            if ($content = \Drupal::moduleHandler()->invoke($module, 'ds_views_row_render_entity', array($entity, $view_mode))) {
+            if ($content = \Drupal::moduleHandler()->invoke($module, 'ds_views_row_render_entity', [$entity, $view_mode])) {
               if (!$translation) {
                 $this->build[$entity_id] = $content;
               }
@@ -80,11 +80,11 @@ abstract class RendererBase extends EntityTranslationRendererBase {
 
         // Give modules a chance to alter the $view_mode. Use $view_mode by ref.
         $view_name = $this->view->storage->id();
-        $context = array(
+        $context = [
           'entity' => $entity,
           'view_name' => $view_name,
           'display' => $this->view->getDisplay(),
-        );
+        ];
         \Drupal::moduleHandler()->alter('ds_views_view_mode', $view_mode, $context);
 
         if (!$rendered) {
@@ -106,11 +106,11 @@ abstract class RendererBase extends EntityTranslationRendererBase {
           }
         }
 
-        $context = array(
+        $context = [
           'row' => $row,
           'view' => &$this->view,
           'view_mode' => $view_mode,
-        );
+        ];
         \Drupal::moduleHandler()->alter('ds_views_row_render_entity', $this->build[$entity_id], $context);
 
         // Keep a static grouping for this view.
@@ -142,10 +142,10 @@ abstract class RendererBase extends EntityTranslationRendererBase {
           }
 
           if (!isset($grouping[$group_value])) {
-            $group_value_content = array(
+            $group_value_content = [
               '#markup' => '<h2 class="grouping-title">' . $group_value . '</h2>',
               '#weight' => -5,
-            );
+            ];
             $grouping[$group_value] = $group_value;
           }
         }
@@ -154,16 +154,16 @@ abstract class RendererBase extends EntityTranslationRendererBase {
         if (!empty($grouping)) {
           if (!empty($group_value_content)) {
             if (!$translation) {
-              $this->build[$entity_id] = array(
+              $this->build[$entity_id] = [
                 'title' => $group_value_content,
                 'content' => $this->build[$entity_id],
-              );
+              ];
             }
             else {
-              $this->build[$entity_id][$langcode] = array(
+              $this->build[$entity_id][$langcode] = [
                 'title' => $group_value_content,
                 'content' => $this->build[$entity_id][$langcode],
-              );
+              ];
             }
           }
         }

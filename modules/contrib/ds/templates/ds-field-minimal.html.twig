@@ -21,7 +21,7 @@
 <div{{ attributes.addClass(classes) }}>
   {% if not label_hidden %}
     <div class="field-label-{{ element['#label_display']|clean_class }}">
-      {{- label }}{% if settings.lb-col %}:{% endif -%}
+      {{- label }}{% if settings['lb-col'] %}:{% endif -%}
     </div>
   {% endif %}
 

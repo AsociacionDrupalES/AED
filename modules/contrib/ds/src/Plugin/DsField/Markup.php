@@ -15,16 +15,16 @@ abstract class Markup extends DsFieldBase {
     if (isset($this->entity()->{$key}->value)) {
       $format = $this->format();
 
-      return array(
+      return [
         '#type' => 'processed_text',
         '#text' => $this->entity()->{$key}->value,
         '#format' => $format,
-        '#filter_types_to_skip' => array(),
+        '#filter_types_to_skip' => [],
         '#langcode' => '',
-      );
+      ];
     }
 
-    return array();
+    return [];
   }
 
   /**

@@ -56,9 +56,9 @@ abstract class Date extends DsFieldBase {
     $date_format = str_replace('ds_post_date_', '', $field['formatter']);
     $render_key = $this->getRenderKey();
 
-    return array(
+    return [
       '#markup' => $this->dateFormatter->format($this->entity()->{$render_key}->value, $date_format),
-    );
+    ];
   }
 
   /**
@@ -68,7 +68,7 @@ abstract class Date extends DsFieldBase {
     $date_types = $this->entityTypeManager->getStorage('date_format')
       ->loadMultiple();
 
-    $date_formatters = array();
+    $date_formatters = [];
     foreach ($date_types as $machine_name => $value) {
       /* @var $value \Drupal\Core\Datetime\DateFormatterInterface */
       if ($value->isLocked()) {

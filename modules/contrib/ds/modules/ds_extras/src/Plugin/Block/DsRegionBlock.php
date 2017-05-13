@@ -24,12 +24,12 @@ class DsRegionBlock extends BlockBase {
     $data = drupal_static('ds_block_region');
 
     if (!empty($data[$id])) {
-      return array(
+      return [
         '#markup' => drupal_render_children($data[$id]),
-      );
+      ];
     }
     else {
-      return array();
+      return [];
     }
   }
 

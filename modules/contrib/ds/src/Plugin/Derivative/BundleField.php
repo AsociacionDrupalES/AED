@@ -17,7 +17,7 @@ class BundleField extends DeriverBase implements ContainerDeriverInterface {
    *
    * @var array
    */
-  protected $derivatives = array();
+  protected $derivatives = [];
 
   /**
    * The base plugin ID that the derivative is for.
@@ -64,11 +64,11 @@ class BundleField extends DeriverBase implements ContainerDeriverInterface {
       $base_table = $entity_type->getBaseTable();
       if ($entity_type->get('field_ui_base_route') && !empty($base_table)) {
         $this->derivatives[$entity_type_id] = $base_plugin_definition;
-        $this->derivatives[$entity_type_id] += array(
+        $this->derivatives[$entity_type_id] += [
           'provider' => $entity_type_id,
           'title' => 'Bundle name',
           'entity_type' => $entity_type_id,
-        );
+        ];
       }
     }
 

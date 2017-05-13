@@ -19,7 +19,7 @@ class TestFieldEmptyString extends DsFieldBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array('#markup' => '');
+    return ['#markup' => ''];
   }
 
 }

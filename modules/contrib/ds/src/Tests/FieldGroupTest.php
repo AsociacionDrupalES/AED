@@ -18,44 +18,44 @@ class FieldGroupTest extends FastTestBase {
    */
   public function testFieldPlugin() {
     // Create a node.
-    $settings = array('type' => 'article', 'promote' => 1);
+    $settings = ['type' => 'article', 'promote' => 1];
     /* @var \Drupal\node\NodeInterface $node */
     $node = $this->drupalCreateNode($settings);
 
     // Configure layout.
-    $layout = array(
+    $layout = [
       'layout' => 'ds_2col',
-    );
-    $layout_assert = array(
-      'regions' => array(
+    ];
+    $layout_assert = [
+      'regions' => [
         'left' => '<td colspan="8">' . t('Left') . '</td>',
         'right' => '<td colspan="8">' . t('Right') . '</td>',
-      ),
-    );
+      ],
+    ];
     $this->dsSelectLayout($layout, $layout_assert);
 
-    $data = array(
+    $data = [
       'weight' => '1',
       'label' => 'Link',
       'format_type' => 'html_element',
-      'format_settings' => array(
+      'format_settings' => [
         'label' => 'Link',
         'element' => 'div',
         'id' => 'wrapper-id',
         'classes' => 'test-class',
-      ),
-    );
+      ],
+    ];
     $group = $this->createGroup('node', 'article', 'view', 'default', $data);
 
-    $fields = array(
+    $fields = [
       'fields[' . $group->group_name . '][region]' => 'right',
       'fields[body][region]' => 'right',
-    );
+    ];
     $this->dsConfigureUi($fields);
 
-    $fields = array(
+    $fields = [
       'fields[body][parent]' => $group->group_name,
-    );
+    ];
     $this->dsConfigureUi($fields);
 
     $this->drupalGet('node/' . $node->id());

@@ -27,7 +27,7 @@ abstract class FastTestBase extends WebTestBase {
    *
    * @var array
    */
-  public static $modules = array(
+  public static $modules = [
     'node',
     'user',
     'field_ui',
@@ -39,9 +39,9 @@ abstract class FastTestBase extends WebTestBase {
     'ds_extras',
     'ds_test',
     'ds_switch_view_mode',
-    'layout_plugin',
+    'layout_discovery',
     'field_group',
-  );
+  ];
 
   /**
    * The label for a random field to be created for testing.
@@ -74,7 +74,7 @@ abstract class FastTestBase extends WebTestBase {
   /**
    * The created user.
    *
-   * @var User
+   * @var \Drupal\user\UserInterface
    */
   protected $adminUser;
 
@@ -87,7 +87,7 @@ abstract class FastTestBase extends WebTestBase {
     $this->drupalPlaceBlock('local_tasks_block');
 
     // Create a test user.
-    $this->adminUser = $this->drupalCreateUser(array(
+    $this->adminUser = $this->drupalCreateUser([
       'access content',
       'access in-place editing',
       'admin classes',
@@ -111,7 +111,7 @@ abstract class FastTestBase extends WebTestBase {
       'administer site configuration',
       'bypass node access',
       'ds switch view mode',
-    ));
+    ]);
     $this->drupalLogin($this->adminUser);
 
     // Create random field name.
@@ -120,46 +120,46 @@ abstract class FastTestBase extends WebTestBase {
     $this->fieldName = 'field_' . $this->fieldNameInput;
 
     // Create Article node type.
-    $this->drupalCreateContentType(array(
+    $this->drupalCreateContentType([
       'type' => 'article',
       'name' => 'Article',
       'revision' => TRUE,
-    ));
-    $this->drupalCreateContentType(array(
+    ]);
+    $this->drupalCreateContentType([
       'type' => 'page',
       'name' => 'Page',
       'revision' => TRUE,
-    ));
+    ]);
 
     // Create a vocabulary named "Tags".
-    $this->vocabulary = Vocabulary::create(array(
+    $this->vocabulary = Vocabulary::create([
       'name' => 'Tags',
       'vid' => 'tags',
       'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-    ));
+    ]);
     $this->vocabulary->save();
 
-    $term1 = Term::create(array(
+    $term1 = Term::create([
       'name' => 'Tag 1',
       'vid' => 'tags',
       'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-    ));
+    ]);
     $term1->save();
 
-    $term2 = Term::create(array(
+    $term2 = Term::create([
       'name' => 'Tag 2',
       'vid' => 'tags',
       'langcode' => LanguageInterface::LANGCODE_NOT_SPECIFIED,
-    ));
+    ]);
     $term2->save();
 
-    $handler_settings = array(
-      'target_bundles' => array(
+    $handler_settings = [
+      'target_bundles' => [
         $this->vocabulary->id() => $this->vocabulary->id(),
-      ),
+      ],
       // Enable auto-create.
       'auto_create' => TRUE,
-    );
+    ];
     $this->createEntityReferenceField('node', 'article', 'field_' . $this->vocabulary->id(), 'Tags', 'taxonomy_term', 'default', $handler_settings, 10);
 
     entity_get_form_display('node', 'article', 'default')

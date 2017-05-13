@@ -2,7 +2,7 @@
 
 namespace Drupal\ds\Form;
 
-
+use Drupal\Core\Cache\Cache;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Form\FormState;
 use Drupal\Core\Form\FormStateInterface;
@@ -35,26 +35,26 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
 
     $manager = \Drupal::service('plugin.manager.block');
 
-    $blocks = array();
+    $blocks = [];
     foreach ($manager->getDefinitions() as $plugin_id => $plugin_definition) {
       $blocks[$plugin_id] = $plugin_definition['admin_label'];
     }
     asort($blocks);
 
-    $form['block_identity']['block'] = array(
+    $form['block_identity']['block'] = [
       '#type' => 'select',
       '#options' => $blocks,
       '#title' => $this->t('Block'),
       '#required' => TRUE,
       '#default_value' => isset($field['properties']['block']) ? $field['properties']['block'] : '',
-    );
+    ];
 
-    $form['use_block_title'] = array(
+    $form['use_block_title'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Use block title as the field label'),
       '#default_value' => isset($field['properties']['use_block_title']) ? $field['properties']['use_block_title'] : FALSE,
       '#weight' => 90,
-    );
+    ];
 
     return $form;
   }
@@ -106,9 +106,12 @@ class BlockFieldForm extends FieldFormBase implements ContainerInjectionInterfac
     $block = $manager->createInstance($block_id);
     $block_config_form = $block->blockForm([], new FormState());
     if ($block_config_form) {
-      $url = new Url('ds.manage_block_field_config', array('field_key' => $this->field['id']));
+      $url = new Url('ds.manage_block_field_config', ['field_key' => $this->field['id']]);
       $form_state->setRedirectUrl($url);
     }
+
+    // Invalidate all blocks.
+    Cache::invalidateTags(['config:ds.block_base']);
   }
 
 }

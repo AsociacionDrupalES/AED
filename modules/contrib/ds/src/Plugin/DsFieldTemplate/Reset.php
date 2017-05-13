@@ -19,19 +19,19 @@ class Reset extends DsFieldTemplateBase {
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
 
-    $form['lb'] = array(
+    $form['lb'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#size' => '10',
       '#default_value' => $config['lb'],
-    );
+    ];
   }
 
   /**
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    $config = array();
+    $config = [];
     $config['lb'] = '';
 
     return $config;

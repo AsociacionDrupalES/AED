@@ -52,9 +52,9 @@ class ExtrasPermissions implements ContainerInjectionInterface {
         // @todo hide switch field if enabled
         $fields = Ds::getFields($entity_type);
         foreach ($fields as $key => $finfo) {
-          $permissions['view ' . $key . ' on ' . $entity_type] = array(
-            'title' => $this->t('View @field on @entity_type', array('@field' => $finfo['title'], '@entity_type' => $info->getLabel())),
-          );
+          $permissions['view ' . $key . ' on ' . $entity_type] = [
+            'title' => $this->t('View @field on @entity_type', ['@field' => $finfo['title'], '@entity_type' => $info->getLabel()]),
+          ];
         }
       }
     }

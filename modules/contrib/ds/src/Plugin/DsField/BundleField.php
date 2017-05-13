@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\ds\Plugin\DsField;
+
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -51,9 +52,9 @@ class BundleField extends DsFieldBase {
     $bundles_info = $this->entityTypeManager->getBundleInfo($config['field']['entity_type']);
     $output = $bundles_info[$entity->bundle()]['label'];
 
-    return array(
+    return [
       '#markup' => $output,
-    );
+    ];
   }
 
 }

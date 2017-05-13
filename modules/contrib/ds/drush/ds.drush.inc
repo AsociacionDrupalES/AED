@@ -12,47 +12,46 @@ use Drupal\Component\Utility\Unicode;
  * Implements hook_drush_command().
  */
 function ds_drush_command() {
-  $items = array();
+  $items = [];
 
-  $items['ds-build'] = array(
+  $items['ds-build'] = [
     'description' => 'Create a basic template and configuration file for a new Display Suite layout.',
-    'arguments' => array(
+    'arguments' => [
       'name'    => 'Name for your layout.',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'name'    => 'Name for your layout.',
       'regions' => 'Regions for your layout, comma-separated.',
       'css'     => 'Set this to true if you want to include a CSS file for your layout.',
       'image'   => 'Set this to true if you want to include a preview image for your layout.',
-    ),
-    'examples' => array(
+    ],
+    'examples' => [
       'drush ds-build "My layout name"' => 'Create a layout with a few example regions.',
       'drush ds-build "My layout name" --regions="Region 1, Region 2"' => 'Create a layout with custom regions.',
       'drush ds-build "My layout name" --css' => 'Create a layout with an included CSS file.',
-    ),
-  );
+    ],
+  ];
 
-  $items['ds-field'] = array(
+  $items['ds-field'] = [
     'description' => 'Create a Display Suite plugin',
-    'arguments' => array(
+    'arguments' => [
       'name'    => 'Name for your Display Suite field class',
-    ),
-    'options' => array(
+    ],
+    'options' => [
       'name'    => 'Name for your class.',
       'entity'  => 'Name of the entity',
-    ),
-    'examples' => array(
+    ],
+    'examples' => [
       'drush ds-field "MyField"' => 'Create a field with only a render function',
       'drush ds-field "MyTest" --entity=user' => 'Create a field for the user entity',
-    ),
-  );
+    ],
+  ];
 
   return $items;
 }
 
 /**
- * Create a basic template and configuration file for a new Display Suite
- * layout.
+ * Create a basic template and configuration file for a Display Suite layout.
  */
 function drush_ds_build($name = NULL) {
   // Determine the layout name.
@@ -85,8 +84,8 @@ function drush_ds_build($name = NULL) {
   drush_op('copy', $ds_layout_path . '/example_layout.inc', $layout_path . "/$machine_name.inc");
 
   // Prepare an array of things that need to be rewritten in our templates.
-  $find = array();
-  $replace = array();
+  $find = [];
+  $replace = [];
 
   // Replace example name.
   $find[] = '/example layout/i';
@@ -108,7 +107,7 @@ function drush_ds_build($name = NULL) {
       $css_find[] = "/(\*\/\n\n).+(\n)$/s";
       $css_replace[] = '$1' . ds_prepare_regions_css($regions) . '$2';
 
-      drush_op('ds_file_preg_replace', array($layout_path . "/$machine_name.css"), $css_find, $css_replace);
+      drush_op('ds_file_preg_replace', [$layout_path . "/$machine_name.css"], $css_find, $css_replace);
     }
 
     // Uncomment the CSS rule in our configuration.
@@ -135,10 +134,10 @@ function drush_ds_build($name = NULL) {
   }
 
   // Rewrite templates.
-  drush_op('ds_file_preg_replace', array($layout_path . "/$twig_machine_name.html.twig", $layout_path . "/$machine_name.inc"), $find, $replace);
+  drush_op('ds_file_preg_replace', [$layout_path . "/$twig_machine_name.html.twig", $layout_path . "/$machine_name.inc"], $find, $replace);
 
   // Notify user of the newly created templates.
-  drush_print(dt('Templates for "@name" created in: @path', array('@name' => $name, '@path' => $layout_path)));
+  drush_print(dt('Templates for "@name" created in: @path', ['@name' => $name, '@path' => $layout_path]));
 }
 
 /**
@@ -167,7 +166,7 @@ function ds_file_preg_replace($file_paths, $find, $replace) {
  * Prepare HTML structure for an array of regions.
  */
 function ds_prepare_regions_html($region_names) {
-  $output = array();
+  $output = [];
 
   foreach ($region_names as $name) {
     $machine_name = ds_prepare_machine_name($name);
@@ -188,7 +187,7 @@ END;
  * Prepare variable documentation for an array of regions.
  */
 function ds_prepare_regions_variable_documentation($region_names) {
-  $output = array();
+  $output = [];
 
   foreach ($region_names as $name) {
     $machine_name = ds_prepare_machine_name($name);
@@ -207,7 +206,7 @@ END;
  * Prepare configuration for an array of regions.
  */
 function ds_prepare_regions_configuration($region_names) {
-  $output = array();
+  $output = [];
 
   foreach ($region_names as $name) {
     $machine_name = ds_prepare_machine_name($name);
@@ -221,7 +220,7 @@ function ds_prepare_regions_configuration($region_names) {
  * Prepare styling for an array of regions.
  */
 function ds_prepare_regions_css($region_names) {
-  $output = array();
+  $output = [];
 
   foreach ($region_names as $name) {
     $html_class = Html::getClass($name);
@@ -267,8 +266,8 @@ function drush_ds_field($name = NULL) {
   drush_op('copy', $ds_class_path . '/ExampleField.php', $class_path . "/$name.php");
 
   // Prepare an array of things that need to be rewritten in our class.
-  $find = array();
-  $replace = array();
+  $find = [];
+  $replace = [];
 
   // Replace example text.
   $find[] = '/ExampleField/';
@@ -284,8 +283,8 @@ function drush_ds_field($name = NULL) {
   }
 
   // Rewrite class.
-  drush_op('ds_file_preg_replace', array($class_path . "/$name.php"), $find, $replace);
+  drush_op('ds_file_preg_replace', [$class_path . "/$name.php"], $find, $replace);
 
   // Notify user of the newly created class.
-  drush_print(dt('"@name" class created in: @class_path', array('@name' => $name, '@class_path' => $class_path)));
+  drush_print(dt('"@name" class created in: @class_path', ['@name' => $name, '@class_path' => $class_path]));
 }

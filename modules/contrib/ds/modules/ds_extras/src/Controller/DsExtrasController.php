@@ -16,7 +16,7 @@ class DsExtrasController extends ControllerBase {
   /**
    * Returns an node through JSON.
    *
-   * @param Request $request
+   * @param \Symfony\Component\HttpFoundation\Request $request
    *   The global request object.
    * @param string $entityType
    *   The type of the requested entity.
@@ -25,15 +25,19 @@ class DsExtrasController extends ControllerBase {
    * @param string $viewMode
    *   The view mode you wish to render for the requested entity.
    *
-   * @return array
-   *   The Views fields report page.
+   * @return \Drupal\Core\Ajax\AjaxResponse
+   *   An ajax response with the new view mode.
    */
   public function switchViewMode(Request $request, $entityType, $entityId, $viewMode) {
     $response = new AjaxResponse();
-    $entity = entity_load($entityType, $entityId);
+    $entity = $this->entityTypeManager()
+      ->getStorage($entityType)
+      ->load($entityId);
 
     if ($entity->access('view')) {
-      $element = entity_view($entity, $viewMode);
+      $element = $this->entityTypeManager()
+        ->getViewBuilder($entityType)
+        ->view($entity, $viewMode);
       $content = \Drupal::service('renderer')->render($element, FALSE);
 
       $response->addCommand(new ReplaceCommand('.' . $request->get('selector'), $content));

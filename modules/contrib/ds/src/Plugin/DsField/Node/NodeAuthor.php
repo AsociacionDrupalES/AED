@@ -28,33 +28,33 @@ class NodeAuthor extends DsFieldBase {
 
     // Users without a user name are anonymous users. These are never linked.
     if (empty($user->name)) {
-      return array(
+      return [
         '#plain_text' => \Drupal::config('user.settings')->get('anonymous'),
-      );
+      ];
     }
 
     $field = $this->getFieldConfiguration();
     if ($field['formatter'] == 'author') {
-      return array(
+      return [
         '#markup' => $user->getUsername(),
-        '#cache' => array(
+        '#cache' => [
           'tags' => $user->getCacheTags(),
-        ),
-      );
+        ],
+      ];
     }
 
     if ($field['formatter'] == 'author_linked') {
-      return array(
+      return [
         '#theme' => 'username',
         '#account' => $user,
-        '#cache' => array(
+        '#cache' => [
           'tags' => $user->getCacheTags(),
-        ),
-      );
+        ],
+      ];
     }
 
     // Otherwise return an empty array.
-    return array();
+    return [];
   }
 
   /**
@@ -62,10 +62,10 @@ class NodeAuthor extends DsFieldBase {
    */
   public function formatters() {
 
-    $formatters = array(
+    $formatters = [
       'author' => $this->t('Author'),
       'author_linked' => $this->t('Author linked to profile'),
-    );
+    ];
 
     return $formatters;
   }

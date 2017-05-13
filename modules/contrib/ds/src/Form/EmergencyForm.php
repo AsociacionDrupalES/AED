@@ -67,50 +67,50 @@ class EmergencyForm extends ConfigFormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
 
-    $form['ds_fields_error'] = array(
+    $form['ds_fields_error'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Fields error'),
-    );
+    ];
 
-    $form['ds_fields_error']['disable'] = array(
+    $form['ds_fields_error']['disable'] = [
       '#type' => 'html_tag',
       '#tag' => 'p',
       '#value' => $this->t('In case you get an error after configuring a layout printing a message like "Fatal error: Unsupported operand types", you can temporarily disable adding fields from DS. You probably are trying to render an node inside a node, for instance through a view, which is simply not possible. See <a href="http://drupal.org/node/1264386">http://drupal.org/node/1264386</a>.'),
-    );
+    ];
 
-    $form['ds_fields_error']['submit'] = array(
+    $form['ds_fields_error']['submit'] = [
       '#type' => 'submit',
       '#value' => ($this->state->get('ds.disabled', FALSE) ? $this->t('Enable attaching fields') : $this->t('Disable attaching fields')),
-      '#submit' => array('::submitFieldAttach'),
+      '#submit' => ['::submitFieldAttach'],
       '#weight' => 1,
-    );
+    ];
 
     if ($this->moduleHandler->moduleExists('ds_extras')) {
       $region_blocks = $this->config('ds_extras.settings')->get('region_blocks');
       if (!empty($region_blocks)) {
 
-        $region_blocks_options = array();
+        $region_blocks_options = [];
         foreach ($region_blocks as $key => $info) {
           $region_blocks_options[$key] = $info['title'];
         }
 
-        $form['region_to_block'] = array(
+        $form['region_to_block'] = [
           '#type' => 'fieldset',
           '#title' => $this->t('Block regions'),
-        );
+        ];
 
-        $form['region_to_block']['remove_block_region'] = array(
+        $form['region_to_block']['remove_block_region'] = [
           '#type' => 'checkboxes',
           '#options' => $region_blocks_options,
           '#description' => $this->t('In case you renamed a content type, you will not see the configured block regions anymore, however the block on the block settings page is still available. On this screen you can remove orphaned block regions.'),
-        );
+        ];
 
-        $form['region_to_block']['submit'] = array(
+        $form['region_to_block']['submit'] = [
           '#type' => 'submit',
           '#value' => $this->t('Remove block regions'),
-          '#submit' => array('::submitRegionToBlock'),
+          '#submit' => ['::submitRegionToBlock'],
           '#weight' => 1,
-        );
+        ];
       }
     }
 
@@ -180,9 +180,9 @@ class EmergencyForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return array(
+    return [
       'ds_extras.settings',
-    );
+    ];
   }
 
 }

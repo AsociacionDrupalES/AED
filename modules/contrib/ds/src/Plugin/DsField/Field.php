@@ -2,7 +2,7 @@
 
 namespace Drupal\ds\Plugin\DsField;
 
-use Drupal\Component\Utility\Html;
+use Drupal\Core\Template\Attribute;
 
 /**
  * The base plugin to create DS fields.
@@ -34,33 +34,53 @@ abstract class Field extends DsFieldBase {
     }
 
     if (empty($output)) {
-      return array();
+      return [];
     }
 
-    // Link.
-    if (!empty($config['link'])) {
-      /* @var $entity EntityInterface */
-      $entity = $this->entity();
-      $url_info = $entity->toUrl();
+    $template = <<<TWIG
+{% if wrapper %}
+<{{ wrapper }}{{ attributes }}>
+{% endif %}
+{% if is_link %}
+  {{ link(output, entity_url) }}
+{% else %}
+  {{ output }}
+{% endif %}
+{% if wrapper %}
+</{{ wrapper }}>
+{% endif %}
+TWIG;
+
+    // Sometimes it can be impossible to make a link to the entity, because it
+    // has no id as it has not yet been saved, e.g. when previewing an unsaved
+    // inline entity form.
+    $is_link = FALSE;
+    $entity_url = NULL;
+    if (!empty($this->entity()->id())) {
+      $is_link = !empty($config['link']);
+      $entity_url = $this->entity()->toUrl();
       if (!empty($config['link class'])) {
-        $url_info->setOption('attributes', array('class' => explode(' ', $config['link class'])));
+        $entity_url->setOption('attributes', ['class' => explode(' ', $config['link class'])]);
       }
-      $output = \Drupal::l($output, $url_info);
-    }
-    else {
-      $output = Html::escape($output);
     }
 
-    // Wrapper and class.
-    if (!empty($config['wrapper'])) {
-      $wrapper = Html::escape($config['wrapper']);
-      $class = (!empty($config['class'])) ? ' class="' . Html::escape($config['class']) . '"' : '';
-      $output = '<' . $wrapper . $class . '>' . $output . '</' . $wrapper . '>';
+    // Build the attributes.
+    $attributes = new Attribute();
+    if (!empty($config['class'])) {
+      $attributes->addClass($config['class']);
     }
 
-    return array(
-      '#markup' => $output,
-    );
+    return [
+      '#type' => 'inline_template',
+      '#template' => $template,
+      '#context' => [
+        'is_link' => $is_link,
+        'wrapper' => !empty($config['wrapper']) ? $config['wrapper'] : '',
+        'attributes' => $attributes,
+        'entity_url' => $entity_url,
+        'output' => $output,
+      ],
+    ];
   }
 
   /**

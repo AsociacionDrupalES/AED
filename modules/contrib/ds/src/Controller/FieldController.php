@@ -18,22 +18,24 @@ class FieldController extends ControllerBase implements ContainerInjectionInterf
   /**
    * The config storage.
    *
-   * @var \Drupal\Core\Config\StorageInterface;
+   * @var \Drupal\Core\Config\StorageInterface
    */
   protected $storage;
 
   /**
    * The module handler.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface;
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;
 
   /**
-   * Constructs a \Drupal\ds\Routing\FieldController object.
+   * Constructs a \Drupal\ds\Controller\FieldController object.
    *
    * @param \Drupal\Core\Config\StorageInterface $storage
    *   The configuration storage.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    */
   public function __construct(StorageInterface $storage, ModuleHandlerInterface $module_handler) {
     $this->storage = $storage;
@@ -57,59 +59,59 @@ class FieldController extends ControllerBase implements ContainerInjectionInterf
     $custom_fields = $this->storage->listAll('ds.field.');
     if (!empty($custom_fields)) {
 
-      $rows = array();
+      $rows = [];
       foreach ($custom_fields as $config) {
         $field_value = $this->config($config)->get();
-        $row = array();
-        $row[] = array(
-          'data' => array(
+        $row = [];
+        $row[] = [
+          'data' => [
             '#plain_text' => $field_value['label'],
-          ),
-        );
+          ],
+        ];
         $row[] = isset($field_value['type_label']) ? $field_value['type_label'] : $this->t('Unknown');
         $row[] = $field_value['id'];
         $row[] = ucwords(str_replace('_', ' ', implode(', ', $field_value['entities'])));
 
-        $operations = array();
-        $operations['edit'] = array(
+        $operations = [];
+        $operations['edit'] = [
           'title' => $this->t('Edit'),
-          'url' => new Url('ds.manage_field', array('field_key' => $field_value['id'])),
-        );
-        $operations['delete'] = array(
+          'url' => new Url('ds.manage_field', ['field_key' => $field_value['id']]),
+        ];
+        $operations['delete'] = [
           'title' => $this->t('Delete'),
-          'url' => new Url('ds.delete_field', array('field_key' => $field_value['id'])),
-        );
+          'url' => new Url('ds.delete_field', ['field_key' => $field_value['id']]),
+        ];
 
         $this->moduleHandler->alter('ds_field_operations', $operations, $field_value);
 
-        $row[] = array(
-          'data' => array(
+        $row[] = [
+          'data' => [
             '#type' => 'operations',
             '#subtype' => 'ds',
             '#links' => $operations,
-          ),
-        );
+          ],
+        ];
 
         $rows[] = $row;
       }
 
-      $build = array(
+      $build = [
         '#theme' => 'table',
-        '#header' => array(
+        '#header' => [
           'Label',
           'Type',
           'Machine name',
           'Entities',
           'Operations',
-        ),
+        ],
         '#rows' => $rows,
-      );
+      ];
 
     }
     else {
-      $build = array(
+      $build = [
         '#markup' => $this->t('No custom fields have been defined.'),
-      );
+      ];
     }
 
     return $build;
@@ -121,7 +123,7 @@ class FieldController extends ControllerBase implements ContainerInjectionInterf
   public function manageRedirect($field_key) {
     $config = $this->config('ds.field.' . $field_key);
     if ($field = $config->get()) {
-      $url = new Url('ds.manage_' . $field['type'] . '_field', array('field_key' => $field_key));
+      $url = new Url('ds.manage_' . $field['type'] . '_field', ['field_key' => $field_key]);
       if ($url->toString()) {
         return new RedirectResponse($url->toString());
       }

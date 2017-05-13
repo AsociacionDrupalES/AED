@@ -14,7 +14,7 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
   /**
    * The entity used for token replacement.
    *
-   * @var EntityInterface
+   * @var \Drupal\Core\Entity\EntityInterface
    */
   protected $entity = NULL;
 
@@ -46,24 +46,24 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
   public function alterForm(&$form) {
     $config = $this->getConfiguration();
 
-    $form['lb'] = array(
+    $form['lb'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#size' => '10',
       '#default_value' => $config['lb'],
-    );
-    $form['lb-col'] = array(
+    ];
+    $form['lb-col'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Show label colon'),
       '#default_value' => $config['lb-col'],
-      '#attributes' => array(
-        'class' => array('colon-checkbox'),
-      ),
-    );
+      '#attributes' => [
+        'class' => ['colon-checkbox'],
+      ],
+    ];
     $field_classes = Ds::getClasses('field');
 
     if (!empty($field_classes)) {
-      $form['classes'] = array(
+      $form['classes'] = [
         '#type' => 'select',
         '#multiple' => TRUE,
         '#options' => $field_classes,
@@ -71,13 +71,13 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
         '#default_value' => $config['classes'],
         '#prefix' => '<div class="field-classes">',
         '#suffix' => '</div>',
-      );
+      ];
     }
     else {
-      $form['classes'] = array(
+      $form['classes'] = [
         '#type' => 'value',
-        '#value' => array(),
-      );
+        '#value' => [],
+      ];
     }
   }
 
@@ -107,10 +107,10 @@ abstract class DsFieldTemplateBase extends PluginBase implements DsFieldTemplate
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    $config = array();
+    $config = [];
     $config['lb'] = '';
     $config['lb-col'] = \Drupal::config('ds.settings')->get('ft-show-colon');
-    $config['classes'] = array();
+    $config['classes'] = [];
 
     return $config;
   }

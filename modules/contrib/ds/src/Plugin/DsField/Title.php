@@ -15,23 +15,23 @@ abstract class Title extends Field {
   public function settingsForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
 
-    $settings['link'] = array(
+    $settings['link'] = [
       '#type' => 'checkbox',
       '#title' => 'Link',
       '#default_value' => $config['link'],
-    );
-    $settings['wrapper'] = array(
+    ];
+    $settings['wrapper'] = [
       '#type' => 'textfield',
       '#title' => 'Wrapper',
       '#default_value' => $config['wrapper'],
       '#description' => $this->t('Eg: h1, h2, p'),
-    );
-    $settings['class'] = array(
+    ];
+    $settings['class'] = [
       '#type' => 'textfield',
       '#title' => 'Class',
       '#default_value' => $config['class'],
       '#description' => $this->t('Put a class on the wrapper. Eg: block-title'),
-    );
+    ];
 
     return $settings;
   }
@@ -42,7 +42,7 @@ abstract class Title extends Field {
   public function settingsSummary($settings) {
     $config = $this->getConfiguration();
 
-    $summary = array();
+    $summary = [];
     if (!empty($config['link'])) {
       $summary[] = 'Link: yes';
     }
@@ -64,11 +64,11 @@ abstract class Title extends Field {
    */
   public function defaultConfiguration() {
 
-    $configuration = array(
+    $configuration = [
       'link' => 0,
       'wrapper' => 'h2',
       'class' => '',
-    );
+    ];
 
     return $configuration;
   }

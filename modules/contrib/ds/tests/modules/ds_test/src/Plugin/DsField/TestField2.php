@@ -19,7 +19,7 @@ class TestField2 extends DsFieldBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array('#markup' => 'Test field plugin on node ' . $this->entity()->id());
+    return ['#markup' => 'Test field plugin on node ' . $this->entity()->id()];
   }
 
 }

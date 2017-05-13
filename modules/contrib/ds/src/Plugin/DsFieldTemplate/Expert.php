@@ -20,15 +20,15 @@ class Expert extends DsFieldTemplateBase {
     $config = $this->getConfiguration();
 
     // Add label.
-    $form['lb'] = array(
+    $form['lb'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Label'),
       '#size' => '10',
       '#default_value' => $config['lb'],
-    );
+    ];
 
     // Add prefix.
-    $form['prefix'] = array(
+    $form['prefix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Prefix'),
       '#size' => '100',
@@ -36,111 +36,111 @@ class Expert extends DsFieldTemplateBase {
       '#default_value' => isset($config['prefix']) ? $config['prefix'] : '',
       '#prefix' => '<div class="field-prefix">',
       '#suffix' => '</div>',
-    );
+    ];
 
-    $wrappers = array(
-      'lbw' => array('title' => $this->t('Label wrapper')),
-      'ow' => array('title' => $this->t('Outer wrapper')),
-      'fis' => array('title' => $this->t('Field items')),
-      'fi' => array('title' => $this->t('Field item')),
-    );
+    $wrappers = [
+      'lbw' => ['title' => $this->t('Label wrapper')],
+      'ow' => ['title' => $this->t('Outer wrapper')],
+      'fis' => ['title' => $this->t('Field items')],
+      'fi' => ['title' => $this->t('Field item')],
+    ];
 
     foreach ($wrappers as $wrapper_key => $value) {
-      $form[$wrapper_key] = array(
+      $form[$wrapper_key] = [
         '#type' => 'checkbox',
         '#title' => $value['title'],
         '#prefix' => '<div class="ft-group ' . $wrapper_key . '">',
         '#default_value' => $config[$wrapper_key],
-      );
-      $form[$wrapper_key . '-el'] = array(
+      ];
+      $form[$wrapper_key . '-el'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Element'),
         '#size' => '10',
         '#description' => $this->t('E.g. div, span, h2 etc.'),
         '#default_value' => $config[$wrapper_key . '-el'],
-        '#states' => array(
-          'visible' => array(
-            ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-          ),
-        ),
-      );
-      $form[$wrapper_key . '-cl'] = array(
+        '#states' => [
+          'visible' => [
+            ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+      $form[$wrapper_key . '-cl'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Classes'),
         '#size' => '10',
         '#default_value' => $config[$wrapper_key . '-cl'],
         '#description' => $this->t('E.g. field-expert'),
-        '#states' => array(
-          'visible' => array(
-            ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-          ),
-        ),
-      );
-      $form[$wrapper_key . '-at'] = array(
+        '#states' => [
+          'visible' => [
+            ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
+      $form[$wrapper_key . '-at'] = [
         '#type' => 'textfield',
         '#title' => $this->t('Attributes'),
         '#size' => '20',
         '#default_value' => $config[$wrapper_key . '-at'],
         '#description' => $this->t('E.g. name="anchor"'),
-        '#states' => array(
-          'visible' => array(
-            ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-          ),
-        ),
-      );
+        '#states' => [
+          'visible' => [
+            ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+          ],
+        ],
+      ];
 
       // Hide colon.
       if ($wrapper_key == 'lbw') {
-        $form['lb-col'] = array(
+        $form['lb-col'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Show label colon'),
           '#default_value' => $config['lb-col'],
-          '#attributes' => array(
-            'class' => array('colon-checkbox'),
-          ),
-          '#states' => array(
-            'visible' => array(
-              ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-            ),
-          ),
-        );
+          '#attributes' => [
+            'class' => ['colon-checkbox'],
+          ],
+          '#states' => [
+            'visible' => [
+              ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+            ],
+          ],
+        ];
       }
       if ($wrapper_key != 'lbw') {
-        $form[$wrapper_key . '-def-at'] = array(
+        $form[$wrapper_key . '-def-at'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Add default attributes'),
           '#default_value' => $config[$wrapper_key . '-def-at'],
           '#suffix' => ($wrapper_key == 'ow') ? '' : '</div><div class="clearfix"></div>',
-          '#states' => array(
-            'visible' => array(
-              ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-            ),
-          ),
-        );
+          '#states' => [
+            'visible' => [
+              ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+            ],
+          ],
+        ];
       }
       else {
-        $form['ft'][$wrapper_key . '-def-at'] = array(
+        $form['ft'][$wrapper_key . '-def-at'] = [
           '#markup' => '</div><div class="clearfix"></div>',
-        );
+        ];
       }
 
       // Default classes for outer wrapper.
       if ($wrapper_key == 'ow') {
-        $form[$wrapper_key . '-def-cl'] = array(
+        $form[$wrapper_key . '-def-cl'] = [
           '#type' => 'checkbox',
           '#title' => $this->t('Add default classes'),
           '#default_value' => $config[$wrapper_key . '-def-cl'],
           '#suffix' => '</div><div class="clearfix"></div>',
-          '#states' => array(
-            'visible' => array(
-              ':input[name$="[' . $wrapper_key . ']"]' => array('checked' => TRUE),
-            ),
-          ),
-        );
+          '#states' => [
+            'visible' => [
+              ':input[name$="[' . $wrapper_key . ']"]' => ['checked' => TRUE],
+            ],
+          ],
+        ];
       }
     }
     // Add suffix.
-    $form['suffix'] = array(
+    $form['suffix'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Suffix'),
       '#size' => '100',
@@ -148,25 +148,25 @@ class Expert extends DsFieldTemplateBase {
       '#default_value' => isset($config['suffix']) ? $config['suffix'] : '',
       '#prefix' => '<div class="field-suffix">',
       '#suffix' => '</div>',
-    );
+    ];
 
     // Token support.
     if (\Drupal::moduleHandler()->moduleExists('token')) {
-      $form['tokens'] = array(
+      $form['tokens'] = [
         '#title' => $this->t('Tokens'),
         '#type' => 'container',
-        '#states' => array(
-          'invisible' => array(
-            'input[name="use_token"]' => array('checked' => FALSE),
-          ),
-        ),
-      );
-      $form['tokens']['help'] = array(
+        '#states' => [
+          'invisible' => [
+            'input[name="use_token"]' => ['checked' => FALSE],
+          ],
+        ],
+      ];
+      $form['tokens']['help'] = [
         '#theme' => 'token_tree_link',
         '#token_types' => 'all',
         '#global_types' => FALSE,
         '#dialog' => TRUE,
-      );
+      ];
     }
   }
 
@@ -174,17 +174,17 @@ class Expert extends DsFieldTemplateBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    $config = array();
+    $config = [];
     $config['lb'] = '';
     $config['lb-col'] = \Drupal::config('ds.settings')->get('ft-show-colon');
 
-    $wrappers = array(
-      'lb' => array('title' => $this->t('Label')),
-      'lbw' => array('title' => $this->t('Label wrapper')),
-      'ow' => array('title' => $this->t('Outer wrapper')),
-      'fis' => array('title' => $this->t('Field items')),
-      'fi' => array('title' => $this->t('Field item')),
-    );
+    $wrappers = [
+      'lb' => ['title' => $this->t('Label')],
+      'lbw' => ['title' => $this->t('Label wrapper')],
+      'ow' => ['title' => $this->t('Outer wrapper')],
+      'fis' => ['title' => $this->t('Field items')],
+      'fi' => ['title' => $this->t('Field item')],
+    ];
     foreach ($wrappers as $wrapper_key => $value) {
       $config[$wrapper_key] = FALSE;
       $config[$wrapper_key . '-el'] = '';
@@ -209,12 +209,12 @@ class Expert extends DsFieldTemplateBase {
       $field_settings['lb-col'] = TRUE;
     }
 
-    $wrappers = array(
+    $wrappers = [
       'lbw' => $this->t('Label wrapper'),
       'ow' => $this->t('Wrapper'),
       'fis' => $this->t('Field items'),
       'fi' => $this->t('Field item'),
-    );
+    ];
 
     foreach ($wrappers as $wrapper_key => $title) {
       if (!empty($values[$wrapper_key])) {
@@ -225,7 +225,7 @@ class Expert extends DsFieldTemplateBase {
         // Classes.
         $field_settings[$wrapper_key . '-cl'] = !(empty($values[$wrapper_key . '-cl'])) ? $values[$wrapper_key . '-cl'] : '';
         // Default Classes.
-        if (in_array($wrapper_key, array('ow', 'lb'))) {
+        if (in_array($wrapper_key, ['ow', 'lb'])) {
           $field_settings[$wrapper_key . '-def-cl'] = !(empty($values[$wrapper_key . '-def-cl'])) ? TRUE : FALSE;
         }
         // Attributes.
@@ -236,20 +236,20 @@ class Expert extends DsFieldTemplateBase {
         /* @var \Drupal\Core\Entity\EntityInterface $entity */
         if ($entity = $this->getEntity()) {
           // Tokens.
-          $apply_to = array(
+          $apply_to = [
             'prefix',
             $wrapper_key . '-el',
             $wrapper_key . '-cl',
             $wrapper_key . '-at',
             'suffix',
-          );
+          ];
 
           foreach ($apply_to as $identifier) {
             if (!empty($field_settings[$identifier])) {
               $field_settings[$identifier] = \Drupal::token()->replace(
                 $field_settings[$identifier],
-                array($entity->getEntityTypeId() => $entity),
-                array('clear' => TRUE)
+                [$entity->getEntityTypeId() => $entity],
+                ['clear' => TRUE]
               );
             }
           }

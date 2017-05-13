@@ -18,7 +18,7 @@ class BlockTest extends FastTestBase {
    *
    * @var array
    */
-  public static $modules = array(
+  public static $modules = [
     'node',
     'user',
     'comment',
@@ -26,8 +26,7 @@ class BlockTest extends FastTestBase {
     'block',
     'block_content',
     'ds',
-    'layout_plugin',
-  );
+  ];
 
   /**
    * The created user.
@@ -43,13 +42,13 @@ class BlockTest extends FastTestBase {
     parent::setUp();
 
     // Create a test user.
-    $this->adminUser = $this->drupalCreateUser(array(
+    $this->adminUser = $this->drupalCreateUser([
       'access content',
       'admin display suite',
       'admin fields',
       'administer blocks',
       'administer block_content display',
-    ));
+    ]);
     $this->drupalLogin($this->adminUser);
   }
 
@@ -59,39 +58,39 @@ class BlockTest extends FastTestBase {
   public function testBlock() {
 
     // Create basic block type.
-    $edit = array(
+    $edit = [
       'label' => 'Basic Block',
       'id' => 'basic',
-    );
-    $this->drupalPostForm('admin/structure/block/block-content/types/add', $edit, t('Save'), array());
+    ];
+    $this->drupalPostForm('admin/structure/block/block-content/types/add', $edit, t('Save'), []);
     $this->assertText('Custom block type Basic Block has been added.', 'Basic block type added');
 
     // Create a basic block.
-    $edit = array();
+    $edit = [];
     $edit['info[0][value]'] = 'Test Block';
     $edit['body[0][value]'] = $this->randomMachineName(16);
-    $this->drupalPostForm('block/add/basic', $edit, t('Save'), array());
+    $this->drupalPostForm('block/add/basic', $edit, t('Save'), []);
     $this->assertText('Basic Block Test Block has been created.', 'Basic Block Test Block created');
 
     // Place the block.
-    $instance = array(
+    $instance = [
       'id' => 'testblock',
       'settings[label]' => $edit['info[0][value]'],
       'region' => 'sidebar_first',
-    );
+    ];
     $block = BlockContent::load(1);
     $url = 'admin/structure/block/add/block_content:' . $block->uuid() . '/' . $this->config('system.theme')->get('default');
     $this->drupalPostForm($url, $instance, t('Save block'));
 
     // Change to a DS layout.
     $url = 'admin/structure/block/block-content/manage/basic/display';
-    $edit = array('layout' => 'ds_2col');
-    $this->drupalPostForm($url, $edit, t('Save'), array());
+    $edit = ['layout' => 'ds_2col'];
+    $this->drupalPostForm($url, $edit, t('Save'), []);
 
-    $fields = array(
+    $fields = [
       'fields[block_description][region]' => 'left',
       'fields[body][region]' => 'right',
-    );
+    ];
     $this->dsConfigureUi($fields, 'admin/structure/block/block-content/manage/basic/display');
 
     // View the block.

@@ -45,15 +45,15 @@ abstract class TokenBase extends DsFieldBase {
   public function build() {
     $content = $this->content();
     $format = $this->format();
-    $value = $this->token->replace($content, array($this->getEntityTypeId() => $this->entity()), array('clear' => TRUE));
+    $value = $this->token->replace($content, [$this->getEntityTypeId() => $this->entity()], ['clear' => TRUE]);
 
-    return array(
+    return [
       '#type' => 'processed_text',
       '#text' => $value,
       '#format' => $format,
-      '#filter_types_to_skip' => array(),
+      '#filter_types_to_skip' => [],
       '#langcode' => '',
-    );
+    ];
   }
 
   /**

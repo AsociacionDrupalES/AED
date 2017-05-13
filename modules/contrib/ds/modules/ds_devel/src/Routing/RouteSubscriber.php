@@ -36,24 +36,24 @@ class RouteSubscriber extends RouteSubscriberBase {
   protected function alterRoutes(RouteCollection $collection) {
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type_id => $entity_type) {
       if ($entity_type->hasLinkTemplate('devel-markup')) {
-        $options = array(
+        $options = [
           '_admin_route' => TRUE,
           '_devel_entity_type_id' => $entity_type_id,
-          'parameters' => array(
-            $entity_type_id => array(
+          'parameters' => [
+            $entity_type_id => [
               'type' => 'entity:' . $entity_type_id,
-            ),
-          ),
-        );
+            ],
+          ],
+        ];
 
         if ($devel_render = $entity_type->getLinkTemplate('devel-markup')) {
           $route = new Route(
             $devel_render,
-            array(
+            [
               '_controller' => '\Drupal\ds_devel\Controller\DsDevelController::entityMarkup',
               '_title' => 'Devel Render',
-            ),
-            array('_permission' => 'access devel information'),
+            ],
+            ['_permission' => 'access devel information'],
             $options
           );
 
@@ -68,7 +68,7 @@ class RouteSubscriber extends RouteSubscriberBase {
    */
   public static function getSubscribedEvents() {
     $events = parent::getSubscribedEvents();
-    $events[RoutingEvents::ALTER] = array('onAlterRoutes', 100);
+    $events[RoutingEvents::ALTER] = ['onAlterRoutes', 100];
     return $events;
   }
 

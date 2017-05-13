@@ -14,22 +14,22 @@ class HiddenRegionTest extends FastTestBase {
    */
   public function testHiddenRegion() {
     // Enable the hidden region option.
-    $edit = array(
+    $edit = [
       'fs3[hidden_region]' => TRUE,
-    );
+    ];
     $this->drupalPostForm('admin/structure/ds/settings', $edit, t('Save configuration'));
 
     $this->dsSelectLayout();
 
     // Create a node.
-    $settings = array('type' => 'article');
+    $settings = ['type' => 'article'];
     $node = $this->drupalCreateNode($settings);
 
     // Configure fields.
-    $fields = array(
+    $fields = [
       'fields[body][region]' => 'right',
       'fields[test_field][region]' => 'ds_hidden',
-    );
+    ];
     $this->dsConfigureUi($fields);
 
     // Test field not printed.
@@ -37,10 +37,10 @@ class HiddenRegionTest extends FastTestBase {
     $this->assertNoText('Test field plugin on node ' . $node->id(), 'Test code field not found');
 
     // Configure fields.
-    $fields = array(
+    $fields = [
       'fields[body][region]' => 'right',
       'fields[test_field][region]' => 'right',
-    );
+    ];
     $this->dsConfigureUi($fields);
 
     // Test field printed.

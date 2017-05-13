@@ -19,7 +19,7 @@ class TestFieldZeroString extends DsFieldBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array('#markup' => '0');
+    return ['#markup' => '0'];
   }
 
 }

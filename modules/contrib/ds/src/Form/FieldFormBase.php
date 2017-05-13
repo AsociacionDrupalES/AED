@@ -89,7 +89,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    */
   public function buildForm(array $form, FormStateInterface $form_state, $field_key = '') {
     // Initialize field.
-    $field = array();
+    $field = [];
 
     // Fetch field if it already exists.
     if (!empty($field_key)) {
@@ -99,7 +99,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
     // Save the field for future reuse.
     $this->field = $field;
 
-    $form['name'] = array(
+    $form['name'] = [
       '#title' => $this->t('Label'),
       '#type' => 'textfield',
       '#default_value' => isset($field['label']) ? $field['label'] : '',
@@ -107,48 +107,48 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
       '#maxlength' => 128,
       '#required' => TRUE,
       '#size' => 30,
-    );
+    ];
 
-    $form['id'] = array(
+    $form['id'] = [
       '#type' => 'machine_name',
       '#default_value' => isset($field['id']) ? $field['id'] : '',
       '#maxlength' => 32,
       '#description' => $this->t('The machine-readable name of this field. This name must contain only lowercase letters and underscores. This name must be unique.'),
       '#disabled' => !empty($field['id']),
-      '#machine_name' => array(
-        'exists' => array($this, 'uniqueFieldName'),
-        'source' => array('name'),
-      ),
-    );
+      '#machine_name' => [
+        'exists' => [$this, 'uniqueFieldName'],
+        'source' => ['name'],
+      ],
+    ];
 
-    $entity_options = array();
+    $entity_options = [];
     $entities = $this->entityTypeManager->getDefinitions();
     foreach ($entities as $entity_type => $entity_info) {
       if ($entity_info->get('field_ui_base_route') || $entity_type == 'ds_views') {
         $entity_options[$entity_type] = Unicode::ucfirst(str_replace('_', ' ', $entity_type));
       }
     }
-    $form['entities'] = array(
+    $form['entities'] = [
       '#title' => $this->t('Entities'),
       '#description' => $this->t('Select the entities for which this field will be made available.'),
       '#type' => 'checkboxes',
       '#required' => TRUE,
       '#options' => $entity_options,
-      '#default_value' => isset($field['entities']) ? $field['entities'] : array(),
-    );
+      '#default_value' => isset($field['entities']) ? $field['entities'] : [],
+    ];
 
-    $form['ui_limit'] = array(
+    $form['ui_limit'] = [
       '#title' => $this->t('Limit field'),
       '#description' => $this->t('Limit this field on field UI per bundles and/or view modes. The values are in the form of $bundle|$view_mode, where $view_mode may be either a view mode set to use custom settings, or \'default\'. You may use * to select all, e.g article|*, *|full or *|*. Enter one value per line.'),
       '#type' => 'textarea',
       '#default_value' => isset($field['ui_limit']) ? $field['ui_limit'] : '',
-    );
+    ];
 
-    $form['submit'] = array(
+    $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#weight' => 100,
-    );
+    ];
 
     return $form;
   }
@@ -157,7 +157,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $field = array();
+    $field = [];
     $field['id'] = $form_state->getValue('id');
     $field['label'] = $form_state->getValue('name');
     $field['ui_limit'] = $form_state->getValue('ui_limit');
@@ -188,12 +188,12 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    */
   protected function getEditableConfigNames() {
     if (isset($this->field, $this->field['id'])) {
-      return array(
+      return [
         'ds.field.' . $this->field['id'],
-      );
+      ];
     }
     else {
-      return array();
+      return [];
     }
   }
 
@@ -201,7 +201,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    * Returns the properties for the custom field.
    */
   public function getProperties(FormStateInterface $form_state) {
-    return array();
+    return [];
   }
 
   /**
@@ -222,7 +222,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
    * Returns whether a field machine name is unique.
    */
   public function uniqueFieldName($name) {
-    $value = strtr($name, array('-' => '_'));
+    $value = strtr($name, ['-' => '_']);
     $config = $this->configFactory()->get('ds.field.' . $value);
     if ($config->get()) {
       return TRUE;
@@ -237,7 +237,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
     $field = $this->field;
 
     // Save field and clear ds_fields_info cache.
-    $this->cacheInvalidator->invalidateTags(array('ds_fields_info'));
+    $this->cacheInvalidator->invalidateTags(['ds_fields_info']);
 
     // Also clear the ds plugin cache.
     \Drupal::service('plugin.manager.ds')->clearCachedDefinitions();
@@ -245,7 +245,7 @@ class FieldFormBase extends ConfigFormBase implements ContainerInjectionInterfac
     // Redirect.
     $url = new Url('ds.fields_list');
     $form_state->setRedirectUrl($url);
-    drupal_set_message(t('The field %field has been saved.', array('%field' => $field['label'])));
+    drupal_set_message(t('The field %field has been saved.', ['%field' => $field['label']]));
   }
 
 }

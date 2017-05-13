@@ -78,17 +78,17 @@ class BlockFieldConfigForm extends FieldFormBase implements ContainerInjectionIn
     }
 
     if (!$form) {
-      return array('#markup' => $this->t("This block has no configuration options."));
+      return ['#markup' => $this->t("This block has no configuration options.")];
     }
 
     // Some form items require this (core block manager also sets this).
     $form['#tree'] = TRUE;
 
-    $form['submit'] = array(
+    $form['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#weight' => 100,
-    );
+    ];
 
     return $form;
   }

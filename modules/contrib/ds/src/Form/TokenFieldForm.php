@@ -28,32 +28,32 @@ class TokenFieldForm extends FieldFormBase {
     $form = parent::buildForm($form, $form_state, $field_key);
     $field = $this->field;
 
-    $form['content'] = array(
+    $form['content'] = [
       '#type' => 'text_format',
       '#title' => $this->t('Field content'),
       '#default_value' => isset($field['properties']['content']['value']) ? $field['properties']['content']['value'] : '',
       '#format' => isset($field['properties']['content']['format']) ? $field['properties']['content']['format'] : 'plain_text',
       '#base_type' => 'textarea',
       '#required' => TRUE,
-    );
+    ];
 
     // Token support.
     if (\Drupal::moduleHandler()->moduleExists('token')) {
-      $form['tokens'] = array(
+      $form['tokens'] = [
         '#title' => $this->t('Tokens'),
         '#type' => 'container',
-        '#states' => array(
-          'invisible' => array(
-            'input[name="use_token"]' => array('checked' => FALSE),
-          ),
-        ),
-      );
-      $form['tokens']['help'] = array(
+        '#states' => [
+          'invisible' => [
+            'input[name="use_token"]' => ['checked' => FALSE],
+          ],
+        ],
+      ];
+      $form['tokens']['help'] = [
         '#theme' => 'token_tree_link',
         '#token_types' => 'all',
         '#global_types' => FALSE,
         '#dialog' => TRUE,
-      );
+      ];
     }
 
     return $form;
@@ -63,9 +63,9 @@ class TokenFieldForm extends FieldFormBase {
    * {@inheritdoc}
    */
   public function getProperties(FormStateInterface $form_state) {
-    return array(
+    return [
       'content' => $form_state->getValue('content'),
-    );
+    ];
   }
 
   /**

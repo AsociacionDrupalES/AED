@@ -24,7 +24,7 @@ ds_2col:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-2col
-  css: css/ds-2col.css
+  library: ds/ds_2col
   icon: images/ds-2col.png
   regions:
     left:
@@ -37,7 +37,7 @@ ds_2col_fluid:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-2col-fluid
-  css: css/ds-2col-fluid.css
+  library: ds/ds_2col_fluid
   icon: images/ds-2col-fluid.png
   regions:
     left:
@@ -50,7 +50,7 @@ ds_2col_stacked:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-2col-stacked
-  css: css/ds-2col-stacked.css
+  library: ds/ds_2col_stacked
   icon: images/ds-2col-stacked.png
   regions:
     header:
@@ -67,7 +67,7 @@ ds_2col_stacked_fluid:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-2col-stacked-fluid
-  css: css/ds-2col-stacked-fluid.css
+  library: ds/ds_2col_stacked_fluid
   icon: images/ds-2col-stacked-fluid.png
   regions:
     header:
@@ -84,7 +84,7 @@ ds_3col:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-3col
-  css: css/ds-3col.css
+  library: ds/ds_3col
   icon: images/ds-3col.png
   regions:
     left:
@@ -99,7 +99,7 @@ ds_3col_equal_width:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-3col-equal-width
-  css: css/ds-3col-equal-width.css
+  library: ds/ds_3col_equal_width
   icon: images/ds-3col-equal-width.png
   regions:
     left:
@@ -114,7 +114,7 @@ ds_3col_stacked:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-3col-stacked
-  css: css/ds-3col-stacked.css
+  library: ds/ds_3col_stacked
   icon: images/ds-3col-stacked.png
   regions:
     header:
@@ -133,7 +133,7 @@ ds_3col_stacked_fluid:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-3col-stacked-fluid
-  css: css/ds-3col-stacked-fluid.css
+  library: ds/ds_3col_stacked_fluid
   icon: images/ds-3col-stacked-fluid.png
   regions:
     header:
@@ -152,7 +152,7 @@ ds_3col_stacked_equal_width:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-3col-stacked-equal-width
-  css: css/ds-3col-stacked-equal-width.css
+  library: ds/ds_3col_stacked_equal_width
   icon: images/ds-3col-stacked-equal-width.png
   regions:
     header:
@@ -171,7 +171,7 @@ ds_4col:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/ds-4col
-  css: css/ds-4col.css
+  library: ds/ds_4col
   icon: images/ds-4col.png
   regions:
     first:

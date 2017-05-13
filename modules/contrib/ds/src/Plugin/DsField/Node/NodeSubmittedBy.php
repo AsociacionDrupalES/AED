@@ -64,22 +64,22 @@ class NodeSubmittedBy extends Date {
     $account = $node->getOwner();
 
     $date_format = str_replace('ds_post_date_', '', $field['formatter']);
-    $user_name = array(
+    $user_name = [
       '#theme' => 'username',
       '#account' => $account,
-    );
-    return array(
+    ];
+    return [
       '#markup' => $this->t('Submitted by <a href=":user_link">@user</a> on @date.',
-        array(
+        [
           '@user' => $this->renderer->render($user_name),
           '@date' => $this->dateFormatter->format($this->entity()->created->value, $date_format),
           ':user_link' => Url::fromUri('entity:user/' . $account->id())->toString(),
-        )
+        ]
       ),
-      '#cache' => array(
+      '#cache' => [
         'tags' => $account->getCacheTags(),
-      ),
-    );
+      ],
+    ];
   }
 
 }

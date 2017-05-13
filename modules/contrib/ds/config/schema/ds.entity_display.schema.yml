@@ -9,9 +9,6 @@ core.entity_view_display.*.*.*.third_party.ds:
         id:
           type: string
           label: 'The id of the layout'
-        path:
-          type: string
-          label: 'The path of the module'
         library:
           type: string
           label: 'The asset library name attached to this layout'

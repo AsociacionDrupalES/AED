@@ -22,7 +22,7 @@ dstest_2col:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/dstest-2col
-  css: css/dstest-2col.css
+  library: ds_test/dstest_2col
   regions:
     left:
       label: Left
@@ -34,7 +34,7 @@ dstest_2col_fluid:
   class: '\Drupal\ds\Plugin\DsLayout'
   type: partial
   template: templates/dstest-2col-fluid
-  css: css/dstest-2col-fluid.css
+  library: ds_test/dstest_2col_fluid
   regions:
     left:
       label: Left
