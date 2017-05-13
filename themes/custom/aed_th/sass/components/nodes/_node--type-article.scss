@@ -125,23 +125,13 @@
         margin: 0 0 15px;
       }
 
+      a {
+        text-decoration: underline;
+      }
+
       ul {
-        @include ul-li-reset;
-
         li {
-
-          &:before {
-            content: '';
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background: black;
-            display: inline-block;
-            vertical-align: top;
-            margin-top: 11px;
-            margin-right: 8px;
-          }
-
+          margin: 6px 0;
         }
       }
 
@@ -176,6 +166,32 @@
           display: inline-block;
           background: #e3e3e3;
           padding: 10px 25px 11px;
+        }
+
+      }
+    }
+
+    .field--name-field-attachments {
+      table {
+        width: 100%;
+
+        thead {
+          tr {
+            th {
+              padding: 10px;
+              background: #e9e9f3;
+              text-align: left;
+            }
+          }
+        }
+
+        tbody {
+          tr {
+            td {
+              padding: 10px;
+
+            }
+          }
         }
 
       }

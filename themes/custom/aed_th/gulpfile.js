@@ -9,9 +9,9 @@ var sassGlob = require('gulp-sass-glob');
 
 gulp.task('sass', function () {
   return gulp.src('./sass/**/*.scss')
+    .pipe(sourcemaps.init({loadMaps: true}))
     .pipe(sassGlob())
     .pipe(sass({includePaths: neat}))
-    .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(sass({outputStyle: 'expanded'}))
     .pipe(sourcemaps.write('.'))
