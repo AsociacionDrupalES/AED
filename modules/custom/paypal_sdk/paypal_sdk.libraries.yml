@@ -1,0 +1,5 @@
+toolbar:
+  version: VERSION
+  css:
+    component:
+      assets/css/styles.paypal_sdk.css: {}

@@ -1,0 +1,23 @@
+paypal_sdk.store:
+  path: '/admin/store'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Store'
+  requirements:
+    _permission: 'access administration pages'
+
+paypal_sdk.process_response:
+  path: '/paypal/subscribe/response/process'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::processResponse'
+    _title: 'PayPal response'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+paypal_sdk.process_cancelled_response:
+  path: '/paypal/subscribe/response/cancelled'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::cancelledResponse'
+    _title: 'PayPal cancelled response'
+  requirements:
+    _permission: 'subscribe paypal products'

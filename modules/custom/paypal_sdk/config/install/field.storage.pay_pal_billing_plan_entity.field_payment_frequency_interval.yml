@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paypal_sdk
+id: pay_pal_billing_plan_entity.field_payment_frequency_interval
+field_name: field_payment_frequency_interval
+entity_type: pay_pal_billing_plan_entity
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

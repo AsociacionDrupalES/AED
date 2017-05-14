@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - datetime
+    - paypal_sdk
+id: pay_pal_billing_plan_entity.field_start_date
+field_name: field_start_date
+entity_type: pay_pal_billing_plan_entity
+type: datetime
+settings:
+  datetime_type: date
+module: datetime
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

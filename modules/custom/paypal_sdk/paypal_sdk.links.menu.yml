@@ -1,0 +1,36 @@
+paypal_sdk.store:
+  route_name: paypal_sdk.store
+  parent: system.admin
+  description: 'Administer store'
+  title: Store
+  weight: 0
+
+# PayPal billing plan menu items definition
+entity.pay_pal_billing_plan_entity.collection:
+  title: 'PayPal billing plans'
+  route_name: entity.pay_pal_billing_plan_entity.collection
+  description: 'List PayPal billing plan entities'
+  parent: paypal_sdk.store
+  weight: 100
+
+# Este es el link de configuracion de la entidad. No se si un usuario deberia tener nada de control sobre la entidad (nisiquiera los admin) por lo que lo dejo comentado pero no lo elimno hasta no llegar a una versión estable.
+#pay_pal_billing_plan_entity.admin.structure.settings:
+#  title: PayPal billing plan settings
+#  description: 'Configure PayPal billing plan entities'
+#  route_name: pay_pal_billing_plan_entity.settings
+#  parent: paypal_sdk.store
+
+# Paypal billing agreement menu items definition
+entity.paypal_billing_agreement.collection:
+  title: 'Paypal billing agreements'
+  route_name: entity.paypal_billing_agreement.collection
+  description: 'List Paypal billing agreement entities'
+  parent: paypal_sdk.store
+  weight: 100
+
+# Este es el link de configuracion de la entidad. No se si un usuario deberia tener nada de control sobre la entidad (nisiquiera los admin) por lo que lo dejo comentado pero no lo elimno hasta no llegar a una versión estable.
+#paypal_billing_agreement.admin.structure.settings:
+#  title: Paypal billing agreement settings
+#  description: 'Configure Paypal billing agreement entities'
+#  route_name: paypal_billing_agreement.settings
+#  parent: paypal_sdk.store

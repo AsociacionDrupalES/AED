@@ -1,0 +1,23 @@
+<?php
+
+define('PAYPAL_BILLING_PLAN_TYPE_FIXED', 'fixed');
+
+/**
+ * Implements hook_help().
+ * @param array $attachments
+ */
+function paypal_sdk_page_attachments(array &$attachments) {
+  #Since libraries-extend DOES NOT WORK on modules we need to attach our minimal css
+  $attachments['#attached']['library'][] = 'paypal_sdk/toolbar';
+
+//  $a = 0;
+//  $r = \Drupal\paypal_sdk\Entity\PayPalBillingPlanEntity::create([
+//    'name' => $plan->getName(),
+//    'description' => $plan->getDescription(),
+//    'type' => $plan->getType(),
+//  ]);
+//
+//  $r->save();
+//  $a = 0;
+
+}

@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paypal_sdk
+id: pay_pal_billing_plan_entity.field_type
+field_name: field_type
+entity_type: pay_pal_billing_plan_entity
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: FIXED
+      label: FIXED
+    -
+      value: INFINITE
+      label: INFINITE
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

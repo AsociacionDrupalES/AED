@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paypal_billing_agreement.field_paypal_agreement_id
+  module:
+    - paypal_sdk
+id: paypal_billing_agreement.paypal_billing_agreement.field_paypal_agreement_id
+field_name: field_paypal_agreement_id
+entity_type: paypal_billing_agreement
+bundle: paypal_billing_agreement
+label: 'PayPal agreement ID'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

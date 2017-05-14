@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paypal_sdk
+id: pay_pal_billing_plan_entity.field_state
+field_name: field_state
+entity_type: pay_pal_billing_plan_entity
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: CREATED
+      label: CREATED
+    -
+      value: ACTIVE
+      label: ACTIVE
+    -
+      value: INACTIVE
+      label: INACTIVE
+    -
+      value: DELETED
+      label: DELETED
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

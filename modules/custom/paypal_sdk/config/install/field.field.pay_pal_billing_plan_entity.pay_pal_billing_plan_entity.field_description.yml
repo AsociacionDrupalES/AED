@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.pay_pal_billing_plan_entity.field_description
+  module:
+    - paypal_sdk
+id: pay_pal_billing_plan_entity.pay_pal_billing_plan_entity.field_description
+field_name: field_description
+entity_type: pay_pal_billing_plan_entity
+bundle: pay_pal_billing_plan_entity
+label: Description
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: string

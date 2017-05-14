@@ -1,0 +1,20 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.paypal_billing_agreement.field_agreement_final_payment
+  module:
+    - datetime
+    - paypal_sdk
+id: paypal_billing_agreement.paypal_billing_agreement.field_agreement_final_payment
+field_name: field_agreement_final_payment
+entity_type: paypal_billing_agreement
+bundle: paypal_billing_agreement
+label: 'Final payment'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: datetime

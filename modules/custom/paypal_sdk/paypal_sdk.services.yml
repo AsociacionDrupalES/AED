@@ -1,0 +1,9 @@
+parameters:
+  billing_agreement.credentials.client_id: 'completar'
+  billing_agreement.credentials.client_secret: 'completar'
+
+services:
+  paypal.billing.agreement:
+    class: Drupal\paypal_sdk\Services\BillingAgreement
+    arguments: ['%billing_agreement.credentials.client_id%', '%billing_agreement.credentials.client_secret%']
+
