@@ -152,11 +152,40 @@ class BillingAgreement {
   public function getPlan($plan_id) {
     try {
       $plan = Plan::get($plan_id, $this->apiContext);
+      return $plan;
+
     } catch (\Exception $e) {
       drupal_set_message($e->getMessage(), "error");
       return FALSE;
     }
-    return $plan;
+
+  }
+
+  /**
+   * Gets all plans.
+   *
+   * Usage:
+   *  foreach ($planList->getPlans() as $plan) {
+   *    drupal_set_message(t($plan->getName() . ' - ' . $plan->getId()));
+   *  }
+   *
+   * @return \PayPal\Api\PlanList
+   */
+  public function getAllPlans() {
+    try {
+      $params = array(
+        'page_size' => '20',
+        'status' => 'ACTIVE'
+      );
+
+      $planList = Plan::all($params, $this->apiContext);
+      return $planList;
+
+    } catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), "error");
+      return FALSE;
+    }
+
   }
 
 

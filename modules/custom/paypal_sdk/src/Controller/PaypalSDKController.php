@@ -1,8 +1,10 @@
 <?php
+
 namespace Drupal\paypal_sdk\Controller;
 
 use Drupal;
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\Core\Url;
 use Drupal\paypal_sdk\Entity\PayPalBillingAgreement;
 use Drupal\paypal_sdk\Services\BillingAgreement;
 use Drupal\user\Entity\User;
@@ -82,5 +84,62 @@ class PaypalSDKController extends ControllerBase {
     drupal_set_message(t('Your subscription has been cancelled.'));
     return $this->redirect('<front>');
   }
+
+  public function pruebas() {
+    /** @var BillingAgreement $pba */
+    $pba = Drupal::service('paypal.billing.agreement');
+
+    $planList = $pba->getAllPlans();
+
+
+    $table['contacts'] = array(
+      '#type' => 'table',
+      '#caption' => $this->t('Plans'),
+      '#header' => [
+        $this->t('Name'),
+        $this->t('Description'),
+        $this->t('Plan ID'),
+        $this->t('Operations'),
+      ],
+    );
+
+    foreach ($planList->getPlans() as $k => $plan) {
+
+
+      $table['contacts'][$k]['name'] = array(
+        '#type' => 'markup',
+        '#markup' => $plan->getName()
+      );
+
+      $table['contacts'][$k]['desc'] = array(
+        '#type' => 'markup',
+        '#markup' => $plan->getDescription()
+      );
+
+      $table['contacts'][$k]['plan_id'] = array(
+        '#type' => 'markup',
+        '#markup' => $plan->getId()
+      );
+
+      $table['contacts'][$k]['operations'] = array(
+        '#type' => 'operations',
+        '#links' => [
+          'edit' => [
+            'title' => t('Edit'),
+            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['planId' => $plan->getId()])
+          ],
+          'delete' => [
+            'title' => t('Delete'),
+            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['planId' => $plan->getId()])
+          ],
+        ],
+      );
+
+    }
+
+
+    return $table;
+  }
+
 
 }

@@ -9,3 +9,5 @@ en el composer de drupal necesito         "paypal/rest-api-sdk-php": "^1.7" por 
 - a futuro deberiamso permitir agreements por credit card tb.
 - cuando se cree un plan que vuelva al listado de planes.
 - el field subscription da una opcion para definir si es single o multivalued y en realidad nuca vamos a soportar multivalued... o si. IDEA: si es multivalued un usuario puede marcar varios planes para que se rendericen. En plan "susc anual", "susc mensual", "susc por días". revisar el code y adaptarlo para que soporte multivalued.
+- Acabar de deprecar las entidades y usar solo los planes y agreemens remotos.
+- poner limites a los elementos de form de plan y agreement.
