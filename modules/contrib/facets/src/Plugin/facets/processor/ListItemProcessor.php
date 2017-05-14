@@ -5,9 +5,13 @@ namespace Drupal\facets\Plugin\facets\processor;
 use Drupal\Core\Config\ConfigManagerInterface;
 use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\EntityTypeBundleInfoInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\TypedData\FieldItemDataDefinition;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\facets\Exception\InvalidProcessorException;
 use Drupal\facets\FacetInterface;
-use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
+use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\facets\Processor\BuildProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -91,15 +95,21 @@ class ListItemProcessor extends ProcessorPluginBase implements BuildProcessorInt
   public function build(FacetInterface $facet, array $results) {
     $field_identifier = $facet->getFieldIdentifier();
     $entity = 'node';
+    $field = FALSE;
+    $allowed_values = [];
 
     // Support multiple entities when using Search API.
-    if ($facet->getFacetSource() instanceof SearchApiFacetSourceInterface) {
+    if ($facet->getFacetSource() instanceof SearchApiDisplay) {
+      /** @var \Drupal\search_api\Entity\Index $index */
       $index = $facet->getFacetSource()->getIndex();
+      /** @var \Drupal\search_api\Item\Field $field */
       $field = $index->getField($field_identifier);
 
-      $entity = str_replace('entity:', '', $field->getDatasourceId());
+      if (!$field->getDatasourceId()) {
+        throw new InvalidProcessorException("This field has no datasource, there is no valid use for this processor with this facet");
+      }
+      $entity = $field->getDatasource()->getEntityTypeId();
     }
-
     // If it's an entity base field, we find it in the field definitions.
     // We don't have access to the bundle via SearchApiFacetSourceInterface, so
     // we check the entity's base fields only.
@@ -107,42 +117,75 @@ class ListItemProcessor extends ProcessorPluginBase implements BuildProcessorInt
 
     // This only works for configurable fields.
     $config_entity_name = sprintf('field.storage.%s.%s', $entity, $field_identifier);
-
     if (isset($base_fields[$field_identifier])) {
       $field = $base_fields[$field_identifier];
     }
     elseif ($this->configManager->loadConfigEntityByName($config_entity_name) !== NULL) {
       $field = $this->configManager->loadConfigEntityByName($config_entity_name);
     }
-
-    if ($field) {
-      $function = $field->getSetting('allowed_values_function');
-
-      if (empty($function)) {
-        $allowed_values = $field->getSetting('allowed_values');
-      }
-      else {
-        $allowed_values = ${$function}($field);
-      }
-
-      // If no values are found for the current field, try to see if this is a
-      // bundle field.
-      if (empty($allowed_values) && $bundles = $this->entityTypeBundleInfo->getBundleInfo($entity)) {
-        foreach ($bundles as $key => $bundle) {
-          $allowed_values[$key] = $bundle['label'];
+    // Fields defined in code don't cant be loaded from storage so check the
+    // fields property path and see if its part of the base fields.
+    elseif ($field->getDataDefinition() instanceof FieldItemDataDefinition) {
+      $fieldDefinition = $field->getDataDefinition()
+        ->getFieldDefinition();
+      $referenced_entity_name = sprintf(
+        'field.storage.%s.%s',
+        $fieldDefinition->getTargetEntityTypeId(),
+        $fieldDefinition->getName()
+      );
+      if ($fieldDefinition instanceof BaseFieldDefinition) {
+        if (isset($base_fields[$field->getPropertyPath()])) {
+          $field = $base_fields[$field->getPropertyPath()];
         }
-      }
 
-      if (is_array($allowed_values)) {
-        /** @var \Drupal\facets\Result\ResultInterface $result */
-        foreach ($results as &$result) {
-          if (isset($allowed_values[$result->getRawValue()])) {
-            $result->setDisplayValue($allowed_values[$result->getRawValue()]);
-          }
+      }
+      // Diggs down to get the referenced field the entity reference is based
+      // on.
+      elseif ($this->configManager->loadConfigEntityByName($referenced_entity_name) !== NULL) {
+        $field = $this->configManager
+          ->loadConfigEntityByName($referenced_entity_name);
+      }
+    }
+    if ($field instanceof FieldStorageDefinitionInterface) {
+      if ($field->getName() !== 'type') {
+        $allowed_values = options_allowed_values($field);
+        if (!empty($allowed_values)) {
+          return $this->overWriteDisplayValues($results, $allowed_values);
         }
       }
     }
+    // If no values are found for the current field, try to see if this is a
+    // bundle field.
+    $list_bundles = $this->entityTypeBundleInfo->getBundleInfo($entity);
+    if (!empty($list_bundles)) {
+      foreach ($list_bundles as $key => $bundle) {
+        $allowed_values[$key] = $bundle['label'];
+      }
+      return $this->overWriteDisplayValues($results, $allowed_values);
+    }
 
+    return $results;
+  }
+
+  /**
+   * Overwrite the display value of the result with a new text.
+   *
+   * @param \Drupal\facets\Result\ResultInterface[] $results
+   *   An array of results to work on.
+   * @param array $replacements
+   *   An array of values that contain possible replacements for the orignal
+   *   values.
+   *
+   * @return \Drupal\facets\Result\ResultInterface[]
+   *   The changed results.
+   */
+  protected function overWriteDisplayValues(array $results, array $replacements) {
+    /** @var \Drupal\facets\Result\ResultInterface $a */
+    foreach ($results as &$a) {
+      if (isset($replacements[$a->getRawValue()])) {
+        $a->setDisplayValue($replacements[$a->getRawValue()]);
+      }
+    }
     return $results;
   }
 

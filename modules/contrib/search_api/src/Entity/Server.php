@@ -5,9 +5,11 @@ namespace Drupal\search_api\Entity;
 use Drupal\Core\Config\Entity\ConfigEntityBase;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Query\QueryInterface;
 use Drupal\search_api\SearchApiException;
 use Drupal\search_api\ServerInterface;
+use Drupal\search_api\Utility\Utility;
 
 /**
  * Defines the search server configuration entity.
@@ -15,6 +17,7 @@ use Drupal\search_api\ServerInterface;
  * @ConfigEntityType(
  *   id = "search_api_server",
  *   label = @Translation("Search server"),
+ *   label_collection = @Translation("Search servers"),
  *   label_singular = @Translation("search server"),
  *   label_plural = @Translation("search servers"),
  *   label_count = @PluralTranslation(
@@ -22,7 +25,7 @@ use Drupal\search_api\ServerInterface;
  *     plural = "@count search servers",
  *   ),
  *   handlers = {
- *     "storage" = "Drupal\Core\Config\Entity\ConfigEntityStorage",
+ *     "storage" = "Drupal\search_api\Entity\SearchApiConfigEntityStorage",
  *     "form" = {
  *       "default" = "Drupal\search_api\Form\ServerForm",
  *       "edit" = "Drupal\search_api\Form\ServerForm",
@@ -58,6 +61,8 @@ use Drupal\search_api\ServerInterface;
  */
 class Server extends ConfigEntityBase implements ServerInterface {
 
+  use LoggerTrait;
+
   /**
    * The ID of the server.
    *
@@ -91,7 +96,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    *
    * @var array
    */
-  protected $backend_config = array();
+  protected $backend_config = [];
 
   /**
    * The backend plugin instance.
@@ -136,7 +141,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if (!$this->backendPlugin) {
       $backend_plugin_manager = \Drupal::service('plugin.manager.search_api.backend');
       $config = $this->backend_config;
-      $config['server'] = $this;
+      $config['#server'] = $this;
       if (!($this->backendPlugin = $backend_plugin_manager->createInstance($this->getBackendId(), $config))) {
         $backend_id = $this->getBackendId();
         $label = $this->label();
@@ -165,16 +170,16 @@ class Server extends ConfigEntityBase implements ServerInterface {
   /**
    * {@inheritdoc}
    */
-  public function getIndexes(array $properties = array()) {
+  public function getIndexes(array $properties = []) {
     $storage = \Drupal::entityTypeManager()->getStorage('search_api_index');
-    return $storage->loadByProperties(array('server' => $this->id()) + $properties);
+    return $storage->loadByProperties(['server' => $this->id()] + $properties);
   }
 
   /**
    * {@inheritdoc}
    */
   public function viewSettings() {
-    return $this->hasValidBackend() ? $this->getBackend()->viewSettings() : array();
+    return $this->hasValidBackend() ? $this->getBackend()->viewSettings() : [];
   }
 
   /**
@@ -196,7 +201,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    */
   public function getSupportedFeatures() {
     if (!isset($this->features)) {
-      $this->features = array();
+      $this->features = [];
       if ($this->hasValidBackend()) {
         $this->features = $this->getBackend()->getSupportedFeatures();
       }
@@ -224,7 +229,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if ($this->hasValidBackend()) {
       return $this->getBackend()->getDiscouragedProcessors();
     }
-    return array();
+    return [];
   }
 
   /**
@@ -234,7 +239,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if ($this->hasValidBackend()) {
       return $this->getBackend()->getBackendDefinedFields($index);
     }
-    return array();
+    return [];
   }
 
   /**
@@ -254,11 +259,11 @@ class Server extends ConfigEntityBase implements ServerInterface {
       }
     }
     catch (SearchApiException $e) {
-      $vars = array(
+      $vars = [
         '%server' => $this->label(),
         '%index' => $index->label(),
-      );
-      watchdog_exception('search_api', $e, '%type while adding index %index to server %server: @message in %function (line %line of %file).', $vars);
+      ];
+      $this->logException($e, '%type while adding index %index to server %server: @message in %function (line %line of %file).', $vars);
     }
 
     $task_manager = \Drupal::getContainer()
@@ -278,11 +283,11 @@ class Server extends ConfigEntityBase implements ServerInterface {
       }
     }
     catch (SearchApiException $e) {
-      $vars = array(
+      $vars = [
         '%server' => $this->label(),
         '%index' => $index->label(),
-      );
-      watchdog_exception('search_api', $e, '%type while updating the fields of index %index on server %server: @message in %function (line %line of %file).', $vars);
+      ];
+      $this->logException($e, '%type while updating the fields of index %index on server %server: @message in %function (line %line of %file).', $vars);
     }
 
     $task_manager = \Drupal::getContainer()
@@ -306,11 +311,11 @@ class Server extends ConfigEntityBase implements ServerInterface {
       }
     }
     catch (SearchApiException $e) {
-      $vars = array(
+      $vars = [
         '%server' => $this->label(),
         '%index' => is_object($index) ? $index->label() : $index,
-      );
-      watchdog_exception('search_api', $e, '%type while removing index %index from server %server: @message in %function (line %line of %file).', $vars);
+      ];
+      $this->logException($e, '%type while removing index %index from server %server: @message in %function (line %line of %file).', $vars);
     }
 
     $task_manager = \Drupal::getContainer()
@@ -340,10 +345,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
    */
   public function deleteItems(IndexInterface $index, array $item_ids) {
     if ($index->isReadOnly()) {
-      $vars = array(
+      $vars = [
         '%index' => $index->label(),
-      );
-      \Drupal::service('logger.channel.search_api')->warning('Trying to delete items from index %index which is marked as read-only.', $vars);
+      ];
+      $this->getLogger()->warning('Trying to delete items from index %index which is marked as read-only.', $vars);
       return;
     }
 
@@ -355,10 +360,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
       }
     }
     catch (SearchApiException $e) {
-      $vars = array(
+      $vars = [
         '%server' => $this->label(),
-      );
-      watchdog_exception('search_api', $e, '%type while deleting items from server %server: @message in %function (line %line of %file).', $vars);
+      ];
+      $this->logException($e, '%type while deleting items from server %server: @message in %function (line %line of %file).', $vars);
     }
 
     $task_manager = \Drupal::getContainer()
@@ -371,10 +376,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
    */
   public function deleteAllIndexItems(IndexInterface $index, $datasource_id = NULL) {
     if ($index->isReadOnly()) {
-      $vars = array(
+      $vars = [
         '%index' => $index->label(),
-      );
-      \Drupal::service('logger.channel.search_api')->warning('Trying to delete items from index %index which is marked as read-only.', $vars);
+      ];
+      $this->getLogger()->warning('Trying to delete items from index %index which is marked as read-only.', $vars);
       return;
     }
 
@@ -383,10 +388,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if (!$datasource_id) {
       // If we're deleting all items of the index, there's no point in keeping
       // any other "delete items" tasks.
-      $types = array(
+      $types = [
         'deleteItems',
         'deleteAllIndexItems',
-      );
+      ];
       $server_task_manager->delete($this, $index, $types);
     }
 
@@ -397,11 +402,11 @@ class Server extends ConfigEntityBase implements ServerInterface {
       }
     }
     catch (SearchApiException $e) {
-      $vars = array(
+      $vars = [
         '%server' => $this->label(),
         '%index' => $index->label(),
-      );
-      watchdog_exception('search_api', $e, '%type while deleting items of index %index from server %server: @message in %function (line %line of %file).', $vars);
+      ];
+      $this->logException($e, '%type while deleting items of index %index from server %server: @message in %function (line %line of %file).', $vars);
     }
 
     $task_manager = \Drupal::getContainer()
@@ -413,7 +418,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
    * {@inheritdoc}
    */
   public function deleteAllItems() {
-    $failed = array();
+    $failed = [];
     $properties['status'] = TRUE;
     $properties['read_only'] = FALSE;
     foreach ($this->getIndexes($properties) as $index) {
@@ -421,10 +426,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
         $this->getBackend()->deleteAllIndexItems($index);
       }
       catch (SearchApiException $e) {
-        $args = array(
+        $args = [
           '%index' => $index->label(),
-        );
-        watchdog_exception('search_api', $e, '%type while deleting all items from index %index: @message in %function (line %line of %file).', $args);
+        ];
+        $this->logException($e, '%type while deleting all items from index %index: @message in %function (line %line of %file).', $args);
         $failed[] = $index->label();
       }
     }
@@ -434,10 +439,10 @@ class Server extends ConfigEntityBase implements ServerInterface {
       throw new SearchApiException("Deleting all items from server '$server_name' failed for the following (write-enabled) indexes: $failed.", 0, $e);
     }
 
-    $types = array(
+    $types = [
       'deleteItems',
       'deleteAllIndexItems',
-    );
+    ];
     \Drupal::getContainer()
       ->get('search_api.server_task_manager')
       ->delete($this, NULL, $types);
@@ -460,12 +465,39 @@ class Server extends ConfigEntityBase implements ServerInterface {
     if (!isset($this->original)) {
       return;
     }
+    // Retrieve active config overrides for this server.
+    $overrides = Utility::getConfigOverrides($this);
 
-    $this->getBackend()->preUpdate();
+    // If there are overrides for the backend or its configuration, attempt to
+    // apply them for the preUpdate() call.
+    if (isset($overrides['backend']) || isset($overrides['backend_config'])) {
+      $backend_config = $this->getBackendConfig();
+      if (isset($overrides['backend_config'])) {
+        $backend_config = $overrides['backend_config'];
+      }
+      $backend_id = $this->getBackendId();
+      if (isset($overrides['backend'])) {
+        $backend_id = $overrides['backend'];
+      }
+      $backend_plugin_manager = \Drupal::service('plugin.manager.search_api.backend');
+      $backend_config['#server'] = $this;
+      if (!($backend = $backend_plugin_manager->createInstance($backend_id, $backend_config))) {
+        $label = $this->label();
+        throw new SearchApiException("The backend with ID '$backend_id' could not be retrieved for server '$label'.");
+      }
+    }
+    else {
+      $backend = $this->getBackend();
+    }
+
+    $backend->preUpdate();
 
     // If the server is being disabled, also disable all its indexes.
-    if (!$this->isSyncing() && !$this->status() && $this->original->status()) {
-      foreach ($this->getIndexes(array('status' => TRUE)) as $index) {
+    if (!$this->isSyncing()
+        && !isset($overrides['status'])
+        && !$this->status()
+        && $this->original->status()) {
+      foreach ($this->getIndexes(['status' => TRUE]) as $index) {
         /** @var \Drupal\search_api\IndexInterface $index */
         $index->setStatus(FALSE)->save();
       }
@@ -554,7 +586,7 @@ class Server extends ConfigEntityBase implements ServerInterface {
     $changed = parent::onDependencyRemoval($dependencies);
 
     if ($this->hasValidBackend()) {
-      $removed_backend_dependencies = array();
+      $removed_backend_dependencies = [];
       $backend = $this->getBackend();
       foreach ($backend->calculateDependencies() as $dependency_type => $list) {
         if (isset($dependencies[$dependency_type])) {

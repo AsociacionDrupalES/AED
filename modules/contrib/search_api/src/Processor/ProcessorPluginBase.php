@@ -23,6 +23,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * - id: The unique, system-wide identifier of the processor.
  * - label: The human-readable name of the processor, translated.
  * - description: A human-readable description for the processor, translated.
+ * - stages: The default weights for all stages for which the processor should
+ *   run. Available stages are defined by the STAGE_* constants in
+ *   ProcessorInterface. This is, by default, used for supportsStage(), so if
+ *   you don't provide a value here, your processor might not work as expected
+ *   even though it implements the corresponding method.
  *
  * A complete plugin definition should be written as in this example:
  *
@@ -34,7 +39,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   stages = {
  *     "preprocess_index" = 0,
  *     "preprocess_query" = 0,
- *     "postprocess_query" = 0
+ *     "postprocess_query" = 0,
  *   }
  * )
  * @endcode
@@ -143,7 +148,7 @@ abstract class ProcessorPluginBase extends IndexPluginBase implements ProcessorI
    * {@inheritdoc}
    */
   public function getPropertyDefinitions(DatasourceInterface $datasource = NULL) {
-    return array();
+    return [];
   }
 
   /**

@@ -24,7 +24,7 @@ class FacetsSerializer extends Serializer {
   /**
    * Tha facet manager.
    *
-   * @var DefaultFacetManager
+   * @var \Drupal\facets\FacetManager\DefaultFacetManager
    */
   protected $facetsManager;
 
@@ -80,7 +80,7 @@ class FacetsSerializer extends Serializer {
     }
 
     // Processing facets.
-    $facetsource_id = "views_page:{$this->view->id()}__{$this->view->getDisplay()->display['id']}";
+    $facetsource_id = "search_api:views_rest__{$this->view->id()}__{$this->view->getDisplay()->display['id']}";
     $facets = $this->facetsManager->getFacetsByFacetSourceId($facetsource_id);
     $this->facetsManager->updateResults($facetsource_id);
 

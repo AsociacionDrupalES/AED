@@ -32,7 +32,8 @@ use Drupal\facets\FacetSourceInterface;
  *     "id",
  *     "name",
  *     "filter_key",
- *     "url_processor"
+ *     "url_processor",
+ *     "breadcrumb"
  *   },
  *   links = {
  *     "canonical" = "/admin/config/search/facets/facet-sources/",
@@ -71,6 +72,13 @@ class FacetSource extends ConfigEntityBase implements FacetSourceInterface {
   protected $url_processor = 'query_string';
 
   /**
+   * The breadcrumb settings.
+   *
+   * @var array
+   */
+  protected $breadcrumb = [];
+
+  /**
    * {@inheritdoc}
    */
   public function getName() {
@@ -105,4 +113,17 @@ class FacetSource extends ConfigEntityBase implements FacetSourceInterface {
     return $this->url_processor;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getBreadcrumbSettings() {
+    return $this->breadcrumb;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setBreadcrumbSettings(array $settings) {
+    $this->breadcrumb = $settings;
+  }
 }

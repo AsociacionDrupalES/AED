@@ -49,7 +49,15 @@ class ExcludeSpecifiedItemsProcessorTest extends UnitTestCase {
     ];
 
     $processor_id = 'exclude_specified_items';
-    $this->processor = new ExcludeSpecifiedItemsProcessor([], $processor_id, []);
+    $this->processor = new ExcludeSpecifiedItemsProcessor([], $processor_id, [
+      'id' => "display_value_widget_order",
+      'label' => "Sort by display value",
+      'description' => "Sorts the widget results by display value.",
+      'default_enabled' => TRUE,
+      'stages' => [
+        "build" => 50,
+      ],
+    ]);
 
     $processor_definitions = [
       $processor_id => [
@@ -309,7 +317,7 @@ class ExcludeSpecifiedItemsProcessorTest extends UnitTestCase {
    * Tests testDescription().
    */
   public function testDescription() {
-    $this->assertEquals('', $this->processor->getDescription());
+    $this->assertEquals('Sorts the widget results by display value.', $this->processor->getDescription());
   }
 
   /**
@@ -324,6 +332,22 @@ class ExcludeSpecifiedItemsProcessorTest extends UnitTestCase {
    */
   public function testIsLocked() {
     $this->assertEquals(FALSE, $this->processor->isLocked());
+  }
+
+  /**
+   * Tests supportsStage().
+   */
+  public function testSupportsStage() {
+    $this->assertTrue($this->processor->supportsStage('build'));
+    $this->assertFalse($this->processor->supportsStage('sort'));
+  }
+
+  /**
+   * Tests getDefaultWeight().
+   */
+  public function testGetDefaultWeight() {
+    $this->assertEquals(50, $this->processor->getDefaultWeight('build'));
+    $this->assertEquals(0, $this->processor->getDefaultWeight('sort'));
   }
 
 }

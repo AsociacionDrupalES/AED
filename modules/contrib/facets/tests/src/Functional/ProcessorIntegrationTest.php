@@ -2,7 +2,9 @@
 
 namespace Drupal\Tests\facets\Functional;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\search_api\Item\Field;
 
 /**
  * Tests the processor functionality.
@@ -21,6 +23,13 @@ class ProcessorIntegrationTest extends FacetsTestBase {
   /**
    * {@inheritdoc}
    */
+  public static $modules = [
+    'options',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
   public function setUp() {
     parent::setUp();
 
@@ -32,25 +41,6 @@ class ProcessorIntegrationTest extends FacetsTestBase {
     $this->assertEqual($this->indexItems($this->indexId), 5, '5 items were indexed.');
     $this->insertExampleContent();
     $this->assertEqual($this->indexItems($this->indexId), 5, '5 items were indexed.');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function installModulesFromClassProperty(ContainerInterface $container) {
-    // This will just set the Drupal state to include the necessary bundles for
-    // our test entity type. Otherwise, fields from those bundles won't be found
-    // and thus removed from the test index. (We can't do it in setUp(), before
-    // calling the parent method, since the container isn't set up at that
-    // point.)
-    $bundles = array(
-      'entity_test_mulrev_changed' => array('label' => 'Entity Test Bundle'),
-      'item' => array('label' => 'item'),
-      'article' => array('label' => 'article'),
-    );
-    \Drupal::state()->set('entity_test_mulrev_changed.bundles', $bundles);
-
-    parent::installModulesFromClassProperty($container);
   }
 
   /**
@@ -132,6 +122,82 @@ class ProcessorIntegrationTest extends FacetsTestBase {
     $this->checkExcludeItems();
     $this->checkHideNonNarrowingProcessor();
     $this->checkHideActiveItems();
+  }
+
+  /**
+   * Tests the for processors in the frontend with a 'boolean' facet.
+   */
+  public function testBooleanProcessorIntegration() {
+    $field_name = 'field_boolean';
+    $field_storage = FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'entity_test_mulrev_changed',
+      'type' => 'boolean',
+    ]);
+    $field_storage->save();
+    $field = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'item',
+    ]);
+    $field->save();
+
+    $index = $this->getIndex();
+
+    // Index the taxonomy and entity reference fields.
+    $boolean_field = new Field($index, $field_name);
+    $boolean_field->setType('integer');
+    $boolean_field->setPropertyPath($field_name);
+    $boolean_field->setDatasourceId('entity:entity_test_mulrev_changed');
+    $boolean_field->setLabel('BooleanField');
+    $index->addField($boolean_field);
+
+    $index->save();
+    $this->indexItems($this->indexId);
+
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+    $entity_test_storage->create([
+      'name' => 'foo bar baz',
+      'body' => 'test test',
+      'type' => 'item',
+      'keywords' => ['orange'],
+      'category' => 'item_category',
+      $field_name => TRUE,
+    ])->save();
+
+    $this->indexItems($this->indexId);
+
+    $facet_name = "Boolean";
+    $facet_id = "boolean";
+
+    // Create facet.
+    $this->editForm = 'admin/config/search/facets/' . $facet_id . '/edit';
+    $this->createFacet($facet_name, $facet_id, $field_name);
+
+    // Check values.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('1');
+
+    $form = [
+      'facet_settings[boolean_item][status]' => TRUE,
+      'facet_settings[boolean_item][settings][on_value]' => 'Yes',
+      'facet_settings[boolean_item][settings][off_value]' => 'No',
+    ];
+    $this->drupalPostForm($this->editForm, $form, 'Save');
+    $this->assertResponse(200);
+    $this->assertFieldChecked('edit-facet-settings-boolean-item-status');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('Yes');
+
+    $form = [
+      'facet_settings[boolean_item][status]' => TRUE,
+      'facet_settings[boolean_item][settings][on_value]' => 'Øn',
+    ];
+    $this->drupalPostForm($this->editForm, $form, 'Save');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('Øn');
   }
 
   /**
@@ -531,6 +597,47 @@ class ProcessorIntegrationTest extends FacetsTestBase {
       $path = $this->editForm;
     }
     $this->drupalPostForm($path, $settings, 'Save');
+  }
+
+  /**
+   * Checks if the list processor changes machine name to the display label.
+   */
+  public function testListProcessor() {
+    entity_test_create_bundle('basic', "Basic page", 'entity_test_mulrev_changed');
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+
+    // Add an entity with basic page content type.
+    $entity_test_storage->create([
+      'name' => 'AC0871108',
+      'body' => 'Eamus Catuli',
+      'type' => 'basic',
+    ])->save();
+    $this->indexItems($this->indexId);
+
+    $facet_name = "Eamus Catuli";
+    $facet_id = "eamus_catuli";
+    $editForm = 'admin/config/search/facets/' . $facet_id . '/edit';
+    $this->createFacet($facet_name, $facet_id);
+
+    // Go to the overview and check that the machine names are used as facets.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertText('Displaying 11 search results');
+    $this->assertFacetLabel('basic');
+
+    // Edit the facet to use the list_item processor.
+    $edit = [
+      'facet_settings[list_item][status]' => TRUE,
+    ];
+    $this->drupalPostForm($editForm, $edit, 'Save');
+    $this->assertResponse(200);
+    $this->assertFieldChecked('edit-facet-settings-list-item-status');
+
+    // Go back to the overview and check that now the label is being used
+    // instead.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertText('Displaying 11 search results');
+    $this->assertFacetLabel('Basic page');
   }
 
 }

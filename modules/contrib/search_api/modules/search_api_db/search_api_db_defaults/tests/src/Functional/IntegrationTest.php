@@ -1,7 +1,8 @@
 <?php
 
-namespace Drupal\Tests\search_api_db_defaults;
+namespace Drupal\Tests\search_api_db_defaults\Functional;
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\comment\Tests\CommentTestTrait;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
@@ -57,21 +58,27 @@ class IntegrationTest extends SearchApiBrowserTestBase {
   public function testInstallAndDefaultSetupWorking() {
     $this->drupalLogin($this->adminUser);
 
+    // Installation invokes a batch and this breaks it.
+    \Drupal::state()->set('search_api_use_tracking_batch', FALSE);
+
     // Install the search_api_db_defaults module.
-    $edit_enable = [
-      'modules[Search][search_api_db_defaults][enable]' => TRUE,
-    ];
-    $this->drupalPostForm('admin/modules', $edit_enable, t('Install'));
+    if (version_compare(\Drupal::VERSION, '8.3', '>=')) {
+      $edit_enable = [
+        'modules[search_api_db_defaults][enable]' => TRUE,
+      ];
+    }
+    else {
+      $edit_enable = [
+        'modules[Search][search_api_db_defaults][enable]' => TRUE,
+      ];
+    }
+    $this->drupalPostForm('admin/modules', $edit_enable, 'Install');
 
-    $this->assertSession()->pageTextContains(t('Some required modules must be enabled'));
+    $this->assertSession()->pageTextContains('Some required modules must be enabled');
 
-    $this->drupalPostForm(NULL, [], t('Continue'));
-    $args = [
-      '@count' => 3,
-      '%names' => 'Database Search Defaults, Database Search, Search API',
-    ];
-    $success_text = strip_tags(t('@count modules have been enabled: %names.', $args));
-    $this->assertSession()->pageTextContains($success_text);
+    $this->drupalPostForm(NULL, [], 'Continue');
+
+    $this->assertSession()->pageTextContains('2 modules have been enabled: Database Search Defaults, Database Search');
 
     $this->rebuildContainer();
 
@@ -91,19 +98,27 @@ class IntegrationTest extends SearchApiBrowserTestBase {
       'title[0][value]' => $title,
       'body[0][value]' => 'This is test content for the Search API to index.',
     ];
-    $this->drupalPostForm('node/add/article', $edit, $this->t('Save and publish'));
+    $this->drupalPostForm('node/add/article', $edit, 'Save and publish');
 
     $this->drupalLogout();
     $this->drupalGet('search/content');
+    $this->assertSession()->pageTextContains('Please enter some keywords to search.');
+    $this->assertSession()->pageTextNotContains($title);
+    $this->assertSession()->responseNotContains('Error message');
+    $this->submitForm([], 'Search');
+    $this->assertSession()->pageTextNotContains($title);
+    $this->assertSession()->responseNotContains('Error message');
+    $this->submitForm(['keys' => 'test'], 'Search');
     $this->assertSession()->pageTextContains($title);
+    $this->assertSession()->responseNotContains('Error message');
 
     // Uninstall the module.
     $this->drupalLogin($this->adminUser);
     $edit_disable = [
       'uninstall[search_api_db_defaults]' => TRUE,
     ];
-    $this->drupalPostForm('admin/modules/uninstall', $edit_disable, t('Uninstall'));
-    $this->submitForm([], t('Uninstall'));
+    $this->drupalPostForm('admin/modules/uninstall', $edit_disable, 'Uninstall');
+    $this->submitForm([], 'Uninstall');
     $this->rebuildContainer();
     $this->assertFalse($this->container->get('module_handler')->moduleExists('search_api_db_defaults'), 'Search API DB Defaults module uninstalled.');
 
@@ -117,7 +132,7 @@ class IntegrationTest extends SearchApiBrowserTestBase {
 
     // Check that saving any of the index's config forms works fine.
     foreach (['edit', 'fields', 'processors'] as $tab) {
-      $submit = $tab == 'fields' ? $this->t('Save changes') : $this->t('Save');
+      $submit = $tab == 'fields' ? 'Save changes' : 'Save';
       $this->drupalGet("admin/config/search/search-api/index/default_index/$tab");
       $this->submitForm([], $submit);
       $this->assertSession()->statusCodeEquals(200);
@@ -130,8 +145,8 @@ class IntegrationTest extends SearchApiBrowserTestBase {
 
     // Enable the module again. This should fail because the either the index
     // or the server or the view was found.
-    $this->drupalPostForm('admin/modules', $edit_enable, t('Install'));
-    $this->assertSession()->pageTextContains(t('It looks like the default setup provided by this module already exists on your site. Cannot re-install module.'));
+    $this->drupalPostForm('admin/modules', $edit_enable, 'Install');
+    $this->assertSession()->pageTextContains('It looks like the default setup provided by this module already exists on your site. Cannot re-install module.');
 
     // Delete all the entities that we would fail on if they exist.
     $entities_to_remove = [
@@ -154,16 +169,16 @@ class IntegrationTest extends SearchApiBrowserTestBase {
 
     // Delete the article content type.
     $this->drupalGet('node/1/delete');
-    $this->submitForm([], $this->t('Delete'));
+    $this->submitForm([], 'Delete');
     $this->drupalGet('admin/structure/types/manage/article');
-    $this->clickLink(t('Delete'));
+    $this->clickLink('Delete');
     $this->assertSession()->statusCodeEquals(200);
-    $this->submitForm([], t('Delete'));
+    $this->submitForm([], 'Delete');
 
     // Try to install search_api_db_defaults module and test if it failed
     // because there was no content type "article".
-    $this->drupalPostForm('admin/modules', $edit_enable, t('Install'));
-    $success_text = t('Content type @content_type not found. Database Search Defaults module could not be installed.', ['@content_type' => 'article']);
+    $this->drupalPostForm('admin/modules', $edit_enable, 'Install');
+    $success_text = new FormattableMarkup('Content type @content_type not found. Database Search Defaults module could not be installed.', ['@content_type' => 'article']);
     $this->assertSession()->pageTextContains($success_text);
   }
 

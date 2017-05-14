@@ -20,8 +20,8 @@ class SearchApiDateTest extends KernelTestBase {
   public function setUp() {
     parent::setUp();
 
-    // This is the default set by Drupal as well, but to be explicit
-    // The raw value is the UTC, the displayed value is calculated
+    // This is the default set by Drupal as well, but to be explicit we set it
+    // here as well. The raw value is the UTC, the displayed value is calculated
     // by the PHP timezone - presently.
     date_default_timezone_set('Australia/Sydney');
   }
@@ -41,13 +41,12 @@ class SearchApiDateTest extends KernelTestBase {
     $widget = $this->getMockBuilder('Drupal\facets\Widget\WidgetPluginInterface')
       ->disableOriginalConstructor()
       ->getMock();
-    $widget->method('getConfiguration')->will($this->returnValue(
-      [
+    $widget->method('getConfiguration')
+      ->will($this->returnValue([
         'granularity' => $granularity,
         'date_display' => '',
         'display_relative' => FALSE,
-      ]
-    ));
+      ]));
     $widget_instance = $facetReflection->getProperty('widgetInstance');
     $widget_instance->setAccessible(TRUE);
     $widget_instance->setValue($facet, $widget);

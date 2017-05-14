@@ -41,4 +41,11 @@ class FacetsFacetSource extends Plugin {
    */
   public $description;
 
+  /**
+   * The id of the search api display, if one is used.
+   *
+   * @var string
+   */
+  public $display_id;
+
 }

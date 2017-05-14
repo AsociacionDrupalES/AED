@@ -10,7 +10,7 @@ use Drupal\node\Entity\Node;
  *
  * @group facets
  */
-class IntegrationTest extends FacetsHooksTestBase {
+class IntegrationTestCoreSearchBase extends CoreSearchFacetsTestBase {
 
   use BlockTestTrait;
 
@@ -144,7 +144,7 @@ class IntegrationTest extends FacetsHooksTestBase {
     $this->setShowAmountOfResults($facet_id, TRUE);
 
     // Update the changed date. The nodes were created on February/March 2016
-    // and the changed date is December 2016.
+    // and the changed date is June 3, 2016.
     $node = Node::load(1);
     $changed_date = new \DateTime('June 3 2016 1PM');
     $node->changed = $changed_date->format('U');
@@ -157,12 +157,13 @@ class IntegrationTest extends FacetsHooksTestBase {
     search_update_totals();
 
     $this->drupalGet('search/node', ['query' => ['keys' => 'test']]);
+    $this->clickLink('2016 (21)');
     $this->assertFacetLabel('June 2016 (1)');
     $this->clickPartialLink('June 2016');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertFacetLabel('June 3, 2016 (1)');
     $this->clickPartialLink('June 3, 2016');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
   }
 
   /**

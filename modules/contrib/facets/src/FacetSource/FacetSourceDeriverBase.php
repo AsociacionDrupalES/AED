@@ -2,7 +2,6 @@
 
 namespace Drupal\facets\FacetSource;
 
-use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\Discovery\ContainerDeriverInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
@@ -63,7 +62,7 @@ abstract class FacetSourceDeriverBase implements ContainerDeriverInterface {
   /**
    * Retrieves the entity manager.
    *
-   * @return \Drupal\Core\Entity\EntityTypeManager
+   * @return \Drupal\Core\Entity\EntityTypeManagerInterface
    *   The entity manager.
    */
   public function getEntityTypeManager() {
@@ -92,23 +91,6 @@ abstract class FacetSourceDeriverBase implements ContainerDeriverInterface {
   }
 
   /**
-   * Compares two plugin definitions according to their labels.
-   *
-   * @param array $a
-   *   A plugin definition, with at least a "label" key.
-   * @param array $b
-   *   Another plugin definition.
-   *
-   * @return int
-   *   An integer less than, equal to, or greater than zero if the first
-   *   argument is considered to be respectively less than, equal to, or greater
-   *   than the second.
-   */
-  public function compareDerivatives(array $a, array $b) {
-    return strnatcasecmp($a['label'], $b['label']);
-  }
-
-  /**
    * Sets search api's display plugin manager.
    *
    * @param \Drupal\search_api\Display\DisplayPluginManager $search_api_display_plugin_manager
@@ -126,6 +108,23 @@ abstract class FacetSourceDeriverBase implements ContainerDeriverInterface {
    */
   public function getSearchApiDisplayPluginManager() {
     return $this->searchApiDisplayPluginManager;
+  }
+
+  /**
+   * Compares two plugin definitions according to their labels.
+   *
+   * @param array $a
+   *   A plugin definition, with at least a "label" key.
+   * @param array $b
+   *   Another plugin definition.
+   *
+   * @return int
+   *   An integer less than, equal to, or greater than zero if the first
+   *   argument is considered to be respectively less than, equal to, or greater
+   *   than the second.
+   */
+  public function compareDerivatives(array $a, array $b) {
+    return strnatcasecmp($a['label'], $b['label']);
   }
 
 }

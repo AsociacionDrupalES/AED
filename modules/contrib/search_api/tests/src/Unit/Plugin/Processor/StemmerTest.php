@@ -29,7 +29,7 @@ class StemmerTest extends UnitTestCase {
 
     $this->setUpMockContainer();
 
-    $this->processor = new Stemmer(array(), 'string', array());
+    $this->processor = new Stemmer([], 'string', []);
   }
 
   /**
@@ -46,10 +46,10 @@ class StemmerTest extends UnitTestCase {
     $item_en->method('getLanguage')->willReturn('en');
     $field_en = new Field($index, 'foo');
     $field_en->setType('text');
-    $field_en->setValues(array(
+    $field_en->setValues([
       new TextValue('ties'),
-    ));
-    $item_en->method('getFields')->willReturn(array('foo' => $field_en));
+    ]);
+    $item_en->method('getFields')->willReturn(['foo' => $field_en]);
 
     $item_de = $this->getMockBuilder(ItemInterface::class)
       ->disableOriginalConstructor()
@@ -57,12 +57,12 @@ class StemmerTest extends UnitTestCase {
     $item_de->method('getLanguage')->willReturn('de');
     $field_de = new Field($index, 'foo');
     $field_de->setType('text');
-    $field_de->setValues(array(
+    $field_de->setValues([
       new TextValue('ties'),
-    ));
-    $item_de->method('getFields')->willReturn(array('foo' => $field_de));
+    ]);
+    $item_de->method('getFields')->willReturn(['foo' => $field_de]);
 
-    $items = array($item_en, $item_de);
+    $items = [$item_en, $item_de];
     $this->processor->preprocessIndexItems($items);
 
     /** @var \Drupal\search_api\Plugin\search_api\data_type\value\TextValueInterface $value */
@@ -85,7 +85,7 @@ class StemmerTest extends UnitTestCase {
    * @dataProvider processDataProvider
    */
   public function testProcess($passed_value, $expected_value) {
-    $this->invokeMethod('process', array(&$passed_value));
+    $this->invokeMethod('process', [&$passed_value]);
     $this->assertEquals($passed_value, $expected_value);
   }
 
@@ -96,96 +96,96 @@ class StemmerTest extends UnitTestCase {
    *   Arrays of arguments for testProcess().
    */
   public function processDataProvider() {
-    return array(
-      array('Yo', 'yo'),
-      array('ties', 'tie'),
-      array('cries', 'cri'),
-      array('exceed', 'exceed'),
-      array('consign', 'consign'),
-      array('consigned', 'consign'),
-      array('consigning', 'consign'),
-      array('consignment', 'consign'),
-      array('consist', 'consist'),
-      array('consisted', 'consist'),
-      array('consistency', 'consist'),
-      array('consistent', 'consist'),
-      array('consistently', 'consist'),
-      array('consisting', 'consist'),
-      array('consists', 'consist'),
-      array('consolation', 'consol'),
-      array('consolations', 'consol'),
-      array('consolatory', 'consolatori'),
-      array('console', 'consol'),
-      array('consoled', 'consol'),
-      array('consoles', 'consol'),
-      array('consolidate', 'consolid'),
-      array('consolidated', 'consolid'),
-      array('consolidating', 'consolid'),
-      array('consoling', 'consol'),
-      array('consolingly', 'consol'),
-      array('consols', 'consol'),
-      array('consonant', 'conson'),
-      array('consort', 'consort'),
-      array('consorted', 'consort'),
-      array('consorting', 'consort'),
-      array('conspicuous', 'conspicu'),
-      array('conspicuously', 'conspicu'),
-      array('conspiracy', 'conspiraci'),
-      array('conspirator', 'conspir'),
-      array('conspirators', 'conspir'),
-      array('conspire', 'conspir'),
-      array('conspired', 'conspir'),
-      array('conspiring', 'conspir'),
-      array('constable', 'constabl'),
-      array('constables', 'constabl'),
-      array('constance', 'constanc'),
-      array('constancy', 'constanc'),
-      array('constant', 'constant'),
-      array('knack', 'knack'),
-      array('knackeries', 'knackeri'),
-      array('knacks', 'knack'),
-      array('knag', 'knag'),
-      array('knave', 'knave'),
-      array('knaves', 'knave'),
-      array('knavish', 'knavish'),
-      array('kneaded', 'knead'),
-      array('kneading', 'knead'),
-      array('knee', 'knee'),
-      array('kneel', 'kneel'),
-      array('kneeled', 'kneel'),
-      array('kneeling', 'kneel'),
-      array('kneels', 'kneel'),
-      array('knees', 'knee'),
-      array('knell', 'knell'),
-      array('knelt', 'knelt'),
-      array('knew', 'knew'),
-      array('knick', 'knick'),
-      array('knif', 'knif'),
-      array('knife', 'knife'),
-      array('knight', 'knight'),
-      array('knightly', 'knight'),
-      array('knights', 'knight'),
-      array('knit', 'knit'),
-      array('knits', 'knit'),
-      array('knitted', 'knit'),
-      array('knitting', 'knit'),
-      array('knives', 'knive'),
-      array('knob', 'knob'),
-      array('knobs', 'knob'),
-      array('knock', 'knock'),
-      array('knocked', 'knock'),
-      array('knocker', 'knocker'),
-      array('knockers', 'knocker'),
-      array('knocking', 'knock'),
-      array('knocks', 'knock'),
-      array('knopp', 'knopp'),
-      array('knot', 'knot'),
-      array('knots', 'knot'),
+    return [
+      ['Yo', 'yo'],
+      ['ties', 'tie'],
+      ['cries', 'cri'],
+      ['exceed', 'exceed'],
+      ['consign', 'consign'],
+      ['consigned', 'consign'],
+      ['consigning', 'consign'],
+      ['consignment', 'consign'],
+      ['consist', 'consist'],
+      ['consisted', 'consist'],
+      ['consistency', 'consist'],
+      ['consistent', 'consist'],
+      ['consistently', 'consist'],
+      ['consisting', 'consist'],
+      ['consists', 'consist'],
+      ['consolation', 'consol'],
+      ['consolations', 'consol'],
+      ['consolatory', 'consolatori'],
+      ['console', 'consol'],
+      ['consoled', 'consol'],
+      ['consoles', 'consol'],
+      ['consolidate', 'consolid'],
+      ['consolidated', 'consolid'],
+      ['consolidating', 'consolid'],
+      ['consoling', 'consol'],
+      ['consolingly', 'consol'],
+      ['consols', 'consol'],
+      ['consonant', 'conson'],
+      ['consort', 'consort'],
+      ['consorted', 'consort'],
+      ['consorting', 'consort'],
+      ['conspicuous', 'conspicu'],
+      ['conspicuously', 'conspicu'],
+      ['conspiracy', 'conspiraci'],
+      ['conspirator', 'conspir'],
+      ['conspirators', 'conspir'],
+      ['conspire', 'conspir'],
+      ['conspired', 'conspir'],
+      ['conspiring', 'conspir'],
+      ['constable', 'constabl'],
+      ['constables', 'constabl'],
+      ['constance', 'constanc'],
+      ['constancy', 'constanc'],
+      ['constant', 'constant'],
+      ['knack', 'knack'],
+      ['knackeries', 'knackeri'],
+      ['knacks', 'knack'],
+      ['knag', 'knag'],
+      ['knave', 'knave'],
+      ['knaves', 'knave'],
+      ['knavish', 'knavish'],
+      ['kneaded', 'knead'],
+      ['kneading', 'knead'],
+      ['knee', 'knee'],
+      ['kneel', 'kneel'],
+      ['kneeled', 'kneel'],
+      ['kneeling', 'kneel'],
+      ['kneels', 'kneel'],
+      ['knees', 'knee'],
+      ['knell', 'knell'],
+      ['knelt', 'knelt'],
+      ['knew', 'knew'],
+      ['knick', 'knick'],
+      ['knif', 'knif'],
+      ['knife', 'knife'],
+      ['knight', 'knight'],
+      ['knightly', 'knight'],
+      ['knights', 'knight'],
+      ['knit', 'knit'],
+      ['knits', 'knit'],
+      ['knitted', 'knit'],
+      ['knitting', 'knit'],
+      ['knives', 'knive'],
+      ['knob', 'knob'],
+      ['knobs', 'knob'],
+      ['knock', 'knock'],
+      ['knocked', 'knock'],
+      ['knocker', 'knocker'],
+      ['knockers', 'knocker'],
+      ['knocking', 'knock'],
+      ['knocks', 'knock'],
+      ['knopp', 'knopp'],
+      ['knot', 'knot'],
+      ['knots', 'knot'],
       // This can happen when Tokenizer is off during indexing, or when
       // preprocessing a search query with quoted keywords.
-      array(" \tExtra  spaces \rappeared \n", 'extra space appear'),
-      array("\tspaced-out  \r\n", 'space out'),
-    );
+      [" \tExtra  spaces \rappeared \n", 'extra space appear'],
+      ["\tspaced-out  \r\n", 'space out'],
+    ];
   }
 
 }

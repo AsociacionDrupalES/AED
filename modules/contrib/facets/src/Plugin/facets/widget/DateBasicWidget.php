@@ -89,7 +89,7 @@ class DateBasicWidget extends WidgetPluginBase {
   /**
    * {@inheritdoc}
    */
-  public function getQueryType($query_types) {
+  public function getQueryType(array $query_types) {
     return $query_types['date'];
   }
 
@@ -109,7 +109,7 @@ class DateBasicWidget extends WidgetPluginBase {
     }, $facet->getResults());
 
     return [
-      '#theme' => 'item_list',
+      '#theme' => 'facets_item_list',
       '#items' => $items,
       '#attributes' => ['data-drupal-facet-id' => $facet->id()],
       '#cache' => [

@@ -46,8 +46,21 @@ interface DisplayInterface extends PluginInspectionInterface, DerivativeInspecti
    *
    * @return \Drupal\Core\Url|null
    *   The URL of the display, or NULL if there is no specific URL for it.
+   *
+   * @deprecated in favor of getPath(). Creating an URL object from a path needs
+   *   a lot of Core's API which might lead to errors when used in certain
+   *   situations. This method will be removed in a future version of the Search
+   *   API module.
    */
   public function getUrl();
+
+  /**
+   * Returns the base path used by this display.
+   *
+   * @return string|null
+   *   The base path for this display, or NULL if there is none.
+   */
+  public function getPath();
 
   /**
    * Returns true if the display is being rendered in the current request.

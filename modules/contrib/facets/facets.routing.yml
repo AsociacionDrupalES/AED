@@ -34,8 +34,15 @@ entity.facets_facet.settings_form:
   requirements:
     _entity_access: 'facets_facet.edit'
 
+entity.facets_facet.clone_form:
+  path: '/admin/config/search/facets/{facets_facet}/clone'
+  defaults:
+    _entity_form: 'facets_facet.clone'
+  requirements:
+    _entity_access: 'facets_facet.edit'
+
 entity.facets_facet_source.edit_form:
-  path: '/admin/config/search/facets/facet-sources/{source_id}/edit'
+  path: '/admin/config/search/facets/facet-sources/{facets_facet_source}/edit'
   defaults:
     _controller: '\Drupal\facets\Controller\FacetSourceController::facetSourceConfigForm'
     _title: 'Edit facet source configuration'

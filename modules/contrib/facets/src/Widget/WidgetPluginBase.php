@@ -58,13 +58,16 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
       }
     }, $facet->getResults());
 
+    $widget = $facet->getWidget();
+
     return [
-      '#theme' => 'item_list',
+      '#theme' => 'facets_item_list',
       '#items' => $items,
       '#attributes' => [
         'data-drupal-facet-id' => $facet->id(),
         'data-drupal-facet-alias' => $facet->getUrlAlias(),
       ],
+      '#context' => ['list_style' => $widget['type']],
       '#cache' => [
         'contexts' => [
           'url.path',
@@ -148,7 +151,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
       }
 
       $items['children'] = [
-        '#theme' => 'item_list',
+        '#theme' => 'facets_item_list',
         '#items' => $child_items,
       ];
 
@@ -164,7 +167,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
     }
 
     if ($result->isActive()) {
-      $items['#attributes'] = ['class' => 'is-active'];
+      $items['#attributes'] = ['class' => ['is-active']];
     }
 
     $items['#wrapper_attributes'] = ['class' => $classes];
@@ -210,6 +213,13 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
       '#show_count' => $this->getConfiguration()['show_numbers'] && ($count !== NULL),
       '#count' => $count,
     ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function isPropertyRequired($name, $type) {
+    return FALSE;
   }
 
 }

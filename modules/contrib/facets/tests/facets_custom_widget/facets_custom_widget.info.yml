@@ -1,0 +1,12 @@
+name: 'Facets custom widget'
+type: module
+description: 'Facets custom widget'
+package: 'Search'
+# core: 8.x
+hidden: true
+
+# Information added by Drupal.org packaging script on 2017-04-10
+version: '8.x-1.0-alpha9'
+core: '8.x'
+project: 'facets'
+datestamp: 1491851651

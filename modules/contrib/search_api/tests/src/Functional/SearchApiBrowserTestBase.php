@@ -81,7 +81,7 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
    *
    * @var string
    */
-  protected $indexId;
+  protected $indexId = 'database_search_index';
 
   /**
    * {@inheritdoc}

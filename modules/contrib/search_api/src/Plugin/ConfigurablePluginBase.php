@@ -60,7 +60,7 @@ abstract class ConfigurablePluginBase extends PluginBase implements Configurable
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array();
+    return [];
   }
 
   /**
@@ -81,7 +81,7 @@ abstract class ConfigurablePluginBase extends PluginBase implements Configurable
    * {@inheritdoc}
    */
   public function calculateDependencies() {
-    return array();
+    return [];
   }
 
   /**

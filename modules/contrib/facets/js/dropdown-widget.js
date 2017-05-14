@@ -10,22 +10,23 @@
   Drupal.facets = Drupal.facets || {};
   Drupal.behaviors.facetsDropdownWidget = {
     attach: function (context, settings) {
-      Drupal.facets.makeDropdown();
+      Drupal.facets.makeDropdown(context, settings);
     }
   };
 
   /**
    * Turns all facet links into a dropdown with options for every link.
    */
-  Drupal.facets.makeDropdown = function () {
+  Drupal.facets.makeDropdown = function (context, settings) {
     // Find all dropdown facet links and turn them into an option.
     $('.js-facets-dropdown-links').once('facets-dropdown-transform').each(function () {
       var $ul = $(this);
       var $links = $ul.find('.facet-item a');
       var $dropdown = $('<select class="facets-dropdown" />').data($ul.data());
 
+      var id = $(this).data('drupal-facet-id');
+      var default_option_label = settings.facets.dropdown_widget[id]['facet-default-option-label'];
       // Add empty text option first.
-      var default_option_label = $ul.data('facet-default-option-label');
       var $default_option = $('<option />')
         .attr('value', '')
         .text(default_option_label);
@@ -46,7 +47,7 @@
           $option.attr('selected', 'selected');
           $link.find('.js-facet-deactivate').remove();
         }
-        $option.html($link.text().trim());
+        $option.html($link.text());
         $dropdown.append($option);
       });
 
@@ -62,7 +63,7 @@
 
       // Replace links with dropdown.
       $ul.after($dropdown).remove();
-      Drupal.attachBehaviors(document, Drupal.settings);
+      Drupal.attachBehaviors($dropdown.parent()[0], Drupal.settings);
     });
   };
 

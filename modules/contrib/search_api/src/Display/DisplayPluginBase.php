@@ -23,6 +23,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   id = "my_display",
  *   label = @Translation("My display"),
  *   description = @Translation("A few words about this search display"),
+ *   index = "search_index",
+ *   path = "/my/custom/search",
  * )
  * @endcode
  *
@@ -135,9 +137,19 @@ abstract class DisplayPluginBase extends PluginBase implements DisplayInterface 
    * {@inheritdoc}
    */
   public function getUrl() {
+    if ($path = $this->getPath()) {
+      return Url::fromUserInput($path);
+    }
+    return NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getPath() {
     $plugin_definition = $this->getPluginDefinition();
     if (!empty($plugin_definition['path'])) {
-      return Url::fromUserInput($plugin_definition['path']);
+      return $plugin_definition['path'];
     }
     return NULL;
   }
@@ -146,10 +158,9 @@ abstract class DisplayPluginBase extends PluginBase implements DisplayInterface 
    * {@inheritdoc}
    */
   public function isRenderedInCurrentRequest() {
-    $plugin_definition = $this->getPluginDefinition();
-    if (!empty($plugin_definition['path'])) {
+    if ($path = $this->getPath()) {
       $current_path = $this->getCurrentPath()->getPath();
-      return $current_path == $plugin_definition['path'];
+      return $current_path == $path;
     }
     return FALSE;
   }

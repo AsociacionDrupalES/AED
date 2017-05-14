@@ -67,9 +67,9 @@ class CoreNodeSearchFacetSourceDeriver extends FacetSourceDeriverBase {
             'id' => $base_plugin_id . PluginBase::DERIVATIVE_SEPARATOR . $machine_name,
             'label' => $this->t('Core Search Page: %page_name', ['%page_name' => $page->get('label')]),
             'description' => $this->t('Provides a facet source.'),
+            'display_id' => $machine_name,
           ] + $base_plugin_definition;
         }
-        uasort($plugin_derivatives, array($this, 'compareDerivatives'));
 
         $this->derivatives[$base_plugin_id] = $plugin_derivatives;
       }

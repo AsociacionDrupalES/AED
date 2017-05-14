@@ -17,4 +17,14 @@ facets.facet_source.*:
     url_processor:
       type: string
       label: 'Url processor'
+    breadcrumb:
+      type: mapping
+      labal: 'Breadcrumb'
+      mapping:
+        active:
+          type: boolean
+          label: 'Append active facets to breadcrumb'
+        group:
+          type: boolean
+          label: 'Group active items under same crumb'
     third_party_settings: {}

@@ -24,9 +24,9 @@ abstract class QueryTypeRangeBase extends QueryTypePluginBase {
       $exclude = $this->facet->getExclude();
       $options['search_api_facets'][$field_identifier] = [
         'field' => $field_identifier,
-        'limit' => 50,
-        'operator' => 'and',
-        'min_count' => 0,
+        'limit' => $this->facet->getHardLimit(),
+        'operator' => $this->facet->getQueryOperator(),
+        'min_count' => $this->facet->getMinCount(),
         'missing' => FALSE,
       ];
 

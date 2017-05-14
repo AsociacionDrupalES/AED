@@ -20,6 +20,7 @@ class WidgetIntegrationTest extends FacetsTestBase {
     'block',
     'facets_search_api_dependency',
     'facets_query_processor',
+    'facets_custom_widget',
   ];
 
   /**
@@ -130,6 +131,30 @@ class WidgetIntegrationTest extends FacetsTestBase {
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('item');
     $this->assertFacetLabel('article');
+  }
+
+  /**
+   * Tests custom widget.
+   *
+   * ::requiredFacetProperties in the custom widget requires the
+   * hide_non_narrowing_result_processor processor, so check that it's enabled
+   * after the custom widget is selected.
+   */
+  public function testCustomWidget() {
+    $id = 'custom_widget';
+    $name = 'Custom widget.';
+    $this->createFacet($name, $id);
+
+    $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
+
+    $this->assertNoFieldChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
+    $this->assertNoFieldChecked('edit-facet-settings-show-only-one-result');
+
+    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], $this->t('Configure widget'));
+    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], $this->t('Save'));
+
+    $this->assertFieldChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
+    $this->assertFieldChecked('edit-facet-settings-show-only-one-result');
   }
 
 }

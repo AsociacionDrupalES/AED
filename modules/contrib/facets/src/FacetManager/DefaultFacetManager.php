@@ -358,7 +358,7 @@ class DefaultFacetManager {
               'class' => 'facet-empty',
             ],
             'empty_text' => [
-              '#markup' => t($empty_behavior['text']),
+              '#markup' => $this->t($empty_behavior['text']),
             ],
           ],
         ];
@@ -424,7 +424,7 @@ class DefaultFacetManager {
    * @return \Drupal\facets\Result\ResultInterface[]
    *   An array of results structured hierarchicaly.
    */
-  protected function buildHierarchicalTree($keyed_results, $parent_groups) {
+  protected function buildHierarchicalTree(array $keyed_results, array $parent_groups) {
     foreach ($keyed_results as &$result) {
       $current_id = $result->getRawValue();
       if (isset($parent_groups[$current_id]) && $parent_groups[$current_id]) {
@@ -435,7 +435,7 @@ class DefaultFacetManager {
             $child_keyed_results[$child_id] = $keyed_results[$child_id];
           }
         }
-        $result->setChildren($this->buildHierarchicalTree($child_keyed_results, $parent_groups));
+        $result->setChildren($child_keyed_results);
         $this->childIds = array_merge($this->childIds, $child_ids);
       }
     }

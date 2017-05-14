@@ -66,4 +66,47 @@ class LanguageIntegrationTest extends FacetsTestBase {
     $this->assertText('article');
   }
 
+  /**
+   * Tests that special characters work such as äüö work.
+   *
+   * @see https://www.drupal.org/node/2838247
+   * @see https://www.drupal.org/node/2838697
+   */
+  public function testSpecialCharacters() {
+    $id = 'water_bear';
+    $name = 'Water bear';
+    $this->createFacet($name, $id, 'keywords');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetBlocksAppear();
+    $this->assertFacetLabel('orange');
+
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+    $entity_test_storage->create([
+      'name' => 'special-chars 1',
+      'body' => 'test test test',
+      'type' => 'article',
+      'keywords' => ['ƒäüö', 'test_key-word', 'special^%s', 'Key Word'],
+      'category' => 'article_category',
+    ])->save();
+    $entity_test_storage->create([
+      'name' => 'special-chars 2',
+      'body' => 'test test test',
+      'type' => 'article',
+      'keywords' => ['ƒäüö', 'special^%s', 'aáå'],
+      'category' => 'article_category',
+    ])->save();
+    $this->assertEquals(2, $this->indexItems($this->indexId), '2 items were indexed.');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetBlocksAppear();
+    $this->assertFacetLabel('orange');
+    $this->assertFacetLabel('ƒäüö');
+    $this->assertFacetLabel('aáå');
+    $this->assertFacetLabel('special^%s');
+    $this->assertFacetLabel('test_key-word');
+    $this->assertFacetLabel('Key Word');
+  }
+
 }

@@ -19,7 +19,7 @@ facet.widget.config.dropdown:
   label: 'Dropdown widget configuration'
   mapping:
     default_option_label:
-      type: string
+      type: label
       label: 'Default option label'
 
 # Config schema for links, you can find the implementation in

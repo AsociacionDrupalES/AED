@@ -11,7 +11,7 @@ use Drupal\Tests\BrowserTestBase;
 /**
  * Provides the base class for web tests for Core Search Facets.
  */
-abstract class FacetsHooksTestBase extends BrowserTestBase {
+abstract class CoreSearchFacetsTestBase extends BrowserTestBase {
 
   use StringTranslationTrait;
   use TestHelperTrait;
@@ -78,45 +78,46 @@ abstract class FacetsHooksTestBase extends BrowserTestBase {
       // the same value per nid and langcode.
       $created_time_en = new \DateTime('February ' . $i . ' 2016 ' . str_pad($i, 2, STR_PAD_LEFT, 0) . 'PM');
       $created_time_es = new \DateTime('March ' . $i . ' 2016 ' . str_pad($i, 2, STR_PAD_LEFT, 0) . 'PM');
-      $node = $this->drupalCreateNode(array(
+      $node = $this->drupalCreateNode([
         'title' => 'test page' . $i . ' EN',
         'body' => 'test page' . $i,
         'type' => 'page',
         'created' => $created_time_en->format('U'),
         'changed' => $created_time_en->format('U'),
         'langcode' => 'en',
-      ));
+      ]);
 
       // Add Spanish translation to the node.
       $node->addTranslation('es', [
         'title' => 'test page' . $i . ' ES',
         'created' => $created_time_es->format('U'),
+        'changed' => ((int) $created_time_es->format('U') + 250),
       ]);
       $node->save();
 
     }
 
     $created_time = new \DateTime('March 9 2016 11PM');
-    $this->drupalCreateNode(array(
+    $this->drupalCreateNode([
       'title' => 'test page 10 EN',
       'body' => 'test page10',
       'type' => 'page',
       'created' => $created_time->format('U'),
-      'changed' => $created_time_en->format('U'),
+      'changed' => ((int) $created_time->format('U') + 250),
       'langcode' => 'en',
-    ));
+    ]);
 
     // Add 10 nodes of the type article.
     for ($i = 1; $i <= 10; $i++) {
       $created_time = new \DateTime('April ' . $i . ' 2016 ' . str_pad($i, 2, STR_PAD_LEFT, 0) . 'PM');
-      $this->drupalCreateNode(array(
+      $this->drupalCreateNode([
         'title' => 'test article' . $i . ' EN',
         'body' => 'test article' . $i,
         'type' => 'article',
         'created' => $created_time->format('U'),
-        'changed' => $created_time_en->format('U'),
+        'changed' => ((int) $created_time->format('U') + 250),
         'langcode' => 'en',
-      ));
+      ]);
     }
 
     // Create the users used for the tests.

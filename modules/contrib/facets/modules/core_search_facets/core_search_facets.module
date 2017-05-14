@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Contains core_search_facets.module
+ * Contains core_search_facets.module.
  */
 
 use Drupal\Core\Database\Query\AlterableInterface;
@@ -10,7 +10,9 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\facets\FacetSourceInterface;
 
 /**
- * Implements hook_query_TAG_alter(): tag search_$type with $type node_search.
+ * Implements hook_query_TAG_alter().
+ *
+ * Tag search_$type with $type node_search.
  */
 function core_search_facets_query_search_node_search_alter(AlterableInterface $query) {
   // Obtain the Facet Source id for the current search.
@@ -40,13 +42,14 @@ function core_search_facets_search_plugin_alter(array &$definitions) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter() for facet_source_edit_form.
+ * Implements hook_form_FORM_ID_alter().
  *
- * Adds a checkbox to show or hide some advanced filters for the core search.
+ * Edits the facet_source_edit_form, so we can add a checkbox to show or hide
+ * some advanced filters for the core search.
  */
 function core_search_facets_form_facet_source_edit_form_alter(&$form, FormStateInterface $form_state) {
   $request = \Drupal::requestStack()->getMasterRequest();
-  $facet_source_id = str_replace(":", "__", $request->attributes->get('source_id'));
+  $facet_source_id = str_replace(":", "__", $request->attributes->get('facets_facet_source'));
   if (strpos($facet_source_id, 'core_node_search') !== FALSE) {
     $form['advanced_filters'] = array(
       '#type' => 'checkbox',

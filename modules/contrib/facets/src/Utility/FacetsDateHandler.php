@@ -2,7 +2,7 @@
 
 namespace Drupal\facets\Utility;
 
-use Drupal\Core\Datetime\DateFormatter;
+use Drupal\Core\Datetime\DateFormatterInterface;
 
 /**
  * Dates Handler service.
@@ -62,17 +62,17 @@ class FacetsDateHandler {
   /**
    * The date formatting service.
    *
-   * @var \Drupal\Core\Datetime\DateFormatter
+   * @var \Drupal\Core\Datetime\DateFormatterInterface
    */
   protected $dateFormatter;
 
   /**
    * FacetsDateHandler constructor.
    *
-   * @param \Drupal\Core\Datetime\DateFormatter $date_formatter
+   * @param \Drupal\Core\Datetime\DateFormatterInterface $date_formatter
    *   The date formatting service.
    */
-  public function __construct(DateFormatter $date_formatter) {
+  public function __construct(DateFormatterInterface $date_formatter) {
     $this->dateFormatter = $date_formatter;
   }
 
@@ -374,15 +374,14 @@ class FacetsDateHandler {
    *   0 if they are equal.
    */
   public function gapCompare($gap1, $gap2) {
-
-    $gap_numbers = array(
+    $gap_numbers = [
       static::FACETS_DATE_YEAR => 6,
       static::FACETS_DATE_MONTH => 5,
       static::FACETS_DATE_DAY => 4,
       static::FACETS_DATE_HOUR => 3,
       static::FACETS_DATE_MINUTE => 2,
       static::FACETS_DATE_SECOND => 1,
-    );
+    ];
 
     $gap1_num = isset($gap_numbers[$gap1]) ? $gap_numbers[$gap1] : 6;
     $gap2_num = isset($gap_numbers[$gap2]) ? $gap_numbers[$gap2] : 6;
@@ -396,7 +395,7 @@ class FacetsDateHandler {
   }
 
   /**
-   * Extracts "start" and "end" dates from an active items.
+   * Extracts "start" and "end" dates from an active item.
    *
    * @param string $item
    *   The active item to extract the dates.

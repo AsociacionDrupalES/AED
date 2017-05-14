@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\spin_rest\Plugin\facets\widget;
+namespace Drupal\facets\Plugin\facets\widget;
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\facets\FacetInterface;
-use Drupal\facets\Plugin\facets\widget\ArrayWidget;
 use Drupal\facets\Plugin\facets\query_type\SearchApiDate;
 
 /**
@@ -88,7 +87,7 @@ class DateArrayWidget extends ArrayWidget {
   /**
    * {@inheritdoc}
    */
-  public function getQueryType($query_types) {
+  public function getQueryType(array $query_types) {
     return $query_types['date'];
   }
 

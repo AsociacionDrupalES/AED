@@ -11,9 +11,9 @@ use Drupal\views\ViewEntityInterface;
 /**
  * Derives a display plugin definition for all supported search view displays.
  *
- * @see \Drupal\search_api\Plugin\search_api\display\ViewsBlockDisplay
- * @see \Drupal\search_api\Plugin\search_api\display\ViewsPageDisplay
- * @see \Drupal\search_api\Plugin\search_api\display\ViewsRestDisplay
+ * @see \Drupal\search_api\Plugin\search_api\display\ViewsBlock
+ * @see \Drupal\search_api\Plugin\search_api\display\ViewsPage
+ * @see \Drupal\search_api\Plugin\search_api\display\ViewsRest
  */
 class ViewsDisplayDeriver extends DisplayDeriverBase {
 
@@ -22,7 +22,7 @@ class ViewsDisplayDeriver extends DisplayDeriverBase {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     if (!isset($this->derivatives)) {
-      $this->derivatives = array();
+      $this->derivatives = [];
 
       try {
         /** @var \Drupal\Core\Entity\EntityStorageInterface $views_storage */
@@ -60,7 +60,7 @@ class ViewsDisplayDeriver extends DisplayDeriverBase {
 
     $index = SearchApiQuery::getIndexFromTable($view->get('base_table'));
     if (!$index instanceof IndexInterface) {
-      return array();
+      return [];
     }
 
     $displays = $view->get('display');
@@ -79,10 +79,10 @@ class ViewsDisplayDeriver extends DisplayDeriverBase {
           $machine_name = $base_machine_name . '_' . ++$i;
         }
 
-        $label_arguments = array(
+        $label_arguments = [
           '%view_name' => $view->label(),
           '%display_title' => $display_info['display_title'],
-        );
+        ];
         $label = $this->t('View %view_name, display %display_title', $label_arguments);
 
         $executable = $view->getExecutable();
@@ -90,10 +90,10 @@ class ViewsDisplayDeriver extends DisplayDeriverBase {
         $display = $executable->getDisplay();
 
         // Create the actual derivative plugin definition.
-        $args = array(
+        $args = [
           '%view_name' => $view->label(),
-          '%display_title' => $display_info['display_title']
-        );
+          '%display_title' => $display_info['display_title'],
+        ];
         if ($view->get('description')) {
           $args['%view_description'] = $view->get('description');
           $description = $this->t('%view_description – Represents the display %display_title of view %view_name.', $args);
@@ -101,16 +101,16 @@ class ViewsDisplayDeriver extends DisplayDeriverBase {
         else {
           $description = $this->t('Represents the display %display_title of view %view_name.', $args);
         }
-        $plugin_derivatives[$machine_name] = array(
+        $plugin_derivatives[$machine_name] = [
           'label' => $label,
           'description' => $description,
           'view_id' => $view->id(),
           'view_display' => $name,
           'index' => $index->id(),
-        ) + $base_plugin_definition;
+        ] + $base_plugin_definition;
 
         // Add the path information to the definition.
-        if ($display->getPath()) {
+        if ($display->hasPath()) {
           $plugin_derivatives[$machine_name]['path'] = '/' . $display->getPath();
         }
       }

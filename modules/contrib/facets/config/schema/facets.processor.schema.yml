@@ -68,6 +68,17 @@ plugin.plugin_configuration.facets_processor.count_limit:
       type: integer
       label: 'Maximum amount of items to show.'
 
+plugin.plugin_configuration.facets_processor.boolean_item:
+  type: mapping
+  label: 'Boolean processor'
+  mapping:
+    on_value:
+      type: string
+      label: 'On value'
+    off_value:
+      type: string
+      label: 'Off value'
+
 plugin.plugin_configuration.facets_processor.url_processor_handler:
   type: config_object
 
@@ -75,4 +86,7 @@ plugin.plugin_configuration.facets_processor.hide_non_narrowing_result_processor
   type: config_object
 
 plugin.plugin_configuration.facets_processor.hide_active_items_processor:
+  type: config_object
+
+plugin.plugin_configuration.facets_processor.list_item:
   type: config_object

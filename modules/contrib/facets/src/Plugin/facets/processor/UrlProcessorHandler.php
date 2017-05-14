@@ -37,6 +37,16 @@ class UrlProcessorHandler extends ProcessorPluginBase implements BuildProcessorI
   protected $processor;
 
   /**
+   * Gets the Processor.
+   *
+   * @return \Drupal\facets\UrlProcessor\UrlProcessorInterface
+   *   The Processor.
+   */
+  public function getProcessor() {
+    return $this->processor;
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function __construct(array $configuration, $plugin_id, array $plugin_definition) {

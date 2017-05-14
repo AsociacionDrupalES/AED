@@ -45,10 +45,10 @@ class RoleFilter extends ProcessorPluginBase implements PluginFormInterface {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array(
+    return [
       'default' => TRUE,
-      'roles' => array(),
-    );
+      'roles' => [],
+    ];
   }
 
   /**
@@ -59,23 +59,23 @@ class RoleFilter extends ProcessorPluginBase implements PluginFormInterface {
       return Html::escape($role->label());
     }, user_roles());
 
-    $form['default'] = array(
+    $form['default'] = [
       '#type' => 'radios',
       '#title' => $this->t('Which users should be indexed?'),
-      '#options' => array(
+      '#options' => [
         1 => $this->t('All but those from one of the selected roles'),
         0 => $this->t('Only those from the selected roles'),
-      ),
+      ],
       '#default_value' => (int) $this->configuration['default'],
-    );
-    $form['roles'] = array(
+    ];
+    $form['roles'] = [
       '#type' => 'select',
       '#title' => $this->t('Roles'),
       '#options' => $options,
       '#multiple' => TRUE,
       '#size' => min(4, count($options)),
       '#default_value' => array_combine($this->configuration['roles'], $this->configuration['roles']),
-    );
+    ];
     return $form;
   }
 

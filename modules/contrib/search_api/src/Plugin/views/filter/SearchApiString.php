@@ -2,8 +2,6 @@
 
 namespace Drupal\search_api\Plugin\views\filter;
 
-use Drupal\Core\Cache\UncacheableDependencyTrait;
-
 /**
  * Defines a filter for adding conditions on string fields to the query.
  *
@@ -17,7 +15,5 @@ use Drupal\Core\Cache\UncacheableDependencyTrait;
  * @ViewsFilter("search_api_string")
  */
 class SearchApiString extends SearchApiNumeric {
-
-  use UncacheableDependencyTrait;
 
 }

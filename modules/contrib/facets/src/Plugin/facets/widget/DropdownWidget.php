@@ -22,7 +22,7 @@ class DropdownWidget extends WidgetPluginBase {
    */
   public function defaultConfiguration() {
     return [
-      'default_option_label' => $this->t('Choose'),
+      'default_option_label' => 'Choose',
     ] + parent::defaultConfiguration();
   }
 
@@ -32,7 +32,7 @@ class DropdownWidget extends WidgetPluginBase {
   public function build(FacetInterface $facet) {
     $build = parent::build($facet);
     $build['#attributes']['class'][] = 'js-facets-dropdown-links';
-    $build['#attributes']['data-facet-default-option-label'] = $this->getConfiguration()['default_option_label'];
+    $build['#attached']['drupalSettings']['facets']['dropdown_widget'][$facet->id()]['facet-default-option-label'] = $this->getConfiguration()['default_option_label'];
     $build['#attached']['library'][] = 'facets/drupal.facets.dropdown-widget';
     return $build;
   }

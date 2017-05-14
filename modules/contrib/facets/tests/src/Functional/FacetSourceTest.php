@@ -49,7 +49,7 @@ class FacetSourceTest extends FacetsTestBase {
     $this->assertResponse(200);
 
     $this->assertUrl('admin/config/search/facets');
-    $this->assertText('Facet source views_page:search_api_test_view__block_1 has been saved.');
+    $this->assertText('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
     $this->clickLink('Configure');
 
     // Test that saving worked filter_key has the new value.
@@ -72,7 +72,7 @@ class FacetSourceTest extends FacetsTestBase {
     $this->assertResponse(200);
 
     $this->assertUrl('admin/config/search/facets');
-    $this->assertText('Facet source views_page:search_api_test_view__block_1 has been saved.');
+    $this->assertText('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
     $this->clickLink('Configure');
 
     // Test that saving worked and that the url processor has the new value.
@@ -83,4 +83,28 @@ class FacetSourceTest extends FacetsTestBase {
     $this->assertEquals('dummy_query', $elements[0]->getValue());
   }
 
+  /**
+   * Tests editing the breadcrumb settings.
+   */
+  public function testEditBreadcrumbSettings() {
+    $this->assertSession()->fieldExists('breadcrumb[active]');
+    $this->assertSession()->fieldExists('breadcrumb[group]');
+    $this->assertSession()->checkboxNotChecked('breadcrumb[group]');
+    $this->assertSession()->checkboxNotChecked('breadcrumb[active]');
+    // Change the breadcrumb settings.
+    $edit = array(
+      'breadcrumb[active]' => TRUE,
+      'breadcrumb[group]' => TRUE,
+    );
+    $this->drupalPostForm(NULL, $edit, 'Save');
+    $this->assertSession()->statusCodeEquals(200);
+
+    $this->assertSession()->addressEquals('admin/config/search/facets');
+    $this->assertSession()->pageTextContains('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
+    $this->clickLink('Configure');
+
+    // Test that saving worked and that the url processor has the new value.
+    $this->assertSession()->checkboxChecked('breadcrumb[group]');
+    $this->assertSession()->checkboxChecked('breadcrumb[active]');
+  }
 }

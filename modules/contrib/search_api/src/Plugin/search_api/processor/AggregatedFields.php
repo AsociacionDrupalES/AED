@@ -28,15 +28,15 @@ class AggregatedFields extends ProcessorPluginBase {
    * {@inheritdoc}
    */
   public function getPropertyDefinitions(DatasourceInterface $datasource = NULL) {
-    $properties = array();
+    $properties = [];
 
     if (!$datasource) {
-      $definition = array(
+      $definition = [
         'label' => $this->t('Aggregated field'),
         'description' => $this->t('An aggregation of multiple other fields.'),
         'type' => 'string',
         'processor_id' => $this->getPluginId(),
-      );
+      ];
       $properties['aggregated_field'] = new AggregatedFieldProperty($definition);
     }
 
@@ -50,10 +50,10 @@ class AggregatedFields extends ProcessorPluginBase {
     $fields = $this->index->getFields();
     $aggregated_fields = $this->getFieldsHelper()
       ->filterForPropertyPath($fields, NULL, 'aggregated_field');
-    $required_properties_by_datasource = array(
-      NULL => array(),
-      $item->getDatasourceId() => array(),
-    );
+    $required_properties_by_datasource = [
+      NULL => [],
+      $item->getDatasourceId() => [],
+    ];
     foreach ($aggregated_fields as $field) {
       foreach ($field->getConfiguration()['fields'] as $combined_id) {
         list($datasource_id, $property_path) = Utility::splitCombinedId($combined_id);
@@ -62,12 +62,12 @@ class AggregatedFields extends ProcessorPluginBase {
     }
 
     $property_values = $this->getFieldsHelper()
-      ->extractItemValues(array($item), $required_properties_by_datasource)[0];
+      ->extractItemValues([$item], $required_properties_by_datasource)[0];
 
     $aggregated_fields = $this->getFieldsHelper()
       ->filterForPropertyPath($item->getFields(), NULL, 'aggregated_field');
     foreach ($aggregated_fields as $aggregated_field) {
-      $values = array();
+      $values = [];
       $configuration = $aggregated_field->getConfiguration();
       foreach ($configuration['fields'] as $combined_id) {
         if (!empty($property_values[$combined_id])) {
@@ -77,28 +77,33 @@ class AggregatedFields extends ProcessorPluginBase {
 
       switch ($configuration['type']) {
         case 'concat':
-          $values = array(implode("\n\n", $values));
+          $values = [implode("\n\n", $values)];
           break;
 
         case 'sum':
-          $values = array(array_sum($values));
+          $values = [array_sum($values)];
           break;
 
         case 'count':
-          $values = array(count($values));
+          $values = [count($values)];
           break;
 
         case 'max':
-          $values = array(max($values));
+          $values = [max($values)];
           break;
 
         case 'min':
-          $values = array(min($values));
+          $values = [min($values)];
           break;
 
         case 'first':
           if ($values) {
-            $values = array(reset($values));
+            $values = [reset($values)];
+          }
+          break;
+        case 'last':
+          if ($values) {
+            $values = [end($values)];
           }
           break;
       }

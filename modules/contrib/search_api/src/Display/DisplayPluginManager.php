@@ -42,7 +42,7 @@ class DisplayPluginManager extends DefaultPluginManager {
    */
   public function getInstances() {
     if ($this->displays === NULL) {
-      $this->displays = array();
+      $this->displays = [];
 
       foreach ($this->getDefinitions() as $name => $display_definition) {
         if (class_exists($display_definition['class']) && empty($this->displays[$name])) {

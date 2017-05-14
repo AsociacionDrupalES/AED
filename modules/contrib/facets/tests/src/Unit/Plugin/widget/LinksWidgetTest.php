@@ -2,51 +2,22 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\widget;
 
-use Drupal\Core\Url;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\widget\LinksWidget;
 use Drupal\facets\Result\Result;
-use Drupal\Tests\UnitTestCase;
 
 /**
  * Unit test for widget.
  *
  * @group facets
  */
-class LinksWidgetTest extends UnitTestCase {
+class LinksWidgetTest extends WidgetTestBase {
 
   /**
-   * The processor to be tested.
-   *
-   * @var \drupal\facets\Widget\WidgetPluginInterface
-   */
-  protected $widget;
-
-  /**
-   * An array containing the results before the processor has ran.
-   *
-   * @var \Drupal\facets\Result\Result[]
-   */
-  protected $originalResults;
-
-  /**
-   * Creates a new processor object for use in the tests.
+   * {@inheritdoc}
    */
   protected function setUp() {
     parent::setUp();
-
-    /** @var \Drupal\facets\Result\Result[] $original_results */
-    $original_results = [
-      new Result('llama', 'Llama', 10),
-      new Result('badger', 'Badger', 20),
-      new Result('duck', 'Duck', 15),
-      new Result('alpaca', 'Alpaca', 9),
-    ];
-
-    foreach ($original_results as $original_result) {
-      $original_result->setUrl(new Url('test'));
-    }
-    $this->originalResults = $original_results;
 
     $this->widget = new LinksWidget();
   }
@@ -107,7 +78,7 @@ class LinksWidgetTest extends UnitTestCase {
       $this->assertEquals($value, $output['#items'][$index]['#title']);
       $this->assertEquals('link', $output['#items'][$index]['#type']);
       if ($index === 0 || $index === 3) {
-        $this->assertEquals('is-active', $output['#items'][$index]['#attributes']['class']);
+        $this->assertEquals(['is-active'], $output['#items'][$index]['#attributes']['class']);
       }
       $this->assertEquals(['facet-item'], $output['#items'][$index]['#wrapper_attributes']['class']);
     }
@@ -140,7 +111,7 @@ class LinksWidgetTest extends UnitTestCase {
       $this->assertEquals($value, $output['#items'][$index]['#title']);
       $this->assertEquals('link', $output['#items'][$index]['#type']);
       if ($index === 1) {
-        $this->assertEquals('is-active', $output['#items'][$index]['#attributes']['class']);
+        $this->assertEquals(['is-active'], $output['#items'][$index]['#attributes']['class']);
       }
       $this->assertEquals(['facet-item'], $output['#items'][$index]['#wrapper_attributes']['class']);
     }
@@ -165,7 +136,7 @@ class LinksWidgetTest extends UnitTestCase {
       $this->assertEquals($value, $output['#items'][$index]['#title']);
       $this->assertEquals('link', $output['#items'][$index]['#type']);
       if ($index === 1) {
-        $this->assertEquals('is-active', $output['#items'][$index]['#attributes']['class']);
+        $this->assertEquals(['is-active'], $output['#items'][$index]['#attributes']['class']);
       }
       $this->assertEquals(['facet-item'], $output['#items'][$index]['#wrapper_attributes']['class']);
     }
@@ -201,7 +172,7 @@ class LinksWidgetTest extends UnitTestCase {
       $this->assertEquals($value, $output['#items'][$index]['#title']);
       $this->assertEquals('link', $output['#items'][$index]['#type']);
       if ($index === 1) {
-        $this->assertEquals('is-active', $output['#items'][$index]['#attributes']['class']);
+        $this->assertEquals(['is-active'], $output['#items'][$index]['#attributes']['class']);
         $this->assertEquals(['facet-item', 'facet-item--expanded'], $output['#items'][$index]['#wrapper_attributes']['class']);
       }
       else {
@@ -209,39 +180,6 @@ class LinksWidgetTest extends UnitTestCase {
       }
     }
 
-  }
-
-  /**
-   * Tests default configuration.
-   */
-  public function testDefaultConfiguration() {
-    $default_config = $this->widget->defaultConfiguration();
-    $this->assertEquals(['show_numbers' => FALSE, 'soft_limit' => 0], $default_config);
-  }
-
-  /**
-   * Build a formattable markup object to use in the other tests.
-   *
-   * @param string $text
-   *   Text to display.
-   * @param int $count
-   *   Number of results.
-   * @param bool $active
-   *   Link is active.
-   * @param bool $show_numbers
-   *   Numbers are displayed.
-   *
-   * @return array
-   *   A render array.
-   */
-  protected function buildLinkAssertion($text, $count = 0, $active = FALSE, $show_numbers = TRUE) {
-    return [
-      '#theme' => 'facets_result_item',
-      '#value' => $text,
-      '#show_count' => $show_numbers && ($count !== NULL),
-      '#count' => $count,
-      '#is_active' => $active,
-    ];
   }
 
 }

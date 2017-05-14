@@ -9,6 +9,7 @@ use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
 use Drupal\search_api\Item\Field;
+use Drupal\search_api\Processor\ProcessorInterface;
 use Drupal\search_api_test\PluginTestTrait;
 use Drupal\taxonomy\Tests\TaxonomyTestTrait;
 
@@ -147,8 +148,8 @@ class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
     sort($actual_processors);
     $this->assertEquals($enabled, $actual_processors);
 
-    $this->checkNodeStatusIntegration();
-    $enabled[] = 'node_status';
+    $this->checkEntityStatusIntegration();
+    $enabled[] = 'entity_status';
     sort($enabled);
     $actual_processors = array_keys($this->loadIndex()->getProcessors());
     sort($actual_processors);
@@ -191,9 +192,48 @@ class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
     sort($actual_processors);
     $this->assertEquals($enabled, $actual_processors);
 
+    $this->checkStemmerIntegration();
+    $enabled[] = 'stemmer';
+    sort($enabled);
+    $actual_processors = array_keys($this->loadIndex()->getProcessors());
+    sort($actual_processors);
+    $this->assertEquals($enabled, $actual_processors);
+
     // The 'add_url' processor is not available to be removed because it's
     // locked.
     $this->checkUrlFieldIntegration();
+
+    // Check the order of the displayed processors.
+    $stages = [
+      ProcessorInterface::STAGE_PREPROCESS_INDEX,
+      ProcessorInterface::STAGE_PREPROCESS_QUERY,
+      ProcessorInterface::STAGE_POSTPROCESS_QUERY,
+    ];
+    /** @var \Drupal\search_api\Processor\ProcessorInterface[] $processors */
+    $processors = \Drupal::getContainer()
+      ->get('search_api.plugin_helper')
+      ->createProcessorPlugins($this->loadIndex());
+    $page = $this->getSession()->getPage();
+    foreach ($stages as $stage) {
+      // Since the order of processors with the same weight is undefined, we
+      // can't just use $index->getProcessorsByStage() and assertEquals().
+      $previous_weight = NULL;
+      $class = 'search-api-stage-wrapper-' . Html::cleanCssIdentifier($stage);
+      /** @var \Behat\Mink\Element\NodeElement $element */
+      foreach ($page->findAll('css', ".$class tr.draggable") as $element) {
+        // Since processors are shown right away when checked in the form, they
+        // are even included in the form when disabled – just hidden. We can
+        // check the "style" attribute to identify them.
+        if (preg_match('/\bsearch-api-processor-weight--([-a-z0-9]+)\b/', $element->getAttribute('class'), $m)) {
+          $processor_id = str_replace('-', '_', $m[1]);
+          $weight = $processors[$processor_id]->getWeight($stage);
+          if ($previous_weight !== NULL) {
+            $this->assertGreaterThanOrEqual($previous_weight, $weight, "Correct order of processor $processor_id in stage $stage");
+          }
+          $previous_weight = $weight;
+        }
+      }
+    }
 
     // Check whether disabling processors also works correctly.
     $this->loadProcessorsTab();
@@ -205,10 +245,19 @@ class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
     $actual_processors = array_keys($this->loadIndex()->getProcessors());
     sort($actual_processors);
     $this->assertEquals($enabled, $actual_processors);
+
+    // After disabling some datasource, all related processors should be
+    // disabled also.
+    $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/edit');
+    $this->drupalPostForm(NULL, ['datasources[entity:user]' => FALSE], 'Save');
+    $processors = $this->loadIndex()->getProcessors();
+    $this->assertArrayNotHasKey('role_filter', $processors);
+    $this->drupalGet('admin/config/search/search-api/index/' . $this->indexId . '/processors');
+    $this->assertSession()->pageTextNotContains('Role filter');
   }
 
   /**
-   * Test that the "Alter processors test backend" actually alters processors.
+   * Tests that processors discouraged by the backend are correctly hidden.
    *
    * @see https://www.drupal.org/node/2228739
    */
@@ -262,14 +311,14 @@ class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
     $this->assertTrue($this->loadIndex()->isValidProcessor('aggregated_field'), 'The "Aggregated fields" processor cannot be disabled.');
 
     $options['query']['datasource'] = '';
-    $this->drupalGet($this->getIndexPath('fields/add'), $options);
+    $this->drupalGet($this->getIndexPath('fields/add/nojs'), $options);
 
     // See \Drupal\search_api\Tests\IntegrationTest::addField().
     $this->assertSession()->responseContains('name="aggregated_field"');
     $this->submitForm([], 'aggregated_field');
     $args['%label'] = 'Aggregated field';
     $this->assertSession()->responseContains(new FormattableMarkup('Field %label was added to the index.', $args));
-    $this->assertSession()->addressEquals($this->getIndexPath('fields/aggregated_field/edit'));
+    $this->assertSession()->addressEquals($this->getIndexPath('fields/edit/aggregated_field'));
     $edit = [
       'type' => 'first',
       'fields[entity:node/title]' => 'title',
@@ -292,29 +341,29 @@ class ProcessorIntegrationTest extends SearchApiBrowserTestBase {
     // indexed.
     $index = $this->loadIndex();
     $index->save();
-    $content_access_fields = array(
-      'status' => array(
+    $content_access_fields = [
+      'status' => [
         'datasource_id' => 'entity:node',
         'property_path' => 'status',
         'type' => 'boolean',
         'indexed_locked' => TRUE,
         'type_locked' => TRUE,
-      ),
-      'uid' => array(
+      ],
+      'uid' => [
         'datasource_id' => 'entity:node',
         'property_path' => 'uid',
         'type' => 'integer',
         'indexed_locked' => TRUE,
         'type_locked' => TRUE,
-      ),
-      'node_grants' => array(
+      ],
+      'node_grants' => [
         'property_path' => 'search_api_node_grants',
         'type' => 'string',
         'indexed_locked' => TRUE,
         'type_locked' => TRUE,
         'hidden' => TRUE,
-      ),
-    );
+      ],
+    ];
     $index_fields = $index->getFields();
     foreach ($content_access_fields as $field_id => $settings) {
       $this->assertTrue(!empty($index_fields[$field_id]), "Field $field_id (required by \"Content access\" processor) is present.");
@@ -423,10 +472,10 @@ TAGS
   }
 
   /**
-   * Tests the UI for the "Node status" processor.
+   * Tests the UI for the "Entity status" processor.
    */
-  public function checkNodeStatusIntegration() {
-    $this->enableProcessor('node_status');
+  public function checkEntityStatusIntegration() {
+    $this->enableProcessor('entity_status');
   }
 
   /**
@@ -455,14 +504,14 @@ TAGS
     $this->assertTrue($this->loadIndex()->isValidProcessor('rendered_item'), 'The "Rendered item" processor cannot be disabled.');
 
     $options['query']['datasource'] = '';
-    $this->drupalGet($this->getIndexPath('fields/add'), $options);
+    $this->drupalGet($this->getIndexPath('fields/add/nojs'), $options);
 
     // See \Drupal\search_api\Tests\IntegrationTest::addField().
     $this->assertSession()->responseContains('name="rendered_item"');
     $this->submitForm([], 'rendered_item');
     $args['%label'] = 'Rendered HTML output';
     $this->assertSession()->responseContains(new FormattableMarkup('Field %label was added to the index.', $args));
-    $this->assertSession()->addressEquals($this->getIndexPath('fields/rendered_item/edit'));
+    $this->assertSession()->addressEquals($this->getIndexPath('fields/edit/rendered_item'));
     $edit = [
       'roles[]' => ['authenticated'],
       'view_mode[entity:node][article]' => 'default',
@@ -492,9 +541,9 @@ TAGS
    */
   public function checkTokenizerIntegration() {
     $configuration = [
-      'spaces' => ':)',
+      'spaces' => '[:foobar:]',
     ];
-    $this->checkValidationError($configuration, 'tokenizer', 'The entered text is no valid regular expression.');
+    $this->checkValidationError($configuration, 'tokenizer', 'The entered text is no valid PCRE character class.');
 
     $configuration = [
       'spaces' => '',
@@ -528,6 +577,20 @@ TAGS
       ],
     ];
     $this->editSettingsForm($configuration, 'hierarchy', $edit, TRUE, FALSE);
+  }
+
+  /**
+   * Tests the UI for the "Stemmer" processor.
+   */
+  public function checkStemmerIntegration() {
+    $this->enableProcessor('stemmer');
+    $configuration = [
+      'exceptions' => ['indian' => 'india'],
+    ];
+    $form_values = [
+      'exceptions' => 'indian=india',
+    ];
+    $this->editSettingsForm($configuration, 'stemmer', $form_values);
   }
 
   /**

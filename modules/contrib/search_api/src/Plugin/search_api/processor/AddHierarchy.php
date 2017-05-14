@@ -36,7 +36,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    *
    * @see \Drupal\search_api\Plugin\search_api\processor\AddHierarchy::getHierarchyFields()
    */
-  protected static $indexHierarchyFields = array();
+  protected static $indexHierarchyFields = [];
 
   /**
    * The entity type manager.
@@ -60,7 +60,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
   /**
    * Retrieves the entity type manager service.
    *
-   * @return \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @return \Drupal\Core\Entity\EntityTypeManagerInterface
    *   The entity type manager service.
    */
   public function getEntityTypeManager() {
@@ -84,7 +84,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    * {@inheritdoc}
    */
   public static function supportsIndex(IndexInterface $index) {
-    $processor = new static(array('#index' => $index), 'hierarchy', array());
+    $processor = new static(['#index' => $index], 'hierarchy', []);
     return (bool) $processor->getHierarchyFields();
   }
 
@@ -105,7 +105,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    */
   protected function getHierarchyFields() {
     if (!isset(static::$indexHierarchyFields[$this->index->id()])) {
-      $field_options = array();
+      $field_options = [];
 
       foreach ($this->index->getFields() as $field_id => $field) {
         $definition = $field->getDataDefinition();
@@ -120,7 +120,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
             if ($property instanceof EntityDataDefinitionInterface) {
               $options = self::findHierarchicalProperties($property, $property_label);
               if ($options) {
-                $field_options += array($field_id => array());
+                $field_options += [$field_id => []];
                 $field_options[$field_id] += $options;
               }
             }
@@ -149,7 +149,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    */
   protected function findHierarchicalProperties(EntityDataDefinitionInterface $property, $property_label) {
     $entity_type_id = $property->getEntityTypeId();
-    $options = array();
+    $options = [];
 
     // Check properties for potential hierarchy. Check two levels down, since
     // Core's entity references all have an additional "entity" sub-property for
@@ -181,9 +181,9 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array(
-      'fields' => array(),
-    );
+    return [
+      'fields' => [],
+    ];
   }
 
   /**
@@ -194,29 +194,29 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
 
     foreach ($this->getHierarchyFields() as $field_id => $options) {
       $enabled = !empty($this->configuration['fields'][$field_id]);
-      $form['fields'][$field_id]['status'] = array(
+      $form['fields'][$field_id]['status'] = [
         '#type' => 'checkbox',
         '#title' => $this->index->getField($field_id)->getLabel(),
         '#default_value' => $enabled,
-      );
+      ];
       reset($options);
-      $form['fields'][$field_id]['property'] = array(
+      $form['fields'][$field_id]['property'] = [
         '#type' => 'radios',
         '#title' => $this->t('Hierarchy property to use'),
         '#description' => $this->t("This field has several nested properties which look like they might contain hierarchy data for the field. Please pick the one that should be used."),
         '#options' => $options,
         '#default_value' => $enabled ? $this->configuration['fields'][$field_id] : key($options),
         '#access' => count($options) > 1,
-        '#states' => array(
-          'visible' => array(
+        '#states' => [
+          'visible' => [
             // @todo This shouldn't be dependent on the form array structure.
             //   Use the '#process' trick instead.
-            ":input[name=\"processors[hierarchy][settings][fields][$field_id][status]\"]" => array(
+            ":input[name=\"processors[hierarchy][settings][fields][$field_id][status]\"]" => [
               'checked' => TRUE,
-            ),
-          ),
-        ),
-      );
+            ],
+          ],
+        ],
+      ];
     }
 
     return $form;
@@ -226,8 +226,8 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
    * {@inheritdoc}
    */
   public function validateConfigurationForm(array &$form, FormStateInterface $formState) {
-    $fields = array();
-    foreach ($formState->getValue('fields', array()) as $field_id => $values) {
+    $fields = [];
+    foreach ($formState->getValue('fields', []) as $field_id => $values) {
       if (!empty($values['status'])) {
         if (empty($values['property'])) {
           $formState->setError($form['fields'][$field_id]['property'], $this->t('You need to select a nested property to use for the hierarchy data.'));
@@ -280,7 +280,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
       /** @var \Drupal\taxonomy\TermStorageInterface $entity_storage */
       $entity_storage = $this->getEntityTypeManager()
         ->getStorage('taxonomy_term');
-      $parents = array();
+      $parents = [];
       foreach ($entity_storage->loadParents($entityId) as $term) {
         $parents[] = $term->id();
       }
@@ -289,7 +289,7 @@ class AddHierarchy extends ProcessorPluginBase implements PluginFormInterface {
       $entity = $this->getEntityTypeManager()
         ->getStorage($entityTypeId)
         ->load($entityId);
-      $parents = array();
+      $parents = [];
       if ($entity instanceof ContentEntityInterface) {
         try {
           foreach ($entity->get($property) as $data) {

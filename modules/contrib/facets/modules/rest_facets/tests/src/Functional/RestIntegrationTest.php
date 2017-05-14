@@ -60,11 +60,12 @@ class RestIntegrationTest extends FacetsTestBase {
    */
   public function testRestResults() {
     global $base_url;
+
     $name = 'Type';
     $id = 'type';
 
     // Add a new facet to filter by content type.
-    $this->createFacet($name, $id, 'type', 'rest_export_1', 'search_api_rest_test_view');
+    $this->createFacet($name, $id, 'type', 'rest_export_1', 'views_rest__search_api_rest_test_view');
 
     // Use the array widget.
     $facet_edit_page = '/admin/config/search/facets/' . $id . '/edit';
@@ -79,6 +80,7 @@ class RestIntegrationTest extends FacetsTestBase {
     $values['facet_sorting[display_value_widget_order][status]'] = FALSE;
     $values['facet_sorting[active_widget_order][status]'] = FALSE;
     $values['facet_settings[query_operator]'] = 'or';
+    $values['facet_settings[only_visible_when_facet_source_is_visible]'] = TRUE;
 
     $this->drupalPostForm(NULL, $values, $this->t('Save'));
 
@@ -87,7 +89,7 @@ class RestIntegrationTest extends FacetsTestBase {
     $name = 'Keywords';
     $id = 'keywords';
     // Add a new facet to filter by keywords.
-    $this->createFacet($name, $id, 'keywords', 'rest_export_1', 'search_api_rest_test_view');
+    $this->createFacet($name, $id, 'keywords', 'rest_export_1', 'views_rest__search_api_rest_test_view');
 
     // Use the array widget.
     $facet_edit_page = '/admin/config/search/facets/' . $id . '/edit';
@@ -102,6 +104,7 @@ class RestIntegrationTest extends FacetsTestBase {
     $values['facet_sorting[display_value_widget_order][status]'] = FALSE;
     $values['facet_sorting[active_widget_order][status]'] = FALSE;
     $values['facet_settings[query_operator]'] = 'or';
+    $values['facet_settings[only_visible_when_facet_source_is_visible]'] = TRUE;
 
     $this->drupalPostForm(NULL, $values, $this->t('Save'));
 
@@ -208,6 +211,28 @@ class RestIntegrationTest extends FacetsTestBase {
       $this->assertEqual($result->values->count, $results[$value]['count']);
     }
 
+  }
+
+  /**
+   * Tests that the system raises an error when selecting the wrong widget.
+   */
+  public function testWidgetSelection() {
+    $name = 'Type';
+    $id = 'type';
+
+    // Add a new facet to filter by content type.
+    $this->createFacet($name, $id, 'type', 'rest_export_1', 'views_rest__search_api_rest_test_view');
+
+    // Use the array widget.
+    $facet_edit_page = '/admin/config/search/facets/' . $id . '/edit';
+    $this->drupalGet($facet_edit_page);
+    $this->assertResponse(200);
+
+    $this->drupalPostForm(NULL, ['widget' => 'checkbox'], $this->t('Configure widget'));
+    $this->assertText('The Facet source is a Rest export. Please select a raw widget.');
+
+    $this->drupalPostForm(NULL, ['widget' => 'array'], $this->t('Configure widget'));
+    $this->assertNoText('The Facet source is a Rest export. Please select a raw widget.');
   }
 
 }

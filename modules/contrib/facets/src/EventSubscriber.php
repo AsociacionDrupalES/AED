@@ -2,7 +2,7 @@
 
 namespace Drupal\facets;
 
-use Drupal\Core\Block\BlockManager;
+use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Config\ConfigCrudEvent;
 use Drupal\Core\Config\ConfigEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,17 +15,17 @@ class EventSubscriber implements EventSubscriberInterface {
   /**
    * Drupal core's block manager.
    *
-   * @var \Drupal\Core\Block\BlockManager
+   * @var \Drupal\Core\Block\BlockManagerInterface
    */
   protected $blockManager;
 
   /**
    * Create an instance of the class.
    *
-   * @param \Drupal\Core\Block\BlockManager $block_manager
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
    *   Core's block manager.
    */
-  public function __construct(BlockManager $block_manager) {
+  public function __construct(BlockManagerInterface $block_manager) {
     $this->blockManager = $block_manager;
   }
 

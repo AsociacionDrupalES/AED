@@ -49,4 +49,20 @@ interface FacetSourceInterface extends ConfigEntityInterface {
    */
   public function getUrlProcessorName();
 
+  /**
+   * Returns an array with breadcrumb settings.
+   *
+   * @return array
+   *   The breadcrumb settings.
+   */
+  public function getBreadcrumbSettings();
+
+  /**
+   * Sets breadcrumb settings.
+   *
+   * @param array $settings
+   *   The breadcrumb settings.
+   */
+  public function setBreadcrumbSettings(array $settings);
+
 }

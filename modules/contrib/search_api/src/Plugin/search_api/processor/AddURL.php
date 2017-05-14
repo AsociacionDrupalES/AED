@@ -27,15 +27,15 @@ class AddURL extends ProcessorPluginBase {
    * {@inheritdoc}
    */
   public function getPropertyDefinitions(DatasourceInterface $datasource = NULL) {
-    $properties = array();
+    $properties = [];
 
     if (!$datasource) {
-      $definition = array(
+      $definition = [
         'label' => $this->t('URI'),
         'description' => $this->t('A URI where the item can be accessed'),
         'type' => 'string',
         'processor_id' => $this->getPluginId(),
-      );
+      ];
       $properties['search_api_url'] = new ProcessorProperty($definition);
     }
 

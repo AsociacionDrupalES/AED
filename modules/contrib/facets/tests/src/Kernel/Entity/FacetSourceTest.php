@@ -60,6 +60,8 @@ class FacetSourceTest extends KernelTestBase {
    * @covers ::getFilterKey
    * @covers ::setUrlProcessor
    * @covers ::getUrlProcessorName
+   * @covers ::setBreadcrumbSettings
+   * @covers ::getBreadcrumbSettings
    */
   public function testGetterSetters() {
     $fs = new FacetSource(['id' => 'llama'], 'facets_facet_source');
@@ -67,12 +69,17 @@ class FacetSourceTest extends KernelTestBase {
     $this->assertNull($fs->getFilterKey());
     $this->assertNull($fs->getName());
     $this->assertEquals('query_string', $fs->getUrlProcessorName());
+    $this->assertEmpty($fs->getBreadcrumbSettings());
 
     $fs->setFilterKey('ab');
     $this->assertEquals('ab', $fs->getFilterKey());
 
     $fs->setUrlProcessor('test');
     $this->assertEquals('test', $fs->getUrlProcessorName());
+
+    $breadcrumb_settings = ['active' => 1, 'group' => 1];
+    $fs->setBreadcrumbSettings($breadcrumb_settings);
+    $this->assertEquals($breadcrumb_settings, $fs->getBreadcrumbSettings());
   }
 
 }

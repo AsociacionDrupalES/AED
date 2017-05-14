@@ -14,7 +14,7 @@ class ViewsDisplayTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = array(
+  public static $modules = [
     'field',
     'search_api',
     'search_api_db',
@@ -29,7 +29,7 @@ class ViewsDisplayTest extends KernelTestBase {
     'views',
     'rest',
     'serialization',
-  );
+  ];
 
   /**
    * {@inheritdoc}
@@ -53,10 +53,10 @@ class ViewsDisplayTest extends KernelTestBase {
       ->set('tracking_page_size', 100)
       ->save();
 
-    $this->installConfig(array(
+    $this->installConfig([
       'search_api_test_example_content',
       'search_api_test_db',
-    ));
+    ]);
   }
 
   /**

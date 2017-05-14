@@ -6,7 +6,6 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\search_api\Item\Field;
 use Drupal\taxonomy\Entity\Term;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Drupal\taxonomy\Tests\TaxonomyTestTrait;
 use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
 
@@ -322,25 +321,6 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
       $this->fieldName => [$this->terms[4]->id()],
     ));
     $this->entities[6]->save();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function installModulesFromClassProperty(ContainerInterface $container) {
-    // This will just set the Drupal state to include the necessary bundles for
-    // our test entity type. Otherwise, fields from those bundles won't be found
-    // and thus removed from the test index. (We can't do it in setUp(), before
-    // calling the parent method, since the container isn't set up at that
-    // point.)
-    $bundles = array(
-      'entity_test_mulrev_changed' => array('label' => 'Entity Test Bundle'),
-      'item' => array('label' => 'item'),
-      'article' => array('label' => 'article'),
-    );
-    \Drupal::state()->set('entity_test_mulrev_changed.bundles', $bundles);
-
-    parent::installModulesFromClassProperty($container);
   }
 
   /**

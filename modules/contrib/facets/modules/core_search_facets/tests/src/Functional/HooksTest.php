@@ -10,16 +10,13 @@ use Drupal\field\Entity\FieldStorageConfig;
  *
  * @group facets
  */
-class HooksTest extends FacetsHooksTestBase {
+class TestCoreSearchBase extends CoreSearchFacetsTestBase {
 
   /**
    * {@inheritdoc}
    */
   public static $modules = [
-    'node',
-    'search',
     'core_search_facets_test_hooks',
-    'field',
   ];
 
   /**
@@ -65,7 +62,7 @@ class HooksTest extends FacetsHooksTestBase {
     );
 
     // The field appears as expected.
-    $this->assertText('Float Field Label', 'Float Field appears as expected');
+    $this->assertText('Float Field Label');
   }
 
 }

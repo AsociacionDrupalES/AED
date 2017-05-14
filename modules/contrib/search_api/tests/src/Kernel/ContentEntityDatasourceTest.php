@@ -30,13 +30,13 @@ class ContentEntityDatasourceTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = array(
+  public static $modules = [
     'search_api',
     'language',
     'user',
     'system',
     'entity_test',
-  );
+  ];
 
   /**
    * The search index used for testing.
@@ -61,31 +61,31 @@ class ContentEntityDatasourceTest extends KernelTestBase {
     // Enable translation for the entity_test module.
     \Drupal::state()->set('entity_test.translation', TRUE);
 
-    $this->installSchema('search_api', array('search_api_item'));
+    $this->installSchema('search_api', ['search_api_item']);
     $this->installEntitySchema('entity_test_mulrev_changed');
-    $this->installConfig(array('language'));
+    $this->installConfig(['language']);
 
     // Create some languages.
     for ($i = 0; $i < 2; ++$i) {
-      ConfigurableLanguage::create(array(
+      ConfigurableLanguage::create([
         'id' => 'l' . $i,
         'label' => 'language - ' . $i,
         'weight' => $i,
-      ))->save();
+      ])->save();
     }
 
     // Create a test index.
-    $this->index = Index::create(array(
+    $this->index = Index::create([
       'name' => 'Test Index',
       'id' => 'test_index',
       'status' => FALSE,
-      'datasource_settings' => array(
-        'entity:' . $this->testEntityTypeId => array(),
-      ),
-      'tracker_settings' => array(
-        'default' => array(),
-      ),
-    ));
+      'datasource_settings' => [
+        'entity:' . $this->testEntityTypeId => [],
+      ],
+      'tracker_settings' => [
+        'default' => [],
+      ],
+    ]);
     $this->datasource = $this->index->getDatasource('entity:' . $this->testEntityTypeId);
 
     $this->setUpExampleStructure();
@@ -97,46 +97,46 @@ class ContentEntityDatasourceTest extends KernelTestBase {
    * @covers ::loadMultiple
    */
   public function testEntityLoading() {
-    foreach (array('item', 'article') as $i => $bundle) {
-      $entity = EntityTestMulRevChanged::create(array(
+    foreach (['item', 'article'] as $i => $bundle) {
+      $entity = EntityTestMulRevChanged::create([
         'id' => $i + 1,
         'type' => $bundle,
         'langcode' => 'l0',
-      ));
+      ]);
       $entity->save();
       $entity->addTranslation('l1')->save();
     }
 
-    $all_item_ids = array('1:l0', '1:l1', '2:l0', '2:l1');
+    $all_item_ids = ['1:l0', '1:l1', '2:l0', '2:l1'];
 
     $loaded_items = $this->datasource->loadMultiple($all_item_ids);
     $this->assertCorrectItems($all_item_ids, $loaded_items);
 
-    $this->datasource->setConfiguration(array(
-      'bundles' => array(
+    $this->datasource->setConfiguration([
+      'bundles' => [
         'default' => FALSE,
-        'selected' => array('item'),
-      ),
-      'languages' => array(
+        'selected' => ['item'],
+      ],
+      'languages' => [
         'default' => TRUE,
-        'selected' => array('l0'),
-      ),
-    ));
+        'selected' => ['l0'],
+      ],
+    ]);
     $loaded_items = $this->datasource->loadMultiple($all_item_ids);
-    $this->assertCorrectItems(array('1:l1'), $loaded_items);
+    $this->assertCorrectItems(['1:l1'], $loaded_items);
 
-    $this->datasource->setConfiguration(array(
-      'bundles' => array(
+    $this->datasource->setConfiguration([
+      'bundles' => [
         'default' => TRUE,
-        'selected' => array('item'),
-      ),
-      'languages' => array(
+        'selected' => ['item'],
+      ],
+      'languages' => [
         'default' => FALSE,
-        'selected' => array('l0', 'l1'),
-      ),
-    ));
+        'selected' => ['l0', 'l1'],
+      ],
+    ]);
     $loaded_items = $this->datasource->loadMultiple($all_item_ids);
-    $this->assertCorrectItems(array('2:l0', '2:l1'), $loaded_items);
+    $this->assertCorrectItems(['2:l0', '2:l1'], $loaded_items);
   }
 
   /**

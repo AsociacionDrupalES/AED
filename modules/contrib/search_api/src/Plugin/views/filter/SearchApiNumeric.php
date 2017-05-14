@@ -2,7 +2,6 @@
 
 namespace Drupal\search_api\Plugin\views\filter;
 
-use Drupal\Core\Cache\UncacheableDependencyTrait;
 use Drupal\views\Plugin\views\filter\NumericFilter;
 
 /**
@@ -14,7 +13,6 @@ use Drupal\views\Plugin\views\filter\NumericFilter;
  */
 class SearchApiNumeric extends NumericFilter {
 
-  use UncacheableDependencyTrait;
   use SearchApiFilterTrait;
 
   /**
@@ -24,13 +22,6 @@ class SearchApiNumeric extends NumericFilter {
     $operators = parent::operators();
     unset($operators['regular_expression']);
     return $operators;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function opEmpty($field) {
-    $this->getQuery()->addCondition($this->realField, NULL, $this->operator == 'empty' ? '=' : '<>', $this->options['group']);
   }
 
 }

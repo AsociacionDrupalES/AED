@@ -105,7 +105,7 @@ class LanguageIntegrationTest extends SearchApiBrowserTestBase {
     $this->submitForm($form_values, 'Save');
     $this->checkForMetaRefresh();
     $this->assertSession()->statusCodeEquals(200);
-    //Completed 1 of 1.
+    // Completed 1 of 1.
     $this->assertSession()->pageTextContains('The index was successfully saved.');
 
     // Make sure that we only have 2 index items. The only indexed items should

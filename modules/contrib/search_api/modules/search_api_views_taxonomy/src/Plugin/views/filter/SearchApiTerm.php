@@ -2,7 +2,6 @@
 
 namespace Drupal\search_api_views_taxonomy\Plugin\views\filter;
 
-use Drupal\Core\Cache\UncacheableDependencyTrait;
 use Drupal\search_api\Plugin\views\filter\SearchApiFilterTrait;
 use Drupal\taxonomy\Plugin\views\filter\TaxonomyIndexTid;
 
@@ -17,7 +16,6 @@ use Drupal\taxonomy\Plugin\views\filter\TaxonomyIndexTid;
  */
 class SearchApiTerm extends TaxonomyIndexTid {
 
-  use UncacheableDependencyTrait;
   use SearchApiFilterTrait;
 
 }

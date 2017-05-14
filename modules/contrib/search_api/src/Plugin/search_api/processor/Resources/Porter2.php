@@ -39,7 +39,7 @@ class Porter2 {
    *
    * @var string[]
    */
-  protected $exceptions = array();
+  protected $exceptions = [];
 
   /**
    * Constructs a SearchApiPorter2 object.
@@ -49,28 +49,28 @@ class Porter2 {
    * @param string[] $custom_exceptions
    *   (optional) A custom list of exceptions.
    */
-  public function __construct($word, $custom_exceptions = array()) {
+  public function __construct($word, $custom_exceptions = []) {
     $this->word = $word;
-    $this->exceptions = $custom_exceptions + array(
-        'skis' => 'ski',
-        'skies' => 'sky',
-        'dying' => 'die',
-        'lying' => 'lie',
-        'tying' => 'tie',
-        'idly' => 'idl',
-        'gently' => 'gentl',
-        'ugly' => 'ugli',
-        'early' => 'earli',
-        'only' => 'onli',
-        'singly' => 'singl',
-        'sky' => 'sky',
-        'news' => 'news',
-        'howe' => 'howe',
-        'atlas' => 'atlas',
-        'cosmos' => 'cosmos',
-        'bias' => 'bias',
-        'andes' => 'andes',
-      );
+    $this->exceptions = $custom_exceptions + [
+      'skis' => 'ski',
+      'skies' => 'sky',
+      'dying' => 'die',
+      'lying' => 'lie',
+      'tying' => 'tie',
+      'idly' => 'idl',
+      'gently' => 'gentl',
+      'ugly' => 'ugli',
+      'early' => 'earli',
+      'only' => 'onli',
+      'singly' => 'singl',
+      'sky' => 'sky',
+      'news' => 'news',
+      'howe' => 'howe',
+      'atlas' => 'atlas',
+      'cosmos' => 'cosmos',
+      'bias' => 'bias',
+      'andes' => 'andes',
+    ];
 
     // Set initial y, or y after a vowel, to Y.
     $inc = 0;
@@ -133,7 +133,7 @@ class Porter2 {
    */
   protected function step0() {
     $found = FALSE;
-    $checks = array("'s'", "'s", "'");
+    $checks = ["'s'", "'s", "'"];
     foreach ($checks as $check) {
       if (!$found && $this->hasEnding($check)) {
         $this->removeEnding($check);
@@ -154,7 +154,7 @@ class Porter2 {
       $this->addEnding('ss');
       $found = TRUE;
     }
-    $checks = array('ied', 'ies');
+    $checks = ['ied', 'ies'];
     foreach ($checks as $check) {
       if (!$found && $this->hasEnding($check)) {
         $length = $this->length();
@@ -183,7 +183,7 @@ class Porter2 {
    * Implements step 1b of the Porter2 algorithm.
    */
   protected function step1b() {
-    $exceptions = array(
+    $exceptions = [
       'inning',
       'outing',
       'canning',
@@ -192,11 +192,11 @@ class Porter2 {
       'proceed',
       'exceed',
       'succeed',
-    );
+    ];
     if (in_array($this->word, $exceptions)) {
       return;
     }
-    $checks = array('eedly', 'eed');
+    $checks = ['eedly', 'eed'];
     foreach ($checks as $check) {
       if ($this->hasEnding($check)) {
         if ($this->r1 !== $this->length()) {
@@ -206,8 +206,8 @@ class Porter2 {
         return;
       }
     }
-    $checks = array('ingly', 'edly', 'ing', 'ed');
-    $second_endings = array('at', 'bl', 'iz');
+    $checks = ['ingly', 'edly', 'ing', 'ed'];
+    $second_endings = ['at', 'bl', 'iz'];
     foreach ($checks as $check) {
       // If the ending is present and the previous part contains a vowel.
       if ($this->hasEnding($check) && $this->containsVowel(substr($this->word, 0, -strlen($check)))) {
@@ -245,7 +245,7 @@ class Porter2 {
    * Implements step 2 of the Porter2 algorithm.
    */
   protected function step2() {
-    $checks = array(
+    $checks = [
       "ization" => "ize",
       "iveness" => "ive",
       "fulness" => "ful",
@@ -269,7 +269,7 @@ class Porter2 {
       "ator" => "ate",
       "bli" => "ble",
       "ogi" => "og",
-    );
+    ];
     foreach ($checks as $find => $replace) {
       if ($this->hasEnding($find)) {
         if ($this->inR1($find)) {
@@ -290,7 +290,7 @@ class Porter2 {
    * Implements step 3 of the Porter2 algorithm.
    */
   protected function step3() {
-    $checks = array(
+    $checks = [
       'ational' => 'ate',
       'tional' => 'tion',
       'alize' => 'al',
@@ -299,7 +299,7 @@ class Porter2 {
       'ical' => 'ic',
       'ness' => '',
       'ful' => '',
-    );
+    ];
     foreach ($checks as $find => $replace) {
       if ($this->hasEnding($find)) {
         if ($this->inR1($find)) {
@@ -320,7 +320,7 @@ class Porter2 {
    * Implements step 4 of the Porter2 algorithm.
    */
   protected function step4() {
-    $checks = array(
+    $checks = [
       'ement',
       'ment',
       'ance',
@@ -339,16 +339,12 @@ class Porter2 {
       'al',
       'er',
       'ic',
-    );
+    ];
     foreach ($checks as $check) {
       // Among the suffixes, if found and in R2, delete.
       if ($this->hasEnding($check)) {
         if ($this->inR2($check)) {
-          if ($check !== 'ion' || in_array($this->charAt(-4), array(
-              's',
-              't'
-            ))
-          ) {
+          if ($check !== 'ion' || in_array($this->charAt(-4), ['s', 't'])) {
             $this->removeEnding($check);
           }
         }
@@ -384,7 +380,7 @@ class Porter2 {
    */
   protected function removeDoubles() {
     $found = FALSE;
-    $doubles = array('bb', 'dd', 'ff', 'gg', 'mm', 'nn', 'pp', 'rr', 'tt');
+    $doubles = ['bb', 'dd', 'ff', 'gg', 'mm', 'nn', 'pp', 'rr', 'tt'];
     foreach ($doubles as $double) {
       if (substr($this->word, -2) == $double) {
         $this->word = substr($this->word, 0, -1);
@@ -408,11 +404,11 @@ class Porter2 {
    * @return bool
    *   TRUE if the character is a vowel, FALSE otherwise.
    */
-  protected function isVowel($position, $word = NULL, $additional = array()) {
+  protected function isVowel($position, $word = NULL, $additional = []) {
     if ($word === NULL) {
       $word = $this->word;
     }
-    $vowels = array_merge(array('a', 'e', 'i', 'o', 'u', 'y'), $additional);
+    $vowels = array_merge(['a', 'e', 'i', 'o', 'u', 'y'], $additional);
     return in_array($this->charAt($position, $word), $vowels);
   }
 
@@ -467,7 +463,7 @@ class Porter2 {
     }
     // Vowel followed by non-vowel other than w, x, Y and preceded by
     // non-vowel.
-    $additional = array('w', 'x', 'Y');
+    $additional = ['w', 'x', 'Y'];
     return !$this->isVowel($position - 1) && $this->isVowel($position) && !$this->isVowel($position + 1, NULL, $additional);
   }
 
@@ -635,7 +631,7 @@ class Porter2 {
    *   TRUE if the given string is a valid -li prefix, FALSE otherwise.
    */
   protected function validLi($string) {
-    return in_array($string, array(
+    return in_array($string, [
       'c',
       'd',
       'e',
@@ -646,7 +642,7 @@ class Porter2 {
       'n',
       'r',
       't',
-    ));
+    ]);
   }
 
 }

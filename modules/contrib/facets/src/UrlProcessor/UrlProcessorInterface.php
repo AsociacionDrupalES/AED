@@ -50,4 +50,12 @@ interface UrlProcessorInterface {
    */
   public function getFilterKey();
 
+  /**
+   * Returns the url separator.
+   *
+   * @return string
+   *   A string containing the url separator.
+   */
+  public function getSeparator();
+
 }

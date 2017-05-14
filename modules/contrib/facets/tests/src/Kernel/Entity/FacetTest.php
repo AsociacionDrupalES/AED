@@ -235,6 +235,7 @@ class FacetTest extends KernelTestBase {
    * @covers ::getResults
    * @covers ::isActiveValue
    * @covers ::getActiveItems
+   * @covers ::setActiveItems
    * @covers ::setActiveItem
    * @covers ::isActiveValue
    */
@@ -263,6 +264,15 @@ class FacetTest extends KernelTestBase {
     $this->assertFalse($entity->getResults()[0]->isActive());
     $entity->setResults($results);
     $this->assertTrue($entity->getResults()[0]->isActive());
+
+    $this->assertTrue($entity->isActiveValue('llama'));
+    $this->assertFalse($entity->isActiveValue('badger'));
+    $this->assertFalse($entity->isActiveValue('owl'));
+
+    $entity->setActiveItems(['badger', 'owl']);
+    $this->assertFalse($entity->isActiveValue('llama'));
+    $this->assertTrue($entity->isActiveValue('badger'));
+    $this->assertTrue($entity->isActiveValue('owl'));
   }
 
   /**

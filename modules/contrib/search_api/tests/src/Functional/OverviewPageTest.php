@@ -88,7 +88,7 @@ class OverviewPageTest extends SearchApiBrowserTestBase {
     $this->assertSession()->pageTextContains($server_name);
     $this->assertSession()->responseContains($server->get('description'));
     $server_class = Html::cleanCssIdentifier($server->getEntityTypeId() . '-' . $server->id());
-    $servers = $this->xpath('//tr[contains(@class,"' . $server_class. '") and contains(@class, "search-api-list-enabled")]');
+    $servers = $this->xpath('//tr[contains(@class,"' . $server_class . '") and contains(@class, "search-api-list-enabled")]');
     $this->assertNotEmpty($servers, 'Server is in proper table');
 
     // Test whether a newly created index appears on the overview page.
@@ -183,7 +183,7 @@ class OverviewPageTest extends SearchApiBrowserTestBase {
   protected function assertEntityStatusChange($entity) {
     $this->drupalGet($this->overviewPageUrl);
     $row_class = Html::cleanCssIdentifier($entity->getEntityTypeId() . '-' . $entity->id());
-    $rows = $this->xpath('//tr[contains(@class,"' .$row_class. '") and contains(@class, "search-api-list-enabled")]');
+    $rows = $this->xpath('//tr[contains(@class,"' . $row_class . '") and contains(@class, "search-api-list-enabled")]');
     $this->assertNotEmpty($rows, 'The newly created entity is enabled by default.');
 
     // The first "Disable" link on the page belongs to our server, the second
@@ -192,13 +192,13 @@ class OverviewPageTest extends SearchApiBrowserTestBase {
 
     // Submit the confirmation form and test that the entity has been disabled.
     $this->submitForm([], 'Disable');
-    $rows = $this->xpath('//tr[contains(@class,"' .$row_class. '") and contains(@class, "search-api-list-disabled")]');
+    $rows = $this->xpath('//tr[contains(@class,"' . $row_class . '") and contains(@class, "search-api-list-disabled")]');
     $this->assertNotEmpty($rows, 'The entity has been disabled.');
 
     // Now enable the entity and verify that the operation succeeded.
     $this->clickLink('Enable');
     $this->drupalGet($this->overviewPageUrl);
-    $rows = $this->xpath('//tr[contains(@class,"' .$row_class. '") and contains(@class, "search-api-list-enabled")]');
+    $rows = $this->xpath('//tr[contains(@class,"' . $row_class . '") and contains(@class, "search-api-list-enabled")]');
     $this->assertNotEmpty($rows, 'The entity has benn enabled.');
   }
 

@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * @file
+ * Update hooks for the facets module.
+ */
+
+use Drupal\facets\Entity\Facet;
+use Drupal\facets\Entity\FacetSource;
+
+/**
+ * Convert facets on Search Api facet sources to use the display plugin.
+ */
+function facets_update_8001() {
+  // We changed the way we work with search api facet sources, we're now using
+  // the SearchApiDisplay plugins that search api ships with. This consolidates
+  // the external points for facets, sorts, autocomplete and others. This
+  // refactor made us a better member of the Search API family. It also makes it
+  // easier for other modules that provide a display to support facets, for
+  // example, for the search_api_page module.
+  //
+  // This only works for the 3 default plugins that we previously shipped. So
+  // only views that have a page, block, or rest display. The id will get
+  // replaced from views_page:foo to search_api:views_page__foo.
+
+  $old_ids = ['views_page', 'views_block', 'views_rest'];
+
+  /** @var \Drupal\facets\FacetInterface[] $entities */
+  $entities = Facet::loadMultiple();
+  foreach ($entities as $entity) {
+    $facetSourceId = $entity->getFacetSourceId();
+    foreach ($old_ids as $id) {
+      if (strpos($facetSourceId, $id) !== FALSE) {
+        $new_id = str_replace($id . ':', 'search_api:' . $id . '__', $facetSourceId);
+        $entity->setFacetSourceId($new_id);
+        $entity->save();
+      }
+    }
+  }
+
+  /** @var \Drupal\facets\FacetSourceInterface[] $facetsources */
+  $facetsources = FacetSource::loadMultiple();
+  foreach ($facetsources as $facetsource) {
+    $as_array = $facetsource->toArray();
+
+    // Replace id and name to new naming scheme.
+    foreach ($old_ids as $id) {
+      if (strpos($as_array['id'], $id) !== FALSE) {
+        $as_array['id'] = str_replace($id . '__', 'search_api__' . $id . '__', $as_array['id']);
+        $as_array['name'] = str_replace($id . ':', 'search_api:' . $id . '__', $as_array['name']);
+      }
+    }
+
+    // Create new source.
+    unset($as_array['uuid']);
+    FacetSource::create($as_array)->save();
+
+    // Delete old facet source.
+    $facetsource->delete();
+  }
+}

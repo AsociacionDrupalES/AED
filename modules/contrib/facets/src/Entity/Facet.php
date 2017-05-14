@@ -20,6 +20,7 @@ use Drupal\facets\FacetInterface;
  *       "default" = "Drupal\facets\Form\FacetSettingsForm",
  *       "edit" = "Drupal\facets\Form\FacetForm",
  *       "settings" = "Drupal\facets\Form\FacetSettingsForm",
+ *       "clone" = "Drupal\facets\Form\FacetCloneForm",
  *       "delete" = "Drupal\facets\Form\FacetDeleteConfirmForm",
  *     },
  *   },
@@ -56,6 +57,7 @@ use Drupal\facets\FacetInterface;
  *     "add-form" = "/admin/config/search/facets/add-facet",
  *     "edit-form" = "/admin/config/search/facets/{facets_facet}/edit",
  *     "settings-form" = "/admin/config/search/facets/{facets_facet}/settings",
+ *     "clone-form" = "/admin/config/search/facets/{facets_facet}/clone",
  *     "delete-form" = "/admin/config/search/facets/{facets_facet}/delete",
  *   }
  * )
@@ -564,6 +566,13 @@ class Facet extends ConfigEntityBase implements FacetInterface {
    */
   public function getActiveItems() {
     return $this->active_values;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setActiveItems(array $values) {
+    $this->active_values = $values;
   }
 
   /**

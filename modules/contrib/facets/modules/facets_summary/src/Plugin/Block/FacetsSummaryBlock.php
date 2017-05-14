@@ -3,7 +3,7 @@
 namespace Drupal\facets_summary\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Cache\Cache;
+use Drupal\Core\Cache\UncacheableDependencyTrait;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drupal\facets_summary\FacetsSummaryBlockInterface;
@@ -11,7 +11,7 @@ use Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Exposes a summary based on all the facets as a blcok.
+ * Exposes a summary based on all the facets as a block.
  *
  * @Block(
  *   id = "facets_summary_block",
@@ -19,6 +19,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * )
  */
 class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterface, ContainerFactoryPluginInterface {
+
+  use UncacheableDependencyTrait;
 
   /**
    * The facet manager service.
@@ -107,14 +109,6 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
       return [$summary->getConfigDependencyKey() => [$summary->getConfigDependencyName()]];
     }
     return [];
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCacheContexts() {
-    // Active facets are always in the query string.
-    return Cache::mergeContexts(parent::getCacheContexts(), ['url.query_args']);
   }
 
 }

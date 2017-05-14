@@ -158,6 +158,7 @@ abstract class SearchApiBaseFacetSource extends FacetSourcePluginBase {
       case 'decimal':
       case 'integer':
         $query_types['numeric'] = 'search_api_granular';
+        $query_types['range'] = 'search_api_range';
         break;
 
     }

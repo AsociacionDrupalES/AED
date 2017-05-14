@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\search_api_db;
+namespace Drupal\Tests\search_api_db\FunctionalJavascript;
 
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\FunctionalJavascriptTests\JavascriptTestBase;
@@ -33,7 +33,7 @@ class IntegrationTest extends JavascriptTestBase {
     $this->assertSession()->statusCodeEquals(200);
 
     $edit = ['name' => ' ~`Test Server', 'id' => '_test'];
-    $this->submitForm($edit, $this->t('Save'));
+    $this->submitForm($edit, 'Save');
     $this->assertSession()->addressEquals('admin/config/search/search-api/server/_test');
   }
 

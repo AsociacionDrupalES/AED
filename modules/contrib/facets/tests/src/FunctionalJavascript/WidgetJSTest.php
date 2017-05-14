@@ -52,10 +52,10 @@ class WidgetJSTest extends JavascriptTestBase {
 
     // Select one of the options from the facet source dropdown and wait for the
     // result to show.
-    $page->selectFieldOption('edit-facet-source-id', 'views_page:search_api_test_view__page_1');
+    $page->selectFieldOption('edit-facet-source-id', 'search_api:views_page__search_api_test_view__page_1');
     $this->getSession()->wait(6000, "jQuery('.facet-source-field-wrapper').length > 0");
 
-    $page->selectFieldOption('facet_source_configs[views_page:search_api_test_view__page_1][field_identifier]', 'type');
+    $page->selectFieldOption('facet_source_configs[search_api:views_page__search_api_test_view__page_1][field_identifier]', 'type');
 
     // Check that after choosing the field, the name is already filled in.
     $field_value = $this->getSession()->getPage()->findField('edit-name')->getValue();
@@ -74,7 +74,7 @@ class WidgetJSTest extends JavascriptTestBase {
       'id' => $id,
       'name' => strtoupper($id),
       'url_alias' => $id,
-      'facet_source_id' => 'views_page:search_api_test_view__page_1',
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
       'field_identifier' => 'type',
       'empty_behavior' => ['behavior' => 'none'],
       'widget' => [
@@ -133,7 +133,7 @@ class WidgetJSTest extends JavascriptTestBase {
       'id' => $id,
       'name' => strtoupper($id),
       'url_alias' => $id,
-      'facet_source_id' => 'views_page:search_api_test_view__page_1',
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
       'field_identifier' => 'type',
       'empty_behavior' => ['behavior' => 'none'],
       'widget' => [

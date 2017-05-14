@@ -6,6 +6,9 @@ use Drupal\Component\Utility\Html;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
+use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
+use Drupal\search_api\Plugin\search_api\display\ViewsRest;
 use Drupal\facets\Processor\ProcessorInterface;
 use Drupal\facets\Processor\ProcessorPluginManager;
 use Drupal\facets\UrlProcessor\UrlProcessorInterface;
@@ -137,6 +140,7 @@ class FacetForm extends EntityForm {
 
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $this->entity;
+    $widget = $facet->getWidgetInstance();
 
     $widget_options = [];
     foreach ($this->getWidgetPluginManager()->getDefinitions() as $widget_id => $definition) {
@@ -212,13 +216,16 @@ class FacetForm extends EntityForm {
         ),
       ),
     );
+
     foreach ($all_processors as $processor_id => $processor) {
       if (!($processor instanceof SortProcessorInterface) && !($processor instanceof UrlProcessorInterface)) {
+
+        $default_value = $processor->isLocked() || $widget->isPropertyRequired($processor_id, 'processors') || !empty($enabled_processors[$processor_id]);
         $clean_css_id = Html::cleanCssIdentifier($processor_id);
         $form['facet_settings'][$processor_id]['status'] = array(
           '#type' => 'checkbox',
           '#title' => (string) $processor->getPluginDefinition()['label'],
-          '#default_value' => $processor->isLocked() || !empty($enabled_processors[$processor_id]),
+          '#default_value' => $default_value,
           '#description' => $processor->getDescription(),
           '#attributes' => array(
             'class' => array(
@@ -226,7 +233,7 @@ class FacetForm extends EntityForm {
             ),
             'data-id' => $clean_css_id,
           ),
-          '#disabled' => $processor->isLocked(),
+          '#disabled' => $processor->isLocked() || $widget->isPropertyRequired($processor_id, 'processors'),
           '#access' => !$processor->isHidden(),
         );
 
@@ -268,11 +275,12 @@ class FacetForm extends EntityForm {
     );
     foreach ($all_processors as $processor_id => $processor) {
       if ($processor instanceof SortProcessorInterface) {
+        $default_value = $processor->isLocked() || $widget->isPropertyRequired($processor_id, 'processors') || !empty($enabled_processors[$processor_id]);
         $clean_css_id = Html::cleanCssIdentifier($processor_id);
         $form['facet_sorting'][$processor_id]['status'] = array(
           '#type' => 'checkbox',
           '#title' => (string) $processor->getPluginDefinition()['label'],
-          '#default_value' => $processor->isLocked() || !empty($enabled_processors[$processor_id]),
+          '#default_value' => $default_value,
           '#description' => $processor->getDescription(),
           '#attributes' => array(
             'class' => array(
@@ -313,14 +321,16 @@ class FacetForm extends EntityForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Hide facet when facet source is not rendered'),
       '#description' => $this->t('When checked, this facet will only be rendered when the facet source is rendered.  If you want to show facets on other pages too, you need to uncheck this setting.'),
-      '#default_value' => $facet->getOnlyVisibleWhenFacetSourceIsVisible(),
+      '#default_value' => $widget->isPropertyRequired('only_visible_when_facet_source_is_visible', 'settings') ?: $facet->getOnlyVisibleWhenFacetSourceIsVisible(),
+      '#disabled' => $widget->isPropertyRequired('only_visible_when_facet_source_is_visible', 'settings') ?: 0,
     ];
 
     $form['facet_settings']['show_only_one_result'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Make sure only one result can be shown.'),
       '#description' => $this->t('When checked, this will make sure that only one result can be selected for this facet at one time.'),
-      '#default_value' => $facet->getShowOnlyOneResult(),
+      '#default_value' => $widget->isPropertyRequired('show_only_one_result', 'settings') ?: $facet->getShowOnlyOneResult(),
+      '#disabled' => $widget->isPropertyRequired('show_only_one_result', 'settings') ?: 0,
     ];
 
     $form['facet_settings']['url_alias'] = [
@@ -335,9 +345,9 @@ class FacetForm extends EntityForm {
     $empty_behavior_config = $facet->getEmptyBehavior();
     $form['facet_settings']['empty_behavior'] = [
       '#type' => 'radios',
-      '#title' => t('Empty facet behavior'),
+      '#title' => $this->t('Empty facet behavior'),
       '#default_value' => $empty_behavior_config['behavior'] ?: 'none',
-      '#options' => ['none' => t('Do not display facet'), 'text' => t('Display text')],
+      '#options' => ['none' => $this->t('Do not display facet'), 'text' => $this->t('Display text')],
       '#description' => $this->t('The action to take when a facet has no items.'),
       '#required' => TRUE,
     ];
@@ -373,7 +383,7 @@ class FacetForm extends EntityForm {
       '#options' => [0 => $this->t('No limit')] + array_combine($hard_limit_options, $hard_limit_options),
       '#description' => $this->t('Display no more than this number of facet items.'),
     ];
-    if (strpos($facet->getFacetSourceId(), 'views_') === FALSE) {
+    if (!$facet->getFacetSource() instanceof SearchApiDisplay) {
       $form['facet_settings']['hard_limit']['#disabled'] = TRUE;
       $form['facet_settings']['hard_limit']['#description'] .= '<br />';
       $form['facet_settings']['hard_limit']['#description'] .= $this->t('This setting only works with Search API based facets.');
@@ -391,7 +401,7 @@ class FacetForm extends EntityForm {
       '#title' => $this->t('Use hierarchy'),
       '#default_value' => $facet->getUseHierarchy(),
     ];
-    if (strpos($facet->getFacetSourceId(), 'views_') === FALSE) {
+    if (!$facet->getFacetSource() instanceof SearchApiDisplay) {
       $form['facet_settings']['use_hierarchy']['#disabled'] = TRUE;
       $form['facet_settings']['use_hierarchy']['#description'] = $this->t('This setting only works with Search API based facets.');
     }
@@ -439,7 +449,7 @@ class FacetForm extends EntityForm {
       '#maxlength' => 4,
       '#required' => TRUE,
     ];
-    if (strpos($facet->getFacetSourceId(), 'views_') === FALSE) {
+    if (!$facet->getFacetSource() instanceof SearchApiDisplay) {
       $form['facet_settings']['min_count']['#disabled'] = TRUE;
       $form['facet_settings']['min_count']['#description'] .= '<br />';
       $form['facet_settings']['min_count']['#description'] .= $this->t('This setting only works with Search API based facets.');
@@ -456,12 +466,16 @@ class FacetForm extends EntityForm {
 
     $form['weights'] = array(
       '#type' => 'details',
-      '#title' => t('Advanced settings'),
+      '#title' => $this->t('Advanced settings'),
       '#collapsible' => TRUE,
       '#collapsed' => TRUE,
     );
 
-    $form['weights']['order'] = ['#markup' => "<h3>" . t('Processor order') . "</h3>"];
+    $form['weights']['order'] = [
+      '#markup' => $this->t('Processor order'),
+      '#prefix' => '<h3>',
+      '#suffix' => '</h3>',
+    ];
 
     // Order enabled processors per stage, create all the containers for the
     // different stages.
@@ -563,6 +577,19 @@ class FacetForm extends EntityForm {
       }
     }
 
+    // Only widgets that return an array can work with rest facet sources, so if
+    // the user has selected another widget, we should point them to their
+    // misconfiguration.
+    if ($facet_source = $facet->getFacetSource()) {
+      if ($facet_source instanceof SearchApiFacetSourceInterface) {
+        if ($facet_source->getDisplay() instanceof ViewsRest) {
+          if (strpos($values['widget'], 'array') === FALSE) {
+            $form_state->setErrorByName('widget', $this->t('The Facet source is a Rest export. Please select a raw widget.'));
+          }
+        }
+      }
+    }
+
     // Validate url alias.
     $url_alias = $form_state->getValue(['facet_settings', 'url_alias']);
     if ($url_alias == 'page') {
@@ -647,7 +674,7 @@ class FacetForm extends EntityForm {
     $facet->setEnableParentWhenChildGetsDisabled($form_state->getValue(['facet_settings', 'enable_parent_when_child_gets_disabled']));
 
     $facet->save();
-    drupal_set_message(t('Facet %name has been updated.', ['%name' => $facet->getName()]));
+    drupal_set_message($this->t('Facet %name has been updated.', ['%name' => $facet->getName()]));
   }
 
   /**

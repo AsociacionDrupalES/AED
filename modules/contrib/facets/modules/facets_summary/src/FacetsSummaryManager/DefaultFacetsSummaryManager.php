@@ -91,6 +91,14 @@ class DefaultFacetsSummaryManager {
     // @see \Drupal\facets\Processor\SortProcessorInterface.
     $this->facetManager->updateResults($facetsource_id);
 
+    $facets_config = $facets_summary->getFacets();
+    // Exclude facets which were not selected for this summary.
+    $facets = array_filter($facets,
+      function($item) use ($facets_config) {
+        return (isset($facets_config[$item->id()]));
+      }
+    );
+
     foreach ($facets as $facet) {
       // For clarity, process facets is called each build.
       // The first facet therefor will trigger the processing. Note that
@@ -101,14 +109,13 @@ class DefaultFacetsSummaryManager {
     }
 
     $build = array(
-      '#theme' => 'item_list',
+      '#theme' => 'facets_summary_item_list',
       '#attributes' => array(
         'data-drupal-facets-summary-id' => $facets_summary->id(),
       ),
     );
 
     $results = [];
-    $facets_config = $facets_summary->getFacets();
 
     // Go through each facet and get the results. After, check if we have to
     // show the counts for each facet and respectively set those to NULL if this

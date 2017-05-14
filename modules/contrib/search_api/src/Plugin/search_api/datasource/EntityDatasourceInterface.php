@@ -41,20 +41,4 @@ interface EntityDatasourceInterface extends DatasourceInterface {
    */
   public function getPartialItemIds($page = NULL, array $bundles = NULL, array $languages = NULL);
 
-  /**
-   * Returns an array of config entity dependencies.
-   *
-   * @param string $entity_type_id
-   *   The entity type to which the fields are attached.
-   * @param string[] $fields
-   *   An array of property paths of fields from this entity type.
-   * @param string[] $all_fields
-   *   An array of property paths of all the fields from this datasource.
-   *
-   * @return string[]
-   *   An array keyed by the IDs of entities on which this datasource depends.
-   *   The values are containing list of Search API fields.
-   */
-  public function getFieldDependenciesForEntityType($entity_type_id, array $fields, array $all_fields);
-
 }

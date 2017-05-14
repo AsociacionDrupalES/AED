@@ -152,7 +152,7 @@ plugin.plugin_configuration.search_api_processor.tokenizer:
       label: 'Regular expression for spaces'
     ignorable:
       type: string
-      label: 'Regular expression for ignorables'
+      label: 'Regular expression for ignorable characters'
     overlap_cjk:
       type: integer
       label: 'Defines if simple CJK handling should be enabled.'

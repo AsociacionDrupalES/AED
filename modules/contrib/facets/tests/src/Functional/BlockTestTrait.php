@@ -28,17 +28,17 @@ trait BlockTestTrait {
    * @param string $source
    *   Facet source.
    */
-  protected function createFacet($name, $id, $field = 'type', $display_id = 'page_1', $source = 'search_api_test_view') {
+  protected function createFacet($name, $id, $field = 'type', $display_id = 'page_1', $source = 'views_page__search_api_test_view') {
     $facet_add_page = 'admin/config/search/facets/add-facet';
 
     $this->drupalGet($facet_add_page);
 
-    $facet_source = "views_page:{$source}__{$display_id}";
+    $facet_source = "search_api:{$source}__{$display_id}";
     $form_values = [
       'id' => $id,
       'name' => $name,
       'facet_source_id' => $facet_source,
-      "facet_source_configs[views_page:{$source}__{$display_id}][field_identifier]" => $field,
+      "facet_source_configs[search_api:{$source}__{$display_id}][field_identifier]" => $field,
     ];
     $this->drupalPostForm(NULL, ['facet_source_id' => $facet_source], 'Configure facet source');
     $this->drupalPostForm(NULL, $form_values, 'Save');

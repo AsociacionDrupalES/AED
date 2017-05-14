@@ -24,6 +24,11 @@ class ShowCountProcessor extends ProcessorPluginBase implements BuildProcessorIn
    * {@inheritdoc}
    */
   public function build(FacetsSummaryInterface $facets_summary, array $build, array $facets) {
+    // Do nothing if there are no selected facets.
+    if (!isset($build['#items'])) {
+      return $build;
+    }
+
     $count = $facets_summary->getFacetSource()->getCount();
     $build_count = [
       '#theme' => 'facets_summary_count',

@@ -52,14 +52,18 @@ class HooksTest extends SearchApiBrowserTestBase {
     // Add the test processor to the index so we can make sure that all expected
     // processor methods are called, too.
     /** @var \Drupal\search_api\Processor\ProcessorInterface $processor */
-    $processor = $index->createPlugin('processor', 'search_api_test');
+    $processor = \Drupal::getContainer()
+      ->get('search_api.plugin_helper')
+      ->createProcessorPlugin($index, 'search_api_test');
     $index->addProcessor($processor)->save();
 
     // Parts of this test actually use the "database_search_index" from the
     // search_api_test_db module (via the test view). Set the processor there,
     // too.
     $index = Index::load('database_search_index');
-    $processor = $index->createPlugin('processor', 'search_api_test');
+    $processor = \Drupal::getContainer()
+      ->get('search_api.plugin_helper')
+      ->createProcessorPlugin($index, 'search_api_test');
     $index->addProcessor($processor)->save();
 
     // Reset the called methods on the processor.
@@ -129,7 +133,8 @@ class HooksTest extends SearchApiBrowserTestBase {
     // The implementation of hook_search_api_field_type_mapping_alter() has
     // removed all dates, so we can't see any timestamp anymore in the page.
     $url_options['query']['datasource'] = 'entity:node';
-    $this->drupalGet($this->getIndexPath('fields/add'), $url_options);
+    $this->drupalGet($this->getIndexPath('fields/add/nojs'), $url_options);
+    $this->assertSession()->pageTextContains('Add fields to index');
     $this->assertSession()->pageTextNotContains('timestamp');
 
     $this->drupalGet('search-api-test');
