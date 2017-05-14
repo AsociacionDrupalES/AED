@@ -64,7 +64,7 @@
       a {
         color: white;
         font-size: 15px;
-        font-weight: 900;
+        font-weight: 700;
         display: inline-block;
         margin-left: 5px;
       }
@@ -107,7 +107,7 @@
     a {
       color: $color-blue-e;
       font-size: 13px;
-      font-weight: 900;
+      font-weight: 700;
       display: block;
 
       @include media ($tab) {
