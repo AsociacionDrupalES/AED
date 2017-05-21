@@ -104,11 +104,24 @@ class BillingAgreement {
     }
 
 
+    $this->setState();
+
+    return TRUE;
+  }
+
+  /**
+   * Set a plan state.
+   * @param \PayPal\Api\Plan $plan
+   * @param string $state CREATED, ACTIVE, etc
+   *
+   * @return bool
+   */
+  public function setState($plan, $state) {
     try {
       $patch = new Patch();
 
       $value = new PayPalModel('{
-	       "state":"ACTIVE"
+	       "state":"' . $state . '"
 	     }');
 
       $patch
@@ -118,29 +131,45 @@ class BillingAgreement {
 
       $patchRequest = new PatchRequest();
       $patchRequest->addPatch($patch);
-      $createdPlan->update($patchRequest, $this->apiContext);
-
-      // @todo creo que no hace falta volver a pedir el plan para obtener el id. casi seguro que es el mismo siempre.
-      $plan = Plan::get($createdPlan->getId(), $this->apiContext);
-
-      // @todo a lo mejor debería ser un entityreference?
-      $entity->set('field_id', $plan->getId());
+      $plan->update($patchRequest, $this->apiContext);
+      return TRUE;
 
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      return FALSE;
     }
-
-    return TRUE;
   }
 
   /**
    * Updates a plan.
    *
-   * @param PayPalBillingPlanEntity $entity @todo should be a more generic object?
+   * @param string $plan_id ID of the plan
+   * @param array $values key value plan nuew values.
+   *
    * @return bool
    */
-  public function updatePlan($entity) {
-    return TRUE;
+  public function updatePlan($plan_id, $values) {
+    $plan = $this->getPlan($plan_id);
+
+    try {
+      $this->setState($plan, 'CREATED');
+      $patch = new Patch();
+
+      $patch
+        ->setOp('replace')
+        ->setPath('/')
+        ->setValue($values);
+
+      $patchRequest = new PatchRequest();
+      $patchRequest->addPatch($patch);
+      $plan->update($patchRequest, $this->apiContext);
+      $this->setState($plan, 'ACTIVE');
+      return TRUE;
+
+    } catch (\Exception $e) {
+      $this->setState($plan, 'ACTIVE');
+      return FALSE;
+    }
+
   }
 
   /**

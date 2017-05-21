@@ -85,7 +85,7 @@ class PaypalSDKController extends ControllerBase {
     return $this->redirect('<front>');
   }
 
-  public function pruebas() {
+  public function billingPlanList() {
     /** @var BillingAgreement $pba */
     $pba = Drupal::service('paypal.billing.agreement');
 
@@ -126,11 +126,11 @@ class PaypalSDKController extends ControllerBase {
         '#links' => [
           'edit' => [
             'title' => t('Edit'),
-            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['planId' => $plan->getId()])
+            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['plan_id' => $plan->getId()])
           ],
           'delete' => [
             'title' => t('Delete'),
-            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['planId' => $plan->getId()])
+            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['plan_id' => $plan->getId()])
           ],
         ],
       );
