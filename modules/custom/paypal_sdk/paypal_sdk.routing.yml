@@ -37,3 +37,11 @@ paypal_sdk.plan_edit_form:
     _form: '\Drupal\paypal_sdk\Form\PlanEditForm'
   requirements:
     _permission: 'subscribe paypal products'
+
+# Delete plan confirm form.
+paypal_sdk.plan_delete_form:
+  path: '/admin/plan/delete/{plan_id}'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanDeleteForm'
+  requirements:
+    _permission: 'subscribe paypal products'

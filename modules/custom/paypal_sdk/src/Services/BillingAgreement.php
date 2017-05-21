@@ -229,12 +229,11 @@ class BillingAgreement {
 
     try {
       $plan->delete($this->apiContext);
-
+      return TRUE;
     } catch (\Exception $e) {
       drupal_set_message($e->getMessage(), "error");
       return FALSE;
     }
-    return TRUE;
   }
 
 

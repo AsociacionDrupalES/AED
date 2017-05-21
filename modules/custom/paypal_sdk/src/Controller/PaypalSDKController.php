@@ -130,7 +130,7 @@ class PaypalSDKController extends ControllerBase {
           ],
           'delete' => [
             'title' => t('Delete'),
-            'url' => Url::fromRoute('paypal_sdk.plan_edit_form', ['plan_id' => $plan->getId()])
+            'url' => Url::fromRoute('paypal_sdk.plan_delete_form', ['plan_id' => $plan->getId()])
           ],
         ],
       );
