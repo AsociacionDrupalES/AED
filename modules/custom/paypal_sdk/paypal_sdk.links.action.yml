@@ -1,10 +1,5 @@
-entity.pay_pal_billing_plan_entity.add_form:
-  route_name: entity.pay_pal_billing_plan_entity.add_form
+paypal_sdk.plan_add_form:
+  route_name: paypal_sdk.plan_add_form
   title: 'Add PayPal billing plan'
   appears_on:
-    - entity.pay_pal_billing_plan_entity.collection
-entity.paypal_billing_agreement.add_form:
-  route_name: entity.paypal_billing_agreement.add_form
-  title: 'Add Paypal billing agreement'
-  appears_on:
-    - entity.paypal_billing_agreement.collection
+    - paypal_sdk.billing_plan_list

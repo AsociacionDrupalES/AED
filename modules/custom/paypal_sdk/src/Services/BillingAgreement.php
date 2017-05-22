@@ -48,34 +48,34 @@ class BillingAgreement {
    * Creates a plan.
    *
    * @param PayPalBillingPlanEntity $entity @todo should be a more generic object?
-   * @return bool
+   * @return bool|\PayPal\Api\Plan $plan
    */
-  public function createPlan($entity) {
+  public function createPlan($data) {
     $plan = new Plan();
 
     $plan
-      ->setName($entity->getName())
-      ->setDescription($entity->get('field_description')->value)
-      ->setType($entity->get('field_type')->value);
+      ->setName($data['name'])
+      ->setDescription($data['description'])
+      ->setType($data['type']);
 
     $paymentDefinition = new PaymentDefinition();
-    $cycles = $entity->get('field_type')->value == "FIXED" ? $entity->get('field_payment_cycles')->value : 0;
+    $cycles = $data['type'] == "FIXED" ? $data['payment_cycles'] : 0;
     $paymentDefinition->setName('Regular Payments')// dinamizar
-    ->setType($entity->get('field_payment_type')->value)
-      ->setFrequency($entity->get('field_payment_frequency')->value)
-      ->setFrequencyInterval($entity->get('field_payment_frequency_interval')->value)
+    ->setType($data['payment_type'])
+      ->setFrequency($data['payment_frequency'])
+      ->setFrequencyInterval($data['payment_frequency_interval'])
       ->setCycles($cycles)
       ->setAmount(new Currency(array(
-        'value' => $entity->get('field_payment_amount')->value,
-        'currency' => $entity->get('field_payment_currency')->value
+        'value' => $data['payment_amount'],
+        'currency' => $data['payment_currency']
       )));
 
     // @todo hacer opcional.
     $chargeModel = new ChargeModel();
     $chargeModel->setType('TAX')
       ->setAmount(new Currency(array(
-        'value' => $entity->get('field_payment_amount')->value * .21,
-        'currency' => $entity->get('field_payment_currency')->value
+        'value' => $data['payment_amount'] * .21,
+        'currency' => $data['payment_currency']
       )));
 
     $paymentDefinition->setChargeModels(array($chargeModel));
@@ -98,15 +98,12 @@ class BillingAgreement {
 
     try {
       $createdPlan = $plan->create($this->apiContext);
+      //$this->setState();
+      return $createdPlan;
     } catch (\Exception $e) {
       drupal_set_message($e->getMessage(), "error");
       return FALSE;
     }
-
-
-    $this->setState();
-
-    return TRUE;
   }
 
   /**
@@ -151,7 +148,7 @@ class BillingAgreement {
     $plan = $this->getPlan($plan_id);
 
     try {
-      $this->setState($plan, 'CREATED');
+//      $this->setState($plan, 'CREATED');
       $patch = new Patch();
 
       $patch
@@ -162,11 +159,11 @@ class BillingAgreement {
       $patchRequest = new PatchRequest();
       $patchRequest->addPatch($patch);
       $plan->update($patchRequest, $this->apiContext);
-      $this->setState($plan, 'ACTIVE');
+//      $this->setState($plan, 'ACTIVE');
       return TRUE;
 
     } catch (\Exception $e) {
-      $this->setState($plan, 'ACTIVE');
+//      $this->setState($plan, 'ACTIVE');
       return FALSE;
     }
 
@@ -198,14 +195,17 @@ class BillingAgreement {
    *    drupal_set_message(t($plan->getName() . ' - ' . $plan->getId()));
    *  }
    *
+   * @param array $options @todo meter en las opciones la posibilidad de especificar el state del listado que queremos por ejemplo. O el page_size, etc.
    * @return \PayPal\Api\PlanList
    */
-  public function getAllPlans() {
+  public function getAllPlans($options = []) {
+
+    $params = array_merge([
+      'page_size' => 20,
+      'status' => 'CREATED'
+    ], $options);
+
     try {
-      $params = array(
-        'page_size' => '20',
-        'status' => 'ACTIVE'
-      );
 
       $planList = Plan::all($params, $this->apiContext);
       return $planList;

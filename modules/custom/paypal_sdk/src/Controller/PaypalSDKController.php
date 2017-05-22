@@ -86,22 +86,43 @@ class PaypalSDKController extends ControllerBase {
   }
 
   public function billingPlanList() {
+
+    $build = array(
+      '#theme' => 'plan_list_tables',
+      '#tables' => [
+        'created' => $this->getPlanTableList(['status' => 'CREATED']),
+        'active' => $this->getPlanTableList(['status' => 'ACTIVE']),
+        //'inactive' => $this->getPlanTableList(['status' => 'INACTIVE'])
+      ],
+    );
+
+    return $build;
+  }
+
+  /**
+   * @param $status_list_options
+   * @return mixed
+   */
+  public function getPlanTableList($status_list_options) {
     /** @var BillingAgreement $pba */
     $pba = Drupal::service('paypal.billing.agreement');
-
-    $planList = $pba->getAllPlans();
+    $planList = $pba->getAllPlans($status_list_options);
 
 
     $table['contacts'] = array(
       '#type' => 'table',
-      '#caption' => $this->t('Plans'),
       '#header' => [
         $this->t('Name'),
         $this->t('Description'),
         $this->t('Plan ID'),
+        $this->t('State'),
         $this->t('Operations'),
       ],
     );
+
+    if (count($planList->getPlans()) == 0) {
+      return $table;
+    }
 
     foreach ($planList->getPlans() as $k => $plan) {
 
@@ -121,6 +142,11 @@ class PaypalSDKController extends ControllerBase {
         '#markup' => $plan->getId()
       );
 
+      $table['contacts'][$k]['state'] = array(
+        '#type' => 'markup',
+        '#markup' => $plan->getState()
+      );
+
       $table['contacts'][$k]['operations'] = array(
         '#type' => 'operations',
         '#links' => [
@@ -136,7 +162,6 @@ class PaypalSDKController extends ControllerBase {
       );
 
     }
-
 
     return $table;
   }

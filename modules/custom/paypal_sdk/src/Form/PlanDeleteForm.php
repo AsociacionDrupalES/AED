@@ -32,7 +32,7 @@ class PlanDeleteForm extends ConfirmFormBase {
    * {@inheritdoc}
    */
   public function getQuestion() {
-    return t('This plan will be deleted at the PayPal platform. Do you want to deletegit  %id?', array('%id' => $this->id));
+    return t('This plan will be deleted at the PayPal platform. Do you want to delete  %id?', array('%id' => $this->id));
   }
 
   /**

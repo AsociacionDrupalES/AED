@@ -31,6 +31,14 @@ paypal_sdk.billing_plan_list:
     _permission: 'subscribe paypal products'
 
 # Edit form for PayPal Plans.
+paypal_sdk.plan_add_form:
+  path: '/admin/plan/add'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanAddForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Edit form for PayPal Plans.
 paypal_sdk.plan_edit_form:
   path: '/admin/plan/edit/{plan_id}'
   defaults:
