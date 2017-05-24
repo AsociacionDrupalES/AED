@@ -53,9 +53,12 @@ function facets_update_8001() {
 
     // Create new source.
     unset($as_array['uuid']);
-    FacetSource::create($as_array)->save();
+    $existing = FacetSource::load($as_array['id']);
+    if (!$existing) {
+      FacetSource::create($as_array)->save();
 
-    // Delete old facet source.
-    $facetsource->delete();
+      // Delete old facet source.
+      $facetsource->delete();
+    }
   }
 }
