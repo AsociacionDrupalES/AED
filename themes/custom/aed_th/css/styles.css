@@ -2105,10 +2105,6 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   margin-bottom: 30px;
 }
 
-.node--type-videos.node--view-mode-full .field--name-body p {
-  margin: 0;
-}
-
 .node--type-videos.node--view-mode-full .field--type-entity-reference {
   margin-bottom: 10px;
 }
