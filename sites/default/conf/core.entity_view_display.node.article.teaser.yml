@@ -10,73 +10,8 @@ dependencies:
     - field.field.node.article.field_tags
     - node.type.article
   module:
-    - ds
-    - field_group
     - image
     - user
-third_party_settings:
-  ds:
-    layout:
-      id: ds_1col
-      path: modules/contrib/ds
-      library: ''
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        classes:
-          layout_class: {  }
-    regions:
-      ds_content:
-        - group_content
-        - node_title
-        - node_post_date
-        - node_submitted_by
-        - field_header_image
-    fields:
-      node_title:
-        plugin_id: node_title
-        weight: 1
-        label: hidden
-        formatter: default
-        settings:
-          link: true
-          wrapper: h2
-          class: ''
-      node_submitted_by:
-        plugin_id: node_submitted_by
-        weight: 2
-        label: hidden
-        formatter: ds_post_date_long
-      node_post_date:
-        plugin_id: node_post_date
-        weight: 2
-        label: hidden
-        formatter: ds_post_date_short
-  field_group:
-    group_content:
-      children:
-        - node_post_date
-        - field_header_image
-      parent_name: ''
-      weight: 0
-      label: 'Image wrapper'
-      format_type: html_element
-      format_settings:
-        label: 'Image wrapper'
-        element: div
-        show_label: false
-        label_element: h3
-        attributes: ''
-        effect: none
-        speed: fast
-        id: ''
-        classes: image-wrapper
 _core:
   default_config_hash: U8ghxJXn8JE2p6Q2wLpPWAxpz4r_8crL1LxtapSrHAE
 id: node.article.teaser
@@ -86,12 +21,13 @@ mode: teaser
 content:
   field_header_image:
     type: image
-    weight: 3
+    weight: 0
     label: hidden
     settings:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
+    region: content
 hidden:
   body: true
   field_attachments: true

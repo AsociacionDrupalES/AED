@@ -25,6 +25,7 @@ content:
       link_to_entity: false
     third_party_settings: {  }
     type: string
+    region: content
   field_social_links:
     weight: 2
     label: above
@@ -36,10 +37,12 @@ content:
       target: ''
     third_party_settings: {  }
     type: link
+    region: content
   member_for:
     weight: 3
     settings: {  }
     third_party_settings: {  }
+    region: content
   user_picture:
     label: hidden
     settings:
@@ -48,5 +51,6 @@ content:
     type: image
     weight: 0
     third_party_settings: {  }
+    region: content
 hidden:
   field_expose_my_profile: true

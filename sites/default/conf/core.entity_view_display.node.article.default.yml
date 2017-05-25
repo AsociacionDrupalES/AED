@@ -9,55 +9,10 @@ dependencies:
     - field.field.node.article.field_tags
     - node.type.article
   module:
-    - ds
     - file
     - image
     - text
     - user
-third_party_settings:
-  ds:
-    layout:
-      id: ds_1col
-      path: modules/contrib/ds
-      library: ''
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        classes:
-          layout_class: {  }
-    regions:
-      ds_content:
-        - node_post_date
-        - node_title
-        - node_submitted_by
-        - field_header_image
-        - body
-        - field_tags
-        - field_attachments
-        - comment
-        - comment_node_article
-    fields:
-      node_title:
-        plugin_id: node_title
-        weight: 1
-        label: hidden
-        formatter: default
-      node_submitted_by:
-        plugin_id: node_submitted_by
-        weight: 2
-        label: hidden
-        formatter: ds_post_date_short
-      node_post_date:
-        plugin_id: node_post_date
-        weight: 0
-        label: hidden
-        formatter: ds_post_date_long
 _core:
   default_config_hash: JtAg_-waIt1quMtdDtHIaXJMxvTuSmxW7bWyO6Zd68E
 id: node.article.default
@@ -66,29 +21,33 @@ bundle: article
 mode: default
 content:
   body:
-    label: hidden
-    weight: 4
     type: text_default
+    weight: 1
+    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
   field_attachments:
-    label: hidden
-    weight: 6
     type: file_table
+    weight: 3
+    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
   field_header_image:
-    weight: 3
+    weight: 0
     label: hidden
     settings:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
     type: image
+    region: content
   field_tags:
-    label: above
-    weight: 5
     type: entity_reference_label
+    weight: 2
+    region: content
+    label: above
     settings:
       link: true
     third_party_settings: {  }

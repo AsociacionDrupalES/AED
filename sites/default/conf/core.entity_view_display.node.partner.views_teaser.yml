@@ -11,29 +11,8 @@ dependencies:
     - image.style.large
     - node.type.partner
   module:
-    - ds
-    - linked_image_field
+    - image
     - user
-third_party_settings:
-  ds:
-    layout:
-      id: ds_1col
-      path: modules/contrib/ds
-      library: ''
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        classes:
-          layout_class: {  }
-    regions:
-      ds_content:
-        - field_logo
 id: node.partner.views_teaser
 targetEntityType: node
 bundle: partner
@@ -46,7 +25,8 @@ content:
       image_style: large
       image_link: content
     third_party_settings: {  }
-    type: field_linked_image
+    type: image
+    region: content
 hidden:
   field_anos_patrocinados: true
   field_slogan: true

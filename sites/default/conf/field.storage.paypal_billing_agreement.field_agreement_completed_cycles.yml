@@ -1,0 +1,22 @@
+uuid: 89683509-d809-40a2-afd8-81c9e78535cb
+langcode: en
+status: true
+dependencies:
+  module:
+    - paypal_sdk
+_core:
+  default_config_hash: oG5EARVTtV9cu87NvJAsa1ehyHpG0hBICacoRR_n-ZI
+id: paypal_billing_agreement.field_agreement_completed_cycles
+field_name: field_agreement_completed_cycles
+entity_type: paypal_billing_agreement
+type: integer
+settings:
+  unsigned: false
+  size: normal
+module: core
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -1,6 +1,5 @@
 module:
   admin_toolbar: 0
-  aed_migration: 0
   aed_user: 0
   automated_cron: 0
   blazy: 0
@@ -19,9 +18,6 @@ module:
   ctools: 0
   datetime: 0
   dblog: 0
-  devel_generate: 0
-  ds_extras: 0
-  ds_switch_view_mode: 0
   dynamic_page_cache: 0
   editor: 0
   email_registration: 0
@@ -35,24 +31,20 @@ module:
   history: 0
   honeypot: 0
   image: 0
-  layout_plugin: 0
+  layout_discovery: 0
   link: 0
   linked_image_field: 0
   menu_link_attributes: 0
   menu_ui: 0
-  migrate: 0
-  migrate_drupal: 0
-  migrate_plus: 0
-  migrate_tools: 0
   node: 0
   options: 0
   page_cache: 0
   page_manager: 0
   page_manager_ui: 0
   path: 0
+  paypal_sdk: 0
   quickedit: 0
   rdf: 0
-  search: 0
   search_api: 0
   search_api_db: 0
   shortcut: 0
@@ -70,7 +62,6 @@ module:
   user: 0
   video_embed_field: 0
   views_ui: 0
-  ds: 1
   menu_link_content: 1
   views: 10
   standard: 1000
@@ -82,3 +73,4 @@ theme:
   aed_th: 0
 _core:
   default_config_hash: m2GVq11UAOVuNgj8x0t5fMOPujpvQQ_zxLoaly1BMEU
+profile: standard

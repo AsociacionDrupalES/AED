@@ -10,7 +10,7 @@ dependencies:
     - seven
 id: seven_user_new
 theme: seven
-region: '-1'
+region: header
 weight: -4
 provider: null
 plugin: 'views_block:who_s_new-block_1'

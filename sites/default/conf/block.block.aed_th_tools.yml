@@ -12,7 +12,7 @@ _core:
   default_config_hash: NeHSoqm4XFqA7_0bDmR429ZZQt3LRbZMNRJTMsFyOfI
 id: aed_th_tools
 theme: aed_th
-region: '-1'
+region: header
 weight: -10
 provider: null
 plugin: 'system_menu_block:tools'

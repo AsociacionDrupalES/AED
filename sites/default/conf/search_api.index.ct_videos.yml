@@ -110,7 +110,7 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
-  node_status: {  }
+  entity_status: {  }
 tracker_settings:
   default: {  }
 options:

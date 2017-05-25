@@ -3,6 +3,7 @@ langcode: en
 status: true
 dependencies:
   config:
+    - core.entity_view_display.comment.comment_node_page.default
     - field.field.node.page.body
     - field.field.node.page.comment_node_page
     - node.type.page
@@ -23,6 +24,7 @@ content:
     type: text_default
     settings: {  }
     third_party_settings: {  }
+    region: content
   comment_node_page:
     label: hidden
     type: comment_default
@@ -31,6 +33,8 @@ content:
       pager_id: 0
       view_mode: default
     third_party_settings: {  }
+    region: content
   links:
     weight: 101
+    region: content
 hidden: {  }

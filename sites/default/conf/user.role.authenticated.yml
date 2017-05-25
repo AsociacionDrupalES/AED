@@ -16,6 +16,7 @@ permissions:
   - 'flag video_visualizado'
   - 'post comments'
   - 'skip comment approval'
+  - 'subscribe paypal products'
   - 'unflag video_visualizado'
   - 'use search_api_sorts'
   - 'use text format filtered_html'

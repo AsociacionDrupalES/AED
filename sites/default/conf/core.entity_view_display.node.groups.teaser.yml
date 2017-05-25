@@ -9,38 +9,9 @@ dependencies:
     - image.style.local_group_image_style
     - node.type.groups
   module:
-    - ds
     - image
     - link
     - user
-third_party_settings:
-  ds:
-    layout:
-      id: ds_1col
-      path: modules/contrib/ds
-      library: ''
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        classes:
-          layout_class: {  }
-    regions:
-      ds_content:
-        - field_group_url
-        - node_title
-        - field_group_image
-    fields:
-      node_title:
-        plugin_id: node_title
-        weight: 1
-        label: hidden
-        formatter: default
 id: node.groups.teaser
 targetEntityType: node
 bundle: groups
@@ -48,7 +19,8 @@ mode: teaser
 content:
   field_group_image:
     type: image
-    weight: 2
+    weight: 1
+    region: content
     label: hidden
     settings:
       image_style: local_group_image_style
@@ -65,5 +37,6 @@ content:
       rel: '0'
       target: '0'
     third_party_settings: {  }
+    region: content
 hidden:
   links: true

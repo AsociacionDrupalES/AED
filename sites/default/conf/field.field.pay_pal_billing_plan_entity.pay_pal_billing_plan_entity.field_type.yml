@@ -1,0 +1,25 @@
+uuid: 9c0c1595-54cf-4d6f-80ac-9ff345b02028
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.pay_pal_billing_plan_entity.field_type
+  module:
+    - options
+    - paypal_sdk
+_core:
+  default_config_hash: wHZJ9t7jqYc6PmD3AoIfPluDV-I9-QhxEoysu7_CaFY
+id: pay_pal_billing_plan_entity.pay_pal_billing_plan_entity.field_type
+field_name: field_type
+entity_type: pay_pal_billing_plan_entity
+bundle: pay_pal_billing_plan_entity
+label: Type
+description: ''
+required: true
+translatable: false
+default_value:
+  -
+    value: FIXED
+default_value_callback: ''
+settings: {  }
+field_type: list_string

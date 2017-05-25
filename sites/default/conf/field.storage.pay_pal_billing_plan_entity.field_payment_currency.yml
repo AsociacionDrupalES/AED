@@ -1,0 +1,29 @@
+uuid: 53877b26-aac9-467a-a7df-a9522e4affe4
+langcode: en
+status: true
+dependencies:
+  module:
+    - options
+    - paypal_sdk
+_core:
+  default_config_hash: dnzmNZiKTA-mEG6PibGDH9ABdpTkOczjOtouzsbNpiU
+id: pay_pal_billing_plan_entity.field_payment_currency
+field_name: field_payment_currency
+entity_type: pay_pal_billing_plan_entity
+type: list_string
+settings:
+  allowed_values:
+    -
+      value: EUR
+      label: EUR
+    -
+      value: USD
+      label: USD
+  allowed_values_function: ''
+module: options
+locked: false
+cardinality: 1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

@@ -10,7 +10,7 @@ _core:
   default_config_hash: NDwadleLD3YVSbDUaakxyYZyINYtkFtOVGShfq4kWy8
 id: aed_th_branding
 theme: aed_th
-region: '-1'
+region: header
 weight: -11
 provider: null
 plugin: system_branding_block

@@ -16,54 +16,27 @@ dependencies:
     - field.field.node.videos.field_videos_version
     - node.type.videos
   module:
-    - ds
     - link
     - text
     - user
     - video_embed_field
-third_party_settings:
-  ds:
-    layout:
-      id: ds_1col
-      path: modules/contrib/ds
-      library: ''
-      disable_css: false
-      entity_classes: all_classes
-      settings:
-        wrappers:
-          ds_content: div
-        outer_wrapper: div
-        attributes: ''
-        link_attribute: ''
-        link_custom: ''
-        classes:
-          layout_class: {  }
-    regions:
-      ds_content:
-        - field_video_url
-        - body
-        - field_videos_evento
-        - field_videos_nivel
-        - field_videos_idioma
-        - field_video_ponente
-        - field_videos_audiencia
-        - field_videos_version
-        - field_slides
 id: node.videos.default
 targetEntityType: node
 bundle: videos
 mode: default
 content:
   body:
-    label: hidden
-    weight: 1
     type: text_default
+    weight: 1
+    region: content
+    label: hidden
     settings: {  }
     third_party_settings: {  }
   field_slides:
-    label: inline
-    weight: 8
     type: link
+    weight: 8
+    region: content
+    label: inline
     settings:
       trim_length: 80
       url_only: false
@@ -72,14 +45,13 @@ content:
       target: ''
     third_party_settings: {  }
   field_video_ponente:
-    label: inline
-    weight: 5
     type: entity_reference_label
+    weight: 5
+    region: content
+    label: inline
     settings:
       link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
+    third_party_settings: {  }
   field_video_url:
     weight: 0
     label: hidden
@@ -90,40 +62,44 @@ content:
       autoplay: true
     third_party_settings: {  }
     type: video_embed_field_video
+    region: content
   field_videos_audiencia:
-    label: inline
-    weight: 6
     type: entity_reference_label
+    weight: 6
+    region: content
+    label: inline
     settings:
       link: false
-    third_party_settings:
-      ds:
-        ds_limit: ''
+    third_party_settings: {  }
   field_videos_evento:
-    label: inline
-    weight: 2
     type: entity_reference_label
+    weight: 2
+    region: content
+    label: inline
     settings:
       link: false
     third_party_settings: {  }
   field_videos_idioma:
-    label: inline
-    weight: 4
     type: entity_reference_label
+    weight: 4
+    region: content
+    label: inline
     settings:
       link: false
     third_party_settings: {  }
   field_videos_nivel:
-    label: inline
-    weight: 3
     type: entity_reference_label
+    weight: 3
+    region: content
+    label: inline
     settings:
       link: false
     third_party_settings: {  }
   field_videos_version:
-    label: inline
-    weight: 7
     type: entity_reference_label
+    weight: 7
+    region: content
+    label: inline
     settings:
       link: false
     third_party_settings: {  }

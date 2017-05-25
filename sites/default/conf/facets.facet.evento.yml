@@ -3,9 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - search_api.index.ct_videos
     - views.view.videos
   module:
-    - views
+    - search_api
 id: evento
 name: Evento
 url_alias: evento
@@ -13,7 +14,7 @@ weight: 0
 min_count: 1
 show_only_one_result: false
 field_identifier: field_videos_evento
-facet_source_id: 'views_page:videos__page_video'
+facet_source_id: 'search_api:views_page__videos__page_video'
 widget:
   type: links
   config:

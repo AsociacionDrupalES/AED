@@ -10,7 +10,6 @@ dependencies:
     - field.field.user.user.user_picture
     - image.style.thumbnail
   module:
-    - ds
     - field_group
     - image
     - social_links_simple
@@ -49,6 +48,7 @@ content:
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    region: content
   field_social_links:
     type: social_links_simple
     weight: 3
@@ -59,9 +59,8 @@ content:
       url_plain: false
       rel: 0
       trim_length: '80'
-    third_party_settings:
-      ds:
-        ds_limit: ''
+    third_party_settings: {  }
+    region: content
   user_picture:
     type: image
     weight: 0
@@ -70,6 +69,7 @@ content:
       image_link: content
     third_party_settings: {  }
     label: hidden
+    region: content
 hidden:
   field_expose_my_profile: true
   member_for: true
