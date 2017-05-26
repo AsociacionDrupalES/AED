@@ -1,0 +1,15 @@
+uuid: d6f53d5c-07d7-4136-b5a9-a1bc81ad10d4
+langcode: en
+status: true
+dependencies: {  }
+name: 620_auto
+label: 620_auto
+effects:
+  c02dff07-588a-4a08-922c-581ba4713f61:
+    uuid: c02dff07-588a-4a08-922c-581ba4713f61
+    id: image_scale
+    weight: 1
+    data:
+      width: 620
+      height: null
+      upscale: true

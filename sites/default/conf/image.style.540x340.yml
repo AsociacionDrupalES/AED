@@ -1,0 +1,14 @@
+uuid: 72511775-74d7-40db-99bf-8433c57a358e
+langcode: en
+status: true
+dependencies: {  }
+name: 540x340
+label: 540x340
+effects:
+  afba230c-fbee-4872-ac9f-401d57293cc1:
+    uuid: afba230c-fbee-4872-ac9f-401d57293cc1
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 540
+      height: 340

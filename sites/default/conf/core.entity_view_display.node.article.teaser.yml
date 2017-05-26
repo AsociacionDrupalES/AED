@@ -8,6 +8,7 @@ dependencies:
     - field.field.node.article.field_attachments
     - field.field.node.article.field_header_image
     - field.field.node.article.field_tags
+    - image.style.540x340
     - node.type.article
   module:
     - image
@@ -24,8 +25,8 @@ content:
     weight: 0
     label: hidden
     settings:
-      image_style: ''
-      image_link: ''
+      image_style: 540x340
+      image_link: content
     third_party_settings: {  }
     region: content
 hidden:
