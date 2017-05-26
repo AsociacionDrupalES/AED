@@ -17,6 +17,11 @@
     var t = media;
     var iframe = t.querySelector('iframe');
     var btn = t.querySelector('.media__icon--play');
+
+    if (btn === null) {
+      return;
+    }
+
     var url = btn.getAttribute('data-url');
     var newIframe;
 
@@ -40,6 +45,7 @@
       var target = this;
       var player = target.parentNode;
       var playing = document.querySelector('.is-playing');
+      var iframe = player.querySelector('iframe');
 
       url = target.getAttribute('data-url');
 
@@ -55,6 +61,10 @@
       newIframe.setAttribute('src', url);
       newIframe.setAttribute('allowfullscreen', true);
 
+      if (iframe !== null) {
+        player.removeChild(iframe);
+      }
+
       player.appendChild(newIframe);
     }
 
@@ -69,7 +79,7 @@
 
       var target = this;
       var player = target.parentNode;
-      var iframe = player.querySelector('iframe');
+      var iframe = player.querySelector('iframe.media__element');
 
       if (player.className.match('is-playing')) {
         player.className = player.className.replace(/(\S+)playing/, '');
@@ -102,7 +112,7 @@
    */
   Drupal.behaviors.blazyMedia = {
     attach: function (context) {
-      var players = context.querySelectorAll('.media--player:not(.media--player--on)');
+      var players = context.querySelectorAll('.media--switch.media--player:not(.media--player--on)');
       _db.once(_db.forEach(players, blazyMedia));
     }
   };

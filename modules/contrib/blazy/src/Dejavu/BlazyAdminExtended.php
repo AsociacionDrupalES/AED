@@ -2,23 +2,19 @@
 
 namespace Drupal\blazy\Dejavu;
 
-use Drupal\Core\Url;
+use Drupal\blazy\Form\BlazyAdminInterface;
 use Drupal\blazy\Form\BlazyAdminFormatterBase;
 
 /**
  * Provides re-usable admin functions, or form elements.
  */
-class BlazyAdminExtended extends BlazyAdminFormatterBase {
+class BlazyAdminExtended extends BlazyAdminFormatterBase implements BlazyAdminInterface {
 
   /**
    * Returns shared form elements across field formatter and Views.
    */
   public function openingForm(array &$form, $definition = []) {
-    if (!isset($definition['namespace'])) {
-      return;
-    }
-
-    $namespace = $definition['namespace'];
+    $namespace = isset($definition['namespace']) ? $definition['namespace'] : 'blazy';
 
     if (!empty($definition['vanilla'])) {
       $form['vanilla'] = [
@@ -41,10 +37,6 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase {
         '#description' => $this->t('Enable the optionset UI module to manage the optionsets.'),
         '#weight'      => -108,
       ];
-
-      if ($this->blazyManager()->getModuleHandler()->moduleExists($namespace . '_ui')) {
-        $form['optionset']['#description'] = $this->t('Manage optionsets at <a href=":url" target="_blank">the optionset admin page</a>.', [':url' => Url::fromRoute('entity.' . $namespace . '.collection')->toString()]);
-      }
     }
 
     parent::openingForm($form, $definition);
@@ -65,21 +57,21 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase {
     }
 
     if (isset($definition['thumbnails'])) {
-      $form['thumbnail'] = array(
+      $form['thumbnail'] = [
         '#type'        => 'select',
         '#title'       => $this->t('Thumbnail image'),
         '#options'     => is_array($definition['thumbnails']) ? $definition['thumbnails'] : [],
-        '#description' => t("Leave empty to not use thumbnail pager."),
-      );
+        '#description' => $this->t('Leave empty to not use thumbnail pager.'),
+      ];
     }
 
     if (isset($definition['overlays'])) {
-      $form['overlay'] = array(
+      $form['overlay'] = [
         '#type'        => 'select',
         '#title'       => $this->t('Overlay media'),
         '#options'     => is_array($definition['overlays']) ? $definition['overlays'] : [],
-        '#description' => $this->t('Overlay is displayed over the main main.'),
-      );
+        '#description' => $this->t('Overlay is displayed over the main stage.'),
+      ];
     }
 
     if (isset($definition['titles'])) {
@@ -118,7 +110,7 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase {
         '#maxlength'    => 255,
         '#field_prefix' => '#',
         '#enforced'     => TRUE,
-        '#description'  => t("Manually define the container ID. <em>This ID is used for the cache identifier, so be sure it is unique</em>. Leave empty to have a guaranteed unique ID managed by the module."),
+        '#description'  => $this->t("Manually define the container ID. <em>This ID is used for the cache identifier, so be sure it is unique</em>. Leave empty to have a guaranteed unique ID managed by the module."),
         '#weight'       => 94,
       ];
     }
@@ -127,7 +119,7 @@ class BlazyAdminExtended extends BlazyAdminFormatterBase {
       $form['caption']['#description'] = $this->t('Enable any of the following fields as captions. These fields are treated and wrapped as captions.');
     }
 
-    if (!isset($definition['id'])) {
+    if (empty($definition['id'])) {
       if (isset($form['caption'])) {
         $form['caption']['#description'] .= ' ' . $this->t('Be sure to make them visible at their relevant Manage display.');
       }

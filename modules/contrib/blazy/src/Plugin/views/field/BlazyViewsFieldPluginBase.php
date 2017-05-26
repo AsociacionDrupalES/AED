@@ -144,7 +144,7 @@ abstract class BlazyViewsFieldPluginBase extends FieldPluginBase {
   public function getScopedFormElements() {
     return [
       'settings' => array_filter($this->options),
-      'target_type' => $this->view->getBaseEntityType()->id(),
+      'target_type' => !$this->view->getBaseEntityType() ? '' : $this->view->getBaseEntityType()->id(),
       'thumbnail_style' => TRUE,
     ];
   }

@@ -21,11 +21,5 @@
     "issues": "https://drupal.org/project/issues/blazy",
     "source": "http://cgit.drupalcode.org/blazy"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://git.drupal.org/project/blazy.git"
-    }
-  ],
   "require": { }
 }

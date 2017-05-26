@@ -1,6 +1,6 @@
 blazy_views_field:
   type: views_field
-  label: 'Blazy'
+  label: Blazy
   mapping:
     box_style:
       type: string

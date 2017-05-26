@@ -1,4 +1,26 @@
 
+Slick 8.x-1.0-dev, 2017-05-26
+-----------------------------
+- Added more tests.
+- Moved Functional tests into Kernel tests.
+- Added ImageItem into SlickFormatter::getThumbnail() parameters for potential
+  lazyloaded thumbnail images reasonable for hundreds of gallery images.
+- Removed settings overrides for Slick::create().
+- Added more relevant info into slick.api.php.
+
+Slick 8.x-1.0-dev, 2017-04-27
+-----------------------------
+- Fixed for leftover t().
+- #2873222 by Munavijayalakshmi, dhruveshdtripathi: Convert module to use short
+  array syntax (new coding standard).
+- #2872871 by elimw: Slick Images Not Showing in Drupal 8.3.
+
+Slick 8.x-1.0-dev, 2017-04-08
+-----------------------------
+- Fixed for .slide__media DIV wrapper being rendered when empty at
+  slick-slide.html.twig.
+- Cleaned up README and typos.
+
 Slick 8.x-1.0-dev, 2017-03-20
 -----------------------------
 - Added a list of available skins at optionset page as planned ages ago.

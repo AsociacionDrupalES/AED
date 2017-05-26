@@ -22,20 +22,22 @@ abstract class BlazyEntityReferenceBase extends BlazyEntityBase {
    * {@inheritdoc}
    */
   public function buildElement(array &$build, $entity, $langcode) {
-    $settings = &$build['settings'];
+    $settings  = &$build['settings'];
+    $item_id   = $settings['item_id'] = empty($settings['item_id']) ? 'box' : $settings['item_id'];
+    $view_mode = $settings['view_mode'] = empty($settings['view_mode']) ? 'full' : $settings['view_mode'];
 
     if (!empty($settings['vanilla'])) {
       return parent::buildElement($build, $entity, $langcode);
     }
 
-    $delta     = $settings['delta'];
-    $item_id   = $settings['item_id'];
-    $view_mode = empty($settings['view_mode']) ? 'full' : $settings['view_mode'];
-    $element   = ['settings' => $settings];
+    $delta   = isset($settings['delta']) ? $settings['delta'] : 0;
+    $element = ['settings' => $settings];
 
     // Built early before stage to allow custom highres video thumbnail later.
     // Implementor must import: Drupal\blazy\Dejavu\BlazyVideoTrait.
-    $this->getMediaItem($element, $entity);
+    if (method_exists($this, 'getMediaItem')) {
+      $this->getMediaItem($element, $entity);
+    }
 
     // Build the main stage.
     $this->buildStage($element, $entity, $langcode);
@@ -71,7 +73,7 @@ abstract class BlazyEntityReferenceBase extends BlazyEntityBase {
     // Build the thumbnail item.
     if (!empty($settings['nav'])) {
       // Thumbnail usages: asNavFor pagers, dot, arrows, photobox thumbnails.
-      $element[$item_id]  = empty($settings['thumbnail_style']) ? [] : $this->formatter->getThumbnail($element['settings']);
+      $element[$item_id]  = empty($settings['thumbnail_style']) ? [] : $this->formatter->getThumbnail($element['settings'], $element['item']);
       $element['caption'] = empty($settings['thumbnail_caption']) ? [] : $this->getFieldRenderable($entity, $settings['thumbnail_caption'], $view_mode);
 
       $build['thumb']['items'][$delta] = $element;

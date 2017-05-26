@@ -61,13 +61,13 @@ class SlickListBuilder extends DraggableListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    $header = array(
+    $header = [
       'label'       => $this->t('Optionset'),
       'breakpoints' => $this->t('Breakpoints'),
       'group'       => $this->t('Group'),
       'lazyload'    => $this->t('Lazyload'),
       'skin'        => $this->t('Skin'),
-    );
+    ];
 
     return $header + parent::buildHeader();
   }
@@ -105,11 +105,11 @@ class SlickListBuilder extends DraggableListBuilder {
       $operations['edit']['title'] = $this->t('Configure');
     }
 
-    $operations['duplicate'] = array(
-      'title'  => t('Duplicate'),
+    $operations['duplicate'] = [
+      'title'  => $this->t('Duplicate'),
       'weight' => 15,
       'url'    => $entity->toUrl('duplicate-form'),
-    );
+    ];
 
     if ($entity->id() == 'default') {
       unset($operations['delete'], $operations['edit']);

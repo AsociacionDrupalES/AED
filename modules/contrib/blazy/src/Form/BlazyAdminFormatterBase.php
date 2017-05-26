@@ -3,7 +3,6 @@
 namespace Drupal\blazy\Form;
 
 use Drupal\Core\Url;
-use Drupal\Core\Form\FormState;
 use Drupal\Component\Utility\Unicode;
 
 /**
@@ -15,7 +14,6 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
    * Returns re-usable image formatter form elements.
    */
   public function imageStyleForm(array &$form, $definition = []) {
-    $image_styles  = image_style_options(FALSE);
     $is_responsive = function_exists('responsive_image_get_image_dimensions');
 
     if (empty($definition['no_image_style'])) {
@@ -27,11 +25,12 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
     }
 
     if ($is_responsive && !empty($definition['responsive_image'])) {
+      $url = Url::fromRoute('entity.responsive_image_style.collection')->toString();
       $form['responsive_image_style'] = [
         '#type'        => 'select',
         '#title'       => $this->t('Responsive image'),
         '#options'     => $this->getResponsiveImageOptions(),
-        '#description' => $this->t('Responsive image style for the main stage image is more reasonable for large images. Works with multi-serving IMG, or PICTURE element. Not compatible with breakpoints and aspect ratio, yet. Leave empty to disable.'),
+        '#description' => $this->t('Responsive image style for the main stage image is more reasonable for large images. Works with multi-serving IMG, or PICTURE element. Not compatible with breakpoints and aspect ratio, yet. Leave empty to disable. <a href=":url" target="_blank">Manage responsive image styles</a>.', [':url' => $url]),
         '#access'      => $this->getResponsiveImageOptions(),
         '#weight'      => -100,
       ];
@@ -49,46 +48,51 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
         '#weight'  => -100,
       ];
     }
+  }
 
-    if ($is_responsive && isset($form['responsive_image_style'])) {
-      $url = Url::fromRoute('entity.responsive_image_style.collection')->toString();
-      $form['responsive_image_style']['#description'] .= ' ' . $this->t('<a href=":url" target="_blank">Manage responsive image styles</a>.', [':url' => $url]);
-    }
+  /**
+   * Return the field formatter settings summary.
+   *
+   * @deprecated: To remove for self::getSettingsSummary() post full release so
+   * to avoid unpredictable settings, and complication with form elements.
+   */
+  public function settingsSummary($plugin, $definition = []) {
+    $definition = isset($definition) ? $definition : $plugin->getScopedFormElements();
+    $definition['settings'] = isset($definition['settings']) ? $definition['settings'] : $plugin->getSettings();
+
+    return $this->getSettingsSummary($definition);
   }
 
   /**
    * Return the field formatter settings summary.
    */
-  public function settingsSummary($plugin, $definition = []) {
-    $form         = [];
-    $summary      = [];
-    $form_state   = new FormState();
-    $settings     = isset($definition['settings']) ? $definition['settings'] : $plugin->getSettings();
-    $elements     = $plugin->settingsForm($form, $form_state);
-    $image_styles = image_style_options(TRUE);
-    $breakpoints  = isset($settings['breakpoints']) ? array_filter($settings['breakpoints']) : [];
-    $excludes     = empty($definition['excludes']) ? $definition : $definition['excludes'];
+  public function getSettingsSummary($definition = []) {
+    $summary = [];
 
-    unset($image_styles['']);
+    if (empty($definition['settings'])) {
+      return $summary;
+    }
 
-    $extras = ['details', 'fieldset', 'hidden', 'markup', 'item', 'table'];
-    foreach ($settings as $key => $setting) {
-      $type = isset($elements[$key]['#type']) ? $elements[$key]['#type'] : '';
+    $this->getExcludedSettingsSummary($definition);
 
-      if (!empty($excludes) && in_array($key, $excludes)) {
-        continue;
-      }
+    $enforced = [
+      'optionset',
+      'cache',
+      'skin',
+      'view_mode',
+      'override',
+      'overridables',
+      'style',
+      'vanilla',
+    ];
 
-      if (in_array($type, $extras) || empty($type)) {
-        continue;
-      }
+    $enforced    = isset($definition['enforced']) ? $definition['enforced'] : $enforced;
+    $settings    = array_filter($definition['settings']);
+    $breakpoints = isset($settings['breakpoints']) && is_array($settings['breakpoints']) ? array_filter($settings['breakpoints']) : [];
 
-      $access   = isset($elements[$key]['#access']) ? $elements[$key]['#access'] : TRUE;
-      $title    = !isset($elements[$key]) && isset($settings[$key]) ? Unicode::ucfirst(str_replace('_', ' ', $key)) : '';
-      $title    = isset($elements[$key]['#title']) ? $elements[$key]['#title'] : $title;
-      $options  = isset($elements[$key]['#options']) ? $elements[$key]['#options'] : [];
-      $vanilla  = !empty($settings['vanilla']) && !isset($elements[$key]['#enforced']);
-      $multiple = isset($elements[$key]['#multiple']) && $elements[$key]['#multiple'];
+    foreach ($definition['settings'] as $key => $setting) {
+      $title   = Unicode::ucfirst(str_replace('_', ' ', $key));
+      $vanilla = !empty($settings['vanilla']);
 
       if ($key == 'breakpoints') {
         $widths = [];
@@ -100,11 +104,11 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
           }
         }
 
-        $title   = $this->t('Breakpoints');
-        $setting = $widths ? implode(', ', $widths) : $this->t('None');
+        $title   = 'Breakpoints';
+        $setting = $widths ? implode(', ', $widths) : 'none';
       }
       else {
-        if (empty($title) || $vanilla || !$access) {
+        if ($vanilla && !in_array($key, $enforced)) {
           continue;
         }
 
@@ -113,35 +117,12 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
         }
 
         if (is_bool($setting) && $setting) {
-          $setting = $this->t('Yes');
-        }
-        elseif (is_string($setting) && $key != 'cache') {
-          // The value is based on select options.
-          if (!$multiple && $type == 'select' && isset($options[$setting])) {
-            $setting = is_object($options[$setting]) ? $options[$setting]->render() : $options[$setting];
-          }
+          $setting = 'yes';
         }
         elseif (is_array($setting)) {
-          $values = array_filter($setting);
-
-          if (!empty($values)) {
-            // Combine possible multi-value select, or checkboxes.
-            $multiple_values = array_combine($values, $values);
-
-            foreach ($multiple_values as $i => $value) {
-              if (isset($options[$i])) {
-                $multiple_values[$i] = is_object($options[$i]) ? $options[$i]->render() : $options[$i];
-              }
-            }
-
-            $setting = implode(', ', $multiple_values);
-          }
-
-          if (is_array($setting)) {
-            $setting = array_filter($setting);
-            if (!empty($setting)) {
-              $setting = implode(', ', $setting);
-            }
+          $setting = array_filter($setting);
+          if (!empty($setting)) {
+            $setting = implode(', ', $setting);
           }
         }
 
@@ -154,7 +135,7 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
         continue;
       }
 
-      if (isset($settings[$key])) {
+      if (isset($settings[$key]) && is_string($setting)) {
         $summary[] = $this->t('@title: <strong>@setting</strong>', [
           '@title'   => $title,
           '@setting' => $setting,
@@ -162,6 +143,58 @@ abstract class BlazyAdminFormatterBase extends BlazyAdminBase {
       }
     }
     return $summary;
+  }
+
+  /**
+   * Exclude the field formatter settings summary as required.
+   */
+  public function getExcludedSettingsSummary(array &$definition = []) {
+    $settings     = &$definition['settings'];
+    $excludes     = empty($definition['excludes']) ? [] : $definition['excludes'];
+    $plugin_id    = isset($definition['plugin_id']) ? $definition['plugin_id'] : '';
+    $blazy        = $plugin_id && strpos($plugin_id, 'blazy') !== FALSE;
+    $image_styles = function_exists('image_style_options') ? image_style_options(TRUE) : [];
+    $media_switch = empty($settings['media_switch']) ? '' : $settings['media_switch'];
+
+    unset($image_styles['']);
+
+    $excludes['current_view_mode'] = TRUE;
+
+    if ($blazy) {
+      $excludes['optionset'] = TRUE;
+    }
+
+    if ($media_switch != 'media') {
+      $excludes['iframe_lazy'] = TRUE;
+    }
+
+    if (!empty($settings['responsive_image_style'])) {
+      foreach (['ratio', 'breakpoints', 'background', 'sizes'] as $key) {
+        $excludes[$key] = TRUE;
+      }
+    }
+
+    if (empty($settings['grid'])) {
+      foreach (['grid', 'grid_medium', 'grid_small', 'visible_items'] as $key) {
+        $excludes[$key] = TRUE;
+      }
+    }
+
+    // Remove exluded settings.
+    foreach ($excludes as $key => $value) {
+      if (isset($settings[$key])) {
+        unset($settings[$key]);
+      }
+    }
+
+    foreach ($settings as $key => $setting) {
+      if ($key == 'style' || $key == 'responsive_image_style' || empty($settings[$key])) {
+        continue;
+      }
+      if (strpos($key, 'style') !== FALSE && isset($image_styles[$settings[$key]])) {
+        $settings[$key] = $image_styles[$settings[$key]];
+      }
+    }
   }
 
   /**

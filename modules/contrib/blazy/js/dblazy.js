@@ -111,12 +111,9 @@
   /**
    * Returns a new object after merging two, or more objects.
    *
-   * Or use https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/
-   * Global_Objects/Object/assign.
+   * Inspired by @adamfschwartz, @zackbloom, http://youmightnotneedjquery.com.
    *
    * @name dBlazy.extend
-   *
-   * Inspired by @adamfschwartz, @zackbloom, http://youmightnotneedjquery.com.
    *
    * @param {Object} out
    *   The objects to merge together.
@@ -170,6 +167,28 @@
       for (var i = 0, len = collection.length; i < len; i++) {
         callback.call(scope, collection[i], i, collection);
       }
+    }
+  };
+
+  /**
+   * A simple hasClass wrapper.
+   *
+   * @name dBlazy.hasClass
+   *
+   * @param {Element} el
+   *   The HTML element.
+   * @param {String} name
+   *   The class name.
+   *
+   * @return {bool}
+   *   True if of of the method is supported.
+   */
+  dBlazy.hasClass = function (el, name) {
+    if (el.classList) {
+      return el.classList.contains(name);
+    }
+    else {
+      return el.className.indexOf(name) !== -1;
     }
   };
 

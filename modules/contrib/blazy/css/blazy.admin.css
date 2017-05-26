@@ -68,7 +68,7 @@ body.path-admin .form--slick *,
 }
 
 .form--vanilla {
-  padding-top: 62px;
+  padding-top: 82px;
 }
 
 /**
@@ -732,6 +732,7 @@ html.js .form--slick .collapsed .details-legend .details-legend-prefix::after {
 }
 
 .form--slick .form-item.form-type-textfield.is-focused {
+  min-height: 48px;
   z-index: 3;
 }
 
@@ -1322,11 +1323,12 @@ td .form__title {
     margin-bottom: 42px;
   }
 
+  .ui-dialog .form--slick.form--half .form-item--style,
   .scroll .form--slick.form--half .form-item--style,
   .field-plugin-settings-editing .form--slick .form-item--style {
     background: none;
     border: 0;
-    height: 62px;
+    height: 42px;
     min-height: 32px;
     padding: 0;
     position: absolute;
@@ -1383,12 +1385,18 @@ td .form__title {
   }
 
   .form--slick.form--image .form-wrapper--caption .form-item,
-  .form--slick.form--caption-2 .form-wrapper--caption .form-item {
+  .form--slick.form--caption-2 .form-wrapper--caption .form-item,
+  .form--slick .form-wrapper--checkboxes.form-wrapper--count-2 .form-item {
     width: 49.9999%;
   }
 
-  .form--slick.form--caption-3 .form-wrapper--caption .form-item {
+  .form--slick.form--caption-3 .form-wrapper--caption .form-item,
+  .form--slick .form-wrapper--checkboxes.form-wrapper--count-3 .form-item {
     width: 33.3333%;
+  }
+
+  .form--slick .form-wrapper--checkboxes.form-wrapper--count-max .form-item label {
+    width: 160px;
   }
 
   .has-tooltip .form-item--tooltip-wide > .description {

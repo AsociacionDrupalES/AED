@@ -16,14 +16,7 @@ class BlazyFormatterManager extends BlazyManager {
    *   The items to prepare settings for.
    */
   public function buildSettings(array &$build, $items) {
-    $settings = &$build['settings'];
-
-    // Sniffs for Views to allow block__no_wrapper, views_no_wrapper, etc.
-    if (function_exists('views_get_current_view') && $view = views_get_current_view()) {
-      $settings['view_name'] = $view->storage->id();
-      $settings['current_view_mode'] = $view->current_display;
-    }
-
+    $settings       = &$build['settings'];
     $count          = $items->count();
     $field          = $items->getFieldDefinition();
     $entity         = $items->getEntity();
@@ -51,25 +44,22 @@ class BlazyFormatterManager extends BlazyManager {
       }
     }
 
-    $settings += [
-      'absolute_path'  => $absolute_path,
-      'bundle'         => $bundle,
-      'content_url'    => $absolute_path,
-      'count'          => $count,
-      'entity_id'      => $entity_id,
-      'entity_type_id' => $entity_type_id,
-      'field_type'     => $field_type,
-      'field_name'     => $field_name,
-      'internal_path'  => $internal_path,
-      'target_type'    => $target_type,
-      'cache_metadata' => ['keys' => [$id, $count]],
-    ];
+    $settings['breakpoints']    = isset($settings['breakpoints']) && empty($settings['responsive_image_style']) ? $settings['breakpoints'] : [];
+    $settings['bundle']         = $bundle;
+    $settings['cache_metadata'] = ['keys' => [$id, $count]];
+    $settings['content_url']    = $settings['absolute_path'] = $absolute_path;
+    $settings['count']          = $count;
+    $settings['entity_id']      = $entity_id;
+    $settings['entity_type_id'] = $entity_type_id;
+    $settings['field_type']     = $field_type;
+    $settings['field_name']     = $field_name;
+    $settings['id']             = $id;
+    $settings['internal_path']  = $internal_path;
+    $settings['lightbox']       = ($switch && in_array($switch, $this->getLightboxes())) ? $switch : FALSE;
+    $settings['resimage']       = function_exists('responsive_image_get_image_dimensions');
+    $settings['target_type']    = $target_type;
 
     unset($entity, $field);
-
-    $settings['id']          = $id;
-    $settings['lightbox']    = ($switch && in_array($switch, $this->getLightboxes())) ? $switch : FALSE;
-    $settings['breakpoints'] = isset($settings['breakpoints']) && empty($settings['responsive_image_style']) ? $settings['breakpoints'] : [];
 
     // @todo: Enable after proper checks.
     // $settings = array_filter($settings);
@@ -83,7 +73,6 @@ class BlazyFormatterManager extends BlazyManager {
     }
 
     $settings['caption']    = empty($settings['caption']) ? [] : array_filter($settings['caption']);
-    $settings['resimage']   = function_exists('responsive_image_get_image_dimensions');
     $settings['background'] = empty($settings['responsive_image_style']) && !empty($settings['background']);
     $resimage_lazy          = $this->configLoad('responsive_image') && !empty($settings['responsive_image_style']);
     $settings['blazy']      = $resimage_lazy || !empty($settings['blazy']);
@@ -109,13 +98,16 @@ class BlazyFormatterManager extends BlazyManager {
     if (!empty($settings['image_style']) && !$resimage_lazy) {
       if ($field_type == 'image' && $items[0]) {
         $settings['item'] = $items[0];
-        $settings['uri']  = $items[0]->entity->getFileUri();
+        $settings['uri']  = ($file = $items[0]->entity) && empty($items[0]->uri) ? $file->getFileUri() : $items[0]->uri;
       }
 
       if (!empty($settings['uri'])) {
         $this->setDimensionsOnce($settings);
       }
     }
+
+    // Add the entity to formatter cache tags.
+    $settings['cache_tags'][] = $settings['entity_type_id'] . ':' . $settings['entity_id'];
 
     $this->getModuleHandler()->alter($namespace . '_settings', $build, $items);
   }

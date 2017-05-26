@@ -18,7 +18,10 @@ class BlazyAdminFormatter extends BlazyAdminFormatterBase {
 
     $this->openingForm($form, $definition);
     $this->imageStyleForm($form, $definition);
-    $this->mediaSwitchForm($form, $definition);
+
+    if (!empty($definition['media_switch_form']) && !isset($form['media_switch'])) {
+      $this->mediaSwitchForm($form, $definition);
+    }
 
     if (!empty($definition['grid_form']) && !isset($form['grid'])) {
       $this->gridForm($form, $definition);

@@ -123,10 +123,6 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
    * Returns shared form elements across field formatter and Views.
    */
   public function openingForm(array &$form, $definition = []) {
-    if (!isset($definition['namespace'])) {
-      return;
-    }
-
     $this->blazyManager->getModuleHandler()->alter('blazy_form_element_definition', $definition);
 
     // Display style: column, plain static grid, slick grid, slick carousel.
@@ -262,10 +258,6 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
    * Defines re-usable breakpoints form.
    */
   public function breakpointElements($definition = []) {
-    if (!isset($definition['breakpoints'])) {
-      return [];
-    }
-
     foreach ($definition['breakpoints'] as $breakpoint) {
       $form[$breakpoint]['breakpoint'] = [
         '#type'               => 'item',
@@ -278,7 +270,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
         '#type'               => 'select',
         '#title'              => $this->t('Image style'),
         '#title_display'      => 'invisible',
-        '#options'            => image_style_options(FALSE),
+        '#options'            => function_exists('image_style_options') ? image_style_options(FALSE) : [],
         '#empty_option'       => $this->t('- None -'),
         '#weight'             => 2,
         '#wrapper_attributes' => ['class' => ['form-item--left']],
@@ -391,7 +383,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
   public function baseForm($definition = []) {
     $settings      = isset($definition['settings']) ? $definition['settings'] : [];
     $lightboxes    = $this->blazyManager->getLightboxes();
-    $image_styles  = image_style_options(FALSE);
+    $image_styles  = function_exists('image_style_options') ? image_style_options(FALSE) : [];
     $is_responsive = function_exists('responsive_image_get_image_dimensions') && !empty($definition['responsive_image']);
 
     $form = [];
@@ -476,17 +468,21 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
         '#type'        => 'select',
         '#options'     => $this->getViewModeOptions($definition['target_type']),
         '#title'       => $this->t('View mode'),
-        '#description' => $this->t('Required to grab the fields, or to have custom entity display as fallback display. If it has fields, be sure the selected "View mode" is enabled, and the enabled fields here are not hidden there. Manage view modes on the <a href=":view_modes">View modes page</a>.', [':view_modes' => Url::fromRoute('entity.entity_view_mode.collection')->toString()]),
+        '#description' => $this->t('Required to grab the fields, or to have custom entity display as fallback display. If it has fields, be sure the selected "View mode" is enabled, and the enabled fields here are not hidden there.'),
         '#weight'      => -96,
         '#enforced'    => TRUE,
       ];
+
+      if ($this->blazyManager()->getModuleHandler()->moduleExists('field_ui')) {
+        $form['view_mode']['#description'] .= $this->t('Manage view modes on the <a href=":view_modes">View modes page</a>.', [':view_modes' => Url::fromRoute('entity.entity_view_mode.collection')->toString()]);
+      }
     }
 
     if (!empty($definition['thumbnail_style'])) {
       $form['thumbnail_style'] = [
         '#type'        => 'select',
         '#title'       => $this->t('Thumbnail style'),
-        '#options'     => image_style_options(TRUE),
+        '#options'     => function_exists('image_style_options') ? image_style_options(TRUE) : [],
         '#description' => $this->t('Usages: Photobox/PhotoSwipe thumbnail, or custom work with thumbnails. Leave empty to not use thumbnails.'),
         '#weight'      => -100,
       ];
@@ -504,10 +500,6 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
     $settings   = isset($definition['settings']) ? $definition['settings'] : [];
     $lightboxes = $this->blazyManager->getLightboxes();
     $is_token   = function_exists('token_theme');
-
-    if (empty($definition['media_switch_form'])) {
-      return;
-    }
 
     if (isset($settings['media_switch'])) {
       $form['media_switch'] = $this->baseForm($definition)['media_switch'];
@@ -573,9 +565,6 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
             '#token_types' => $types,
           ];
         }
-        else {
-          $form['box_caption_custom']['#description'] .= ' ' . $this->t('Install Token module to browse available tokens.');
-        }
       }
     }
 
@@ -633,6 +622,11 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
             $form[$key]['#title_display'] = 'before';
           }
           elseif ($form[$key]['#type'] == 'checkboxes' && !empty($form[$key]['#options'])) {
+            $form[$key]['#attributes']['class'][] = 'form-wrapper--checkboxes';
+            $form[$key]['#attributes']['class'][] = 'form-wrapper--' . str_replace('_', '-', $key);
+            $count = count($form[$key]['#options']);
+            $form[$key]['#attributes']['class'][] = 'form-wrapper--count-' . ($count > 3 ? 'max' : $count);
+
             foreach ($form[$key]['#options'] as $i => $option) {
               $form[$key][$i]['#field_suffix'] = '&nbsp;';
               $form[$key][$i]['#title_display'] = 'before';
@@ -733,6 +727,7 @@ abstract class BlazyAdminBase implements BlazyAdminInterface {
    */
   protected function getState($state, $definition = []) {
     $lightboxes = [];
+
     foreach ($this->blazyManager->getLightboxes() as $key => $lightbox) {
       $lightboxes[$key]['value'] = $lightbox;
     }

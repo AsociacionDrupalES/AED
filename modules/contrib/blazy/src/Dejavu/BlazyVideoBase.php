@@ -49,6 +49,7 @@ abstract class BlazyVideoBase extends FormatterBase {
       'image_style_form'  => TRUE,
       'media_switch_form' => TRUE,
       'multimedia'        => TRUE,
+      'plugin_id'         => $this->getPluginId(),
       'settings'          => $this->getSettings(),
       'target_type'       => $target_type,
       'thumb_positions'   => TRUE,

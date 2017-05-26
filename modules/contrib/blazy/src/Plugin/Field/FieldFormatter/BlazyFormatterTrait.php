@@ -13,13 +13,6 @@ use Drupal\blazy\BlazyGrid;
 trait BlazyFormatterTrait {
 
   /**
-   * Returns the blazy admin service.
-   */
-  public function admin() {
-    return \Drupal::service('blazy.admin.formatter');
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
@@ -118,13 +111,6 @@ trait BlazyFormatterTrait {
       $build[$delta] = $this->blazyManager->getImage($box);
       unset($box);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function settingsSummary() {
-    return $this->admin()->settingsSummary($this);
   }
 
 }

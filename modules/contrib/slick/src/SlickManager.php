@@ -30,6 +30,13 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
   ];
 
   /**
+   * Static cache for the skin definition.
+   *
+   * @var array
+   */
+  protected $skinDefinition;
+
+  /**
    * Returns the supported skins.
    */
   public static function getConstantSkins() {
@@ -42,12 +49,12 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
    * @see \Drupal\blazy\BlazyManagerBase::buildSkins()
    */
   public function getSkins() {
-    $skins = &drupal_static(__METHOD__, NULL);
-    if (!isset($skins)) {
+    if (!isset($this->skinDefinition)) {
       $methods = ['skins', 'arrows', 'dots'];
-      $skins = $this->buildSkins('slick', '\Drupal\slick\SlickSkin', $methods);
+      $this->skinDefinition = $this->buildSkins('slick', '\Drupal\slick\SlickSkin', $methods);
     }
-    return $skins;
+
+    return $this->skinDefinition;
   }
 
   /**
@@ -110,10 +117,8 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
    * {@inheritdoc}
    */
   public function attach($attach = []) {
-    $attach += [
-      'slick_css'  => $this->configLoad('slick_css', 'slick.settings'),
-      'module_css' => $this->configLoad('module_css', 'slick.settings'),
-    ];
+    $attach['slick_css']  = isset($attach['slick_css']) ? $attach['slick_css'] : $this->configLoad('slick_css', 'slick.settings');
+    $attach['module_css'] = isset($attach['module_css']) ? $attach['module_css'] : $this->configLoad('module_css', 'slick.settings');
 
     $load = parent::attach($attach);
 
@@ -210,7 +215,7 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
       $cache['tags']     = Cache::buildTags('slick:' . $settings['id'], $suffixes, '.');
 
       if (!empty($settings['cache_tags'])) {
-        $cache['tags'] = array_merge($cache['tags'], $settings['cache_tags']);
+        $cache['tags'] = Cache::mergeTags($cache['tags'], $settings['cache_tags']);
       }
 
       $slick['#cache'] = $cache;
@@ -242,7 +247,7 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
       $dots_class[] = Html::cleanCssIdentifier('slick-dots--' . $settings['skin_dots']);
     }
 
-    if ($dots_class) {
+    if ($dots_class && !empty($build['optionset'])) {
       $dots_class[] = $build['optionset']->getSetting('dotsClass') ?: 'slick-dots';
       $js['dotsClass'] = implode(" ", $dots_class);
     }
@@ -331,6 +336,10 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
       '#items'      => [],
       '#build'      => $build,
       '#pre_render' => [[$this, 'preRenderSlickWrapper']],
+      // Satisfy CTools blocks as per 2017/04/06: 2804165 which expects children
+      // only, but not #theme, #type, #markup properties.
+      // @todo: Remove when CTools is more accommodative.
+      'items'       => [],
     ];
   }
 
@@ -356,7 +365,7 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
 
     // Supports programmatic options defined within skin definitions to allow
     // addition of options with other libraries integrated with Slick without
-    // modifying Optionset like Zoom, Reflection, Slicebox, etc.
+    // modifying optionset such as for Zoom, Reflection, Slicebox, Transit, etc.
     if (!empty($settings['skin'])) {
       $skins = $this->getSkinsByGroup('main');
       if (isset($skins[$settings['skin']]['options'])) {
@@ -407,7 +416,7 @@ class SlickManager extends BlazyManagerBase implements BlazyManagerInterface, Sl
     $slick[0] = self::slick($build);
 
     // Build the thumbnail Slick.
-    if (isset($build['thumb'])) {
+    if ($settings['nav'] && isset($build['thumb'])) {
       foreach (['items', 'options', 'settings'] as $key) {
         $build[$key] = isset($build['thumb'][$key]) ? $build['thumb'][$key] : [];
       }

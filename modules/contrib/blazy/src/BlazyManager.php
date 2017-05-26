@@ -4,7 +4,6 @@ namespace Drupal\blazy;
 
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\image\Entity\ImageStyle;
 
 /**
  * Implements a public facing blazy manager.
@@ -20,14 +19,13 @@ class BlazyManager extends BlazyManagerBase {
    *   The settings being modified.
    */
   public function cleanUpBreakpoints(array &$settings = []) {
-    if (empty($settings['breakpoints'])) {
-      return;
-    }
+    if (!empty($settings['breakpoints'])) {
+      foreach ($settings['breakpoints'] as $key => &$breakpoint) {
+        $breakpoint = array_filter($breakpoint);
 
-    foreach ($settings['breakpoints'] as $key => &$breakpoint) {
-      $breakpoint = array_filter($breakpoint);
-      if (empty($breakpoint['width']) && empty($breakpoint['image_style'])) {
-        unset($settings['breakpoints'][$key]);
+        if (empty($breakpoint['width']) && empty($breakpoint['image_style'])) {
+          unset($settings['breakpoints'][$key]);
+        }
       }
     }
 
@@ -35,6 +33,19 @@ class BlazyManager extends BlazyManagerBase {
     if (empty($settings['blazy'])) {
       $settings['blazy'] = !empty($settings['breakpoints']);
     }
+  }
+
+  /**
+   * Checks if an image style contains crop effect.
+   */
+  public function isCrop($style = NULL) {
+    foreach ($style->getEffects() as $effect) {
+      if (strpos($effect->getPluginId(), 'crop') !== FALSE) {
+        return TRUE;
+      }
+    }
+
+    return FALSE;
   }
 
   /**
@@ -51,14 +62,16 @@ class BlazyManager extends BlazyManagerBase {
     $dimensions['height'] = $settings['original_height'] = isset($item->height) ? $item->height : NULL;
 
     // If image style contains crop, sets dimension once, and let all inherit.
-    if (($style = ImageStyle::load($settings['image_style'])) && Blazy::isCrop($style)) {
-      $style->transformDimensions($dimensions, $settings['uri']);
+    if (!empty($settings['image_style']) && ($style = $this->entityLoad($settings['image_style']))) {
+      if ($this->isCrop($style)) {
+        $style->transformDimensions($dimensions, $settings['uri']);
 
-      $settings['height'] = $dimensions['height'];
-      $settings['width']  = $dimensions['width'];
+        $settings['height'] = $dimensions['height'];
+        $settings['width']  = $dimensions['width'];
 
-      // Informs individual images that dimensions are already set once.
-      $settings['_dimensions'] = TRUE;
+        // Informs individual images that dimensions are already set once.
+        $settings['_dimensions'] = TRUE;
+      }
     }
 
     // Also sets breakpoint dimensions once, if cropped.
@@ -84,26 +97,28 @@ class BlazyManager extends BlazyManagerBase {
    */
   public function isBlazy(array &$settings, array $item = []) {
     // Retrieves Blazy formatter related settings from within Views style.
-    $item_id  = $settings['item_id'];
-    $content  = isset($item[$item_id]) ? $item[$item_id] : $item;
-    $cherries = [
-      'blazy',
-      'box_style',
-      'image_style',
-      'lazy',
-      'media_switch',
-      'ratio',
-      'uri',
-    ];
+    $content = !empty($settings['item_id']) && isset($item[$settings['item_id']]) ? $item[$settings['item_id']] : $item;
 
     // 1. Blazy formatter within Views fields by supported modules.
     if (isset($item['settings'])) {
-      $blazy = isset($content['#build']['settings']) ? $content['#build']['settings'] : [];
+      // Prevents edge case with unexpected flattened Views results which is
+      // normally triggered by checking "Use field template" option.
+      $blazy = is_array($content) && isset($content['#build']['settings']) ? $content['#build']['settings'] : [];
 
       // Allows breakpoints overrides such as multi-styled images by GridStack.
       if (empty($settings['breakpoints']) && isset($blazy['breakpoints'])) {
         $settings['breakpoints'] = $blazy['breakpoints'];
       }
+
+      $cherries = [
+        'blazy',
+        'box_style',
+        'image_style',
+        'lazy',
+        'media_switch',
+        'ratio',
+        'uri',
+      ];
 
       foreach ($cherries as $key) {
         $fallback = isset($settings[$key]) ? $settings[$key] : '';
@@ -112,7 +127,7 @@ class BlazyManager extends BlazyManagerBase {
     }
 
     // 2. Blazy Views fields by supported modules.
-    if (isset($content['#view']) && ($view = $content['#view'])) {
+    if (is_array($content) && isset($content['#view']) && ($view = $content['#view'])) {
       if ($blazy_field = BlazyViews::viewsField($view)) {
         $settings = array_merge(array_filter($blazy_field->mergedViewsSettings()), array_filter($settings));
       }
@@ -168,14 +183,16 @@ class BlazyManager extends BlazyManagerBase {
           $dimensions['width'] = $settings['original_width'];
           $dimensions['height'] = $settings['original_height'];
 
-          if (($style = ImageStyle::load($breakpoint['image_style'])) && Blazy::isCrop($style)) {
-            $style->transformDimensions($dimensions, $settings['uri']);
-            $padding = round((($dimensions['height'] / $dimensions['width']) * 100), 2);
-            $json['dimensions'][$width] = $padding;
+          if (!empty($breakpoint['image_style']) && ($style = $this->entityLoad($breakpoint['image_style']))) {
+            if ($this->isCrop($style)) {
+              $style->transformDimensions($dimensions, $settings['uri']);
+              $padding = round((($dimensions['height'] / $dimensions['width']) * 100), 2);
+              $json['dimensions'][$width] = $padding;
 
-            // Only set padding-bottom for the last breakpoint to avoid FOUC.
-            if ($end['width'] == $breakpoint['width']) {
-              $settings['padding_bottom'] = $padding;
+              // Only set padding-bottom for the last breakpoint to avoid FOUC.
+              if ($end['width'] == $breakpoint['width']) {
+                $settings['padding_bottom'] = $padding;
+              }
             }
           }
         }
@@ -219,15 +236,13 @@ class BlazyManager extends BlazyManagerBase {
    *   The alterable and renderable array of enforced content, or theme_blazy().
    */
   public function getImage(array $build = []) {
-    /** @var Drupal\image\Plugin\Field\FieldType\ImageItem $item */
-    $item     = $build['item'];
-    $settings = &$build['settings'];
-    $theme    = isset($settings['theme_hook_image']) ? $settings['theme_hook_image'] : 'blazy';
-
-    if (empty($item)) {
+    if (empty($build['item'])) {
       return [];
     }
 
+    /** @var Drupal\image\Plugin\Field\FieldType\ImageItem $item */
+    $item                    = $build['item'];
+    $settings                = &$build['settings'];
     $settings['delta']       = isset($settings['delta']) ? $settings['delta'] : 0;
     $settings['image_style'] = isset($settings['image_style']) ? $settings['image_style'] : '';
 
@@ -238,7 +253,7 @@ class BlazyManager extends BlazyManagerBase {
     // Respects content not handled by theme_blazy(), but passed through.
     if (empty($build['content'])) {
       $image = [
-        '#theme'       => $theme,
+        '#theme'       => isset($settings['theme_hook_image']) ? $settings['theme_hook_image'] : 'blazy',
         '#delta'       => $settings['delta'],
         '#item'        => [],
         '#image_style' => $settings['image_style'],
@@ -286,9 +301,9 @@ class BlazyManager extends BlazyManagerBase {
     $settings['responsive_image_style_id'] = '';
     if (!empty($settings['resimage']) && !empty($settings['responsive_image_style'])) {
       $responsive_image_style = $this->entityLoad($settings['responsive_image_style'], 'responsive_image_style');
-      $settings['responsive_image_style_id'] = $responsive_image_style->id() ?: '';
       $settings['lazy'] = '';
-      if (!empty($settings['responsive_image_style_id'])) {
+      if (!empty($responsive_image_style)) {
+        $settings['responsive_image_style_id'] = $responsive_image_style->id();
         if ($this->configLoad('responsive_image')) {
           $item_attributes['data-srcset'] = TRUE;
           $settings['lazy'] = 'responsive';
@@ -317,8 +332,8 @@ class BlazyManager extends BlazyManagerBase {
     $element['#settings']        = $settings;
 
     foreach (['caption', 'media', 'wrapper'] as $key) {
-      if (!empty($settings["$key" . '_attributes'])) {
-        $element["#$key" . '_attributes'] = $settings["$key" . '_attributes'];
+      if (!empty($settings[$key . '_attributes'])) {
+        $element["#$key" . '_attributes'] = $settings[$key . '_attributes'];
       }
     }
 
@@ -339,11 +354,15 @@ class BlazyManager extends BlazyManagerBase {
    *
    * @param object $entity
    *   The entity being rendered.
+   * @param array $settings
+   *   The settings containing view_mode.
+   * @param string $fallback
+   *   The fallback content when all fails, probably just entity label.
    *
    * @return array|bool
    *   The renderable array of the view builder, or false if not applicable.
    */
-  public function getEntityView($entity = NULL, $settings = [], $fallback = '') {
+  public function getEntityView($entity = NULL, array $settings = [], $fallback = '') {
     if ($entity instanceof EntityInterface) {
       $entity_type_id = $entity->getEntityTypeId();
       $view_hook      = $entity_type_id . '_view';

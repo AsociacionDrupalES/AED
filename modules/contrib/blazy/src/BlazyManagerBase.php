@@ -8,7 +8,6 @@ use Drupal\Core\Render\RendererInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Cache\Cache;
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Component\Utility\Html;
 use Drupal\Component\Utility\NestedArray;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -53,6 +52,13 @@ abstract class BlazyManagerBase implements BlazyManagerInterface {
   protected $cache;
 
   /**
+   * The supported lightboxes.
+   *
+   * @var array
+   */
+  protected $lightboxes = [];
+
+  /**
    * Constructs a BlazyManager object.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, ModuleHandlerInterface $module_handler, RendererInterface $renderer, ConfigFactoryInterface $config_factory, CacheBackendInterface $cache) {
@@ -95,6 +101,13 @@ abstract class BlazyManagerBase implements BlazyManagerInterface {
    */
   public function getRenderer() {
     return $this->renderer;
+  }
+
+  /**
+   * Returns the config factory.
+   */
+  public function getConfigFactory() {
+    return $this->configFactory;
   }
 
   /**
@@ -144,13 +157,6 @@ abstract class BlazyManagerBase implements BlazyManagerInterface {
       }
     }
 
-    if (!empty($attach['colorbox'])) {
-      \Drupal::service('colorbox.attachment')->attach($dummy);
-      $load = isset($dummy['#attached']) ? NestedArray::mergeDeep($load, $dummy['#attached']) : $load;
-      $load['library'][] = 'blazy/colorbox';
-      unset($dummy);
-    }
-
     // Only load grid xor column, but not both.
     $attach['column'] = !empty($attach['style']) && $attach['style'] == 'column';
     if (!empty($attach['column'])) {
@@ -176,38 +182,39 @@ abstract class BlazyManagerBase implements BlazyManagerInterface {
    * Collects defined skins as registered via hook_MODULE_NAME_skins_info().
    */
   public function buildSkins($namespace, $skin_class, $methods = []) {
-    $skins = [];
     $cid = $namespace . ':skins';
-    if ($cache = $this->cache->get($cid)) {
-      $skins = $cache->data;
+    $cache = $this->cache->get($cid);
+
+    if ($cache) {
+      return $cache->data;
     }
-    else {
-      $classes = $this->moduleHandler->invokeAll($namespace . '_skins_info');
-      $classes = array_merge([$skin_class], $classes);
-      $items   = $skins = [];
-      foreach ($classes as $class) {
-        if (class_exists($class)) {
-          $reflection = new \ReflectionClass($class);
-          if ($reflection->implementsInterface($skin_class . 'Interface')) {
-            $skin = new $class();
-            if (empty($methods) && method_exists($skin, 'skins')) {
-              $items = $skin->skins();
-            }
-            else {
-              foreach ($methods as $method) {
-                $items[$method] = method_exists($skin, $method) ? $skin->{$method}() : [];
-              }
+
+    $classes = $this->moduleHandler->invokeAll($namespace . '_skins_info');
+    $classes = array_merge([$skin_class], $classes);
+    $items   = $skins = [];
+    foreach ($classes as $class) {
+      if (class_exists($class)) {
+        $reflection = new \ReflectionClass($class);
+        if ($reflection->implementsInterface($skin_class . 'Interface')) {
+          $skin = new $class();
+          if (empty($methods) && method_exists($skin, 'skins')) {
+            $items = $skin->skins();
+          }
+          else {
+            foreach ($methods as $method) {
+              $items[$method] = method_exists($skin, $method) ? $skin->{$method}() : [];
             }
           }
         }
-        $skins = NestedArray::mergeDeep($skins, $items);
       }
-
-      $count = isset($items['skins']) ? count($items['skins']) : count($items);
-      $tags  = Cache::buildTags($cid, ['count:' . $count]);
-
-      $this->cache->set($cid, $skins, Cache::PERMANENT, $tags);
+      $skins = NestedArray::mergeDeep($skins, $items);
     }
+
+    $count = isset($items['skins']) ? count($items['skins']) : count($items);
+    $tags  = Cache::buildTags($cid, ['count:' . $count]);
+
+    $this->cache->set($cid, $skins, Cache::PERMANENT, $tags);
+
     return $skins;
   }
 
@@ -218,33 +225,27 @@ abstract class BlazyManagerBase implements BlazyManagerInterface {
    *   The supported lightboxes.
    */
   public function getLightboxes() {
-    $photobox = \Drupal::root() . '/libraries/photobox/photobox/jquery.photobox.js';
+    $boxes = $this->lightboxes + ['colorbox', 'photobox'];
 
     $lightboxes = [];
-    foreach (['colorbox', 'photobox'] as $lightbox) {
-      $supported = function_exists($lightbox . '_theme');
-      if ($lightbox == 'photobox' && is_file($photobox)) {
-        $supported = TRUE;
-      }
-      if ($supported) {
+    foreach (array_unique($boxes) as $lightbox) {
+      if (function_exists($lightbox . '_theme')) {
         $lightboxes[] = $lightbox;
       }
     }
 
     $this->moduleHandler->alter('blazy_lightboxes', $lightboxes);
-    return $lightboxes;
+    return array_unique($lightboxes);
   }
 
   /**
-   * Returns the trusted HTML ID common for Blazy, GridStack, Mason, Slick.
+   * Sets the lightboxes.
    *
-   * @deprecated: Removed prior to release for Blazy::getHtmlId().
+   * @param string $lightbox
+   *   The lightbox name, expected to be the module name.
    */
-  public static function getHtmlId($string = 'blazy', $id = '') {
-    $blazy_id = &drupal_static('blazy_id', 0);
-
-    // Do not use dynamic Html::getUniqueId, otherwise broken AJAX.
-    return empty($id) ? Html::getId($string . '-' . ++$blazy_id) : $id;
+  public function setLightboxes($lightbox) {
+    $this->lightboxes[] = $lightbox;
   }
 
 }

@@ -21,7 +21,7 @@ class BlazyGrid {
    *   The modified array of grid items.
    */
   public static function build(array $items = [], array $settings = []) {
-    $blazy = empty($settings['blazy_data']) ? '' : $settings['blazy_data'];
+    $blazy = empty($settings['blazy_data']) ? '' : Json::encode($settings['blazy_data']);
     $settings['style'] = empty($settings['style']) ? 'grid' : $settings['style'];
 
     $grids = [];
@@ -56,7 +56,7 @@ class BlazyGrid {
           'block-' . $settings['style'],
           'block-count-' . $count,
         ],
-        'data-blazy' => Json::encode($blazy),
+        'data-blazy' => $blazy,
       ],
       '#wrapper_attributes' => [
         'class' => ['item-list--blazy', 'item-list--blazy-' . $settings['style']],

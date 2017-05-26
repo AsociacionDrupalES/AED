@@ -17,7 +17,8 @@ trait BlazyEntityTrait {
    */
   public function getFieldString($entity, $field_name = '', $langcode = NULL) {
     $value = '';
-    if (empty($field_name)) {
+    $has_field = !empty($field_name) && isset($entity->{$field_name});
+    if (!$has_field) {
       return $value;
     }
 

@@ -1,4 +1,82 @@
 
+Blazy 8.x-1.0-dev, 2017-05-26
+-----------------------------
+- Added tests.
+- Moved lightbox and other optional integration outside classes due to breaking
+  test coverage. Be sure to clear cache to pick up new alter functions.
+- Moved Responsive image integration into Blazy to declutter module file, and
+  add test coverage.
+- Refactored field settings summary to avoid heavy form elements.
+- Deprecated BlazyAdminFormatterBase::settingsSummary for ::getSettingsSummary()
+  to reduce complexity with unpredictable form elements.
+
+Blazy 8.x-1.0-dev, 2017-05-03
+-----------------------------
+- #2873319 by gausarts, tjwelde: IE11 and below: responsive_image IE fix not
+  working.
+
+Blazy 8.x-1.0-dev, 2017-04-29
+-----------------------------
+- Added blazy.api.php.
+
+Blazy 8.x-1.0-dev, 2017-04-28
+-----------------------------
+- Fixed for Instagram integration with empty entity for some reason.
+- Fixed for Soundcloud integration which has special source_field name:
+  source_url_field. And exluded from VEF integration.
+
+Blazy 8.x-1.0-dev, 2017-04-27
+-----------------------------
+- #2873191 by Pavan B S, dhruveshdtripathi: Convert module to use short array
+  syntax (new coding standard).
+- Updated README.
+- Respected hand-coded image attributes.
+
+Blazy 8.x-1.0-dev, 2017-04-26
+-----------------------------
+- Issue #2871085 by chr.fritsch: Exception if configured image style does not
+  exist anymore.
+
+Blazy 8.x-1.0-dev, 2017-04-09
+-----------------------------
+- Fixed for iframe mixes with/without "Image to iframe" on the same page.
+- Marked final ROADMAP/TODO completed.
+- Moved reusable files and videos (VEF) into BlazyFormatterBaseTrait.php.
+- Added Blazy Video formatter for iframes.
+- Fixed for non-existent field check such as for a mix of image and video.
+- A few cleanups, and documentation.
+
+Blazy 8.x-1.0-dev, 2017-04-07
+-----------------------------
+- #2867553 by gambry: Field formatter cache is not invalidated when the entity
+  it belongs to is updated.
+- A few cleanups: .eslintignore, .ui-dialog, JS doc comments, grid.
+
+Blazy 8.x-1.0-dev, 2017-03-02
+-----------------------------
+- Fixed for few typos.
+- Added support for block_field.module for Slick Views elements.
+- Split re-usable BlazyViewsStylePluginBase methods into BlazyStylePluginTrait
+  to have advanced options when extending other style plugins: HTML list, etc.
+  which may require existing/ different markups for free.
+
+Blazy 8.x-1.0-dev, 2017-02-20
+-----------------------------
+- Fixed for Blazy libraries weight regression at hook_library_info_alter().
+- Fixed for Views integration edge case with unexpected flattened Views results.
+
+Blazy 8.x-1.0-dev, 2017-02-07
+-----------------------------
+- #2849191 by tjwelde, chr.fritsch: Drupal 8.3 error.
+
+Blazy 8.x-1.0-dev, 2017-01-27
+-----------------------------
+- Reverted changes to support RAF for old browsers.
+
+Blazy 8.x-1.0-dev, 2017-01-26
+-----------------------------
+- #2846560 by gausarts, chr.fritsch: Images of gallery will not be loaded.
+
 Blazy 8.x-1.0-dev, 2017-01-24
 -----------------------------
 - Split BlazyDefault::imageSettings() into BlazyDefault::baseImageSettings().

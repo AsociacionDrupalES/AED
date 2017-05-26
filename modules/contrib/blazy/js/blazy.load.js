@@ -28,6 +28,8 @@
     },
 
     clearing: function (el) {
+      var ie = _db.hasClass(el, 'b-responsive') && el.hasAttribute('data-pfsrc');
+
       // The .b-lazy element can be attached to IMG, or DIV as CSS background.
       el.className = el.className.replace(/(\S+)loading/, '');
 
@@ -43,6 +45,15 @@
           wrapEl.className = wrapEl.className.replace(/(\S+)loading/, '');
         }
       });
+
+      // @todo: Remove when Blazy library fixes this.
+      // @see http://scottjehl.github.io/picturefill/
+      if (window.picturefill && ie) {
+        window.picturefill({
+          reevaluate: true,
+          elements: [el]
+        });
+      }
     }
   };
 
@@ -103,6 +114,8 @@
 
     // Reacts on resizing.
     if (!me.done) {
+      me.init.revalidate();
+
       _db.resize(function () {
         me.windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 

@@ -7,6 +7,7 @@
 
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\blazy\Blazy;
 
 /**
@@ -35,55 +36,7 @@ function blazy_preprocess_responsive_image(&$variables) {
   }
 
   // We are here either using Blazy, or core Responsive image formatters.
-  // Is picture element.
-  if (!$variables['output_image_tag']) {
-    // Prepare all <picture> [data-srcset] attributes on <source> elements.
-    _blazy_preprocess_responsive_image_picture_sources($variables);
-
-    // Fetches the picture element fallback URI, and empty it later.
-    $fallback_uri = $variables['img_element']['#srcset'][0]['uri'];
-
-    // Cleans up the no-longer relevant attributes for controlling element.
-    unset($variables['attributes']['data-srcset'], $variables['img_element']['#attributes']['data-srcset']);
-    $variables['img_element']['#srcset'] = '';
-    // Prevents invalid IMG tag when one pixel placeholder is disabled.
-    $variables['img_element']['#uri'] = Blazy::PLACEHOLDER;
-  }
-  else {
-    $srcset = $variables['attributes']['srcset'];
-    $srcset_values = $srcset->value();
-    $fallback_uri = $variables['img_element']['#uri'];
-
-    $variables['attributes']['data-srcset'] = $srcset_values;
-    $variables['img_element']['#attributes']['data-srcset'] = $srcset_values;
-    $variables['img_element']['#attributes']['srcset'] = '';
-  }
-
-  // Blazy needs controlling element to have a fallback [data-src], else error.
-  $variables['img_element']['#attributes']['data-src'] = $fallback_uri;
-  $variables['img_element']['#attributes']['class'][] = 'b-lazy b-responsive';
-
-  // Only replace fallback image URI with 1px placeholder, if so configured.
-  // This will prevent downloading the fallback image.
-  if ($config['one_pixel']) {
-    $variables['img_element']['#uri'] = Blazy::PLACEHOLDER;
-  }
-
-  $variables['img_element']['#attached']['drupalSettings']['blazy'] = $config['blazy'];
-}
-
-/**
- * Adds [data-srcset] attribute to picture source element to support lazyload.
- */
-function _blazy_preprocess_responsive_image_picture_sources(&$variables) {
-  /** @var \Drupal\Core\Template\Attribute $source */
-  foreach ($variables['sources'] as &$source) {
-    $srcset = $source['srcset'];
-    $srcset_values = $srcset->value();
-
-    $source->setAttribute('data-srcset', $srcset_values);
-    $source->removeAttribute('srcset');
-  }
+  Blazy::preprocessResponsiveImage($variables);
 }
 
 /**
@@ -121,16 +74,26 @@ function blazy_views_pre_render($view) {
  * Implements hook_field_formatter_info_alter().
  */
 function blazy_field_formatter_info_alter(array &$info) {
-  // Supports optional Media Entity via VEM within VEF if available.
+  // Supports optional Media Entity via VEM/VEF if available.
+  $common = [
+    'description' => t('Displays lazyloaded images, or iframes, for VEF/ ME.'),
+    'quickedit'   => ['editor' => 'disabled'],
+    'provider'    => 'blazy',
+  ];
+
   if (function_exists('video_embed_media_media_bundle_insert')) {
-    $info['blazy_file'] = [
+    $info['blazy_file'] = $common + [
       'id'          => 'blazy_file',
       'label'       => t('Blazy Image with Media'),
-      'description' => t('Display the images associated to VEM/ME as videos.'),
       'class'       => 'Drupal\blazy\Plugin\Field\FieldFormatter\BlazyFileFormatter',
       'field_types' => ['entity_reference', 'image'],
-      'quickedit'   => ['editor' => 'disabled'],
-      'provider'    => 'blazy',
+    ];
+
+    $info['blazy_video'] = $common + [
+      'id'          => 'blazy_video',
+      'label'       => t('Blazy Video'),
+      'class'       => 'Drupal\blazy\Plugin\Field\FieldFormatter\BlazyVideoFormatter',
+      'field_types' => ['video_embed_field'],
     ];
   }
 }
@@ -147,7 +110,42 @@ function blazy_config_schema_info_alter(array &$definitions) {
  */
 function blazy_library_info_alter(&$libraries, $extension) {
   if ($extension === 'blazy' && function_exists('libraries_get_path')) {
-    $libraries['blazy']['js'] = ['/' . libraries_get_path('blazy') . '/blazy.min.js' => []];
+    $libraries['blazy']['js'] = ['/' . libraries_get_path('blazy') . '/blazy.min.js' => ['weight' => -4]];
+  }
+}
+
+/**
+ * Implements hook_blazy_attach_alter().
+ */
+function blazy_blazy_attach_alter(array &$load, $attach = []) {
+  if (!empty($attach['colorbox'])) {
+    $dummy = [];
+    \Drupal::service('colorbox.attachment')->attach($dummy);
+    $load = isset($dummy['#attached']) ? NestedArray::mergeDeep($load, $dummy['#attached']) : $load;
+    $load['library'][] = 'blazy/colorbox';
+    unset($dummy);
+  }
+}
+
+/**
+ * Implements hook_blazy_lightboxes_alter().
+ */
+function blazy_blazy_lightboxes_alter(array &$lightboxes) {
+  if (is_file(DRUPAL_ROOT . '/libraries/photobox/photobox/jquery.photobox.js')) {
+    $lightboxes[] = 'photobox';
+  }
+}
+
+/**
+ * Implements hook_blazy_settings_alter().
+ */
+function blazy_blazy_settings_alter(array &$build, $items) {
+  $settings = &$build['settings'];
+
+  // Sniffs for Views to allow block__no_wrapper, views_no_wrapper, etc.
+  if (function_exists('views_get_current_view') && $view = views_get_current_view()) {
+    $settings['view_name'] = $view->storage->id();
+    $settings['current_view_mode'] = $view->current_display;
   }
 }
 

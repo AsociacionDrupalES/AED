@@ -11,14 +11,14 @@
   max-width: 100%;
 }
 
-/* Ensures not affecting iframe only without media switcher */
-.media--player.media--ratio > iframe {
+/** Ensures not affecting iframe only without media switcher */
+.media--switch iframe {
   opacity: 0;
   visibility: hidden;
 }
 
-.media--ratio iframe,
-.media__icon {
+.media__icon,
+.media--ratio iframe {
   -webkit-transition: visibility 0s linear 0.5s, opacity 0.5s linear;
   transition: visibility 0s linear 0.5s, opacity 0.5s linear;
 }
@@ -80,10 +80,6 @@
   background-color: #ff6d2c;
 }
 
-.is-playing .media__icon--close {
-  visibility: hidden;
-}
-
 .media__icon--play {
   border: 8px solid white;
   border-radius: 50%;
@@ -111,28 +107,29 @@
   transition-delay: 0s;
 }
 
-.media--switch .media__image,
+.is-playing .media__icon--close {
+  visibility: hidden;
+}
+
 .media__icon--play,
 .media:hover .media__icon--litebox,
-.is-playing .media__iframe,
-.is-playing.media--ratio > iframe,
-.is-playing:hover .media__icon--close {
+.media--switch img,
+.media--switch.is-playing iframe,
+.media--switch.is-playing:hover .media__icon--close {
   opacity: 1;
   visibility: visible;
 }
 
-.is-playing > img,
-.is-playing > .media__image,
-.is-playing.media--switch .media__image,
-.is-playing .media__icon--play,
-.is-playing:hover .media__icon--play {
+.media--switch.is-playing img,
+.media--switch.is-playing .media__icon--play,
+.media--switch.is-playing:hover .media__icon--play {
   opacity: 0;
   position: absolute;
   visibility: hidden;
   z-index: -1;
 }
 
-.is-playing .media__iframe {
+.media--switch.is-playing iframe {
   z-index: 3;
 }
 

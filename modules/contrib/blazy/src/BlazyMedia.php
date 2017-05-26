@@ -36,7 +36,7 @@ class BlazyMedia {
     $build = $media->get($settings['source_field'])->view($settings['view_mode']);
     $build['#settings'] = $settings;
 
-    return self::wrap($build);
+    return isset($build[0]) ? self::wrap($build) : $build;
   }
 
   /**
@@ -57,8 +57,12 @@ class BlazyMedia {
     // Media entity is a single being, reasonable to work with multi-value?
     $item       = $field[0];
     $settings   = isset($field['#settings']) ? $field['#settings'] : [];
-    $attributes = &$item['#attributes'];
     $iframe     = isset($item['#tag']) && $item['#tag'] == 'iframe';
+    $attributes = [];
+
+    if (isset($item['#attributes'])) {
+      $attributes = &$item['#attributes'];
+    }
 
     // Converts iframes into lazyloaded ones.
     if ($iframe && !empty($attributes['src'])) {
@@ -85,7 +89,7 @@ class BlazyMedia {
       $build['#attributes']['data-thumb'] = ImageStyle::load($settings['thumbnail_style'])->buildUrl($settings['uri']);
     }
 
-    // Currently known media entities using iframe: Instagram.
+    // See comment above for known media entities using iframe.
     if ($iframe) {
       $build['#attributes']['class'][] = 'media--ratio';
 

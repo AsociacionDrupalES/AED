@@ -8,13 +8,12 @@ data usage if they don't browse the whole page.
 FEATURES
 o Supports core Image.
 o Supports core Responsive image.
-o Supports Colorbox/Photobox, also multimedia lightboxes.
-o Supports Retina display.
-o Multi-serving images for configurable XS, SM and MD breakpoints, almost
-  similar to core Responsive image, only less complex.
+o Supports Colorbox/Photobox/ PhotoSwipe, also multimedia lightboxes.
+o Multi-serving images for configurable breakpoints, almost similar to core
+  Responsive image, only less complex.
 o CSS background lazyloading, see Mason, GridStack, and Slick carousel.
-o IFRAME urls via via custom coded, Blazy Image with Media entity via Video
-  Embed Media, or see Slick Video, Slick Media.
+o IFRAME urls via custom coded, Blazy Video, Blazy Image with Media entity via
+  Video Embed Media, or see Slick Video, Slick Media.
 o Delay loading for below-fold images until 100px (configurable) before they are
   visible at viewport.
 o A simple effortless CSS loading indicator.
@@ -23,9 +22,9 @@ o It doesn't take over all images, so it can be enabled as needed via Blazy
 
 
 OPTIONAL FEATURES
-o Views fields for File ER and Media Entity integration.
+o Views fields for File ER and Media Entity integration, see Slick Browser.
 o Views style plugin Blazy Grid.
-o Field formatters: Blazy, and Blazy Image with Media integration.
+o Field formatters: Blazy, Blazy Video, and Blazy Image with Media integration.
 
 
 REQUIREMENTS
@@ -50,16 +49,6 @@ o Find "Blazy" formatter under "Manage display".
 
 o Go to "admin/config/media/blazy" to manage few global options, including
   enabling support for lazyloading core Responsive image.
-
-For custom usages, add a class "b-lazy" along with a "data-src" attribute
-referring to an expected image or iframe URL, or to any supported element:
-IMG, IFRAME or DIV/BODY, etc.
-Non-media element, DIV/BODY/etc., will have background image lazyloaded instead.
-
-Wrap the parent container with [data-blazy attribute containing the expected
-options to limit the scope, or for simple need without aspect ratio. Add extra
-class .blazy to support aspect ratio with multi-serving images.
-And load the blazy library accordingly.
 
 
 MODULES THAT INTEGRATE WITH OR REQUIRE BLAZY
@@ -107,7 +96,7 @@ Add a min-height CSS to individual element to avoid layout reflow if not using
   image. Otherwise some collapsed images containers will defeat the purpose of
   lazyloading. When using CSS background, the container may also be collapsed.
   Both layout reflow and lazyloading delay issues are actually taken care of
-  if Aspect ratio is enabled in the first place.
+  if Aspect ratio option is enabled in the first place.
 
 Adjust, and override blazy CSS files accordingly.
 
@@ -118,7 +107,9 @@ ROADMAP/TODO
 [x] Media entity image/video, and Video embed field lazyloading, if any.
     10/25/2016
     Added both simple Blazy Media formatter and Views field Media Entity.
-o Makes a solid lazyloading solution for IMG, DIV, IFRAME tags.
+[x] Makes a solid lazyloading solution for IMG, DIV, IFRAME tags.
+    4/9/2017
+    Added IFRAME (Blazy Video), apart from existing IMG/ DIV (CSS background).
 
 
 CURRENT DEVELOPMENT STATUS
@@ -130,18 +121,32 @@ Alpha and Beta releases are for developers only. Be aware of possible breakage.
 
 UPDATE SOP:
 Visit any of the following URLs when updating Blazy, or its related modules.
+Please ignore any documentation if already aware of Drupal site building. This
+is for the sake of completed documentation for those who may need it.
 
 1. /admin/config/development/performance
   Unless an update is required, clearing cache should fix most issues.
 
   o Hit "Clear all caches" button once the new Blazy in place.
   o Regenerate CSS and JS as the latest fixes may contain changes to the assets.
+    Ignore below if you are aware, and found no asset changes from commits.
+    Normally clearing cache suffices when no asset changes are found.
+    - Uncheck CSS and JS aggregation options under Bandwidth optimization.
+    - Save.
+    - [Ignorable] See one of Blazy related pages if display is expected.
+    - [Ignorable] Only clear cache if needed.
+    - Check both options again.
+    - Save again.
+    - [Ignorable] Press F5, or CMD/ CTRL + R to refresh browser cache if needed.
 
 2. /admin/reports/status
   Check for any pending update, and run /update.php from the brower address bar.
 
 3. If Twig templates are customized, compare against the latest.
 
+
+PROGRAMATICALLY
+See blazy.api.php for details.
 
 PERFORMANCE TIPS:
 o If breakpoints provided with tons of images, using image styles with ANY crop

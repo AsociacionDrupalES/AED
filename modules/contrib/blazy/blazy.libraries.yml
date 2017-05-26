@@ -31,7 +31,7 @@ column:
 
 dblazy:
   js:
-    js/dblazy.min.js: { weight: -2, minified: true }
+    js/dblazy.min.js: { weight: -3, minified: true }
 
 load:
   js:

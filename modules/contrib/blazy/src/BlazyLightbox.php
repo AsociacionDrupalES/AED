@@ -157,16 +157,13 @@ class BlazyLightbox {
           $caption = \Drupal::token()->replace($settings['box_caption_custom'], [$entity->getEntityTypeId() => $entity, 'file' => $item], $options);
 
           // Checks for multi-value text fields, and maps its delta to image.
-          if (strpos($caption, ", <p>") !== FALSE) {
+          if (!empty($caption) && strpos($caption, ", <p>") !== FALSE) {
             $caption = str_replace(", <p>", '| <p>', $caption);
             $captions = explode("|", $caption);
             $caption = isset($captions[$delta]) ? $captions[$delta] : '';
           }
         }
         break;
-
-      default:
-        $caption = '';
     }
 
     return empty($caption) ? [] : ['#markup' => $caption];

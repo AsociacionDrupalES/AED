@@ -82,9 +82,6 @@ trait BlazyVideoTrait {
     if (strpos($url, 'autoplay') === FALSE || strpos($url, 'autoplay=0') !== FALSE) {
       $settings['autoplay_url'] = strpos($url, '?') === FALSE ? $url . '?autoplay=1' : $url . '&autoplay=1';
     }
-    if ($settings['scheme'] == 'soundcloud') {
-      $settings['autoplay_url'] = strpos($url, '?') === FALSE ? $url . '?auto_play=true' : $url . '&auto_play=true';
-    }
 
     // Only applies when Image style is empty, no file API, no $item,
     // with unmanaged VEF image without image_style.
@@ -174,8 +171,10 @@ trait BlazyVideoTrait {
 
     $bundle = $media->bundle();
     $fields = $media->getFields();
+    $config = $media->getType()->getConfiguration();
+    $source = isset($config['source_url_field']) ? $config['source_url_field'] : '';
 
-    $source_field[$bundle]    = $media->getType()->getConfiguration()['source_field'];
+    $source_field[$bundle]    = isset($config['source_field']) ? $config['source_field'] : $source;
     $settings['bundle']       = $bundle;
     $settings['source_field'] = $source_field[$bundle];
     $settings['media_url']    = $media->url();
@@ -197,10 +196,15 @@ trait BlazyVideoTrait {
     if ($source && isset($media->{$source})) {
       $value     = $media->{$source}->getValue();
       $input_url = isset($value[0]['uri']) ? $value[0]['uri'] : (isset($value[0]['value']) ? $value[0]['value'] : '');
+      $input_url = strip_tags($input_url);
 
       if ($input_url) {
         $settings['input_url'] = $input_url;
-        $this->buildVideo($settings, $input_url);
+
+        // Soundcloud has different source_field name: source_url_field.
+        if (strpos($input_url, 'soundcloud') === FALSE) {
+          $this->buildVideo($settings, $input_url);
+        }
       }
       elseif (isset($value[0]['alt'])) {
         $settings['type'] = 'image';

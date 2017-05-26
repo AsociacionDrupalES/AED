@@ -18,7 +18,7 @@
  * Aspect ratio element wrapper. So can use dynamic/fluid ratio via JS which is
  * not possible using ::pseudo selector approach.
  */
-.media--ratio {
+.media.media--ratio {
   display: block;
   height: 0;
   overflow: hidden;
@@ -26,7 +26,7 @@
 }
 
 /* Allows to fix broken images with hidden elements, see slick.load.js. */
-.js-media--ratio {
+.media.js-media--ratio {
   height: auto;
 }
 
