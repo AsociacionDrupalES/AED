@@ -21,5 +21,13 @@ drush sqlsan --sanitize-password=12345 --sanitize-email=dr%nid@drupal.es
 
 echo
 echo -e "${LBLUE} > Updating non-core fields.${DEFAULT}"
-drush sqlq "UPDATE users SET mail = substring(MD5(RAND()), -8);"
+drush sqlq "UPDATE user__field_social_links SET field_social_links_title = substring(MD5(RAND()), -8);"
+drush sqlq "UPDATE user__field_social_links SET field_social_links_uri = concat('https://www.drupal.org/', RAND());"
 
+drush sqlq "UPDATE url_alias SET alias = concat('/user/', RAND()) where source LIKE '%user%'"
+
+drush sqlq "UPDATE user__field_name SET field_name_value = concat('Name ', RAND())"
+
+drush sqlq "UPDATE users_field_data SET name = concat('u', uid) WHERE uid NOT IN (0,1)"
+drush sqlq "UPDATE users_field_data SET mail = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
+drush sqlq "UPDATE users_field_data SET init = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
