@@ -34,3 +34,6 @@ echo -e "${LBLUE} > Table users_field_data.${DEFAULT}"
 drush sqlq "UPDATE users_field_data SET name = concat('u', uid) WHERE uid NOT IN (0,1)"
 drush sqlq "UPDATE users_field_data SET mail = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
 drush sqlq "UPDATE users_field_data SET init = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
+
+echo -e "${LBLUE} > Clear the cache ;)${DEFAULT}"
+drush cr
