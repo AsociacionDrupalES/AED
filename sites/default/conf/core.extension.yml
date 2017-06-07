@@ -52,6 +52,7 @@ module:
   slick_ui: 0
   slick_views: 0
   social_links_simple: 0
+  stage_file_proxy: 0
   system: 0
   taxonomy: 0
   text: 0
