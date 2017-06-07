@@ -1,6 +1,7 @@
-#Web de la Asociación española de Drupal
+# Web de la Asociación española de Drupal
 
-##Contribuir
+## Contribuir
+
 Cualquiera que tenga un momento puede contribuir. Mira en [https://github.com/AsociacionDrupalES/AED/issues](https://github.com/AsociacionDrupalES/AED/issues) para poder ver todas las tareas pendientes. 
 Si quieres hacer alguno pidetelo con un comentario, haz un fork del repo y finalmente un PR. 
 
