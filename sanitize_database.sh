@@ -35,5 +35,15 @@ drush sqlq "UPDATE users_field_data SET name = concat('u', uid) WHERE uid NOT IN
 drush sqlq "UPDATE users_field_data SET mail = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
 drush sqlq "UPDATE users_field_data SET init = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
 
+echo -e "${LBLUE} > Truncate sessions and watchdog table.${DEFAULT}"
+drush sqlq "TRUNCATE TABLE sessions;"
+drush sqlq "TRUNCATE TABLE watchdog;"
+
+echo -e "${LBLUE} > Sanitize config variables.${DEFAULT}"
+drush -y config-set system.site mail x@x.com
+drush -y config-set update.settings notification.emails.0 x@x.com
+drush -y config-set contact.form.feedback recipients x@x.com
+
+
 echo -e "${LBLUE} > Clear the cache ;)${DEFAULT}"
 drush cr
