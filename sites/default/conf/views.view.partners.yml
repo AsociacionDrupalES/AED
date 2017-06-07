@@ -10,6 +10,8 @@ dependencies:
     - node.type.partner
     - system.menu.main
     - taxonomy.vocabulary.anios
+  content:
+    - 'taxonomy_term:anios:e39bed2b-f012-4786-9559-fb010b77022d'
   module:
     - image
     - link
@@ -188,7 +190,19 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
-      sorts: {  }
+      sorts:
+        random:
+          id: random
+          table: views
+          field: random
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: ASC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: random
       title: 'Empresas colaboradoras'
       header:
         area:
@@ -225,7 +239,7 @@ display:
       link_url: /node
       link_display: custom_url
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
@@ -251,6 +265,8 @@ display:
         pager: false
         link_display: false
         link_url: false
+        filters: false
+        filter_groups: false
       use_more_always: true
       use_more_text: 'See all'
       header: {  }
@@ -262,11 +278,81 @@ display:
           offset: 0
       link_display: page_1
       link_url: /node
+      filters:
+        status:
+          value: '1'
+          table: node_field_data
+          field: status
+          plugin_id: boolean
+          entity_type: node
+          entity_field: status
+          id: status
+          expose:
+            operator: ''
+          group: 1
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          value:
+            partner: partner
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+        field_anos_patrocinados_target_id:
+          id: field_anos_patrocinados_target_id
+          table: node__field_anos_patrocinados
+          field: field_anos_patrocinados_target_id
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value:
+            388: 388
+          group: 1
+          exposed: false
+          expose:
+            operator_id: ''
+            label: ''
+            description: ''
+            use_operator: false
+            operator: ''
+            identifier: ''
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+            reduce: false
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          reduce_duplicates: false
+          type: select
+          limit: true
+          vid: anios
+          hierarchy: false
+          error_message: true
+          plugin_id: taxonomy_index_tid
+      filter_groups:
+        operator: AND
+        groups:
+          1: AND
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
+        - user
         - 'user.node_grants:view'
         - user.permissions
       tags:
@@ -331,7 +417,8 @@ display:
           group_type: group
           admin_label: ''
           operator: or
-          value: {  }
+          value:
+            388: 388
           group: 1
           exposed: true
           expose:
@@ -348,15 +435,15 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-              administrator1: '0'
-              colaborador: '0'
-              editor: '0'
-              control_de_usuarios: '0'
               socio: '0'
               socio_2013: '0'
               socio_2014: '0'
               socio_2015: '0'
               socio_2016: '0'
+              socio_2017: '0'
+              socio_2018: '0'
+              socio_2019: '0'
+              socio_2020: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -421,10 +508,15 @@ display:
       pager:
         type: full
         options:
-          items_per_page: 16
+          items_per_page: 24
           offset: 0
           id: 0
           total_pages: null
+          tags:
+            previous: ‹‹
+            next: ››
+            first: '« First'
+            last: 'Last »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -433,14 +525,9 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          tags:
-            previous: ‹‹
-            next: ››
-            first: '« First'
-            last: 'Last »'
           quantity: 9
     cache_metadata:
-      max-age: -1
+      max-age: 0
       contexts:
         - 'languages:language_content'
         - 'languages:language_interface'
