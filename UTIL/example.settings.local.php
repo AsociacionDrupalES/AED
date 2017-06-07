@@ -10,6 +10,8 @@ $databases['default']['default'] = array(
   'driver' => 'mysql',
 );
 
+$config['stage_file_proxy.settings']['origin'] = 'https://asociaciondrupal.es';
+
 //$settings['trusted_host_patterns'] = array(
 //  '^dev\.asociaciondrupal\.es$',
 //);
