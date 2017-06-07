@@ -1,8 +1,8 @@
 <?php
 $databases['default']['default'] = array(
   'database' => 'aed',
-  'username' => 'root',
-  'password' => 'root',
+  'username' => 'aed',
+  'password' => 'aed',
   'prefix' => '',
   'host' => 'localhost',
   'port' => '3306',

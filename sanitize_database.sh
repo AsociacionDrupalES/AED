@@ -35,6 +35,9 @@ drush sqlq "UPDATE users_field_data SET name = concat('u', uid) WHERE uid NOT IN
 drush sqlq "UPDATE users_field_data SET mail = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
 drush sqlq "UPDATE users_field_data SET init = concat(uid, '@drupal.es') WHERE uid NOT IN (0,1)"
 
+echo -e "${LBLUE} > Truncate cache_render table.${DEFAULT}"
+drush sqlq "TRUNCATE TABLE cache_render;"
+
 echo -e "${LBLUE} > Truncate sessions and watchdog table.${DEFAULT}"
 drush sqlq "TRUNCATE TABLE sessions;"
 drush sqlq "TRUNCATE TABLE watchdog;"
