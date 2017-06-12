@@ -6,7 +6,7 @@ _core:
   default_config_hash: c4zaT5cyPxuTXI6JOWt3qRtMvICT9tHB6d9a5VG-CmQ
 id: feedback
 label: Contact
-recipients: asociacion@drupal.es,comunicacion@drupal.es
+recipients: x@x.com
 reply: ''
 weight: 0
 message: 'Your message has been sent.'
