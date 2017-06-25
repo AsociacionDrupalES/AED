@@ -2,11 +2,17 @@ uuid: d33a6c4a-3d3a-4e54-9112-9e6556d50a5b
 langcode: en
 status: true
 dependencies: {  }
+third_party_settings:
+  contact_storage:
+    submit_text: 'Send message'
+    show_preview: true
+    disabled_form_message: 'This contact form has been disabled.'
+    maximum_submissions_user: 0
 _core:
   default_config_hash: c4zaT5cyPxuTXI6JOWt3qRtMvICT9tHB6d9a5VG-CmQ
 id: feedback
 label: Contact
-recipients: asociacion@drupal.es,comunicacion@drupal.es
+recipients: 'asociacion@drupal.es,comunicacion@drupal.es'
 reply: ''
 weight: 0
 message: 'Your message has been sent.'
