@@ -15,8 +15,7 @@ body.path-videos {
       color: white;
       font-size: 26px;
       text-transform: uppercase;
-      background: url(image-url('icon-chevron-down-21x11.png')) no-repeat black;
-      background-position: 94% center;
+      background: black url(image-url('icon-chevron-down-21x11.png')) no-repeat 94% center;
       display: none;
       cursor: pointer;
       padding: 10px 15px;
@@ -26,8 +25,7 @@ body.path-videos {
       }
 
       &.active {
-        background: url(image-url('icon-chevron-up-21x11.png')) no-repeat black;
-        background-position: 94% center;
+        background: black url(image-url('icon-chevron-up-21x11.png')) no-repeat 94% center;
 
         @include media($tab) {
           background-position: 98% center;
@@ -98,6 +96,11 @@ body.path-videos {
           background: white;
         }
 
+        &.is-active {
+          background: #9c7e0e;
+          padding-top: 5px;
+          padding-bottom: 5px;
+        }
       }
 
       .item-list {
