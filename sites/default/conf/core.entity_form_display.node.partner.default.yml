@@ -3,8 +3,10 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.partner.body
     - field.field.node.partner.field_anos_patrocinados
     - field.field.node.partner.field_logo
+    - field.field.node.partner.field_slides
     - field.field.node.partner.field_slogan
     - field.field.node.partner.field_webpage
     - image.style.thumbnail
@@ -13,11 +15,21 @@ dependencies:
     - image
     - link
     - path
+    - text
 id: node.partner.default
 targetEntityType: node
 bundle: partner
 mode: default
 content:
+  body:
+    weight: 36
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
+    third_party_settings: {  }
+    type: text_textarea_with_summary
+    region: content
   created:
     type: datetime_timestamp
     weight: 10
@@ -40,6 +52,14 @@ content:
       preview_image_style: thumbnail
     third_party_settings: {  }
     type: image_image
+    region: content
+  field_slides:
+    weight: 37
+    settings:
+      placeholder_url: ''
+      placeholder_title: ''
+    third_party_settings: {  }
+    type: link_default
     region: content
   field_slogan:
     weight: 34
