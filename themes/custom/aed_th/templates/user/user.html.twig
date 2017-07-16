@@ -19,5 +19,9 @@
 <article{{ attributes.addClass('profile') }}>
   {% if content %}
     {{- content -}}
+    <div class="user-roles">
+      <span class="label">{{- 'Socio/a en: '|t -}}</span>
+      {{- user.getRoles()|slice(2)|join(' ')|replace({'socio_': ''}) -}}
+    </div>
   {% endif %}
 </article>

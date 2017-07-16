@@ -1,0 +1,23 @@
+uuid: 83519f76-8c86-4bd4-b9f5-1078d8d303e4
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_slides
+    - node.type.partner
+  module:
+    - link
+id: node.partner.field_slides
+field_name: field_slides
+entity_type: node
+bundle: partner
+label: Enlaces
+description: 'You can add here links to your social networks, corporate website or to drupal.org pages and profiles.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  link_type: 17
+  title: 1
+field_type: link

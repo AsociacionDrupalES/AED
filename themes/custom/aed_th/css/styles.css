@@ -3140,8 +3140,7 @@ body.path-videos .region--left-wrapper .trigger-button {
   color: white;
   font-size: 26px;
   text-transform: uppercase;
-  background: url("/themes/custom/aed_th/images/icon-chevron-down-21x11.png") no-repeat black;
-  background-position: 94% center;
+  background: black url("/themes/custom/aed_th/images/icon-chevron-down-21x11.png") no-repeat 94% center;
   display: none;
   cursor: pointer;
   padding: 10px 15px;
@@ -3154,8 +3153,7 @@ body.path-videos .region--left-wrapper .trigger-button {
 }
 
 body.path-videos .region--left-wrapper .trigger-button.active {
-  background: url("/themes/custom/aed_th/images/icon-chevron-up-21x11.png") no-repeat black;
-  background-position: 94% center;
+  background: black url("/themes/custom/aed_th/images/icon-chevron-up-21x11.png") no-repeat 94% center;
 }
 
 @media screen and (min-width: 768px) {
@@ -3232,6 +3230,12 @@ body.path-videos .region--left-wrapper .block-facets a {
 body.path-videos .region--left-wrapper .block-facets a:hover, body.path-videos .region--left-wrapper .block-facets a:focus {
   color: black;
   background: white;
+}
+
+body.path-videos .region--left-wrapper .block-facets a.is-active {
+  background: #9c7e0e;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 /*# sourceMappingURL=styles.css.map */

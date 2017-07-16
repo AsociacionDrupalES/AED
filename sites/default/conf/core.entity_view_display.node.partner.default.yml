@@ -3,20 +3,30 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.partner.body
     - field.field.node.partner.field_anos_patrocinados
     - field.field.node.partner.field_logo
+    - field.field.node.partner.field_slides
     - field.field.node.partner.field_slogan
     - field.field.node.partner.field_webpage
     - node.type.partner
   module:
     - image
     - link
+    - text
     - user
 id: node.partner.default
 targetEntityType: node
 bundle: partner
 mode: default
 content:
+  body:
+    weight: 5
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: text_default
+    region: content
   field_anos_patrocinados:
     weight: 4
     label: inline
@@ -33,6 +43,18 @@ content:
       image_link: field_webpage
     third_party_settings: {  }
     type: image
+    region: content
+  field_slides:
+    weight: 6
+    label: above
+    settings:
+      trim_length: 80
+      url_only: false
+      url_plain: false
+      rel: ''
+      target: ''
+    third_party_settings: {  }
+    type: link
     region: content
   field_slogan:
     weight: 3
@@ -56,7 +78,7 @@ content:
     region: content
   links:
     weight: 0
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
 hidden: {  }
