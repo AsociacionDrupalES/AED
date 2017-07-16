@@ -42,7 +42,7 @@ display:
         type: basic
         options:
           submit_button: Buscar
-          reset_button: false
+          reset_button: true
           reset_button_label: Reset
           exposed_sorts_label: 'Sort by'
           expose_sort_order: false
@@ -208,57 +208,6 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           plugin_id: boolean
-        uid:
-          id: uid
-          table: users_field_data
-          field: uid
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: uid_op
-            label: Nombre
-            description: 'Buscar por nombre'
-            use_operator: false
-            operator: uid_op
-            identifier: uid
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              editor: '0'
-              anonymous: '0'
-              administrator: '0'
-              socio: '0'
-              socio_2013: '0'
-              socio_2014: '0'
-              socio_2015: '0'
-              socio_2016: '0'
-              socio_2017: '0'
-              socio_2018: '0'
-              socio_2019: '0'
-              socio_2020: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: user
-          entity_field: uid
-          plugin_id: user_name
         roles_target_id:
           id: roles_target_id
           table: user__roles
@@ -299,6 +248,54 @@ display:
           reduce_duplicates: false
           entity_type: user
           plugin_id: user_roles
+        field_name_value:
+          id: field_name_value
+          table: user__field_name
+          field: field_name_value
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: contains
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: field_name_value_op
+            label: Nombre
+            description: 'Buscar por nombre'
+            use_operator: false
+            operator: field_name_value_op
+            identifier: field_name_value
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              editor: '0'
+              anonymous: '0'
+              administrator: '0'
+              socio: '0'
+              socio_2013: '0'
+              socio_2014: '0'
+              socio_2015: '0'
+              socio_2016: '0'
+              socio_2017: '0'
+              socio_2018: '0'
+              socio_2019: '0'
+              socio_2020: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          plugin_id: string
       sorts:
         field_name_value:
           id: field_name_value
@@ -342,7 +339,7 @@ display:
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
-      use_ajax: true
+      use_ajax: false
     cache_metadata:
       max-age: -1
       contexts:
