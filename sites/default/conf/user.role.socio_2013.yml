@@ -4,7 +4,7 @@ status: true
 dependencies: {  }
 id: socio_2013
 label: 'Socio 2013'
-weight: 8
+weight: -5
 is_admin: null
 permissions:
   - 'change own username'

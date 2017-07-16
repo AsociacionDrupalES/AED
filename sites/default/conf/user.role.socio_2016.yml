@@ -4,6 +4,6 @@ status: true
 dependencies: {  }
 id: socio_2016
 label: 'Socio 2016'
-weight: 12
+weight: -2
 is_admin: null
 permissions: {  }
