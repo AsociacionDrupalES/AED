@@ -1,0 +1,22 @@
+uuid: d18a4ec9-c0bf-42ed-bfd9-a4162301ef28
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.body
+    - node.type.partner
+  module:
+    - text
+id: node.partner.body
+field_name: body
+entity_type: node
+bundle: partner
+label: Body
+description: 'This text will be shown in the Partner page.'
+required: false
+translatable: true
+default_value: {  }
+default_value_callback: ''
+settings:
+  display_summary: true
+field_type: text_with_summary
