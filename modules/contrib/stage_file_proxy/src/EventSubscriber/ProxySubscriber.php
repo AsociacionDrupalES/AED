@@ -6,12 +6,11 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Url;
 use Psr\Log\LoggerInterface;
-use Drupal\Component\EventDispatcher\ContainerAwareEventDispatcher;
 use Drupal\stage_file_proxy\EventDispatcher\AlterExcludedPathsEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Drupal\stage_file_proxy\FetchManagerInterface;
 
 /**
@@ -29,14 +28,14 @@ class ProxySubscriber implements EventSubscriberInterface {
   /**
    * The logger.
    *
-   * @var LoggerInterface
+   * @var \Psr\Log\LoggerInterface
    */
   protected $logger;
 
   /**
    * The event dispatcher.
    *
-   * @var ContainerAwareEventDispatcher
+   * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
    */
   protected $eventDispatcher;
 
@@ -45,12 +44,12 @@ class ProxySubscriber implements EventSubscriberInterface {
    *
    * @param \Drupal\stage_file_proxy\FetchManagerInterface $manager
    *   The manager used to fetch the file against.
-   *
    * @param \Psr\Log\LoggerInterface $logger
-   * @param ContainerAwareEventDispatcher $event_dispatcher
+   *   The logger interface.
+   * @param \Symfony\Component\EventDispatcher\EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
    */
-  public function __construct(FetchManagerInterface $manager, LoggerInterface $logger, ContainerAwareEventDispatcher $event_dispatcher) {
+  public function __construct(FetchManagerInterface $manager, LoggerInterface $logger, EventDispatcherInterface $event_dispatcher) {
     $this->manager = $manager;
     $this->logger = $logger;
     $this->eventDispatcher = $event_dispatcher;
@@ -63,20 +62,34 @@ class ProxySubscriber implements EventSubscriberInterface {
    *   The Event to process.
    */
   public function checkFileOrigin(GetResponseEvent $event) {
-    $file_dir = $this->manager->filePublicPath();
-    $uri = $event->getRequest()->getPathInfo();
+    $config = \Drupal::config('stage_file_proxy.settings');
+    // Get the origin server.
+    $server = $config->get('origin');
 
-    $uri = Unicode::substr($uri, 1);
-
-    if (strpos($uri, '' . $file_dir) !== 0) {
+    // Quit if no origin given.
+    if (!$server) {
       return;
     }
 
-    $alter_excluded_paths_event = new AlterExcludedPathsEvent(array());
-    $event = $this->eventDispatcher->dispatch('stage_file_proxy.alter_excluded_paths', $alter_excluded_paths_event);
-    $excluded_paths = $event->getExcludedPaths();
+    // Quit if we are the origin, ignore http(s).
+    if (preg_replace('#^[a-z]*://#u', '', $server) === $event->getRequest()->getHost()) {
+      return;
+    }
+
+    $file_dir = $this->manager->filePublicPath();
+    $request_path = $event->getRequest()->getPathInfo();
+
+    $request_path = Unicode::substr($request_path, 1);
+
+    if (strpos($request_path, '' . $file_dir) !== 0) {
+      return;
+    }
+
+    $alter_excluded_paths_event = new AlterExcludedPathsEvent([]);
+    $this->eventDispatcher->dispatch('stage_file_proxy.alter_excluded_paths', $alter_excluded_paths_event);
+    $excluded_paths = $alter_excluded_paths_event->getExcludedPaths();
     foreach ($excluded_paths as $excluded_path) {
-      if (strpos($uri, $excluded_path) !== FALSE) {
+      if (strpos($request_path, $excluded_path) !== FALSE) {
         return;
       }
     }
@@ -84,50 +97,59 @@ class ProxySubscriber implements EventSubscriberInterface {
     // Note if the origin server files location is different. This
     // must be the exact path for the remote site's public file
     // system path, and defaults to the local public file system path.
-    $remote_file_dir = trim(\Drupal::config('stage_file_proxy.settings')->get('origin_dir'));
+    $remote_file_dir = trim($config->get('origin_dir'));
     if (!$remote_file_dir) {
       $remote_file_dir = $file_dir;
     }
 
-    $uri = rawurldecode($uri);
-    $relative_path = Unicode::substr($uri, Unicode::strlen($file_dir) + 1);
+    $request_path = rawurldecode($request_path);
+    // Path relative to file directory. Used for hotlinking.
+    $relative_path = Unicode::substr($request_path, Unicode::strlen($file_dir) + 1);
+    // If file is fetched and use_imagecache_root is set, original is used.
+    $fetch_path = $relative_path;
 
-    // Get the origin server.
-    $server = \Drupal::config('stage_file_proxy.settings')->get('origin');
-
-    if ($server) {
-      // Is this imagecache? Request the root file and let imagecache resize.
-      if (\Drupal::config('stage_file_proxy.settings')->get('origin') && $original_path = $this->manager->styleOriginalPath($relative_path, TRUE)) {
-        $relative_path = file_uri_target($original_path);
-        if (file_exists($original_path)) {
-          // Imagecache can generate it without our help.
-          return;
-        }
+    // Is this imagecache? Request the root file and let imagecache resize.
+    // We check this first so locally added files have precedence.
+    $original_path = $this->manager->styleOriginalPath($relative_path, TRUE);
+    if ($original_path) {
+      if (file_exists($original_path)) {
+        // Imagecache can generate it without our help.
+        return;
       }
-
-      $query = \Drupal::request()->query->all();
-      $query_parameters = UrlHelper::filterQueryParameters($query);
-
-      if (\Drupal::config('stage_file_proxy.settings')->get('hotlink')) {
-
-        $location = Url::fromUri("$server/$remote_file_dir/$relative_path", array(
-          'query' => $query_parameters,
-          'absolute' => TRUE,
-        ))->toString();
-
+      if ($config->get('use_imagecache_root')) {
+        // Config says: Fetch the original.
+        $fetch_path = file_uri_target($original_path);
       }
-      elseif ($this->manager->fetch($server, $remote_file_dir, $relative_path)) {
-        // Refresh this request & let the web server work out mime type, etc.
-        $location = Url::fromUri('base://' . $uri, array(
-          'query' => $query_parameters,
-          'absolute' => TRUE,
-        ))->toString();
-      }
-      else {
-        $this->logger->error('Stage File Proxy encountered an unknown error by retrieving file @file', array('@file' => $server . '/' . UrlHelper::encodePath($remote_file_dir . '/' . $relative_path)));
-        throw new NotFoundHttpException();
-      }
+    }
 
+    $query = \Drupal::request()->query->all();
+    $query_parameters = UrlHelper::filterQueryParameters($query);
+      $options = [
+        'verify' => \Drupal::config('stage_file_proxy.settings')->get('verify'),
+      ];
+
+    if ($config->get('hotlink')) {
+
+      $location = Url::fromUri("$server/$remote_file_dir/$relative_path", [
+        'query' => $query_parameters,
+        'absolute' => TRUE,
+      ])->toString();
+
+    }
+    elseif ($this->manager->fetch($server, $remote_file_dir, $fetch_path, $options)) {
+      // Refresh this request & let the web server work out mime type, etc.
+      $location = Url::fromUri('base://' . $request_path, [
+        'query' => $query_parameters,
+        'absolute' => TRUE,
+      ])->toString();
+      // Avoid redirection caching in upstream proxies.
+      header("Cache-Control: must-revalidate, no-cache, post-check=0, pre-check=0, private");
+    }
+    else {
+      $this->logger->error('Stage File Proxy encountered an unknown error by retrieving file @file', ['@file' => $server . '/' . UrlHelper::encodePath($remote_file_dir . '/' . $relative_path)]);
+    }
+
+    if (isset($location)) {
       header("Location: $location");
       exit;
     }
@@ -139,9 +161,9 @@ class ProxySubscriber implements EventSubscriberInterface {
    * @return array
    *   An array of event listener definitions.
    */
-  static function getSubscribedEvents() {
+  public static function getSubscribedEvents() {
     // Priority 240 is after ban middleware but before page cache.
-    $events[KernelEvents::REQUEST][] = array('checkFileOrigin', 240);
+    $events[KernelEvents::REQUEST][] = ['checkFileOrigin', 240];
     return $events;
   }
 

@@ -54,7 +54,7 @@ trait TestHelperTrait {
   protected function checkFacetIsNotActive($label) {
     $label = (string) $label;
     $label = strip_tags($label);
-    $links = $this->xpath('//a/span[1][normalize-space(text())=:label]', array(':label' => $label));
+    $links = $this->xpath('//a/span[1][normalize-space(text())=:label]', [':label' => $label]);
     return $this->assert(isset($links[0]));
   }
 

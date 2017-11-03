@@ -225,7 +225,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: search-api-test-search-view-caching
+      path: search-api-test-search-view-caching-none
       display_description: ''
     cache_metadata:
       max-age: -1
@@ -242,7 +242,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: search-api-test-search-view-caching
+      path: search-api-test-search-view-caching-tag
       display_description: ''
       cache:
         type: search_api_tag
@@ -264,7 +264,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: search-api-test-search-view-caching
+      path: search-api-test-search-view-caching-time
       display_description: ''
       cache:
         type: search_api_time

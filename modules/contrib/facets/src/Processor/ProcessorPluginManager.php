@@ -42,20 +42,20 @@ class ProcessorPluginManager extends DefaultPluginManager {
    *   - label: The translated label for this stage.
    */
   public function getProcessingStages() {
-    return array(
-      ProcessorInterface::STAGE_PRE_QUERY => array(
+    return [
+      ProcessorInterface::STAGE_PRE_QUERY => [
         'label' => $this->t('Pre query stage'),
-      ),
-      ProcessorInterface::STAGE_POST_QUERY => array(
+      ],
+      ProcessorInterface::STAGE_POST_QUERY => [
         'label' => $this->t('Post query stage'),
-      ),
-      ProcessorInterface::STAGE_BUILD => array(
+      ],
+      ProcessorInterface::STAGE_BUILD => [
         'label' => $this->t('Build stage'),
-      ),
-      ProcessorInterface::STAGE_SORT => array(
+      ],
+      ProcessorInterface::STAGE_SORT => [
         'label' => $this->t('Sort stage'),
-      ),
-    );
+      ],
+    ];
   }
 
 }

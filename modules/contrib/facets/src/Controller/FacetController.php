@@ -35,7 +35,7 @@ class FacetController extends ControllerBase {
    *   The page title.
    */
   public function pageTitle(FacetInterface $facet) {
-    return new FormattableMarkup('@title', array('@title' => $facet->label()));
+    return new FormattableMarkup('@title', ['@title' => $facet->label()]);
   }
 
 }

@@ -2,14 +2,17 @@
 
 namespace Drupal\search_api\Plugin\views\field;
 
-use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\TypedData\ComplexDataInterface;
 use Drupal\Core\TypedData\DataReferenceInterface;
 use Drupal\Core\TypedData\ListInterface;
+use Drupal\Core\TypedData\TranslatableInterface;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\search_api\Plugin\views\SearchApiHandlerTrait;
+use Drupal\search_api\Processor\ConfigurablePropertyInterface;
 use Drupal\search_api\Processor\ProcessorPropertyInterface;
 use Drupal\search_api\Utility\FieldsHelperInterface;
 use Drupal\search_api\Utility\Utility;
@@ -21,6 +24,11 @@ use Drupal\views\ResultRow;
  *
  * Multi-valued field handling is taken from
  * \Drupal\views\Plugin\views\field\PrerenderList.
+ *
+ * Note: Some method parameters are documented as type array|\ArrayAccess. This
+ * is just done to avoid the code sniffer complaining about the missing "array"
+ * type hint (since it's impossible to add it, due to the Views parent plugin
+ * classes not having that type hint, either).
  */
 trait SearchApiFieldTrait {
 
@@ -90,6 +98,15 @@ trait SearchApiFieldTrait {
   protected $skipAccessChecks = [];
 
   /**
+   * Array of replacement property paths to use when getting field values.
+   *
+   * @var string[]
+   *
+   * @see \Drupal\search_api\Plugin\views\field\SearchApiFieldTrait::extractProcessorProperty()
+   */
+  protected $propertyReplacements = [];
+
+  /**
    * The fields helper.
    *
    * @var \Drupal\search_api\Utility\FieldsHelperInterface|null
@@ -102,6 +119,13 @@ trait SearchApiFieldTrait {
    * @var \Drupal\Core\TypedData\TypedDataManagerInterface|null
    */
   protected $typedDataManager;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * Retrieves the typed data manager.
@@ -123,6 +147,29 @@ trait SearchApiFieldTrait {
    */
   public function setTypedDataManager(TypedDataManagerInterface $typed_data_manager) {
     $this->typedDataManager = $typed_data_manager;
+    return $this;
+  }
+
+  /**
+   * Retrieves the entity type manager.
+   *
+   * @return \Drupal\Core\Entity\EntityTypeManagerInterface
+   *   The entity type manager.
+   */
+  public function getEntityTypeManager() {
+    return $this->entityTypeManager ?: \Drupal::entityTypeManager();
+  }
+
+  /**
+   * Sets the entity type manager.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   *
+   * @return $this
+   */
+  public function setEntityTypeManager(EntityTypeManagerInterface $entity_type_manager) {
+    $this->entityTypeManager = $entity_type_manager;
     return $this;
   }
 
@@ -186,7 +233,7 @@ trait SearchApiFieldTrait {
   /**
    * Provide a form to edit options for this plugin.
    *
-   * @param array $form
+   * @param array|\ArrayAccess $form
    *   The existing form structure, passed by reference.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current form state.
@@ -308,9 +355,10 @@ trait SearchApiFieldTrait {
    * @see \Drupal\views\Plugin\views\field\FieldHandlerInterface::getEntity()
    */
   public function getEntity(ResultRow $values) {
-    list($datasource_id, $property_path) = Utility::splitCombinedId($this->getCombinedPropertyPath());
+    $combined_property_path = $this->getCombinedPropertyPath();
+    list($datasource_id, $property_path) = Utility::splitCombinedId($combined_property_path);
 
-    if ($values->search_api_datasource != $datasource_id) {
+    if ($values->search_api_datasource !== $datasource_id) {
       return NULL;
     }
 
@@ -319,9 +367,9 @@ trait SearchApiFieldTrait {
     // entity, cause we go too far up.
     $levels = 2;
     while ($levels--) {
-      if (!empty($values->_relationship_objects[$property_path][$value_index])) {
+      if (!empty($values->_relationship_objects[$combined_property_path][$value_index])) {
         /** @var \Drupal\Core\TypedData\TypedDataInterface $object */
-        $object = $values->_relationship_objects[$property_path][$value_index];
+        $object = $values->_relationship_objects[$combined_property_path][$value_index];
         $value = $object->getValue();
         if ($value instanceof EntityInterface) {
           return $value;
@@ -331,12 +379,13 @@ trait SearchApiFieldTrait {
       if (!$property_path) {
         break;
       }
-      list($property_path) = Utility::splitPropertyPath($property_path);
       // For multi-valued fields, the parent's index is not the same as the
       // field value's index.
-      if (!empty($values->_relationship_parent_indices[$value_index])) {
-        $value_index = $values->_relationship_parent_indices[$value_index];
+      if (!empty($values->_relationship_parent_indices[$combined_property_path][$value_index])) {
+        $value_index = $values->_relationship_parent_indices[$combined_property_path][$value_index];
       }
+      list($property_path) = Utility::splitPropertyPath($property_path);
+      $combined_property_path = $this->createCombinedPropertyPath($datasource_id, $property_path);
     }
 
     return NULL;
@@ -372,192 +421,26 @@ trait SearchApiFieldTrait {
    * This gives the handlers some time to set up before any handler has
    * been rendered.
    *
-   * @param \Drupal\views\ResultRow[] $values
+   * @param \Drupal\views\ResultRow[]|\ArrayAccess $values
    *   An array of all ResultRow objects returned from the query.
    *
    * @see \Drupal\views\Plugin\views\field\FieldHandlerInterface::preRender()
    */
   public function preRender(&$values) {
-    $index = $this->getIndex();
     // We deal with the properties one by one, always loading the necessary
     // values for any nested properties coming afterwards.
-    // @todo This works quite well, but will load each item/entity individually.
-    //   Instead, we should exploit the workflow of proceeding by each property
-    //   on its own to multi-load as much as possible (maybe even entities of
-    //   the same type from different properties).
-    // @todo Also, this will unnecessarily load items/entities even if all
-    //   required fields are provided in the results. However, to solve this,
-    //   expandRequiredProperties() would have to provide more information, or
-    //   provide a separate properties list for each row.
-    foreach ($this->expandRequiredProperties() as $datasource_id => $properties) {
-      if ($datasource_id === '') {
-        $datasource_id = NULL;
-      }
-      foreach ($properties as $property_path => $combined_property_path) {
-        // Determine the path of the parent property, and the property key to
-        // take from it for this property. If the name is "_object", we just
-        // wanted the parent object to be loaded, so we might be done – except
-        // when the parent is empty, in which case we wanted to load the
-        // original search result, which we haven't done yet.
-        list($parent_path, $name) = Utility::splitPropertyPath($property_path);
-        if ($parent_path && $name == '_object') {
+    foreach ($this->expandRequiredProperties() as $properties) {
+      foreach ($properties as $property_path => $info) {
+        $combined_property_path = $info['combined_property_path'];
+        $dependents = $info['dependents'];
+
+        if ($combined_property_path === NULL) {
+          $this->preLoadResultItems($values, $dependents);
           continue;
         }
 
-        // Now go through all rows and add the property to them, if necessary.
-        foreach ($values as $i => $row) {
-          // Check whether this field even exists for this row.
-          if (!$this->isActiveForRow($row)) {
-            continue;
-          }
-          // Check whether there are parent objects present. If no, either load
-          // them (in case the parent is the result item itself) or bail.
-          if (empty($row->_relationship_objects[$parent_path])) {
-            if ($parent_path) {
-              continue;
-            }
-            else {
-              $row->_relationship_objects[$parent_path] = [$row->_item->getOriginalObject()];
-            }
-          }
-
-          // If the property key is "_object", we just needed to load the search
-          // result item, so we're now done.
-          if ($name == '_object') {
-            continue;
-          }
-
-          // Determine whether we want to set field values for this property on
-          // this row. This is the case if the property is one of the explicitly
-          // retrieved properties and not yet set on the result row object.
-          $set_values = isset($this->retrievedProperties[$datasource_id][$property_path]) && !isset($row->{$combined_property_path});
-
-          if (empty($row->_relationship_objects[$property_path])) {
-            // Iterate over all parent objects to get their typed data for this
-            // property and to extract their values.
-            $row->_relationship_objects[$property_path] = [];
-            foreach ($row->_relationship_objects[$parent_path] as $j => $parent) {
-              // Follow references.
-              while ($parent instanceof DataReferenceInterface) {
-                $parent = $parent->getTarget();
-              }
-              // At this point we need the parent to be a complex item,
-              // otherwise it can't have any children (and thus, our property
-              // can't be present).
-              if (!($parent instanceof ComplexDataInterface)) {
-                continue;
-              }
-              // Check whether this is a processor-generated property and use
-              // special code to retrieve it in this case.
-              $definitions = $index->getPropertyDefinitions($datasource_id);
-              if (!$parent_path && isset($definitions[$name])) {
-                $definition = $definitions[$name];
-                if ($definition instanceof ProcessorPropertyInterface) {
-                  $processor = $index->getProcessor($definition->getProcessorId());
-                  if (!$processor) {
-                    continue;
-                  }
-                  // We need to call the processor's addFieldValues() method in
-                  // order to get the field value. We do this using a clone of
-                  // the search item so as to preserve the original state of the
-                  // item. We also use a dummy field object – either a clone of
-                  // a fitting indexed field (to get its configuration), or a
-                  // newly created one.
-                  $property_fields = $this->getFieldsHelper()
-                    ->filterForPropertyPath($index->getFields(), $datasource_id, $property_path);
-                  if ($property_fields) {
-                    $dummy_field = clone reset($property_fields);
-                  }
-                  else {
-                    $dummy_field = $this->getFieldsHelper()
-                      ->createFieldFromProperty($index, $definition, $datasource_id, $property_path, 'tmp', 'string');
-                  }
-                  /** @var \Drupal\search_api\Item\ItemInterface $dummy_item */
-                  $dummy_item = clone $row->_item;
-                  $dummy_item->setFields([
-                    'tmp' => $dummy_field,
-                  ]);
-                  $dummy_item->setFieldsExtracted(TRUE);
-
-                  $processor->addFieldValues($dummy_item);
-
-                  if ($set_values) {
-                    $row->{$combined_property_path} = [];
-                  }
-                  foreach ($dummy_field->getValues() as $value) {
-                    if (!$this->checkEntityAccess($value, $combined_property_path)) {
-                      continue;
-                    }
-                    if ($set_values) {
-                      $row->{$combined_property_path}[] = $value;
-                    }
-                    $typed_data = $this->getTypedDataManager()
-                      ->create($definition, $value);
-                    $row->_relationship_objects[$property_path][] = $typed_data;
-                    $row->_relationship_parent_indices[$property_path][] = $j;
-                  }
-
-                  continue;
-                }
-              }
-              // Add the typed data for the property to our relationship objects
-              // for this property path. To treat list properties correctly
-              // regarding possible child properties, add all the list items
-              // individually.
-              try {
-                $typed_data = $parent->get($name);
-
-                // If the typed data is an entity, check whether the current
-                // user can access it.
-                $value = $typed_data->getValue();
-                if ($value instanceof EntityInterface) {
-                  if (!$this->checkEntityAccess($value, $combined_property_path)) {
-                    continue;
-                  }
-                  if ($value instanceof ContentEntityInterface && $value->hasTranslation($row->search_api_language)) {
-                    $typed_data = $value->getTranslation($row->search_api_language)->getTypedData();
-                  }
-                }
-
-                if ($typed_data instanceof ListInterface) {
-                  foreach ($typed_data as $item) {
-                    $row->_relationship_objects[$property_path][] = $item;
-                    $row->_relationship_parent_indices[$property_path][] = $j;
-                  }
-                }
-                else {
-                  $row->_relationship_objects[$property_path][] = $typed_data;
-                  $row->_relationship_parent_indices[$property_path][] = $j;
-                }
-              }
-              catch (\InvalidArgumentException $e) {
-                // This can easily happen, for example, when requesting a field
-                // that only exists on a different bundle. Unfortunately, there
-                // is no ComplexDataInterface::hasProperty() method, so we can
-                // only catch and ignore the exception.
-              }
-            }
-          }
-
-          if ($set_values) {
-            $row->{$combined_property_path} = [];
-
-            // Iterate over the typed data objects, extract their values and set
-            // the relationship objects for the next iteration of the outer loop
-            // over properties.
-            foreach ($row->_relationship_objects[$property_path] as $typed_data) {
-              $row->{$combined_property_path}[] = $this->getFieldsHelper()
-                ->extractFieldValues($typed_data);
-            }
-
-            // If we just set any field values on the result row, clean them up
-            // by merging them together (currently it's an array of arrays, but
-            // it should be just a flat array).
-            if ($row->{$combined_property_path}) {
-              $row->{$combined_property_path} = call_user_func_array('array_merge', $row->{$combined_property_path});
-            }
-          }
-        }
+        $property_values = $this->getValuesToExtract($values, $combined_property_path, $dependents);
+        $this->extractPropertyValues($values, $combined_property_path, $property_values, $dependents);
       }
     }
   }
@@ -573,9 +456,13 @@ trait SearchApiFieldTrait {
    * the parent object necessary to load the "child" property is always already
    * loaded.
    *
-   * @return string[][]
-   *   The combined property paths to retrieve, keyed by their datasource ID and
-   *   property path.
+   * @return array[][]
+   *   The properties to retrieve, keyed by their datasource ID and property
+   *   path. The values are associative arrays with the following keys:
+   *   - combined_property_path: The "combined property path" of the retrieved
+   *     property.
+   *   - dependents: An array containing the originally required properties that
+   *     led to this property being required.
    */
   protected function expandRequiredProperties() {
     $required_properties = [];
@@ -583,17 +470,396 @@ trait SearchApiFieldTrait {
       if ($datasource_id === '') {
         $datasource_id = NULL;
       }
-      foreach (array_keys($properties) as $property_path) {
+      foreach ($properties as $property_path => $combined_property_path) {
+        $paths_to_add = [NULL];
         $path_to_add = '';
         foreach (explode(':', $property_path) as $component) {
           $path_to_add .= ($path_to_add ? ':' : '') . $component;
-          if (!isset($required_properties[$path_to_add])) {
-            $required_properties[$datasource_id][$path_to_add] = Utility::createCombinedId($datasource_id, $path_to_add);
+          $paths_to_add[] = $path_to_add;
+        }
+        foreach ($paths_to_add as $path_to_add) {
+          if (!isset($required_properties[$datasource_id][$path_to_add])) {
+            $required_properties[$datasource_id][$path_to_add] = [
+              'combined_property_path' => $this->createCombinedPropertyPath($datasource_id, $path_to_add),
+              'dependents' => [],
+            ];
           }
+          $required_properties[$datasource_id][$path_to_add]['dependents'][] = $combined_property_path;
         }
       }
     }
     return $required_properties;
+  }
+
+  /**
+   * Pre-loads the result objects, where necessary.
+   *
+   * @param \Drupal\views\ResultRow[] $values
+   *   The Views result rows for which result objects should be loaded.
+   * @param string[] $dependents
+   *   The actually required properties (as combined property paths) that
+   *   depend on the result objects.
+   */
+  protected function preLoadResultItems(array $values, array $dependents) {
+    $to_load = [];
+    foreach ($values as $i => $row) {
+      // If the object is already set on the result row, we've got nothing to do
+      // here.
+      if (!empty($row->_object)) {
+        continue;
+      }
+      // Same if the object was loaded on the result item already.
+      $object = $row->_item->getOriginalObject(FALSE);
+      if ($object) {
+        $row->_object = $object;
+        $row->_relationship_objects[NULL] = [$object];
+        continue;
+      }
+      // We also don't need to load the object if all field values that depend
+      // on it are already present on the result row.
+      $required = FALSE;
+      foreach ($dependents as $dependent) {
+        if (!isset($row->$dependent)) {
+          $required = TRUE;
+          break;
+        }
+      }
+      if (!$required) {
+        continue;
+      }
+
+      $to_load[$row->search_api_id] = $i;
+    }
+
+    if (!$to_load) {
+      return;
+    }
+
+    $items = $this->getIndex()->loadItemsMultiple(array_keys($to_load));
+    foreach ($to_load as $item_id => $i) {
+      if (!empty($items[$item_id])) {
+        $values[$i]->_object = $items[$item_id];
+        $values[$i]->_relationship_objects[NULL] = [$items[$item_id]];
+      }
+    }
+  }
+
+  /**
+   * Determines and prepares the property values that need to be extracted.
+   *
+   * @param \Drupal\views\ResultRow[] $values
+   *   The Views result rows from which property values should be extracted.
+   * @param string $combined_property_path
+   *   The combined property path of the property to extract. Or NULL to extract
+   *   the result item.
+   * @param string[] $dependents
+   *   The actually required properties (as combined property paths) that
+   *   depend on this property.
+   *
+   * @return \Drupal\Core\TypedData\TypedDataInterface[][]
+   *   The values of the property for each result row, keyed by result row
+   *   index.
+   */
+  protected function getValuesToExtract(array $values, $combined_property_path, array $dependents) {
+    list ($datasource_id, $property_path) = Utility::splitCombinedId($combined_property_path);
+
+    // Determine the path of the parent property, and the property key to
+    // take from it for this property.
+    list($parent_path, $name) = Utility::splitPropertyPath($property_path);
+    $combined_parent_path = $this->createCombinedPropertyPath($datasource_id, $parent_path);
+
+    // For top-level properties, we need the definition to check whether its
+    // a processor-generated property later.
+    $property = NULL;
+    if (!$parent_path) {
+      $datasource_properties = $this->getIndex()
+        ->getPropertyDefinitions($datasource_id);
+      if (isset($datasource_properties[$name])) {
+        $property = $datasource_properties[$name];
+      }
+    }
+
+    // Now go through all rows and add the property to them, if necessary.
+    // We then extract the actual values in a second pass in order to be
+    // able to use multi-loading for any encountered entities.
+    /** @var \Drupal\Core\TypedData\TypedDataInterface[][] $property_values */
+    $property_values = [];
+    $entities_to_load = [];
+    foreach ($values as $i => $row) {
+      // Bail for rows with the wrong datasource for this property, or for
+      // which this field doesn't even apply (which will usually be the
+      // same, though).
+      if (($datasource_id && $datasource_id !== $row->search_api_datasource)
+          || !$this->isActiveForRow($row)) {
+        continue;
+      }
+
+      // Then, make sure we even need this property for the current row.
+      // (Will not be the case if all required properties that depend on
+      // this property were already set on the row previously.)
+      $required = FALSE;
+      foreach ($dependents as $dependent) {
+        if (!isset($row->$dependent)) {
+          $required = TRUE;
+          break;
+        }
+      }
+      if (!$required) {
+        continue;
+      }
+
+      // Check whether there are parent objects present. Otherwise, nothing we
+      // can do here.
+      if (empty($row->_relationship_objects[$combined_parent_path])) {
+        continue;
+      }
+
+      // If the property key is "_object", we only needed to load the parent
+      // object(s), so we just copy those to the result row object and we're
+      // done.
+      if ($name === '_object') {
+        // The $row->_object is special, since we also set it in
+        // \Drupal\search_api\Plugin\views\query\SearchApiQuery::addResults()
+        // (conditionally). To keep it consistent, we make it single-valued
+        // here, too.
+        if ($combined_property_path !== '_object') {
+          $row->{$combined_property_path} = $row->_relationship_objects[$combined_parent_path];
+        }
+        continue;
+      }
+
+      if (empty($row->_relationship_objects[$combined_property_path])) {
+        // Check whether this is a processor-generated property and use
+        // special code to retrieve it in that case.
+        if ($property instanceof ProcessorPropertyInterface) {
+          // Determine whether this property is required.
+          $is_required = in_array($combined_property_path, $dependents);
+          $this->extractProcessorProperty($property, $row, $combined_property_path, $is_required);
+          continue;
+        }
+
+        foreach ($row->_relationship_objects[$combined_parent_path] as $j => $parent) {
+          // Follow references.
+          while ($parent instanceof DataReferenceInterface) {
+            $parent = $parent->getTarget();
+          }
+
+          // At this point we need the parent to be a complex item,
+          // otherwise it can't have any children (and thus, our property
+          // can't be present).
+          if (!($parent instanceof ComplexDataInterface)) {
+            continue;
+          }
+
+          try {
+            // Retrieve the actual typed data for the property and add it to
+            // our property values.
+            $typed_data = $parent->get($name);
+            $property_values[$i][$j] = $typed_data;
+            // Remember any encountered entity references so we can
+            // multi-load them.
+            if ($typed_data instanceof DataReferenceInterface) {
+              /** @var \Drupal\Core\TypedData\DataReferenceDefinitionInterface $definition */
+              $definition = $typed_data->getDataDefinition();
+              $definition = $definition->getTargetDefinition();
+              if ($definition instanceof EntityDataDefinitionInterface) {
+                $entity_type_id = $definition->getEntityTypeId();
+                $entity_type = $this->getEntityTypeManager()
+                  ->getDefinition($entity_type_id);
+                if ($entity_type->isStaticallyCacheable()) {
+                  $entity_id = $typed_data->getTargetIdentifier();
+                  $entities_to_load[$entity_type_id][$entity_id] = $entity_id;
+                }
+              }
+            }
+          }
+          catch (\InvalidArgumentException $e) {
+            // This can easily happen, for example, when requesting a field
+            // that only exists on a different bundle. Unfortunately, there
+            // is no ComplexDataInterface::hasProperty() method, so we can
+            // only catch and ignore the exception.
+          }
+        }
+      }
+    }
+
+    // Multi-load all entities we encountered before.
+    foreach ($entities_to_load as $entity_type_id => $ids) {
+      $this->getEntityTypeManager()
+        ->getStorage($entity_type_id)
+        ->loadMultiple($ids);
+    }
+
+    return $property_values;
+  }
+
+  /**
+   * Extracts a processor-based property from an item.
+   *
+   * @param \Drupal\search_api\Processor\ProcessorPropertyInterface $property
+   *   The property definition.
+   * @param \Drupal\views\ResultRow $row
+   *   The Views result row.
+   * @param string $combined_property_path
+   *   The combined property path of the property to set.
+   * @param bool $is_required
+   *   TRUE if the property is directly required, FALSE if it should only be
+   *   extracted because some child/ancestor properties are required.
+   */
+  protected function extractProcessorProperty(ProcessorPropertyInterface $property, ResultRow $row, $combined_property_path, $is_required) {
+    $index = $this->getIndex();
+    $processor = $index->getProcessor($property->getProcessorId());
+    if (!$processor) {
+      return;
+    }
+
+    list($datasource_id, $property_path) = Utility::splitCombinedId($combined_property_path);
+
+    // We need to call the processor's addFieldValues() method in order to get
+    // the field value. We do this using a clone of the search item so as to
+    // preserve the original state of the item. We also use a dummy field
+    // object – either a clone of a fitting indexed field (to get its
+    // configuration), or a newly created one.
+    $property_fields = $this->getFieldsHelper()
+      ->filterForPropertyPath($index->getFields(), $datasource_id, $property_path);
+    if ($property_fields) {
+      if (!empty($this->definition['search_api field'])
+          && !empty($property_fields[$this->definition['search_api field']])) {
+        $field_id = $this->definition['search_api field'];
+        $dummy_field = $property_fields[$field_id];
+        // In case this field is also configurable, create a new, unique
+        // combined property path for this field so adding multiple fields based
+        // on the same property works correctly.
+        if ($property instanceof ConfigurablePropertyInterface) {
+          $new_path = $combined_property_path . '|' . $field_id;
+          $this->propertyReplacements[$combined_property_path] = $new_path;
+          $combined_property_path = $new_path;
+        }
+      }
+      else {
+        $dummy_field = reset($property_fields);
+      }
+      $dummy_field = clone $dummy_field;
+    }
+    else {
+      $dummy_field = $this->getFieldsHelper()
+        ->createFieldFromProperty($index, $property, $datasource_id, $property_path, 'tmp', 'string');
+    }
+    /** @var \Drupal\search_api\Item\ItemInterface $dummy_item */
+    $dummy_item = clone $row->_item;
+    $dummy_item->setFields([
+      'tmp' => $dummy_field,
+    ]);
+    $dummy_item->setFieldsExtracted(TRUE);
+
+    $processor->addFieldValues($dummy_item);
+
+    $row->_relationship_objects[$combined_property_path] = [];
+    $set_values = $is_required && !isset($row->{$combined_property_path});
+    if ($set_values) {
+      $row->{$combined_property_path} = [];
+    }
+    foreach ($dummy_field->getValues() as $value) {
+      if (!$this->checkEntityAccess($value, $combined_property_path)) {
+        continue;
+      }
+      if ($set_values) {
+        $row->{$combined_property_path}[] = $value;
+      }
+      $typed_data = $this->getTypedDataManager()
+        ->create($property, $value);
+      $row->_relationship_objects[$combined_property_path][] = $typed_data;
+      // Processor-generated properties always have just a single parent: the
+      // result item itself. Therefore, the parent's index is always 0.
+      $row->_relationship_parent_indices[$combined_property_path][] = 0;
+    }
+  }
+
+  /**
+   * Places extracted property values and objects into the result row.
+   *
+   * @param \Drupal\views\ResultRow[] $values
+   *   The Views result rows from which property values should be extracted.
+   * @param string $combined_property_path
+   *   The combined property path of the property to extract.
+   * @param \Drupal\Core\TypedData\TypedDataInterface[][] $property_values
+   *   The values of the property for each result row, keyed by result row
+   *   index.
+   * @param string[] $dependents
+   *   The actually required properties (as combined property paths) that
+   *   depend on this property.
+   */
+  protected function extractPropertyValues(array $values, $combined_property_path, array $property_values, array $dependents) {
+    // Now go through the rows a second time and actually add all objects
+    // and (if necessary) properties.
+    foreach ($values as $i => $row) {
+      if (!empty($property_values[$i])) {
+        // Add the typed data for the property to our relationship objects
+        // for this property path.
+        $row->_relationship_objects[$combined_property_path] = [];
+        foreach ($property_values[$i] as $j => $typed_data) {
+          // If the typed data is an entity, check whether the current
+          // user can access it (and switch to the right translation, if
+          // available).
+          $value = $typed_data->getValue();
+          if ($value instanceof EntityInterface) {
+            if (!$this->checkEntityAccess($value, $combined_property_path)) {
+              continue;
+            }
+            if ($value instanceof TranslatableInterface
+                && $value->hasTranslation($row->search_api_language)) {
+              // PhpStorm isn't able to keep both interfaces in mind at the same
+              // time, so we need to use a third interface here that combines
+              // both.
+              /** @var \Drupal\Core\Entity\ContentEntityInterface $value */
+              $typed_data = $value->getTranslation($row->search_api_language)
+                ->getTypedData();
+            }
+          }
+
+          // To treat list properties correctly regarding possible child
+          // properties, add all the list items individually.
+          if ($typed_data instanceof ListInterface) {
+            foreach ($typed_data as $item) {
+              $row->_relationship_objects[$combined_property_path][] = $item;
+              $row->_relationship_parent_indices[$combined_property_path][] = $j;
+            }
+          }
+          else {
+            $row->_relationship_objects[$combined_property_path][] = $typed_data;
+            $row->_relationship_parent_indices[$combined_property_path][] = $j;
+          }
+        }
+      }
+
+      // Determine whether we want to set field values for this property on this
+      // row. This is the case if the property is one of the explicitly
+      // retrieved properties and not yet set on the result row object. Also, if
+      // we have no objects for this property, we needn't bother anyways, of
+      // course.
+      if (!in_array($combined_property_path, $dependents)
+          || isset($row->{$combined_property_path})
+          || empty($row->_relationship_objects[$combined_property_path])) {
+        continue;
+      }
+
+      $row->{$combined_property_path} = [];
+
+      // Iterate over the typed data objects, extract their values and set
+      // the relationship objects for the next iteration of the outer loop
+      // over properties.
+      foreach ($row->_relationship_objects[$combined_property_path] as $typed_data) {
+        $row->{$combined_property_path}[] = $this->getFieldsHelper()
+          ->extractFieldValues($typed_data);
+      }
+
+      // If we just set any field values on the result row, clean them up
+      // by merging them together (currently it's an array of arrays, but
+      // it should be just a flat array).
+      if ($row->{$combined_property_path}) {
+        $row->{$combined_property_path} = call_user_func_array('array_merge', $row->{$combined_property_path});
+      }
+    }
   }
 
   /**
@@ -681,6 +947,32 @@ trait SearchApiFieldTrait {
   }
 
   /**
+   * Creates a combined property path.
+   *
+   * A combined property path is similar to a "combined ID" in that it contains
+   * information about both the datasource and the property path on that
+   * datasource.
+   *
+   * The difference is that a combined property path, as used in this class, can
+   * be NULL (to reference the original result item).
+   *
+   * @param string|null $datasource_id
+   *   The datasource ID, or NULL for a datasource-independent property.
+   * @param string|null $property_path
+   *   The property path from the result item to the specified property, or NULL
+   *   to reference the result item.
+   *
+   * @return string|null
+   *   The combined property path.
+   */
+  protected function createCombinedPropertyPath($datasource_id, $property_path) {
+    if ($property_path === NULL) {
+      return NULL;
+    }
+    return Utility::createCombinedId($datasource_id, $property_path);
+  }
+
+  /**
    * Retrieves the ID of the datasource to which this field belongs.
    *
    * @return string|null
@@ -733,6 +1025,9 @@ trait SearchApiFieldTrait {
    */
   public function getItems(ResultRow $values) {
     $property_path = $this->getCombinedPropertyPath();
+    if (!empty($this->propertyReplacements[$property_path])) {
+      $property_path = $this->propertyReplacements[$property_path];
+    }
     if (!empty($values->{$property_path})) {
       // Although it's undocumented, the field handler base class assumes items
       // will always be arrays. See #2648012 for documenting this.
@@ -757,7 +1052,7 @@ trait SearchApiFieldTrait {
   /**
    * Renders all items in this field together.
    *
-   * @param array $items
+   * @param array|\ArrayAccess $items
    *   The items provided by getItems() for a single row.
    *
    * @return string

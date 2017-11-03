@@ -5,14 +5,14 @@
 
 (function ($) {
 
-  "use strict";
+  'use strict';
 
   Drupal.behaviors.facetSoftLimit = {
     attach: function (context, settings) {
-      if (settings.facets.softLimit != undefined) {
+      if (settings.facets.softLimit !== undefined) {
         $.each(settings.facets.softLimit, function (facet, limit) {
           Drupal.facets.applySoftLimit(facet, limit);
-        })
+        });
       }
     }
   };
@@ -21,13 +21,18 @@
 
   /**
    * Applies the soft limit UI feature to a specific facets list.
+   *
+   * @param {string} facet
+   *   The facet id.
+   * @param {string} limit
+   *   The maximum amount of items to show.
    */
   Drupal.facets.applySoftLimit = function (facet, limit) {
     var zero_based_limit = limit - 1;
     var facetsList = $('ul[data-drupal-facet-id="' + facet + '"]');
 
     // Hide facets over the limit.
-    facetsList.find('li:gt(' + zero_based_limit + ')').once().hide();
+    facetsList.children('li:gt(' + zero_based_limit + ')').once().hide();
 
     // Add "Show more" / "Show less" links.
     facetsList.once().filter(function () {

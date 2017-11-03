@@ -197,11 +197,9 @@ class FieldsHelper implements FieldsHelperInterface {
     $definition = $data->getDataDefinition();
     if ($definition instanceof ComplexDataDefinitionInterface) {
       $property = $definition->getMainPropertyName();
-      if (isset($value[$property])) {
-        return [$value[$property]];
-      }
+      return isset($value[$property]) ? [$value[$property]] : [];
     }
-    elseif (is_array($value)) {
+    if (is_array($value)) {
       return array_values($value);
     }
     return [$value];
@@ -291,8 +289,7 @@ class FieldsHelper implements FieldsHelperInterface {
         $dummy_item->setFieldsExtracted(TRUE);
         $processors = $index->getProcessorsByStage(ProcessorInterface::STAGE_ADD_PROPERTIES);
         foreach ($processors as $processor_id => $processor) {
-          // Avoid an infinite recursion.
-          if (isset($needed_processors[$processor_id]) && $processor != $this) {
+          if (isset($needed_processors[$processor_id])) {
             $processor->addFieldValues($dummy_item);
           }
         }
@@ -380,8 +377,7 @@ class FieldsHelper implements FieldsHelperInterface {
   public function isContentEntityType($entity_type_id) {
     try {
       $definition = $this->entityTypeManager->getDefinition($entity_type_id);
-      // @todo Once we depend on Drupal 8.3+, use entityClassImplements().
-      return $definition->isSubclassOf(ContentEntityInterface::class);
+      return $definition->entityClassImplements(ContentEntityInterface::class);
     }
     catch (PluginNotFoundException $e) {
       return FALSE;
@@ -420,7 +416,7 @@ class FieldsHelper implements FieldsHelperInterface {
   /**
    * {@inheritdoc}
    */
-  public function createField(IndexInterface $index, $fieldIdentifier, $fieldInfo = []) {
+  public function createField(IndexInterface $index, $fieldIdentifier, array $fieldInfo = []) {
     $field = new Field($index, $fieldIdentifier);
 
     foreach ($fieldInfo as $key => $value) {

@@ -12,3 +12,5 @@ sites/default/files
 
 # NO dbs.
 *.sql
+
+drush

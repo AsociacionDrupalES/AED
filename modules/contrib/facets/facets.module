@@ -31,8 +31,10 @@ function facets_help($route_name, RouteMatchInterface $route_match) {
       return $output;
 
     case 'facets.overview':
-      return t('Below is a list of facets grouped by facetsources they are associated with. A facetsource is the instance where the facet does the actual filtering, for example a View on a Search API index.');
-
+      $output = '';
+      $output .= '<p>' . t('Below is a list of facets grouped by facetsources they are associated with. A facetsource is the instance where the facet does the actual filtering, for example a View on a Search API index.') . '</p>';
+      $output .= '<p>' . t('The facets weight can be changed with drag and drop withing the same facet source. Although you can drag and drop a facet under any facet source, this change will not be performed on save.') . '</p>';
+      return $output;
   }
 }
 
@@ -42,6 +44,7 @@ function facets_help($route_name, RouteMatchInterface $route_match) {
 function facets_theme($existing, $type, $theme, $path) {
   return [
     'facets_result_item' => [
+      'base hook' => 'facets_result_item',
       'variables' => [
         'value' => '',
         'show_count' => FALSE,
@@ -254,7 +257,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
 
     // If the facet source is not loaded, or the facet source doesn't have
     // breadcrumbs enabled, don't do anything.
-    if (!($facet_source && $facet_source->getBreadcrumbSettings()['active'])) {
+    if (!($facet_source && !empty($facet_source->getBreadcrumbSettings()['active']))) {
       continue;
     }
 
@@ -297,7 +300,9 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
             $active_results[$facet->getUrlAlias()][] = $cloned_result;
           }
         }
-        $url_processor->buildUrls($facet, $active_results[$facet->getUrlAlias()]);
+        if (!empty($active_results[$facet->getUrlAlias()])) {
+          $url_processor->buildUrls($facet, $active_results[$facet->getUrlAlias()]);
+        }
         $active_facets[$facet->getUrlAlias()] = $facet;
       }
     }
@@ -308,6 +313,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
     // @see https://www.drupal.org/node/2861586
     // TODO handle not grouped facets.
 
+    /** @var \Drupal\facets\Result\ResultInterface[] $facet_results */
     foreach ($active_results as $facet_alias => $facet_results) {
       $facet_used_result[] = $facet_alias;
       $facet_crumb_items = [];
@@ -321,13 +327,16 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
         $facet_url = $res->getUrl();
         /** @var \Drupal\Core\Url $facet_url */
         $query = $facet_url->getOption('query');
-        $source_filter = $query[$facet_source->getFilterKey()];
+        $filter_key = $facet_source->getFilterKey() ?: 'f';
+        $source_filter = $query[$filter_key];
         $source_filter = array_unique($source_filter);
         $source_filter = array_filter($source_filter);
         $matches = preg_grep('/^' . implode('|^', $facet_used_result) . '/', $source_filter);
-        $query[$facet_source->getFilterKey()] = $matches;
+        $query[$filter_key] = $matches;
         $facet_crumb_items[] = $res->getDisplayValue();
       }
+
+      sort($facet_crumb_items);
 
       // Set the new query and create the link.
       $facet_url->setOption('query', $query);
@@ -336,5 +345,4 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
       $breadcrumb->addLink($link);
     }
   }
-
 }

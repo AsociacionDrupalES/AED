@@ -20,7 +20,7 @@ abstract class QueryTypePluginBase extends PluginBase implements QueryTypeInterf
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->query = $this->configuration['query'];
     $this->facet = $this->configuration['facet'];
-    $this->results = !empty($this->configuration['results']) ? $this->configuration['results'] : array();
+    $this->results = !empty($this->configuration['results']) ? $this->configuration['results'] : [];
   }
 
   /**

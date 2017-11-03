@@ -35,7 +35,17 @@ class FacetCloneForm extends EntityForm {
    */
   protected $displayPluginManager;
 
-  public function __construct(FacetSourcePluginManager $facetSourcePluginManager, DisplayPluginManager $displayPluginManager,EntityStorageInterface $facetStorage) {
+  /**
+   * Creates the class.
+   *
+   * @param \Drupal\facets\FacetSource\FacetSourcePluginManager $facetSourcePluginManager
+   *   The facet source plugin manager.
+   * @param \Drupal\search_api\Display\DisplayPluginManager $displayPluginManager
+   *   Search api's display plugin manager.
+   * @param \Drupal\Core\Entity\EntityStorageInterface $facetStorage
+   *   Entity storage class.
+   */
+  public function __construct(FacetSourcePluginManager $facetSourcePluginManager, DisplayPluginManager $displayPluginManager, EntityStorageInterface $facetStorage) {
     $this->facetSourcePluginManager = $facetSourcePluginManager;
     $this->displayPluginManager = $displayPluginManager;
     $this->facetStorage = $facetStorage;

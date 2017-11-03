@@ -111,6 +111,7 @@ class DependentFacetProcessorTest extends UnitTestCase {
    * Provides test cases with data.
    *
    * @return array
+   *   An array of test data.
    */
   public function provideNegated() {
     return [

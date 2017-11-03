@@ -30,7 +30,7 @@ class RangeSliderProcessor extends SliderProcessor implements PreQueryProcessorI
 
     array_walk($active_items, function (&$item) {
       if (preg_match('/\(min:((?:-)?[\d\.]+),max:((?:-)?[\d\.]+)\)/i', $item, $matches)) {
-        $item = array($matches[1], $matches[2]);
+        $item = [$matches[1], $matches[2]];
       }
       else {
         $item = NULL;

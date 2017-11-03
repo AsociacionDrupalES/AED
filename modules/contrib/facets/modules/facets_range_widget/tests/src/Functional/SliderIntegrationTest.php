@@ -123,7 +123,7 @@ class SliderIntegrationTest extends FacetsTestBase {
         'type' => 'item',
         'keywords' => ['orange'],
         'category' => 'item_category',
-        'field_integer' => (bool) $i%2 ? $i : $i+1,
+        'field_integer' => (bool) $i % 2 ? $i : $i + 1,
       ])->save();
     }
 

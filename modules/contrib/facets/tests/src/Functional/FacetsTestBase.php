@@ -107,13 +107,13 @@ abstract class FacetsTestBase extends BrowserTestBase {
       }
     }
     else {
-      $server = Server::create(array(
+      $server = Server::create([
         'id' => $id,
         'name' => $name,
         'description' => $name,
         'backend' => $backend_id,
         'backend_config' => $backend_config,
-      ));
+      ]);
       $server->save();
     }
 
@@ -146,13 +146,13 @@ abstract class FacetsTestBase extends BrowserTestBase {
       }
     }
     else {
-      $index = Index::create(array(
+      $index = Index::create([
         'id' => $id,
         'name' => $name,
         'description' => $name,
         'server' => $server_id,
-        'datasources' => array($datasource_id),
-      ));
+        'datasources' => [$datasource_id],
+      ]);
       $index->save();
       $this->indexId = $index->id();
     }

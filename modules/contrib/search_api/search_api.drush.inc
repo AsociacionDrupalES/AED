@@ -672,7 +672,7 @@ function drush_search_api_server_clear($server_id = NULL) {
   foreach ($server->getIndexes() as $index) {
     $index->clear();
   }
-  drush_print(dt('All indexes on the search server @server_id were cleared.', array('@server_id' => $server_id)));
+  drush_print(dt('All indexes on the search server @server_id were cleared.', ['@server_id' => $server_id]));
 }
 
 /**

@@ -42,11 +42,11 @@ class ProcessorPluginManager extends DefaultPluginManager {
    *   - label: The translated label for this stage.
    */
   public function getProcessingStages() {
-    return array(
-      ProcessorInterface::STAGE_BUILD => array(
+    return [
+      ProcessorInterface::STAGE_BUILD => [
         'label' => $this->t('Build stage'),
-      ),
-    );
+      ],
+    ];
   }
 
 }

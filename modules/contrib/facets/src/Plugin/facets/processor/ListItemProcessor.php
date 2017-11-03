@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @FacetsProcessor(
  *   id = "list_item",
  *   label = @Translation("List item label"),
- *   description = @Translation("Fields that are a list (such as list (integer), list (text)) or a bundle field can use this processor to show the value instead of the key."),
+ *   description = @Translation("Display the label instead of the key of fields that are a list (such as <em>List (integer)</em>) or <em>List (text)</em>) or a bundle field."),
  *   stages = {
  *     "build" = 5
  *   }
@@ -106,7 +106,7 @@ class ListItemProcessor extends ProcessorPluginBase implements BuildProcessorInt
       $field = $index->getField($field_identifier);
 
       if (!$field->getDatasourceId()) {
-        throw new InvalidProcessorException("This field has no datasource, there is no valid use for this processor with this facet");
+        throw new InvalidProcessorException("The {$field_identifier} field has no datasource, there is no valid use for the {$this->pluginId} processor with this facet");
       }
       $entity = $field->getDatasource()->getEntityTypeId();
     }

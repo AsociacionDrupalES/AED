@@ -2,7 +2,6 @@
 
 namespace Drupal\facets\Form;
 
-use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Entity\EntityForm;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
@@ -49,13 +48,6 @@ class FacetSettingsForm extends EntityForm {
   protected $moduleHandler;
 
   /**
-   * The block manager.
-   *
-   * @var \Drupal\Core\Block\BlockManagerInterface
-   */
-  protected $blockManager;
-
-  /**
    * The url generator.
    *
    * @var \Drupal\Core\Routing\UrlGeneratorInterface
@@ -73,17 +65,14 @@ class FacetSettingsForm extends EntityForm {
    *   The plugin manager for processors.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
-   *   The block manager.
    * @param \Drupal\Core\Routing\UrlGeneratorInterface $url_generator
    *   The url generator.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, FacetSourcePluginManager $facet_source_plugin_manager, ProcessorPluginManager $processor_plugin_manager, ModuleHandlerInterface $module_handler, BlockManagerInterface $block_manager, UrlGeneratorInterface $url_generator) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, FacetSourcePluginManager $facet_source_plugin_manager, ProcessorPluginManager $processor_plugin_manager, ModuleHandlerInterface $module_handler, UrlGeneratorInterface $url_generator) {
     $this->facetStorage = $entity_type_manager->getStorage('facets_facet');
     $this->facetSourcePluginManager = $facet_source_plugin_manager;
     $this->processorPluginManager = $processor_plugin_manager;
     $this->moduleHandler = $module_handler;
-    $this->blockManager = $block_manager;
     $this->urlGenerator = $url_generator;
   }
 
@@ -96,7 +85,6 @@ class FacetSettingsForm extends EntityForm {
       $container->get('plugin.manager.facets.facet_source'),
       $container->get('plugin.manager.facets.processor'),
       $container->get('module_handler'),
-      $container->get('plugin.manager.block'),
       $container->get('url_generator')
     );
   }
@@ -322,9 +310,6 @@ class FacetSettingsForm extends EntityForm {
     else {
       drupal_set_message($this->t('Facet %name has been updated.', ['%name' => $facet->getName()]));
     }
-
-    // Clear Drupal cache for blocks to reflect recent changes.
-    $this->blockManager->clearCachedDefinitions();
 
     list($type,) = explode(':', $facet_source_id);
     if ($type !== 'search_api') {

@@ -5,7 +5,7 @@
 
 (function ($) {
 
-  "use strict";
+  'use strict';
 
   Drupal.behaviors.facetsEditForm = {
     attach: function (context, settings) {
@@ -16,7 +16,7 @@
         $('#edit-name').val(default_name);
         setTimeout(function () { $('#edit-name').trigger('change'); }, 100);
 
-      })
+      });
     }
   };
 

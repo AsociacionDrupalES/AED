@@ -46,7 +46,7 @@ class EventSubscriber implements EventSubscriberInterface {
    * {@inheritdoc}
    */
   public static function getSubscribedEvents() {
-    $events[ConfigEvents::DELETE][] = array('onConfigDelete', 50);
+    $events[ConfigEvents::DELETE][] = ['onConfigDelete', 50];
     return $events;
   }
 

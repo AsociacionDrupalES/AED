@@ -139,14 +139,14 @@ class FacetsDateHandler {
   public function getNextDateGap($gap, $min_gap = self::FACETS_DATE_SECOND) {
     // Array of numbers used to determine whether the next gap is smaller than
     // the minimum gap allowed in the drilldown.
-    $gap_numbers = array(
+    $gap_numbers = [
       static::FACETS_DATE_YEAR => 6,
       static::FACETS_DATE_MONTH => 5,
       static::FACETS_DATE_DAY => 4,
       static::FACETS_DATE_HOUR => 3,
       static::FACETS_DATE_MINUTE => 2,
       static::FACETS_DATE_SECOND => 1,
-    );
+    ];
 
     // Gets gap numbers for both the gap and minimum gap, checks if the next gap
     // is within the limit set by the $min_gap parameter.
@@ -236,7 +236,7 @@ class FacetsDateHandler {
    * @see FACETS_get_timestamp_gap()
    */
   public function getDateGap($start_date, $end_date, $min_gap = NULL) {
-    $range = array(strtotime($start_date), strtotime($end_date));
+    $range = [strtotime($start_date), strtotime($end_date)];
     if (!in_array(FALSE, $range, TRUE)) {
       return $this->getTimestampGap($range[0], $range[1], $min_gap);
     }

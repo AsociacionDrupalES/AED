@@ -24,14 +24,14 @@ class DateArrayWidget extends ArrayWidget {
    *   An array of granularity options.
    */
   private function granularityOptions() {
-    return array(
+    return [
       SearchApiDate::FACETAPI_DATE_YEAR => $this->t('Year'),
       SearchApiDate::FACETAPI_DATE_MONTH => $this->t('Month'),
       SearchApiDate::FACETAPI_DATE_DAY => $this->t('Day'),
       SearchApiDate::FACETAPI_DATE_HOUR => $this->t('Hour'),
       SearchApiDate::FACETAPI_DATE_MINUTE => $this->t('Minute'),
       SearchApiDate::FACETAPI_DATE_SECOND => $this->t('Second'),
-    );
+    ];
   }
 
   /**

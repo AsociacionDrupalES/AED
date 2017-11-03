@@ -1,6 +1,7 @@
 <?php
 
 namespace Drupal\KernelTests\Core\Database;
+
 use Drupal\Core\Database\InvalidQueryException;
 use Drupal\Core\Database\Database;
 
@@ -496,8 +497,7 @@ class SelectTest extends DatabaseTestBase {
     ];
     $test_groups[] = [
       'regex' => '#Singer',
-      'expected' => [
-      ],
+      'expected' => [],
     ];
 
     foreach ($test_groups as $test_group) {

@@ -40,9 +40,9 @@ class FacetSourceTest extends FacetsTestBase {
    */
   public function testEditFilterKey() {
     // Change the filter key.
-    $edit = array(
+    $edit = [
       'filter_key' => 'fq',
-    );
+    ];
     $this->assertField('filter_key');
     $this->assertField('url_processor');
     $this->drupalPostForm(NULL, $edit, 'Save');
@@ -63,9 +63,9 @@ class FacetSourceTest extends FacetsTestBase {
    */
   public function testEditUrlProcessor() {
     // Change the url processor.
-    $edit = array(
+    $edit = [
       'url_processor' => 'dummy_query',
-    );
+    ];
     $this->assertField('filter_key');
     $this->assertField('url_processor');
     $this->drupalPostForm(NULL, $edit, 'Save');
@@ -92,10 +92,10 @@ class FacetSourceTest extends FacetsTestBase {
     $this->assertSession()->checkboxNotChecked('breadcrumb[group]');
     $this->assertSession()->checkboxNotChecked('breadcrumb[active]');
     // Change the breadcrumb settings.
-    $edit = array(
+    $edit = [
       'breadcrumb[active]' => TRUE,
       'breadcrumb[group]' => TRUE,
-    );
+    ];
     $this->drupalPostForm(NULL, $edit, 'Save');
     $this->assertSession()->statusCodeEquals(200);
 
@@ -107,4 +107,5 @@ class FacetSourceTest extends FacetsTestBase {
     $this->assertSession()->checkboxChecked('breadcrumb[group]');
     $this->assertSession()->checkboxChecked('breadcrumb[active]');
   }
+
 }

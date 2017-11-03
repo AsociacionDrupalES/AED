@@ -27,7 +27,7 @@ class FacetsSummaryBlock extends BlockBase implements FacetsSummaryBlockInterfac
    *
    * @var \Drupal\facets_summary\FacetsSummaryManager\DefaultFacetsSummaryManager
    */
-  protected $facetManager;
+  protected $facetsSummaryManager;
 
   /**
    * The associated facets_source_summary entity.

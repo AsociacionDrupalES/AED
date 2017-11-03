@@ -16,6 +16,11 @@
 
   /**
    * Turns all facet links into a dropdown with options for every link.
+   *
+   * @param {object} context
+   *   Context.
+   * @param {object} settings
+   *   Settings.
    */
   Drupal.facets.makeDropdown = function (context, settings) {
     // Find all dropdown facet links and turn them into an option.

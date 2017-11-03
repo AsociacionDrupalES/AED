@@ -158,6 +158,7 @@ function chosen_attach_library(array &$element) {
   $options = array(
     'disable_search' => (bool) $chosen_conf->get('disable_search'),
     'disable_search_threshold' => (int) $chosen_conf->get('disable_search_threshold'),
+    'allow_single_deselect' => (bool) $chosen_conf->get('allow_single_deselect'),
     'search_contains' => (bool) $chosen_conf->get('search_contains'),
     'placeholder_text_multiple' => $chosen_conf->get('placeholder_text_multiple'),
     'placeholder_text_single' => $chosen_conf->get('placeholder_text_single'),

@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\facets\Kernel\Entity;
 
+use Drupal\Core\Plugin\PluginBase;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Exception\InvalidProcessorException;
 use Drupal\facets\Hierarchy\HierarchyPluginManager;
@@ -370,6 +371,43 @@ class FacetTest extends KernelTestBase {
     $this->assertInstanceOf('\Drupal\facets\Plugin\facets\hierarchy\Taxonomy', $entity->getHierarchyInstance());
 
     $this->assertEquals(['type' => 'taxonomy', 'config' => []], $entity->getHierarchy());
+  }
+
+  /**
+   * Tests that the block caches are cleared from API calls.
+   *
+   * @covers ::postSave
+   * @covers ::postDelete
+   * @covers ::clearBlockCache
+   */
+  public function testBlockCache() {
+    // Block processing requires the system module.
+    $this->enableModules(['system']);
+
+    // Create our facet.
+    $entity = Facet::create([
+      'id' => 'test_facet',
+      'name' => 'Test facet',
+    ]);
+    $entity->setWidget('links');
+    $entity->setEmptyBehavior(['behavior' => 'none']);
+
+    $block_id = 'facet_block' . PluginBase::DERIVATIVE_SEPARATOR . $entity->id();
+
+    // Check we don't have a block yet.
+    $this->assertFalse($this->container->get('plugin.manager.block')->hasDefinition($block_id));
+
+    // Save our facet.
+    $entity->save();
+
+    // Check our block exists.
+    $this->assertTrue($this->container->get('plugin.manager.block')->hasDefinition($block_id));
+
+    // Delete our facet.
+    $entity->delete();
+
+    // Check our block exists.
+    $this->assertFalse($this->container->get('plugin.manager.block')->hasDefinition($block_id));
   }
 
 }

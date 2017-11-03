@@ -33,7 +33,7 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
 
     $this->setUpExampleStructure();
     $this->insertExampleContent();
-    self::assertEquals($this->indexItems($this->indexId), 5, '5 items were indexed.');
+    $this->assertEquals($this->indexItems($this->indexId), 5, '5 items were indexed.');
 
     $block = [
       'region' => 'footer',
@@ -48,52 +48,81 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
    * Tests Breadcrumb integration with grouping.
    */
   public function testGroupingIntegration() {
-    $this->drupalGet('admin/config/search/facets');
-    $this->clickLink('Configure', 1);
-    $edit = [
-      'filter_key' => 'f',
-      'url_processor' => 'query_string',
-      'breadcrumb[active]' => TRUE,
-      'breadcrumb[group]' => TRUE,
-    ];
-    $this->drupalPostForm(NULL, $edit, 'Save');
-
+    $this->editFacetConfig();
     $id = 'keywords';
-    $name = '#Keywords';
+    $name = 'Keywords';
     $this->createFacet($name, $id, 'keywords');
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
 
     $id = 'type';
-    $name = '#Type';
+    $name = 'Type';
     $this->createFacet($name, $id);
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
     $this->drupalPostForm(NULL, ['facet_settings[weight]' => '1'], 'Save');
 
-    // Breadcrumb should show #Keywords: orange > #Type: article, item
+    // Test with a default filter key.
+    $this->editFacetConfig(['filter_key' => 'f']);
+    $this->breadcrumbTest();
 
+    // Test with an empty filter key.
+    $this->editFacetConfig(['filter_key' => '']);
+    $this->breadcrumbTest();
+
+    // Test with a specific filter key.
+    $this->editFacetConfig(['filter_key' => 'my_filter_key']);
+    $this->breadcrumbTest();
+  }
+
+  /**
+   * Edit the facet configuration with the given values.
+   *
+   * @param array $config
+   *   The new configuration for the facet.
+   */
+  public function editFacetConfig(array $config = []) {
+    $this->drupalGet('admin/config/search/facets');
+    $this->clickLink('Configure', 1);
+    $default_config = [
+      'filter_key' => 'f',
+      'url_processor' => 'query_string',
+      'breadcrumb[active]' => TRUE,
+      'breadcrumb[group]' => TRUE,
+    ];
+    $edit = array_merge($default_config, $config);
+    $this->drupalPostForm(NULL, $edit, 'Save');
+  }
+
+  /**
+   * Tests Breadcrumb with the given config.
+   */
+  protected function breadcrumbTest() {
+    // Breadcrumb should show Keywords: orange > Type: article, item.
     $initial_query = ['search_api_fulltext' => 'foo', 'test_param' => 1];
     $this->drupalGet('search-api-test-fulltext', ['query' => $initial_query]);
 
     $this->clickLink('item');
+    $this->assertSession()->linkExists('Type: item');
+
     $this->clickLink('article');
+    $this->assertSession()->linkExists('Type: article, item');
+
     $this->clickLink('orange');
+    $this->assertSession()->linkExists('Keywords: orange');
+    $this->assertSession()->linkExists('Type: article, item');
 
-    $this->assertSession()->linkExists('#Keywords: orange');
-    $this->assertSession()->linkExists('#Type: article, item');
+    $this->clickLink('Type: article, item');
 
-    $this->clickLink('#Type: article, item');
-
-    $this->assertSession()->linkExists('#Keywords: orange');
-    $this->assertSession()->linkExists('#Type: article, item');
+    $this->assertSession()->linkExists('Keywords: orange');
+    $this->assertSession()->linkExists('Type: article, item');
     $this->checkFacetIsActive('orange');
     $this->checkFacetIsActive('item');
     $this->checkFacetIsActive('article');
 
-    $this->clickLink('#Keywords: orange');
-    $this->assertSession()->linkExists('#Keywords: orange');
-    $this->assertSession()->linkNotExists('#Type: article, item');
+    $this->clickLink('Keywords: orange');
+    $this->assertSession()->linkExists('Keywords: orange');
+    $this->assertSession()->linkNotExists('Type: article, item');
     $this->checkFacetIsActive('orange');
     $this->checkFacetIsNotActive('item');
     $this->checkFacetIsNotActive('article');
@@ -106,7 +135,8 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   /**
    * Tests Breadcrumb integration without grouping.
    */
-//  public function testNonGroupingIntegration() {
-    // TODO test it after we implement non grouping functionality.
-//  }
+  public function testNonGroupingIntegration() {
+    $this->markTestSkipped('Not yet implemented.');
+  }
+
 }

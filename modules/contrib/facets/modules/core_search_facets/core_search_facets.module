@@ -51,11 +51,11 @@ function core_search_facets_form_facet_source_edit_form_alter(&$form, FormStateI
   $request = \Drupal::requestStack()->getMasterRequest();
   $facet_source_id = str_replace(":", "__", $request->attributes->get('facets_facet_source'));
   if (strpos($facet_source_id, 'core_node_search') !== FALSE) {
-    $form['advanced_filters'] = array(
+    $form['advanced_filters'] = [
       '#type' => 'checkbox',
       '#title' => t('Show Advanced Filters.'),
       '#default_value' => \Drupal::config("facets.facet_source.{$facet_source_id}")->get('third_party_settings.core_search_facets.advanced_filters'),
-    );
+    ];
     $form['#entity_builders'][] = 'core_search_facets_facet_source_form_form_builder';
   }
 }

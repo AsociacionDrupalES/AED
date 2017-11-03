@@ -13,7 +13,7 @@ use Drupal\facets\Processor\ProcessorPluginBase;
  * @FacetsProcessor(
  *   id = "exclude_specified_items",
  *   label = @Translation("Exclude specified items"),
- *   description = @Translation("Excludes items by node id or title."),
+ *   description = @Translation("Exclude items depending on their raw or display value (such as node IDs or titles)."),
  *   stages = {
  *     "build" = 50
  *   }
@@ -25,13 +25,12 @@ class ExcludeSpecifiedItemsProcessor extends ProcessorPluginBase implements Buil
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
-    $processors = $facet->getProcessors();
-    $config = $processors[$this->getPluginId()];
+    $config = $this->getConfiguration();
 
     /** @var \Drupal\facets\Result\ResultInterface $result */
-    $exclude_item = $config->getConfiguration()['exclude'];
+    $exclude_item = $config['exclude'];
     foreach ($results as $id => $result) {
-      if ($config->getConfiguration()['regex']) {
+      if ($config['regex']) {
         $matcher = '/' . trim(str_replace('/', '\\/', $exclude_item)) . '/';
         if (preg_match($matcher, $result->getRawValue()) || preg_match($matcher, $result->getDisplayValue())) {
           unset($results[$id]);
@@ -55,19 +54,18 @@ class ExcludeSpecifiedItemsProcessor extends ProcessorPluginBase implements Buil
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
-    $processors = $facet->getProcessors();
-    $config = isset($processors[$this->getPluginId()]) ? $processors[$this->getPluginId()] : NULL;
+    $config = $this->getConfiguration();
 
     $build['exclude'] = [
       '#title' => $this->t('Exclude items'),
       '#type' => 'textfield',
-      '#default_value' => !is_null($config) ? $config->getConfiguration()['exclude'] : $this->defaultConfiguration()['exclude'],
+      '#default_value' => $config['exclude'],
       '#description' => $this->t("Comma separated list of titles or values that should be excluded, matching either an item's title or value."),
     ];
     $build['regex'] = [
       '#title' => $this->t('Regular expressions used'),
       '#type' => 'checkbox',
-      '#default_value' => !is_null($config) ? $config->getConfiguration()['regex'] : $this->defaultConfiguration()['regex'],
+      '#default_value' => $config['regex'],
       '#description' => $this->t('Interpret each exclude list item as a regular expression pattern.<br /><small>(Slashes are escaped automatically, patterns using a comma can be wrapped in "double quotes", and if such a pattern uses double quotes itself, just make them double-double-quotes (""))</small>.'),
     ];
 

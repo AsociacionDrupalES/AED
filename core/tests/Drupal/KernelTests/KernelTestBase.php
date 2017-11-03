@@ -18,10 +18,12 @@ use Drupal\Core\Language\Language;
 use Drupal\Core\Site\Settings;
 use Drupal\Core\Test\TestDatabase;
 use Drupal\simpletest\AssertContentTrait;
-use Drupal\simpletest\AssertHelperTrait;
+use Drupal\Tests\AssertHelperTrait;
 use Drupal\Tests\ConfigTestTrait;
 use Drupal\Tests\RandomGeneratorTrait;
+use Drupal\Tests\TestRequirementsTrait;
 use Drupal\simpletest\TestServiceProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\Request;
 use org\bovigo\vfs\vfsStream;
@@ -30,32 +32,50 @@ use org\bovigo\vfs\visitor\vfsStreamPrintVisitor;
 /**
  * Base class for functional integration tests.
  *
- * Tests extending this base class can access files and the database, but the
- * entire environment is initially empty. Drupal runs in a minimal mocked
- * environment, comparable to the one in the early installer.
+ * This base class should be useful for testing some types of integrations which
+ * don't require the overhead of a fully-installed Drupal instance, but which
+ * have many dependencies on parts of Drupal which can't or shouldn't be mocked.
  *
- * Unlike \Drupal\Tests\UnitTestCase, modules specified in the $modules
- * property are automatically added to the service container for each test.
- * The module/hook system is functional and operates on a fixed module list.
- * Additional modules needed in a test may be loaded and added to the fixed
- * module list.
+ * This base class partially boots a fixture Drupal. The state of the fixture
+ * Drupal is comparable to the state of a system during the early part of the
+ * installation process.
  *
- * Unlike \Drupal\simpletest\WebTestBase, the modules are only loaded, but not
- * installed. Modules have to be installed manually, if needed.
+ * Tests extending this base class can access services and the database, but the
+ * system is initially empty. This Drupal runs in a minimal mocked filesystem
+ * which operates within vfsStream.
+ *
+ * Modules specified in the $modules property are added to the service container
+ * for each test. The module/hook system is functional. Additional modules
+ * needed in a test should override $modules. Modules specified in this way will
+ * be added to those specified in superclasses.
+ *
+ * Unlike \Drupal\Tests\BrowserTestBase, the modules are not installed. They are
+ * loaded such that their services and hooks are available, but the install
+ * process has not been performed.
+ *
+ * Other modules can be made available in this way using
+ * KernelTestBase::enableModules().
+ *
+ * Some modules can be brought into a fully-installed state using
+ * KernelTestBase::installConfig(), KernelTestBase::installSchema(), and
+ * KernelTestBase::installEntitySchema(). Alternately, tests which need modules
+ * to be fully installed could inherit from \Drupal\Tests\BrowserTestBase.
  *
  * @see \Drupal\Tests\KernelTestBase::$modules
  * @see \Drupal\Tests\KernelTestBase::enableModules()
- *
- * @todo Extend ::setRequirementsFromAnnotation() and ::checkRequirements() to
- *   account for '@requires module'.
+ * @see \Drupal\Tests\KernelTestBase::installConfig()
+ * @see \Drupal\Tests\KernelTestBase::installEntitySchema()
+ * @see \Drupal\Tests\KernelTestBase::installSchema()
+ * @see \Drupal\Tests\BrowserTestBase
  */
-abstract class KernelTestBase extends \PHPUnit_Framework_TestCase implements ServiceProviderInterface {
+abstract class KernelTestBase extends TestCase implements ServiceProviderInterface {
 
   use AssertLegacyTrait;
   use AssertContentTrait;
   use AssertHelperTrait;
   use RandomGeneratorTrait;
   use ConfigTestTrait;
+  use TestRequirementsTrait;
 
   /**
    * {@inheritdoc}
@@ -209,15 +229,6 @@ abstract class KernelTestBase extends \PHPUnit_Framework_TestCase implements Ser
 
     // Change the current dir to DRUPAL_ROOT.
     chdir(static::getDrupalRoot());
-  }
-
-  /**
-   * Returns the drupal root directory.
-   *
-   * @return string
-   */
-  protected static function getDrupalRoot() {
-    return dirname(dirname(substr(__DIR__, 0, -strlen(__NAMESPACE__))));
   }
 
   /**
@@ -678,7 +689,7 @@ abstract class KernelTestBase extends \PHPUnit_Framework_TestCase implements Ser
    * Installs default configuration for a given list of modules.
    *
    * @param string|string[] $modules
-   *   A list of modules for which to install default configuration.
+   *   A module or list of modules for which to install default configuration.
    *
    * @throws \LogicException
    *   If any module in $modules is not enabled.
@@ -768,6 +779,9 @@ abstract class KernelTestBase extends \PHPUnit_Framework_TestCase implements Ser
 
   /**
    * Enables modules for this test.
+   *
+   * This method does not install modules fully. Services and hooks for the
+   * module are available, but the install process is not performed.
    *
    * To install test modules outside of the testing environment, add
    * @code

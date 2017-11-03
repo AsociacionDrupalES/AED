@@ -17,6 +17,8 @@ class DummyQuery extends QueryString {
 
   /**
    * A string that separates the filters in the query string.
+   *
+   * @var string
    */
   protected $separator = '||';
 

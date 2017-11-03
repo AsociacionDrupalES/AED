@@ -6,6 +6,7 @@ use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\NodeType;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
+use Drupal\search_api\Utility\Utility;
 use Drupal\Tests\BrowserTestBase;
 
 /**
@@ -116,7 +117,7 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
     // Do not use a batch for tracking the initial items after creating an
     // index when running the tests via the GUI. Otherwise, it seems Drupal's
     // Batch API gets confused and the test fails.
-    if (php_sapi_name() != 'cli') {
+    if (!Utility::isRunningInCli()) {
       \Drupal::state()->set('search_api_use_tracking_batch', FALSE);
     }
   }
@@ -200,7 +201,7 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
    * This function looks for the "http-equiv" attribute to be set to "Refresh"
    * and is case-sensitive.
    *
-   * @todo Remove once #2757023 gets committed (and we can depend on it).
+   * @todo Remove once we depend on Drupal 8.4+.
    */
   protected function checkForMetaRefresh() {
     $refresh = $this->cssSelect('meta[http-equiv="Refresh"]');

@@ -2,6 +2,7 @@
 
 namespace Drupal\core_search_facets;
 
+use Drupal\Core\Database\Query\Condition;
 use Drupal\search\SearchQuery;
 
 /**
@@ -41,7 +42,7 @@ class FacetsQuery extends SearchQuery {
    *   An associative array of query information.
    *
    * @return FacetsQuery
-   *    An instance of this class.
+   *   An instance of this class.
    */
   public function addFacetField(array $query_info) {
     foreach ($query_info['fields'] as $field_info) {
@@ -58,7 +59,7 @@ class FacetsQuery extends SearchQuery {
 
     // Adds OR conditions.
     if (!empty($this->words)) {
-      $or = db_or();
+      $or = new Condition('OR');
       foreach ($this->words as $word) {
         $or->condition('i.word', $word);
       }
@@ -73,7 +74,7 @@ class FacetsQuery extends SearchQuery {
       ->groupBy('value')
       ->groupBy('i.type')
       ->groupBy('i.sid')
-      ->having('COUNT(*) >= :matches', array(':matches' => $this->matches));
+      ->having('COUNT(*) >= :matches', [':matches' => $this->matches]);
 
     // For complex search queries, add the LIKE conditions.
     /*if (!$this->simple) {
@@ -91,8 +92,8 @@ class FacetsQuery extends SearchQuery {
       ->addMetaData('normalize', $this->normalize);
 
     // Adds subquery to group the results in the r table.
-    $subquery = db_select($this->query, 'r')
-      ->fields('r', array('value'))
+    $subquery = \Drupal::database()->select($this->query, 'r')
+      ->fields('r', ['value'])
       ->groupBy('r.value');
 
     // Adds COUNT() expression to get facet counts.

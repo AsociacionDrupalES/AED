@@ -41,7 +41,7 @@ class RangeSliderWidget extends SliderWidget {
    * {@inheritdoc}
    */
   public function isPropertyRequired($name, $type) {
-    if ($name === 'slider' && $type === 'processors') {
+    if ($name === 'range_slider' && $type === 'processors') {
       return TRUE;
     }
     if ($name === 'show_only_one_result' && $type === 'settings') {

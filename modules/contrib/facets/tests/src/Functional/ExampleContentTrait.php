@@ -34,43 +34,43 @@ trait ExampleContentTrait {
 
     $entity_test_storage = \Drupal::entityTypeManager()
       ->getStorage('entity_test_mulrev_changed');
-    $this->entities[1] = $entity_test_storage->create(array(
+    $this->entities[1] = $entity_test_storage->create([
       'name' => 'foo bar baz',
       'body' => 'test test',
       'type' => 'item',
-      'keywords' => array('orange'),
+      'keywords' => ['orange'],
       'category' => 'item_category',
-    ));
+    ]);
     $this->entities[1]->save();
-    $this->entities[2] = $entity_test_storage->create(array(
+    $this->entities[2] = $entity_test_storage->create([
       'name' => 'foo test',
       'body' => 'bar test',
       'type' => 'item',
-      'keywords' => array('orange', 'apple', 'grape'),
+      'keywords' => ['orange', 'apple', 'grape'],
       'category' => 'item_category',
-    ));
+    ]);
     $this->entities[2]->save();
-    $this->entities[3] = $entity_test_storage->create(array(
+    $this->entities[3] = $entity_test_storage->create([
       'name' => 'bar',
       'body' => 'test foobar',
       'type' => 'item',
-    ));
+    ]);
     $this->entities[3]->save();
-    $this->entities[4] = $entity_test_storage->create(array(
+    $this->entities[4] = $entity_test_storage->create([
       'name' => 'foo baz',
       'body' => 'test test test',
       'type' => 'article',
-      'keywords' => array('apple', 'strawberry', 'grape'),
+      'keywords' => ['apple', 'strawberry', 'grape'],
       'category' => 'article_category',
-    ));
+    ]);
     $this->entities[4]->save();
-    $this->entities[5] = $entity_test_storage->create(array(
+    $this->entities[5] = $entity_test_storage->create([
       'name' => 'bar baz',
       'body' => 'foo',
       'type' => 'article',
-      'keywords' => array('orange', 'strawberry', 'grape', 'banana'),
+      'keywords' => ['orange', 'strawberry', 'grape', 'banana'],
       'category' => 'article_category',
-    ));
+    ]);
     $this->entities[5]->save();
     $count = \Drupal::entityQuery('entity_test_mulrev_changed')
       ->count()

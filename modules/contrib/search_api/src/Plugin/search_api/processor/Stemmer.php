@@ -33,12 +33,16 @@ class Stemmer extends FieldsProcessorPluginBase {
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return [
+    $configuration = parent::defaultConfiguration();
+
+    $configuration += [
       'exceptions' => [
         'texan' => 'texa',
         'mexican' => 'mexic',
       ],
     ];
+
+    return $configuration;
   }
 
   /**

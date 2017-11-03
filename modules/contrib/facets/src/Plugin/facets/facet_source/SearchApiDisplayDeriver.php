@@ -4,6 +4,7 @@ namespace Drupal\facets\Plugin\facets\facet_source;
 
 use Drupal\Component\Plugin\PluginBase;
 use Drupal\facets\FacetSource\FacetSourceDeriverBase;
+use Drupal\search_api\IndexInterface;
 
 /**
  * Derives a facet source plugin definition for every Search API display plugin.
@@ -19,7 +20,7 @@ class SearchApiDisplayDeriver extends FacetSourceDeriverBase {
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
     $base_plugin_id = $base_plugin_definition['id'];
-    $plugin_derivatives = array();
+    $plugin_derivatives = [];
 
     $display_plugin_manager = $this->getSearchApiDisplayPluginManager();
     foreach ($display_plugin_manager->getDefinitions() as $display_id => $display_definition) {
@@ -28,10 +29,19 @@ class SearchApiDisplayDeriver extends FacetSourceDeriverBase {
         continue;
       }
 
+      /** @var \Drupal\search_api\Display\DisplayInterface $display */
       $display = $display_plugin_manager->createInstance($display_id);
 
-      $server = $display->getIndex()
-        ->getServerInstance();
+      $index = $display->getIndex();
+
+      // If we can't reliably load the index, we should just cancel trying to
+      // create a derivative for this display.
+      if (!$index instanceof IndexInterface) {
+        continue;
+      }
+
+      // Get the server linked to the index.
+      $server = $index->getServerInstance();
 
       // If facets are not supported by the server, don't actually add this to
       // the list of plugins.
