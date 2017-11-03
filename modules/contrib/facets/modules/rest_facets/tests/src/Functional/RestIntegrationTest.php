@@ -45,11 +45,11 @@ class RestIntegrationTest extends FacetsTestBase {
     // and thus removed from the test index. (We can't do it in setUp(), before
     // calling the parent method, since the container isn't set up at that
     // point.)
-    $bundles = array(
-      'entity_test_mulrev_changed' => array('label' => 'Entity Test Bundle'),
-      'item' => array('label' => 'item'),
-      'article' => array('label' => 'article'),
-    );
+    $bundles = [
+      'entity_test_mulrev_changed' => ['label' => 'Entity Test Bundle'],
+      'item' => ['label' => 'item'],
+      'article' => ['label' => 'article'],
+    ];
     \Drupal::state()->set('entity_test_mulrev_changed.bundles', $bundles);
 
     parent::installModulesFromClassProperty($container);
@@ -117,11 +117,11 @@ class RestIntegrationTest extends FacetsTestBase {
     // Verify the facet "Type".
     $results = [
       'article' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aarticle',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aarticle',
         'count' => 2,
       ],
       'item' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem',
         'count' => 3,
       ],
     ];
@@ -135,23 +135,23 @@ class RestIntegrationTest extends FacetsTestBase {
     // Verify the facet "Keywords".
     $results = [
       'banana' => [
-        'url' => $base_url . '/facets-rest?f[0]=keywords%3Abanana',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=keywords%3Abanana',
         'count' => 1,
       ],
       'strawberry' => [
-        'url' => $base_url . '/facets-rest?f[0]=keywords%3Astrawberry',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=keywords%3Astrawberry',
         'count' => 2,
       ],
       'apple' => [
-        'url' => $base_url . '/facets-rest?f[0]=keywords%3Aapple',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=keywords%3Aapple',
         'count' => 2,
       ],
       'orange' => [
-        'url' => $base_url . '/facets-rest?f[0]=keywords%3Aorange',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=keywords%3Aorange',
         'count' => 3,
       ],
       'grape' => [
-        'url' => $base_url . '/facets-rest?f[0]=keywords%3Agrape',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=keywords%3Agrape',
         'count' => 3,
       ],
     ];
@@ -163,14 +163,14 @@ class RestIntegrationTest extends FacetsTestBase {
     }
 
     // Filter and verify that the results are correct.
-    $json = $this->drupalGet($base_url . '/facets-rest?f[0]=type%3Aitem');
+    $json = $this->drupalGet($base_url . '/facets-rest?f%5B0%5D=type%3Aitem');
     $json_decoded = json_decode($json);
 
     $this->assertEqual(count($json_decoded->search_results), 3);
 
     $results = [
       'article' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=type%3Aarticle',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=type%3Aarticle',
         'count' => 2,
       ],
       'item' => [
@@ -178,23 +178,23 @@ class RestIntegrationTest extends FacetsTestBase {
         'count' => 3,
       ],
       'banana' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=keywords%3Abanana',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=keywords%3Abanana',
         'count' => 0,
       ],
       'strawberry' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=keywords%3Astrawberry',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=keywords%3Astrawberry',
         'count' => 0,
       ],
       'apple' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=keywords%3Aapple',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=keywords%3Aapple',
         'count' => 1,
       ],
       'orange' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=keywords%3Aorange',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=keywords%3Aorange',
         'count' => 2,
       ],
       'grape' => [
-        'url' => $base_url . '/facets-rest?f[0]=type%3Aitem&f[1]=keywords%3Agrape',
+        'url' => $base_url . '/facets-rest?f%5B0%5D=type%3Aitem&f%5B1%5D=keywords%3Agrape',
         'count' => 1,
       ],
     ];

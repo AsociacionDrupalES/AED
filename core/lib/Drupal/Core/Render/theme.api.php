@@ -364,7 +364,7 @@
  *   '#cache' => [
  *     'keys' => ['entity_view', 'node', $node->id()],
  *     'contexts' => ['languages'],
- *     'tags' => ['node:' . $node->id()],
+ *     'tags' => $node->getCacheTags(),
  *     'max-age' => Cache::PERMANENT,
  *   ],
  * @endcode
@@ -627,7 +627,7 @@ function hook_preprocess_HOOK(&$variables) {
 function hook_theme_suggestions_HOOK(array $variables) {
   $suggestions = [];
 
-  $suggestions[] = 'node__' . $variables['elements']['#langcode'];
+  $suggestions[] = 'hookname__' . $variables['elements']['#langcode'];
 
   return $suggestions;
 }
@@ -728,7 +728,7 @@ function hook_themes_installed($theme_list) {
 /**
  * Respond to themes being uninstalled.
  *
- * @param array $theme_list
+ * @param array $themes
  *   Array containing the names of the themes being uninstalled.
  *
  * @see \Drupal\Core\Extension\ThemeHandler::uninstall()

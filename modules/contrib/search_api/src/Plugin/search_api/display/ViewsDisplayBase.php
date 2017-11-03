@@ -56,6 +56,22 @@ abstract class ViewsDisplayBase extends DisplayPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function getPath() {
+    $path = parent::getPath();
+
+    // Recreating a link when a contextual filter is used in the display's path
+    // is not possible. So instead we return NULL, which forces most
+    // implementations to use the current request's path instead.
+    if (strpos($path, '%') !== FALSE) {
+      return NULL;
+    }
+
+    return $path;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function isRenderedInCurrentRequest() {
     $plugin_definition = $this->getPluginDefinition();
     $current_route = $this->getCurrentRouteMatch()->getRouteName();

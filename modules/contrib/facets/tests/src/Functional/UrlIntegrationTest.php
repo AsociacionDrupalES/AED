@@ -146,4 +146,32 @@ class UrlIntegrationTest extends FacetsTestBase {
     $this->assertFacetLabel('banana');
   }
 
+  /**
+   * Regression test for #2871475.
+   *
+   * @link https://drupal.org/node/2871475
+   */
+  public function testIncompleteFacetUrl() {
+    $id = 'owl';
+    $name = 'Owl';
+    $this->createFacet($name, $id);
+
+    $url = Url::fromUserInput('/search-api-test-fulltext');
+    $this->checkClickedFacetUrl($url);
+
+    // Build the path as described in #2871475.
+    $path = 'search-api-test-fulltext';
+    $options['absolute'] = TRUE;
+    $url = $this->buildUrl($path, $options);
+    $url .= '?f';
+
+    // Visit the page.
+    $session = $this->getSession();
+    $this->prepareRequest();
+    $session->visit($url);
+
+    // Check that no errors occurred.
+    $this->assertSession()->statusCodeEquals(200);
+  }
+
 }

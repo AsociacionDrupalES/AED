@@ -1,7 +1,7 @@
 services:
   stage_file_proxy.fetch_manager:
     class: Drupal\stage_file_proxy\FetchManager
-    arguments: ['@http_client']
+    arguments: ['@http_client', '@file_system']
 
   stage_file_proxy.subscriber:
     class: Drupal\stage_file_proxy\EventSubscriber\ProxySubscriber

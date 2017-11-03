@@ -190,43 +190,43 @@ class WidgetJSTest extends JavascriptTestBase {
 
     $entity_test_storage = \Drupal::entityTypeManager()
       ->getStorage('entity_test_mulrev_changed');
-    $entity_1 = $entity_test_storage->create(array(
+    $entity_1 = $entity_test_storage->create([
       'name' => 'foo bar baz',
       'body' => 'test test',
       'type' => 'item',
-      'keywords' => array('orange'),
+      'keywords' => ['orange'],
       'category' => 'item_category',
-    ));
+    ]);
     $entity_1->save();
-    $entity_2 = $entity_test_storage->create(array(
+    $entity_2 = $entity_test_storage->create([
       'name' => 'foo test',
       'body' => 'bar test',
       'type' => 'item',
-      'keywords' => array('orange', 'apple', 'grape'),
+      'keywords' => ['orange', 'apple', 'grape'],
       'category' => 'item_category',
-    ));
+    ]);
     $entity_2->save();
-    $entity_3 = $entity_test_storage->create(array(
+    $entity_3 = $entity_test_storage->create([
       'name' => 'bar',
       'body' => 'test foobar',
       'type' => 'item',
-    ));
+    ]);
     $entity_3->save();
-    $entity_4 = $entity_test_storage->create(array(
+    $entity_4 = $entity_test_storage->create([
       'name' => 'foo baz',
       'body' => 'test test test',
       'type' => 'article',
-      'keywords' => array('apple', 'strawberry', 'grape'),
+      'keywords' => ['apple', 'strawberry', 'grape'],
       'category' => 'article_category',
-    ));
+    ]);
     $entity_4->save();
-    $entity_5 = $entity_test_storage->create(array(
+    $entity_5 = $entity_test_storage->create([
       'name' => 'bar baz',
       'body' => 'foo',
       'type' => 'article',
-      'keywords' => array('orange', 'strawberry', 'grape', 'banana'),
+      'keywords' => ['orange', 'strawberry', 'grape', 'banana'],
       'category' => 'article_category',
-    ));
+    ]);
     $entity_5->save();
 
     $inserted_entities = \Drupal::entityQuery('entity_test_mulrev_changed')

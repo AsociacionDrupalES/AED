@@ -218,14 +218,16 @@ class ToolkitGdTest extends KernelTestBase {
       $operations += [
         'rotate_5' => [
           'function' => 'rotate',
-          'arguments' => ['degrees' => 5, 'background' => '#FF00FF'], // Fuchsia background.
+          // Fuchsia background.
+          'arguments' => ['degrees' => 5, 'background' => '#FF00FF'],
           'width' => 41,
           'height' => 23,
           'corners' => array_fill(0, 4, $this->fuchsia),
         ],
         'rotate_90' => [
           'function' => 'rotate',
-          'arguments' => ['degrees' => 90, 'background' => '#FF00FF'], // Fuchsia background.
+          // Fuchsia background.
+          'arguments' => ['degrees' => 90, 'background' => '#FF00FF'],
           'width' => 20,
           'height' => 40,
           'corners' => [$this->transparent, $this->red, $this->green, $this->blue],
@@ -365,7 +367,7 @@ class ToolkitGdTest extends KernelTestBase {
             if ($image->getToolkit()->getType() == $image_original_type || $corner != $this->transparent) {
               $correct_colors = $this->colorsAreEqual($color, $corner);
               $this->assertTrue($correct_colors, SafeMarkup::format('Image %file object after %action action has the correct color placement at corner %corner.',
-                ['%file'   => $file, '%action' => $op, '%corner' => $key]));
+                ['%file' => $file, '%action' => $op, '%corner' => $key]));
             }
           }
         }

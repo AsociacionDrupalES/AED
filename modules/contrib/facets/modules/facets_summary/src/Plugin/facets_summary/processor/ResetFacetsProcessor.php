@@ -57,7 +57,7 @@ class ResetFacetsProcessor extends ProcessorPluginBase implements BuildProcessor
     // Lets use any first facet to get correct url.
     $results = reset($facets)->getResults();
 
-    /** @var  \Drupal\Core\Url $first_item_url */
+    /** @var \Drupal\Core\Url $first_item_url */
     $first_item_url = reset($results)->getUrl();
     $first_item_url = clone ($first_item_url);
     $first_item_url->setOptions(['query' => $query_params]);

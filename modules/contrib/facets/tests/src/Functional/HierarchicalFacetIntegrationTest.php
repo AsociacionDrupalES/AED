@@ -6,8 +6,8 @@ use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\search_api\Item\Field;
 use Drupal\taxonomy\Entity\Term;
-use Drupal\taxonomy\Tests\TaxonomyTestTrait;
 use Drupal\field\Tests\EntityReference\EntityReferenceTestTrait;
+use Drupal\Tests\taxonomy\Functional\TaxonomyTestTrait;
 
 /**
  * Tests the hierarchical facets implementation.
@@ -171,6 +171,38 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests sorting of hierarchy.
+   */
+  public function testHierarchySorting() {
+    // Expand the hierarchy and verify that all items are visible initially.
+    $edit = [
+      'facet_settings[expand_hierarchy]' => '1',
+      'facet_settings[use_hierarchy]' => '1',
+      'facet_settings[translate_entity][status]' => '1',
+      'facet_sorting[count_widget_order][status]' => '0',
+      'facet_sorting[active_widget_order][status]' => '0',
+    ];
+    $this->drupalPostForm($this->facetEditPage, $edit, 'Save');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertStringPosition('Parent 1', 'Parent 2');
+    $this->assertStringPosition('Child 1', 'Child 2');
+    $this->assertStringPosition('Child 2', 'Child 3');
+    $this->assertStringPosition('Child 3', 'Child 4');
+
+    $edit = [
+      'facet_sorting[display_value_widget_order][settings][sort]' => 'DESC',
+    ];
+    $this->drupalPostForm($this->facetEditPage, $edit, 'Save');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertStringPosition('Parent 2', 'Parent 1');
+    $this->assertStringPosition('Child 4', 'Child 3');
+    $this->assertStringPosition('Child 3', 'Child 2');
+    $this->assertStringPosition('Child 2', 'Child 1');
+  }
+
+  /**
    * Verify the "Enable parent when child gets disabled" option is working.
    */
   protected function verifyEnableParentWhenChildGetsDisabledOption() {
@@ -264,62 +296,62 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     $entity_test_storage = \Drupal::entityTypeManager()
       ->getStorage('entity_test_mulrev_changed');
 
-    $this->entities[1] = $entity_test_storage->create(array(
+    $this->entities[1] = $entity_test_storage->create([
       'name' => 'foo bar baz',
       'body' => 'test test',
       'type' => 'item',
-      'keywords' => array('orange'),
+      'keywords' => ['orange'],
       'category' => 'item_category',
       $this->fieldName => [$this->parents['Parent 1']->id()],
-    ));
+    ]);
     $this->entities[1]->save();
 
-    $this->entities[2] = $entity_test_storage->create(array(
+    $this->entities[2] = $entity_test_storage->create([
       'name' => 'foo test',
       'body' => 'bar test',
       'type' => 'item',
-      'keywords' => array('orange', 'apple', 'grape'),
+      'keywords' => ['orange', 'apple', 'grape'],
       'category' => 'item_category',
       $this->fieldName => [$this->parents['Parent 2']->id()],
-    ));
+    ]);
     $this->entities[2]->save();
 
-    $this->entities[3] = $entity_test_storage->create(array(
+    $this->entities[3] = $entity_test_storage->create([
       'name' => 'bar',
       'body' => 'test foobar',
       'type' => 'item',
       $this->fieldName => [$this->terms[1]->id()],
-    ));
+    ]);
     $this->entities[3]->save();
 
-    $this->entities[4] = $entity_test_storage->create(array(
+    $this->entities[4] = $entity_test_storage->create([
       'name' => 'foo baz',
       'body' => 'test test test',
       'type' => 'article',
-      'keywords' => array('apple', 'strawberry', 'grape'),
+      'keywords' => ['apple', 'strawberry', 'grape'],
       'category' => 'article_category',
       $this->fieldName => [$this->terms[2]->id()],
-    ));
+    ]);
     $this->entities[4]->save();
 
-    $this->entities[5] = $entity_test_storage->create(array(
+    $this->entities[5] = $entity_test_storage->create([
       'name' => 'bar baz',
       'body' => 'foo',
       'type' => 'article',
-      'keywords' => array('orange', 'strawberry', 'grape', 'banana'),
+      'keywords' => ['orange', 'strawberry', 'grape', 'banana'],
       'category' => 'article_category',
       $this->fieldName => [$this->terms[3]->id()],
-    ));
+    ]);
     $this->entities[5]->save();
 
-    $this->entities[6] = $entity_test_storage->create(array(
+    $this->entities[6] = $entity_test_storage->create([
       'name' => 'bar baz',
       'body' => 'foo',
       'type' => 'article',
-      'keywords' => array('orange', 'strawberry', 'grape', 'banana'),
+      'keywords' => ['orange', 'strawberry', 'grape', 'banana'],
       'category' => 'article_category',
       $this->fieldName => [$this->terms[4]->id()],
-    ));
+    ]);
     $this->entities[6]->save();
   }
 

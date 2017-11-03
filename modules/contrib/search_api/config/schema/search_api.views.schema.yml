@@ -229,7 +229,7 @@ views.filter.search_api_user:
   label: 'Search API user'
 
 views.filter_value.search_api_boolean:
-  type: boolean
+  type: string
 
 views.filter_value.search_api_datasource:
   type: string

@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api\Plugin\search_api\tracker;
 
+use Drupal\Component\Datetime\TimeInterface;
 use Drupal\Core\Database\Connection;
 use Drupal\search_api\LoggerTrait;
 use Drupal\search_api\Tracker\TrackerPluginBase;
@@ -39,15 +40,21 @@ class Basic extends TrackerPluginBase {
   protected $connection;
 
   /**
+   * The time service.
+   *
+   * @var \Drupal\Component\Datetime\TimeInterface|null
+   */
+  protected $timeService;
+
+  /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
     /** @var static $tracker */
     $tracker = parent::create($container, $configuration, $plugin_id, $plugin_definition);
 
-    /** @var \Drupal\Core\Database\Connection $connection */
-    $connection = $container->get('database');
-    $tracker->setDatabaseConnection($connection);
+    $tracker->setDatabaseConnection($container->get('database'));
+    $tracker->setTimeService($container->get('datetime.time'));
 
     return $tracker;
   }
@@ -72,6 +79,29 @@ class Basic extends TrackerPluginBase {
    */
   public function setDatabaseConnection(Connection $connection) {
     $this->connection = $connection;
+    return $this;
+  }
+
+  /**
+   * Retrieves the time service.
+   *
+   * @return \Drupal\Component\Datetime\TimeInterface
+   *   The time service.
+   */
+  public function getTimeService() {
+    return $this->timeService ?: \Drupal::time();
+  }
+
+  /**
+   * Sets the time service.
+   *
+   * @param \Drupal\Component\Datetime\TimeInterface $time_service
+   *   The new time service.
+   *
+   * @return $this
+   */
+  public function setTimeService(TimeInterface $time_service) {
+    $this->timeService = $time_service;
     return $this;
   }
 
@@ -173,7 +203,7 @@ class Basic extends TrackerPluginBase {
             'index_id' => $index_id,
             'datasource' => $datasource_id,
             'item_id' => $item_id,
-            'changed' => REQUEST_TIME,
+            'changed' => $this->getTimeService()->getRequestTime(),
             'status' => $this::STATUS_NOT_INDEXED,
           ]);
         }
@@ -199,8 +229,10 @@ class Basic extends TrackerPluginBase {
       $ids_chunks = ($ids !== NULL ? array_chunk($ids, 1000) : [NULL]);
       foreach ($ids_chunks as $ids_chunk) {
         $update = $this->createUpdateStatement();
-        // @todo Once we depend on Drupal 8.3+, replace REQUEST_TIME.
-        $update->fields(['changed' => REQUEST_TIME, 'status' => $this::STATUS_NOT_INDEXED]);
+        $update->fields([
+          'changed' => $this->getTimeService()->getRequestTime(),
+          'status' => $this::STATUS_NOT_INDEXED,
+        ]);
         if ($ids_chunk) {
           $update->condition('item_id', $ids_chunk, 'IN');
         }
@@ -220,7 +252,10 @@ class Basic extends TrackerPluginBase {
     $transaction = $this->getDatabaseConnection()->startTransaction();
     try {
       $update = $this->createUpdateStatement();
-      $update->fields(['changed' => REQUEST_TIME, 'status' => $this::STATUS_NOT_INDEXED]);
+      $update->fields([
+        'changed' => $this->getTimeService()->getRequestTime(),
+        'status' => $this::STATUS_NOT_INDEXED,
+      ]);
       if ($datasource_id) {
         $update->condition('datasource', $datasource_id);
       }

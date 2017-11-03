@@ -65,12 +65,12 @@ class ShowTextWhenEmptyProcessor extends ProcessorPluginBase implements BuildPro
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array(
-      'text' => array(
+    return [
+      'text' => [
         'format' => 'plain_text',
         'value' => $this->t('There is no current search in progress.'),
-      ),
-    );
+      ],
+    ];
   }
 
   /**

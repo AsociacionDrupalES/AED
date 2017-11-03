@@ -12,8 +12,8 @@ use Drupal\user\Entity\User;
  *
  * @FacetsProcessor(
  *   id = "uid_to_username_callback",
- *   label = @Translation("Transform uid to username"),
- *   description = @Translation("Show the username instead, when the source field is a user id."),
+ *   label = @Translation("Transform UID to user name"),
+ *   description = @Translation("Display the user name if the source field is a user ID."),
  *   stages = {
  *     "build" = 5
  *   }

@@ -43,7 +43,7 @@ class DropdownWidget extends WidgetPluginBase {
   public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
     $config = $this->getConfiguration();
 
-    $message = $this->t('This widget requires "Make sure only one result can be shown." to be enabled to behave as a standard dropdown.');
+    $message = $this->t('To achieve the standard behavior of a dropdown, you need to enable the facet setting below <em>"Ensure that only one result can be displayed"</em>.');
     $form['warning'] = [
       '#markup' => '<div class="messages messages--warning">' . $message . '</div>',
     ];

@@ -62,3 +62,27 @@ function facets_update_8001() {
     }
   }
 }
+
+/**
+ * Remove 'other_facet' plugin for older versions of facets.
+ */
+function facets_update_8002() {
+  $database = \Drupal::database();
+  $query = $database
+    ->query("SELECT * FROM {config} WHERE data LIKE '%other_facet%'");
+  $results = $query->fetchAll();
+
+  foreach ($results as $result) {
+    $data = unserialize($result->data);
+    if (isset($data['visibility']['other_facet'])) {
+      unset($data['visibility']['other_facet']);
+    }
+
+    $database->update('config')
+      ->fields(array(
+        'data' => serialize($data),
+      ))
+      ->condition('name', $result->name)
+      ->execute();
+  }
+}

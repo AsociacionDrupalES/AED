@@ -24,6 +24,7 @@ class ProcessorIntegrationTest extends FacetsTestBase {
    * {@inheritdoc}
    */
   public static $modules = [
+    'facets_custom_widget',
     'options',
   ];
 
@@ -638,6 +639,26 @@ class ProcessorIntegrationTest extends FacetsTestBase {
     $this->drupalGet('search-api-test-fulltext');
     $this->assertText('Displaying 11 search results');
     $this->assertFacetLabel('Basic page');
+  }
+
+  /**
+   * Test pre query processor.
+   */
+  public function testPreQueryProcessor() {
+    $facet_name = "Eamus Catuli";
+    $facet_id = "eamus_catuli";
+    $editForm = 'admin/config/search/facets/' . $facet_id . '/edit';
+    $this->createFacet($facet_name, $facet_id);
+
+    $edit = [
+      'facet_settings[test_pre_query][status]' => TRUE,
+      'facet_settings[test_pre_query][settings][test_value]' => 'Llama',
+    ];
+    $this->drupalPostForm($editForm, $edit, 'Save');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains('Llama');
   }
 
 }

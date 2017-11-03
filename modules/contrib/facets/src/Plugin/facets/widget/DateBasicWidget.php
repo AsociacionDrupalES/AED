@@ -26,14 +26,14 @@ class DateBasicWidget extends WidgetPluginBase {
    *   An array of granularity options.
    */
   private function granularityOptions() {
-    return array(
+    return [
       SearchApiDate::FACETAPI_DATE_YEAR => $this->t('Year'),
       SearchApiDate::FACETAPI_DATE_MONTH => $this->t('Month'),
       SearchApiDate::FACETAPI_DATE_DAY => $this->t('Day'),
       SearchApiDate::FACETAPI_DATE_HOUR => $this->t('Hour'),
       SearchApiDate::FACETAPI_DATE_MINUTE => $this->t('Minute'),
       SearchApiDate::FACETAPI_DATE_SECOND => $this->t('Second'),
-    );
+    ];
   }
 
   /**
@@ -99,17 +99,17 @@ class DateBasicWidget extends WidgetPluginBase {
   public function build(FacetInterface $facet) {
     $this->facet = $facet;
 
-    $items = array_map(function (Result $result) {
+    $items = array_map(function (Result $result) use ($facet) {
       if (empty($result->getUrl())) {
         return ['#markup' => $this->extractText($result)];
       }
       else {
-        return $this->buildListItems($result);
+        return $this->buildListItems($facet, $result);
       }
     }, $facet->getResults());
 
     return [
-      '#theme' => 'facets_item_list',
+      '#theme' => $this->getFacetItemListThemeHook($facet),
       '#items' => $items,
       '#attributes' => ['data-drupal-facet-id' => $facet->id()],
       '#cache' => [

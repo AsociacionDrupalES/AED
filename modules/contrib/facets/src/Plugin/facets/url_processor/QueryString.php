@@ -129,6 +129,12 @@ class QueryString extends UrlProcessorPluginBase {
       }
 
       $result_get_params->set($this->filterKey, array_values($filter_params));
+      // Grab any route params from the original request.
+      $routeParameters = Url::createFromRequest($this->request)
+        ->getRouteParameters();
+      if (!empty($routeParameters)) {
+        $url->setRouteParameters($routeParameters);
+      }
 
       $new_url = clone $url;
       if ($result_get_params->all() !== [$this->filterKey => []]) {
@@ -171,7 +177,12 @@ class QueryString extends UrlProcessorPluginBase {
     $url_parameters = $this->request->query;
 
     // Get the active facet parameters.
-    $active_params = $url_parameters->get($this->filterKey, array(), TRUE);
+    $active_params = $url_parameters->get($this->filterKey, [], TRUE);
+
+    // When an invalid parameter is passed in the url, we can't do anything.
+    if (!is_array($active_params)) {
+      return;
+    }
 
     // Explode the active params on the separator.
     foreach ($active_params as $param) {

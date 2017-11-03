@@ -22,6 +22,14 @@ plugin.plugin_configuration.facets_processor.translate_entity:
       type: boolean
       label: translate entity
 
+plugin.plugin_configuration.facets_processor.term_weight_widget_order:
+  type: mapping
+  label: 'Display term widget order'
+  mapping:
+    sort:
+      type: string
+      label: sort order
+
 plugin.plugin_configuration.facets_processor.exclude_specified_items:
   type: mapping
   label: 'Exclude specified items'

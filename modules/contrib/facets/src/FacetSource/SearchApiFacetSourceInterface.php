@@ -15,7 +15,6 @@ interface SearchApiFacetSourceInterface extends FacetSourcePluginInterface {
    */
   public function getIndex();
 
-
   /**
    * Retrieves the Search API display plugin associated with this facet source.
    *
@@ -23,4 +22,5 @@ interface SearchApiFacetSourceInterface extends FacetSourcePluginInterface {
    *   The Search API display plugin associated with this facet source.
    */
   public function getDisplay();
+
 }

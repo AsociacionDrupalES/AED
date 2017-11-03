@@ -5,7 +5,7 @@
 
 (function ($) {
 
-  "use strict";
+  'use strict';
 
   Drupal.behaviors.facetsIndexFormatter = {
     attach: function (context, settings) {

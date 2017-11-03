@@ -2,6 +2,8 @@
 
 namespace Drupal\core_search_facets\Plugin\facets\facet_source;
 
+use Drupal\Core\Database\Connection;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\core_search_facets\Plugin\CoreSearchFacetSourceInterface;
 use Drupal\facets\FacetInterface;
@@ -67,6 +69,20 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
   protected $request;
 
   /**
+   * The module handler.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The current primary database.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
+  /**
    * Constructs a Drupal\Component\Plugin\PluginBase object.
    *
    * @param array $configuration
@@ -81,26 +97,33 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    *   The plugin manager for core search plugins.
    * @param \Symfony\Component\HttpFoundation\Request $request
    *   The master request.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The current primary database.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, QueryTypePluginManager $query_type_plugin_manager, SearchPluginManager $search_manager, Request $request) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, QueryTypePluginManager $query_type_plugin_manager, SearchPluginManager $search_manager, Request $request, ModuleHandlerInterface $module_handler, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $query_type_plugin_manager);
     $this->searchManager = $search_manager;
     $this->request = clone $request;
     $this->setSearchKeys($this->request->query->get('keys'));
+    $this->moduleHandler = $module_handler;
+    $this->database = $database;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-
     return new static(
       $configuration,
       $plugin_id,
       $plugin_definition,
       $container->get('plugin.manager.facets.query_type'),
       $container->get('plugin.manager.search'),
-      $container->get('request_stack')->getMasterRequest()
+      $container->get('request_stack')->getMasterRequest(),
+      $container->get('module_handler'),
+      $container->get('database')
     );
   }
 
@@ -120,10 +143,10 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    */
   public function fillFacetsWithResults(array $facets) {
     foreach ($facets as $facet) {
-      $configuration = array(
+      $configuration = [
         'query' => NULL,
         'facet' => $facet,
-      );
+      ];
 
       // Get the Facet Specific Query Type so we can process the results
       // using the build() function of the query type.
@@ -182,8 +205,7 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    * {@inheritdoc}
    */
   public function isRenderedInCurrentRequest() {
-    $request = \Drupal::requestStack()->getMasterRequest();
-    $search_page = $request->attributes->get('entity');
+    $search_page = $this->request->attributes->get('entity');
     if ($search_page instanceof SearchPageInterface) {
       $facet_source_id = 'core_node_search:' . $search_page->id();
       if ($facet_source_id == $this->getPluginId()) {
@@ -198,7 +220,6 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
-
     $form['field_identifier'] = [
       '#type' => 'select',
       '#options' => $this->getFields(),
@@ -219,7 +240,7 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
     $facet_fields = $this->getDefaultFields();
 
     // Get the allowed field types.
-    $allowed_field_types = \Drupal::moduleHandler()->invokeAll('facets_core_allowed_field_types', array($field_types = []));
+    $allowed_field_types = $this->moduleHandler->invokeAll('facets_core_allowed_field_types', [$field_types = []]);
 
     // Get the current field instances and detect if the field type is allowed.
     $fields = FieldConfig::loadMultiple();
@@ -261,7 +282,9 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    */
   public function getFacetQueryExtender() {
     if (!$this->facetQueryExtender) {
-      $this->facetQueryExtender = db_select('search_index', 'i', array('target' => 'replica'))->extend('Drupal\core_search_facets\FacetsQuery');
+      $this->facetQueryExtender = $this->database
+        ->select('search_index', 'i', ['target' => 'replica'])
+        ->extend('Drupal\core_search_facets\FacetsQuery');
       $this->facetQueryExtender->join('node_field_data', 'n', 'n.nid = i.sid AND n.langcode = i.langcode');
       $this->facetQueryExtender
          // ->condition('n.status', 1).
@@ -309,19 +332,19 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
         $column = $facet->getFieldIdentifier() . '_value';
       }
 
-      $query_info['fields'][$field_name . '.' . $column] = array(
+      $query_info['fields'][$field_name . '.' . $column] = [
         'table_alias' => $table,
         'field' => $column,
-      );
+      ];
 
       // Adds the join on the node table.
-      $query_info['joins'] = array(
-        $table => array(
+      $query_info['joins'] = [
+        $table => [
           'table' => $table,
           'alias' => $table,
           'condition' => "n.vid = $table.revision_id AND i.langcode = $table.langcode",
-        ),
-      );
+        ],
+      ];
     }
 
     // Returns query info, makes sure all keys are present.
@@ -337,7 +360,7 @@ class CoreNodeSearchFacetSource extends FacetSourcePluginBase implements CoreSea
    * @TODO move to the Base class???
    */
   public function hasFacets() {
-    $manager = \Drupal::service('entity_type.manager')->getStorage('facets_facet');
+    $manager = $this->entityTypeManager->getStorage('facets_facet');
     $facets = $manager->loadMultiple();
     foreach ($facets as $facet) {
       if ($facet->getFacetSourceId() == $this->getPluginId()) {

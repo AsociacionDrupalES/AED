@@ -49,19 +49,19 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
   public function build(FacetInterface $facet) {
     $this->facet = $facet;
 
-    $items = array_map(function (Result $result) {
+    $items = array_map(function (Result $result) use ($facet) {
       if (empty($result->getUrl())) {
         return $this->buildResultItem($result);
       }
       else {
-        return $this->buildListItems($result);
+        return $this->buildListItems($facet, $result);
       }
     }, $facet->getResults());
 
     $widget = $facet->getWidget();
 
     return [
-      '#theme' => 'facets_item_list',
+      '#theme' => $this->getFacetItemListThemeHook($facet),
       '#items' => $items,
       '#attributes' => [
         'data-drupal-facet-id' => $facet->id(),
@@ -75,6 +75,24 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
         ],
       ],
     ];
+  }
+
+  /**
+   * Provides a full array of possible theme functions to try for a given hook.
+   *
+   * This allows the following template suggestions:
+   *  - facets-item-list--WIDGET_TYPE--FACET_ID
+   *  - facets-item-list--WIDGET_TYPE
+   *  - facets-item-list
+   *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   The facet whose output is being generated.
+   *
+   * @return string
+   *   A theme hook name with suggestions, suitable for the #theme property.
+   */
+  protected function getFacetItemListThemeHook(FacetInterface $facet) {
+    return 'facets_item_list__' . $facet->getWidget()['type'] . '__' . $facet->id();
   }
 
   /**
@@ -130,13 +148,15 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
   /**
    * Builds a renderable array of result items.
    *
+   * @param \Drupal\facets\FacetInterface $facet
+   *   The facet we need to build.
    * @param \Drupal\facets\Result\ResultInterface $result
    *   A result item.
    *
    * @return array
    *   A renderable array of the result.
    */
-  protected function buildListItems(ResultInterface $result) {
+  protected function buildListItems($facet, ResultInterface $result) {
     $classes = ['facet-item'];
     $items = $this->prepareLink($result);
 
@@ -147,11 +167,11 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
       $child_items = [];
       $classes[] = 'facet-item--expanded';
       foreach ($children as $child) {
-        $child_items[] = $this->buildListItems($child);
+        $child_items[] = $this->buildListItems($facet, $child);
       }
 
       $items['children'] = [
-        '#theme' => 'facets_item_list',
+        '#theme' => $this->getFacetItemListThemeHook($facet),
         '#items' => $child_items,
       ];
 
@@ -171,7 +191,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
     }
 
     $items['#wrapper_attributes'] = ['class' => $classes];
-    $items['#attributes']['data-drupal-facet-item-id'] = $this->facet->getUrlAlias() . '-' . $result->getRawValue();
+    $items['#attributes']['data-drupal-facet-item-id'] = $this->facet->getUrlAlias() . '-' . str_replace(' ', '-', $result->getRawValue());
     $items['#attributes']['data-drupal-facet-item-value'] = $result->getRawValue();
     return $items;
   }

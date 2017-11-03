@@ -52,7 +52,7 @@ class LinksWidget extends WidgetPluginBase {
       '#title' => $this->t('Soft limit'),
       '#default_value' => $this->getConfiguration()['soft_limit'],
       '#options' => [0 => $this->t('No limit')] + array_combine($options, $options),
-      '#description' => $this->t('Limits the number of displayed facets via JavaScript.'),
+      '#description' => $this->t('Limit the number of displayed facets via JavaScript.'),
     ];
     return $form;
   }

@@ -41,7 +41,7 @@ class ArrayWidget extends WidgetPluginBase {
         $items[$facet->getFieldIdentifier()][] = $text;
       }
       else {
-        $items[$facet->getFieldIdentifier()][] = $this->buildListItems($result);
+        $items[$facet->getFieldIdentifier()][] = $this->buildListItems($facet, $result);
       }
     }
 
@@ -49,15 +49,9 @@ class ArrayWidget extends WidgetPluginBase {
   }
 
   /**
-   * Builds an array with the results.
-   *
-   * @param \Drupal\facets\Result\ResultInterface $result
-   *   A result item.
-   *
-   * @return array
-   *   An array of the result.
+   * {@inheritdoc}
    */
-  protected function buildListItems(ResultInterface $result) {
+  protected function buildListItems($facet, ResultInterface $result) {
     if ($children = $result->getChildren()) {
       $items = $this->prepare($result);
 

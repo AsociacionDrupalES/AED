@@ -5,7 +5,6 @@ namespace Drupal\Tests\facets_summary\Functional;
 use Drupal\Tests\facets\Functional\FacetsTestBase;
 use Drupal\facets_summary\Entity\FacetsSummary;
 use Drupal\views\Views;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests the overall functionality of the Facets summary admin UI.
@@ -20,15 +19,6 @@ class IntegrationTest extends FacetsTestBase {
   public static $modules = [
     'facets_summary',
   ];
-
-  /**
-   * No config checking.
-   *
-   * @var bool
-   *
-   * @todo Enable config checking again.
-   */
-  protected $strictConfigSchema = FALSE;
 
   /**
    * {@inheritdoc}
@@ -212,6 +202,79 @@ class IntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests counts for summaries.
+   *
+   * @see https://www.drupal.org/node/2873523
+   */
+  public function testCount() {
+    // Create facets.
+    $this->createFacet('Otter', 'otter', 'keywords');
+    // Clear all the caches between building the 2 facets - because things fail
+    // otherwise.
+    $this->resetAll();
+    $this->createFacet('Wolverine', 'wolverine');
+
+    // Make sure the numbers are shown with the facets.
+    $edit = [
+      'widget' => 'links',
+      'widget_config[show_numbers]' => '1',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/otter/edit', $edit, 'Save');
+    $this->drupalPostForm('admin/config/search/facets/wolverine/edit', $edit, 'Save');
+
+    // Add a summary.
+    $values = [
+      'name' => 'Mustelidae',
+      'id' => 'mustelidae',
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+
+    // Configure the summary to hide the count.
+    $summaries = [
+      'facets[otter][checked]' => TRUE,
+      'facets[otter][label]' => 'Summary giraffe',
+      'facets[otter][show_count]' => FALSE,
+      'facets[wolverine][checked]' => TRUE,
+      'facets[wolverine][label]' => 'Summary llama',
+      'facets[wolverine][show_count]' => FALSE,
+    ];
+    $this->drupalPostForm(NULL, $summaries, 'Save');
+
+    // Place the block.
+    $block = [
+      'region' => 'footer',
+      'id' => str_replace('_', '-', 'owl'),
+      'weight' => 50,
+    ];
+    $summary_block = $this->drupalPlaceBlock('facets_summary_block:mustelidae', $block);
+
+    $this->drupalGet('search-api-test-fulltext');
+    $webAssert = $this->assertSession();
+    $webAssert->pageTextContains('Displaying 5 search results');
+    $this->assertFacetBlocksAppear();
+    $webAssert->pageTextContains($summary_block->label());
+
+    $this->assertFacetLabel('article (2)');
+    $this->assertFacetLabel('apple (2)');
+
+    $summaries = [
+      'facets[otter][show_count]' => TRUE,
+      'facets[wolverine][show_count]' => TRUE,
+    ];
+    $this->drupalPostForm('admin/config/search/facets/facet-summary/mustelidae/edit', $summaries, 'Save');
+
+    $this->drupalGet('search-api-test-fulltext');
+    $webAssert = $this->assertSession();
+    $webAssert->pageTextContains('Displaying 5 search results');
+    $this->assertFacetBlocksAppear();
+    $webAssert->pageTextContains($summary_block->label());
+
+    $this->assertFacetLabel('article (2)');
+    $this->assertFacetLabel('apple (2)');
+  }
+
+  /**
    * Tests configuring show_count processor.
    */
   protected function configureShowCountProcessor() {
@@ -276,7 +339,7 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalPlaceBlock('facets_summary_block:show_count', ['region' => 'footer', 'id' => 'show-count']);
     $this->drupalGet('search-api-test-fulltext');
 
-    $this->assertSession()->pageTextNotContains('5 results found');
+    $this->assertSession()->pageTextContains('5 results found');
 
     $this->clickLink('apple');
     $this->assertSession()->pageTextContains('2 results found');

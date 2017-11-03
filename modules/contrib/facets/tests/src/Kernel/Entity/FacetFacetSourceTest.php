@@ -51,10 +51,10 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
       ->set('tracking_page_size', 100)
       ->save();
 
-    $this->installConfig(array(
+    $this->installConfig([
       'search_api_test_example_content',
       'search_api_test_db',
-    ));
+    ]);
 
     $this->installConfig('search_api_test_views');
   }

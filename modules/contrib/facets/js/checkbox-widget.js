@@ -5,7 +5,7 @@
 
 (function ($) {
 
-  "use strict";
+  'use strict';
 
   Drupal.facets = Drupal.facets || {};
   Drupal.behaviors.facetsCheckboxWidget = {
@@ -22,7 +22,7 @@
     var $links = $('.js-facets-checkbox-links .facet-item a');
     $links.once('facets-checkbox-transform').each(Drupal.facets.makeCheckbox);
     // Set indeterminate value on parents having an active trail.
-    $('.facet-item--expanded.facet-item--active-trail > input').prop("indeterminate", true);
+    $('.facet-item--expanded.facet-item--active-trail > input').prop('indeterminate', true);
   };
 
   /**
@@ -57,6 +57,9 @@
 
   /**
    * Disable all facet checkboxes in the facet and apply a 'disabled' class.
+   *
+   * @param {object} $facet
+   *   jQuery object of the facet.
    */
   Drupal.facets.disableFacet = function ($facet) {
     $facet.addClass('facets-disabled');
@@ -66,9 +69,12 @@
 
   /**
    * Event listener for easy prevention of event propagation.
+   *
+   * @param {object} e
+   *   Event.
    */
   Drupal.facets.preventDefault = function (e) {
     e.preventDefault();
-  }
+  };
 
 })(jQuery);

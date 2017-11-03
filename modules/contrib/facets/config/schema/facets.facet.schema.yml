@@ -7,7 +7,7 @@ facets.facet.*:
       label: 'ID'
     name:
       type: label
-      label: Name'
+      label: Name
     uuid:
       type: string
       label: 'UUID'
@@ -18,7 +18,7 @@ facets.facet.*:
       type: integer
       label: 'Minimum count'
     url_alias:
-      type: string
+      type: label
       label: 'Name of facet as used in the URL'
     facet_source_id:
       type: string
@@ -91,11 +91,3 @@ facets.facet.*:
               label: 'The processor''s weight for this stage'
           settings:
             type: plugin.plugin_configuration.facets_processor.[%parent.processor_id]
-
-condition.plugin.other_facet:
-  type: condition.plugin
-  mapping:
-    facet_value:
-      type: string
-    facets:
-      type: string

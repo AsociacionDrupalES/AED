@@ -386,7 +386,7 @@ class IntegrationTest extends FacetsTestBase {
         'facet_settings[url_alias]' => 'alias' . $unwanted_value . '1',
       ];
       $this->drupalPostForm(NULL, $form_values, 'Save');
-      $this->assertText('Url alias has illegal characters.');
+      $this->assertText('The URL alias contains characters that are not allowed.');
     }
 
     // Post an alias with allowed values.

@@ -53,7 +53,7 @@ class TranslateEntityProcessorTest extends UnitTestCase {
    *
    * @var \Drupal\facets\Result\ResultInterface[]
    */
-  protected $original_results;
+  protected $originalResults;
 
   /**
    * {@inheritdoc}
@@ -109,8 +109,8 @@ class TranslateEntityProcessorTest extends UnitTestCase {
       ->method('getFieldIdentifier')
       ->willReturn('testfield');
 
-    $this->original_results = [new Result(2, 2, 5)];
-    $this->facet->setResults($this->original_results);
+    $this->originalResults = [new Result(2, 2, 5)];
+    $this->facet->setResults($this->originalResults);
 
     // Mock language manager.
     $this->languageManager = $this->getMockBuilder(LanguageManagerInterface::class)
@@ -163,14 +163,14 @@ class TranslateEntityProcessorTest extends UnitTestCase {
 
     // Without the processor we expect the id to display.
     foreach ($expected_results as $key => $expected) {
-      $this->assertEquals($expected['nid'], $this->original_results[$key]->getRawValue());
-      $this->assertEquals($expected['nid'], $this->original_results[$key]->getDisplayValue());
+      $this->assertEquals($expected['nid'], $this->originalResults[$key]->getRawValue());
+      $this->assertEquals($expected['nid'], $this->originalResults[$key]->getDisplayValue());
     }
 
     // With the processor we expect the title to display.
     /** @var \Drupal\facets\Result\ResultInterface[] $filtered_results */
     $processor = new TranslateEntityProcessor([], 'translate_entity', [], $this->languageManager, $this->entityTypeManager);
-    $filtered_results = $processor->build($this->facet, $this->original_results);
+    $filtered_results = $processor->build($this->facet, $this->originalResults);
     foreach ($expected_results as $key => $expected) {
       $this->assertEquals($expected['nid'], $filtered_results[$key]->getRawValue());
       $this->assertEquals($expected['title'], $filtered_results[$key]->getDisplayValue());
@@ -206,13 +206,13 @@ class TranslateEntityProcessorTest extends UnitTestCase {
 
     // Without the processor we expect the id to display.
     foreach ($expected_results as $key => $expected) {
-      $this->assertEquals($expected['tid'], $this->original_results[$key]->getRawValue());
-      $this->assertEquals($expected['tid'], $this->original_results[$key]->getDisplayValue());
+      $this->assertEquals($expected['tid'], $this->originalResults[$key]->getRawValue());
+      $this->assertEquals($expected['tid'], $this->originalResults[$key]->getDisplayValue());
     }
 
     /** @var \Drupal\facets\Result\ResultInterface[] $filtered_results */
     $processor = new TranslateEntityProcessor([], 'translate_entity', [], $this->languageManager, $this->entityTypeManager);
-    $filtered_results = $processor->build($this->facet, $this->original_results);
+    $filtered_results = $processor->build($this->facet, $this->originalResults);
 
     // With the processor we expect the title to display.
     foreach ($expected_results as $key => $expected) {
@@ -226,7 +226,6 @@ class TranslateEntityProcessorTest extends UnitTestCase {
    */
   public function testDeletedEntityResults() {
     // Set original results.
-
     $term_storage = $this->getMock(EntityStorageInterface::class);
     $term_storage->expects($this->any())
       ->method('loadMultiple')
@@ -238,7 +237,7 @@ class TranslateEntityProcessorTest extends UnitTestCase {
     // Processor should return nothing (and not throw an exception).
     /** @var \Drupal\facets\Result\ResultInterface[] $filtered_results */
     $processor = new TranslateEntityProcessor([], 'translate_entity', [], $this->languageManager, $this->entityTypeManager);
-    $filtered_results = $processor->build($this->facet, $this->original_results);
+    $filtered_results = $processor->build($this->facet, $this->originalResults);
     $this->assertEmpty($filtered_results);
   }
 

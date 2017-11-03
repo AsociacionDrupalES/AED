@@ -107,6 +107,13 @@ class ChosenConfigForm extends ConfigFormBase {
       '#description' => $this->t('Enable or disable the search box in the results list to filter out possible options.'),
     ];
 
+    $form['options']['allow_single_deselect'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Allow Deselect on Single Selects'),
+      '#default_value' => $chosen_conf->get('allow_single_deselect'),
+      '#description' => $this->t('Enable or disable the deselect on single selects. Requires an empty default option.'),
+    ];
+
     $form['theme_options'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Chosen per theme options'),
@@ -186,6 +193,7 @@ class ChosenConfigForm extends ConfigFormBase {
       ->set('jquery_selector', $form_state->getValue('jquery_selector'))
       ->set('search_contains', $form_state->getValue('search_contains'))
       ->set('disable_search', $form_state->getValue('disable_search'))
+      ->set('allow_single_deselect', $form_state->getValue('allow_single_deselect'))
       ->set('disabled_themes', $form_state->getValue('disabled_themes'))
       ->set('chosen_include', $form_state->getValue('chosen_include'))
       ->set('placeholder_text_multiple', $form_state->getValue('placeholder_text_multiple'))

@@ -55,7 +55,7 @@ class AlterExcludedPathsEvent extends Event {
    *   The excluded path string to add.
    */
   public function addExcludedPath($excluded_path) {
-    $this->excludedPath[] = $excluded_path;
+    $this->excludedPaths[] = $excluded_path;
   }
 
   /**

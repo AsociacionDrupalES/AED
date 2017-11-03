@@ -698,8 +698,6 @@ class AccessResultTest extends UnitTestCase {
       [$neutral_un, 'OR', $forbidden_un, FALSE, NULL],
 
 
-
-
       // Allowed (ct) AND allowed (ct,cf,un).
       [$allowed_ct, 'AND', $allowed_ct, TRUE, TRUE],
       [$allowed_ct, 'AND', $allowed_cf, TRUE, FALSE],
@@ -859,7 +857,7 @@ class AccessResultTest extends UnitTestCase {
    * tested in ::testOrIf().
    */
   public function testOrIfCacheabilityMerging() {
-    $merge_both_directions = function(AccessResult $a, AccessResult $b) {
+    $merge_both_directions = function (AccessResult $a, AccessResult $b) {
       // A globally cacheable access result.
       $a->setCacheMaxAge(3600);
       // Another access result that is cacheable per permissions.

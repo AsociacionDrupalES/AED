@@ -235,9 +235,12 @@ class DefaultFacetManager {
     if (!$this->preparedFacets && empty($this->facets)) {
       $this->facets = $this->getEnabledFacets();
       foreach ($this->facets as $facet) {
+        $processor_configs = $facet->getProcessorConfigs();
         foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_PRE_QUERY) as $processor) {
+          $processor_config = $processor_configs[$processor->getPluginDefinition()['id']]['settings'];
+          $processor_config['facet'] = $facet;
           /** @var PreQueryProcessorInterface $pre_query_processor */
-          $pre_query_processor = $this->processorPluginManager->createInstance($processor->getPluginDefinition()['id'], ['facet' => $facet]);
+          $pre_query_processor = $this->processorPluginManager->createInstance($processor->getPluginDefinition()['id'], $processor_config);
           if (!$pre_query_processor instanceof PreQueryProcessorInterface) {
             throw new InvalidProcessorException("The processor {$processor->getPluginDefinition()['id']} has a pre_query definition but doesn't implement the required PreQueryProcessorInterface interface");
           }
@@ -330,18 +333,11 @@ class DefaultFacetManager {
     foreach ($facet->getProcessorsByStage(ProcessorInterface::STAGE_SORT) as $processor) {
       $active_sort_processors[] = $processor;
     }
-    uasort($results, function ($a, $b) use ($active_sort_processors) {
-      $return = 0;
-      foreach ($active_sort_processors as $sort_processor) {
-        if ($return = $sort_processor->sortResults($a, $b)) {
-          if ($sort_processor->getConfiguration()['sort'] == 'DESC') {
-            $return *= -1;
-          }
-          break;
-        }
-      }
-      return $return;
-    });
+
+    // Sort the actual results if we have enabled sort processors.
+    if (!empty($active_sort_processors)) {
+      $results = $this->sortFacetResults($active_sort_processors, $results);
+    }
 
     $facet->setResults($results);
 
@@ -434,6 +430,14 @@ class DefaultFacetManager {
           if (isset($keyed_results[$child_id])) {
             $child_keyed_results[$child_id] = $keyed_results[$child_id];
           }
+          else {
+            // Children could already be built by Facets Summary manager, if
+            // they are, just loading them will suffice.
+            $children = $keyed_results[$current_id]->getChildren();
+            if (!empty($children[$child_id])) {
+              $child_keyed_results[$child_id] = $children[$child_id];
+            }
+          }
         }
         $result->setChildren($child_keyed_results);
         $this->childIds = array_merge($this->childIds, $child_ids);
@@ -441,6 +445,44 @@ class DefaultFacetManager {
     }
 
     return $keyed_results;
+  }
+
+  /**
+   * Sort the facet results, and recurse to children to do the same.
+   *
+   * @param \Drupal\facets\Processor\SortProcessorInterface[] $active_sort_processors
+   *   An array of sort processors.
+   * @param \Drupal\facets\Result\ResultInterface[] $results
+   *   An array of results.
+   *
+   * @return \Drupal\facets\Result\ResultInterface[]
+   *   A sorted array of results.
+   */
+  protected function sortFacetResults(array $active_sort_processors, array $results) {
+    uasort($results, function ($a, $b) use ($active_sort_processors) {
+      $return = 0;
+      foreach ($active_sort_processors as $sort_processor) {
+        if ($return = $sort_processor->sortResults($a, $b)) {
+          if ($sort_processor->getConfiguration()['sort'] == 'DESC') {
+            $return *= -1;
+          }
+          break;
+        }
+      }
+      return $return;
+    });
+
+    // Loop over the results and see if they have any children, if they do, fire
+    // a request to this same method again with the children.
+    foreach ($results as &$result) {
+      if (!empty($result->getChildren())) {
+        $children = $this->sortFacetResults($active_sort_processors, $result->getChildren());
+        $result->setChildren($children);
+      }
+    }
+
+    // Return the sorted results.
+    return $results;
   }
 
 }

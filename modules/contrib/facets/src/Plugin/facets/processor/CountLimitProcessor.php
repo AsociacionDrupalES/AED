@@ -13,7 +13,7 @@ use Drupal\facets\Processor\ProcessorPluginBase;
  * @FacetsProcessor(
  *   id = "count_limit",
  *   label = @Translation("Count limit"),
- *   description = @Translation("Show or hide facets with based on item count."),
+ *   description = @Translation("Show or hide depending on the number of results."),
  *   stages = {
  *     "build" = 50
  *   }
@@ -25,8 +25,7 @@ class CountLimitProcessor extends ProcessorPluginBase implements BuildProcessorI
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet, array $results) {
-    $processors = $facet->getProcessors();
-    $config = $processors[$this->getPluginId()]->getConfiguration();
+    $config = $this->getConfiguration();
 
     $min_count = $config['minimum_items'];
     $max_count = $config['maximum_items'];
@@ -45,25 +44,24 @@ class CountLimitProcessor extends ProcessorPluginBase implements BuildProcessorI
    * {@inheritdoc}
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $facet) {
-    $processors = $facet->getProcessors();
-    $config = isset($processors[$this->getPluginId()]) ? $processors[$this->getPluginId()] : NULL;
+    $config = $this->getConfiguration();
 
-    $build['minimum_items'] = array(
+    $build['minimum_items'] = [
       '#title' => $this->t('Minimum items'),
       '#type' => 'number',
       '#min' => 1,
-      '#default_value' => !is_null($config) ? $config->getConfiguration()['minimum_items'] : $this->defaultConfiguration()['minimum_items'],
+      '#default_value' => $config['minimum_items'],
       '#description' => $this->t('Hide block if the facet contains less than this number of results.'),
-    );
+    ];
 
-    $max_default_value = !is_null($config) ? $config->getConfiguration()['maximum_items'] : $this->defaultConfiguration()['maximum_items'];
-    $build['maximum_items'] = array(
+    $max_default_value = $config['maximum_items'];
+    $build['maximum_items'] = [
       '#title' => $this->t('Maximum items'),
       '#type' => 'number',
       '#min' => 1,
       '#default_value' => $max_default_value ? $max_default_value : '',
       '#description' => $this->t('Hide block if the facet contains more than this number of results.'),
-    );
+    ];
 
     return $build;
   }
@@ -83,10 +81,10 @@ class CountLimitProcessor extends ProcessorPluginBase implements BuildProcessorI
    * {@inheritdoc}
    */
   public function defaultConfiguration() {
-    return array(
+    return [
       'minimum_items' => 1,
       'maximum_items' => 0,
-    );
+    ];
   }
 
 }
