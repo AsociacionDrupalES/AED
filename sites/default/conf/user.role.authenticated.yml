@@ -12,6 +12,7 @@ permissions:
   - 'access checkout'
   - 'access comments'
   - 'access content'
+  - 'access site-wide contact form'
   - 'access user profiles'
   - 'edit own comments'
   - 'edit own groups content'

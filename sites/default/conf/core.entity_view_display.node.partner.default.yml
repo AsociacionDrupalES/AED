@@ -22,7 +22,7 @@ mode: default
 content:
   body:
     weight: 5
-    label: above
+    label: hidden
     settings: {  }
     third_party_settings: {  }
     type: text_default
