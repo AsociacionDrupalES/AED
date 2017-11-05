@@ -1,5 +1,5 @@
 uuid: ab059a26-72b7-423a-9946-94d1197edc4b
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -13,7 +13,7 @@ id: pay_pal_billing_plan_entity.pay_pal_billing_plan_entity.field_state
 field_name: field_state
 entity_type: pay_pal_billing_plan_entity
 bundle: pay_pal_billing_plan_entity
-label: State
+label: Estado
 description: ''
 required: false
 translatable: false

@@ -1,5 +1,5 @@
 uuid: 647c9b84-eda2-4488-aa8c-9ee262ece45f
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -30,3 +30,4 @@ content:
     region: content
 hidden:
   comment_node_page: true
+  langcode: true

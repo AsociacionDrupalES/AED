@@ -1,10 +1,10 @@
 uuid: 6f851363-17cc-4c02-8618-95f766f0b6b1
-langcode: en
+langcode: es
 status: true
 dependencies: {  }
 _core:
   default_config_hash: NIKBt6kw_uPhNI0qtR2DnRf7mSOgAQdx7Q94SKMjXbQ
-name: 'Plain text'
+name: 'Texto sin formato'
 format: plain_text
 weight: 10
 filters:

@@ -1,0 +1,2 @@
+label: 'Start date'
+description: 'Especifica cuando arrancar con la suscripción. Por defecto se inicia en el mismo momento que el usuario la completa pero se puede desplazar hacia adelante.'

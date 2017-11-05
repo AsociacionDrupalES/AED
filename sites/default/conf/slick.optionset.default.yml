@@ -1,5 +1,5 @@
 uuid: 5dd746fa-c4e2-4d03-8428-5cf6babe8b8a
-langcode: en
+langcode: es
 status: false
 dependencies:
   enforced:
@@ -9,7 +9,7 @@ _core:
   default_config_hash: SVy48utsf4KUVUlWN4SVRrgkTEeEcXJsQnz7WCg7atA
 id: default
 name: default
-label: Default
+label: Predeterminado
 weight: -10
 group: ''
 skin: default

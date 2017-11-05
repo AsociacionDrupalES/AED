@@ -1,5 +1,5 @@
 uuid: 9fa7a19f-fcac-4b6e-8e12-38d323e7f526
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -13,7 +13,7 @@ id: pay_pal_billing_plan_entity.pay_pal_billing_plan_entity.field_start_date
 field_name: field_start_date
 entity_type: pay_pal_billing_plan_entity
 bundle: pay_pal_billing_plan_entity
-label: 'Start date'
+label: 'Fecha de inicio'
 description: 'Especifica cuando arrancar con la suscripción. Por defecto se inicia en el mismo momento que el usuario la completa pero se puede desplazar hacia adelante.'
 required: false
 translatable: false

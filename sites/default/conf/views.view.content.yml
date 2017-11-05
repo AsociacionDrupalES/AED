@@ -1,5 +1,5 @@
 uuid: b1af2927-fca0-4577-9596-a26b033ca485
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -8,9 +8,9 @@ dependencies:
 _core:
   default_config_hash: YIwhIF9MSP1E_HMam6MrYeti_UqMXQiLDMjDsPFKK8s
 id: content
-label: Content
+label: Contenido
 module: node
-description: 'Find and manage content.'
+description: 'Encontrar y administrar contenido.'
 tag: default
 base_table: node_field_data
 base_field: nid
@@ -29,10 +29,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Filter
+          submit_button: Filtro
           reset_button: true
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -44,10 +44,10 @@ display:
           id: 0
           total_pages: null
           tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
-            first: '« First'
-            last: 'Last »'
+            previous: '‹ Anterior'
+            next: 'Siguiente >'
+            first: '« Primero'
+            last: 'Último »'
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -173,7 +173,7 @@ display:
           id: title
           table: node_field_data
           field: title
-          label: Title
+          label: Título
           exclude: false
           alter:
             alter_text: false
@@ -196,7 +196,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Content type'
+          label: 'Tipo de contenido'
           exclude: false
           alter:
             alter_text: false
@@ -259,7 +259,7 @@ display:
           table: users_field_data
           field: name
           relationship: uid
-          label: Author
+          label: Autor
           exclude: false
           alter:
             alter_text: false
@@ -277,7 +277,7 @@ display:
           id: status
           table: node_field_data
           field: status
-          label: Status
+          label: Estado
           exclude: false
           alter:
             alter_text: false
@@ -290,8 +290,8 @@ display:
           type: boolean
           settings:
             format: custom
-            format_custom_true: Published
-            format_custom_false: Unpublished
+            format_custom_true: Publicado
+            format_custom_false: 'No publicado'
           plugin_id: field
           entity_type: node
           entity_field: status
@@ -299,7 +299,7 @@ display:
           id: changed
           table: node_field_data
           field: changed
-          label: Updated
+          label: Actualizado
           exclude: false
           alter:
             alter_text: false
@@ -324,7 +324,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Operations
+          label: Operaciones
           exclude: false
           alter:
             alter_text: false
@@ -390,7 +390,7 @@ display:
           exposed: true
           expose:
             operator_id: ''
-            label: Status
+            label: Estado
             description: ''
             use_operator: false
             operator: status_op
@@ -402,7 +402,7 @@ display:
               authenticated: authenticated
           is_grouped: true
           group_info:
-            label: 'Published status'
+            label: 'Estado de publicación'
             description: ''
             identifier: status
             optional: true
@@ -413,11 +413,11 @@ display:
             default_group_multiple: {  }
             group_items:
               1:
-                title: Published
+                title: Publicado
                 operator: '='
                 value: '1'
               2:
-                title: Unpublished
+                title: 'No publicado'
                 operator: '='
                 value: '0'
           plugin_id: boolean
@@ -436,7 +436,7 @@ display:
           exposed: true
           expose:
             operator_id: type_op
-            label: 'Content type'
+            label: 'Tipo de contenido'
             description: ''
             use_operator: false
             operator: type_op
@@ -477,7 +477,7 @@ display:
           exposed: true
           expose:
             operator_id: title_op
-            label: Title
+            label: Título
             description: ''
             use_operator: false
             operator: title_op
@@ -517,7 +517,7 @@ display:
           exposed: true
           expose:
             operator_id: langcode_op
-            label: Language
+            label: Idioma
             description: ''
             use_operator: false
             operator: langcode_op
@@ -546,14 +546,14 @@ display:
           entity_type: node
           entity_field: langcode
       sorts: {  }
-      title: Content
+      title: Contenido
       empty:
         area_text_custom:
           id: area_text_custom
           table: views
           field: area_text_custom
           empty: true
-          content: 'No content available.'
+          content: 'No hay contenido disponible.'
           plugin_id: text_custom
       arguments: {  }
       relationships:
@@ -571,7 +571,7 @@ display:
           1: AND
       display_extenders: {  }
     display_plugin: default
-    display_title: Master
+    display_title: Máster
     id: default
     position: 0
     cache_metadata:
@@ -590,20 +590,20 @@ display:
       path: admin/content/node
       menu:
         type: 'default tab'
-        title: Content
+        title: Contenido
         description: ''
         menu_name: admin
         weight: -10
         context: ''
       tab_options:
         type: normal
-        title: Content
-        description: 'Find and manage content'
+        title: Contenido
+        description: 'Encontrar y administrar contenido'
         menu_name: admin
         weight: -10
       display_extenders: {  }
     display_plugin: page
-    display_title: Page
+    display_title: Página
     id: page_1
     position: 1
     cache_metadata:

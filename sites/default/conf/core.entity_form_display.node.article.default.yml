@@ -1,5 +1,5 @@
 uuid: ef6aa8b5-bc0f-44cb-b334-9da631592470
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -60,6 +60,13 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  langcode:
+    type: language_select
+    weight: 2
+    region: content
+    settings:
+      include_locked: true
+    third_party_settings: {  }
   path:
     type: path
     weight: 9
@@ -73,6 +80,13 @@ content:
     weight: 6
     third_party_settings: {  }
     region: content
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 120
+    region: content
+    third_party_settings: {  }
   sticky:
     type: boolean_checkbox
     settings:

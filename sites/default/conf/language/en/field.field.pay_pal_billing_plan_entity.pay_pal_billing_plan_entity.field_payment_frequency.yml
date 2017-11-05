@@ -1,0 +1,2 @@
+label: 'Payment frequency'
+description: 'Si has seleccionado "FIXED" como tipo de plan, selecciona aquí la periodicidad con la que se emitirá un cobro. Por ejemplo, si quieres cobrarle al usuario una vez al mes selecciona "MONTHLY"'

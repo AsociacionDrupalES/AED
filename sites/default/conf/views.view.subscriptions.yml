@@ -1,5 +1,5 @@
 uuid: 8857bcd5-5256-4031-9eb2-6c8124657643
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -23,7 +23,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Master
+    display_title: Máster
     position: 0
     display_options:
       access:
@@ -43,10 +43,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Apply
+          submit_button: Aplicar
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -59,12 +59,12 @@ display:
           total_pages: null
           expose:
             items_per_page: false
-            items_per_page_label: 'Items per page'
+            items_per_page_label: 'Elementos por página'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
+            items_per_page_options_all_label: '- Todo -'
             offset: false
-            offset_label: Offset
+            offset_label: Desplazamiento
           tags:
             previous: ‹‹
             next: ››
@@ -196,7 +196,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Description
+          label: Descripción
           exclude: false
           alter:
             alter_text: false
@@ -404,7 +404,7 @@ display:
   user_paypal_subscriptions:
     display_plugin: page
     id: user_paypal_subscriptions
-    display_title: Page
+    display_title: Página
     position: 1
     display_options:
       display_extenders: {  }

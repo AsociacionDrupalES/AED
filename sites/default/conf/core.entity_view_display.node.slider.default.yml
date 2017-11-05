@@ -32,4 +32,5 @@ content:
       image_link: ''
     third_party_settings: {  }
 hidden:
+  langcode: true
   links: true

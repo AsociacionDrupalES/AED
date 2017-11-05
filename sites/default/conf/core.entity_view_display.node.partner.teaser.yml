@@ -4,8 +4,10 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.node.teaser
+    - field.field.node.partner.body
     - field.field.node.partner.field_anos_patrocinados
     - field.field.node.partner.field_logo
+    - field.field.node.partner.field_slides
     - field.field.node.partner.field_slogan
     - field.field.node.partner.field_webpage
     - node.type.partner
@@ -35,6 +37,9 @@ content:
       link_to_entity: false
     third_party_settings: {  }
 hidden:
+  body: true
   field_anos_patrocinados: true
+  field_slides: true
   field_webpage: true
+  langcode: true
   links: true
