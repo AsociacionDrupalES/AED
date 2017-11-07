@@ -1,5 +1,5 @@
 uuid: 1ea61544-2ee9-4a7d-b0c7-280f1031c9e6
-langcode: es
+langcode: en
 status: false
 dependencies:
   module:
@@ -7,6 +7,6 @@ dependencies:
 _core:
   default_config_hash: fVFfJv_GzBRE-wpRHbfD5a3VjnhbEOXG6lvRd3uaccY
 id: node.search_index
-label: 'Índice de búsqueda'
+label: 'Search index'
 targetEntityType: node
 cache: true

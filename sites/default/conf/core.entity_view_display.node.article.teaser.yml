@@ -1,5 +1,5 @@
 uuid: 75235cb2-1cd3-4cf6-ae64-b60622742591
-langcode: es
+langcode: en
 status: true
 dependencies:
   config:
@@ -33,5 +33,4 @@ hidden:
   body: true
   field_attachments: true
   field_tags: true
-  langcode: true
   links: true

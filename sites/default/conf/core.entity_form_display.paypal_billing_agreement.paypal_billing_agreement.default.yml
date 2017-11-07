@@ -1,5 +1,5 @@
 uuid: a91763c2-4412-45c9-a793-97a494db7152
-langcode: es
+langcode: en
 status: true
 dependencies:
   config:
@@ -52,13 +52,6 @@ content:
     third_party_settings: {  }
     type: string_textfield
     region: content
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 0
