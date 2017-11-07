@@ -22,5 +22,4 @@ content:
   links:
     weight: 100
     region: content
-hidden:
-  langcode: true
+hidden: {  }

@@ -1,5 +1,5 @@
 uuid: 8869bbd3-88b7-46f8-a8b6-1b5518c1d47c
-langcode: es
+langcode: en
 status: true
 dependencies:
   module:
@@ -8,9 +8,9 @@ dependencies:
 _core:
   default_config_hash: msYnighLW1IbiBfyQbwbQwb2cU-5LECiFryt60k0Nfk
 id: block_content
-label: 'Biblioteca de bloques personalizados'
+label: 'Custom block library'
 module: views
-description: 'Encontrar y administrar bloques personalizados.'
+description: 'Find and manage custom blocks.'
 tag: default
 base_table: block_content_field_data
 base_field: id
@@ -19,7 +19,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Máster
+    display_title: Master
     position: 0
     display_options:
       access:
@@ -40,10 +40,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Aplicar
+          submit_button: Apply
           reset_button: false
-          reset_button_label: Restablecer
-          exposed_sorts_label: 'Ordenar por'
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -55,16 +55,16 @@ display:
           id: 0
           total_pages: null
           tags:
-            previous: '‹ Anterior'
-            next: 'Siguiente >'
+            previous: '‹ Previous'
+            next: 'Next ›'
           expose:
             items_per_page: false
-            items_per_page_label: 'Elementos por página'
+            items_per_page_label: 'Items per page'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- Todo -'
+            items_per_page_options_all_label: '- All -'
             offset: false
-            offset_label: Desplazamiento
+            offset_label: Offset
       style:
         type: table
         options:
@@ -122,7 +122,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Descripción del bloque'
+          label: 'Block description'
           exclude: false
           alter:
             alter_text: false
@@ -187,7 +187,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Tipo de bloque'
+          label: 'Block type'
           exclude: false
           alter:
             alter_text: false
@@ -252,7 +252,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Actualizado
+          label: Updated
           exclude: false
           alter:
             alter_text: false
@@ -308,7 +308,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Operaciones
+          label: Operations
           exclude: false
           alter:
             alter_text: false
@@ -366,7 +366,7 @@ display:
           exposed: true
           expose:
             operator_id: info_op
-            label: 'Descripción del bloque'
+            label: 'Block description'
             description: ''
             use_operator: false
             operator: info_op
@@ -406,7 +406,7 @@ display:
           exposed: true
           expose:
             operator_id: type_op
-            label: 'Tipo de bloque'
+            label: 'Block type'
             description: ''
             use_operator: false
             operator: type_op
@@ -435,7 +435,7 @@ display:
           entity_field: type
           plugin_id: bundle
       sorts: {  }
-      title: 'Biblioteca de bloques personalizados'
+      title: 'Custom block library'
       header: {  }
       footer: {  }
       empty:
@@ -448,7 +448,7 @@ display:
           admin_label: ''
           empty: true
           tokenize: false
-          content: 'No hay bloques personalizados disponibles. '
+          content: 'There are no custom blocks available. '
           plugin_id: text_custom
         block_content_listing_empty:
           admin_label: ''
@@ -476,14 +476,14 @@ display:
   page_1:
     display_plugin: page
     id: page_1
-    display_title: Página
+    display_title: Page
     position: 1
     display_options:
       display_extenders: {  }
       path: admin/structure/block/block-content
       menu:
         type: tab
-        title: 'Biblioteca de bloques personalizados'
+        title: 'Custom block library'
         description: ''
         parent: block.admin_display
         weight: 0

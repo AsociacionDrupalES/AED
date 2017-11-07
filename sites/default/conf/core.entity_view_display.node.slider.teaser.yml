@@ -28,4 +28,3 @@ content:
     region: content
 hidden:
   field_image_slide: true
-  langcode: true

@@ -1,5 +1,5 @@
 uuid: 1366c11c-25fe-456d-a618-35047afa2c7b
-langcode: es
+langcode: en
 status: true
 dependencies:
   config:
@@ -25,13 +25,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
-  langcode:
-    type: language_select
-    weight: 2
-    region: content
-    settings:
-      include_locked: true
-    third_party_settings: {  }
   subject:
     type: string_textfield
     weight: 10

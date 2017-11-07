@@ -1,5 +1,5 @@
 uuid: 336568fb-d0ed-4954-885f-4f3433059651
-langcode: es
+langcode: en
 status: true
 dependencies: {  }
 _core:
@@ -7,4 +7,4 @@ _core:
 id: basic
 label: Basic
 revision: 0
-description: 'Un bloque básico contiene un título y un cuerpo.'
+description: 'A basic block contains a title and a body.'

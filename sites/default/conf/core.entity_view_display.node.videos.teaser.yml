@@ -45,5 +45,4 @@ hidden:
   field_videos_idioma: true
   field_videos_nivel: true
   field_videos_version: true
-  langcode: true
   links: true
