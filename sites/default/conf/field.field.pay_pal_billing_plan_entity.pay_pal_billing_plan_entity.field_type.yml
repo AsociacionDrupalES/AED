@@ -1,5 +1,5 @@
 uuid: 9c0c1595-54cf-4d6f-80ac-9ff345b02028
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -13,7 +13,7 @@ id: pay_pal_billing_plan_entity.pay_pal_billing_plan_entity.field_type
 field_name: field_type
 entity_type: pay_pal_billing_plan_entity
 bundle: pay_pal_billing_plan_entity
-label: Type
+label: Tipo
 description: ''
 required: true
 translatable: false

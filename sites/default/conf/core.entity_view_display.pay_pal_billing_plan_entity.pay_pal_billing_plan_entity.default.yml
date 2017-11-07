@@ -1,5 +1,5 @@
 uuid: cd3a707a-fe91-4a31-aad6-d89241c1a13f
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -136,4 +136,5 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-hidden: {  }
+hidden:
+  langcode: true

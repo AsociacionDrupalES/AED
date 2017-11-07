@@ -1,5 +1,5 @@
 uuid: e0771ec5-708e-4798-b50f-c6da90676e17
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -54,3 +54,4 @@ content:
     region: content
 hidden:
   field_expose_my_profile: true
+  langcode: true

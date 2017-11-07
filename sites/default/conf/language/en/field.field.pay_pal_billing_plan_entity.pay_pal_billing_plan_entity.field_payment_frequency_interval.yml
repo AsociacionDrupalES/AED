@@ -1,0 +1,2 @@
+label: 'Payment frequency interval'
+description: 'A billing agreement can be for a determined period, eg: for 6 months, or just be a subscription with no expiration. In the first case select "FIXED" and setup the frequencies.'

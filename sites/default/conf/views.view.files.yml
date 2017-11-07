@@ -1,5 +1,5 @@
 uuid: 2c8d32ee-c4f6-456c-80ef-bd5251a3babf
-langcode: en
+langcode: es
 status: true
 dependencies:
   module:
@@ -8,9 +8,9 @@ dependencies:
 _core:
   default_config_hash: rRWxAX-IQkJ5viACQRovRkC784EyCl9493GU_G23n2Q
 id: files
-label: Files
+label: Archivos
 module: file
-description: 'Find and manage files.'
+description: 'Encontrar y administrar archivos.'
 tag: default
 base_table: file_managed
 base_field: fid
@@ -19,7 +19,7 @@ display:
   default:
     display_plugin: default
     id: default
-    display_title: Master
+    display_title: Máster
     position: 0
     display_options:
       access:
@@ -40,10 +40,10 @@ display:
       exposed_form:
         type: basic
         options:
-          submit_button: Filter
+          submit_button: Filtro
           reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
+          reset_button_label: Restablecer
+          exposed_sorts_label: 'Ordenar por'
           expose_sort_order: true
           sort_asc_label: Asc
           sort_desc_label: Desc
@@ -55,16 +55,16 @@ display:
           id: 0
           total_pages: 0
           tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
+            previous: '‹ Anterior'
+            next: 'Siguiente >'
           expose:
             items_per_page: false
-            items_per_page_label: 'Items per page'
+            items_per_page_label: 'Elementos por página'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
+            items_per_page_options_all_label: '- Todo -'
             offset: false
-            offset_label: Offset
+            offset_label: Desplazamiento
       style:
         type: table
         options:
@@ -187,7 +187,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Name
+          label: Nombre
           exclude: false
           alter:
             alter_text: false
@@ -250,7 +250,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'MIME type'
+          label: 'Tipo MIME'
           exclude: false
           alter:
             alter_text: false
@@ -302,7 +302,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Size
+          label: Tamaño
           exclude: false
           alter:
             alter_text: false
@@ -354,7 +354,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Status
+          label: Estado
           exclude: false
           alter:
             alter_text: false
@@ -398,8 +398,8 @@ display:
           type: boolean
           settings:
             format: custom
-            format_custom_false: Temporary
-            format_custom_true: Permanent
+            format_custom_false: Temporal
+            format_custom_true: Permanente
           plugin_id: field
           entity_type: file
           entity_field: status
@@ -410,7 +410,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Upload date'
+          label: 'Fecha de subida'
           exclude: false
           alter:
             alter_text: false
@@ -466,7 +466,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Changed date'
+          label: 'Fecha del último cambio'
           exclude: false
           alter:
             alter_text: false
@@ -522,7 +522,7 @@ display:
           relationship: fid
           group_type: sum
           admin_label: ''
-          label: 'Used in'
+          label: 'Usado en'
           exclude: false
           alter:
             alter_text: false
@@ -568,7 +568,7 @@ display:
           decimal: .
           separator: ','
           format_plural: true
-          format_plural_string: "1 place\x03@count places"
+          format_plural_string: !!binary MSBwbGFjZQNAY291bnQgcGxhY2Vz
           prefix: ''
           suffix: ''
           plugin_id: numeric
@@ -586,7 +586,7 @@ display:
           exposed: true
           expose:
             operator_id: filemime_op
-            label: Filename
+            label: 'Nombre de archivo'
             description: ''
             use_operator: false
             operator: filename_op
@@ -626,7 +626,7 @@ display:
           exposed: true
           expose:
             operator_id: filemime_op
-            label: 'MIME type'
+            label: 'Tipo MIME'
             description: ''
             use_operator: false
             operator: filemime_op
@@ -666,7 +666,7 @@ display:
           exposed: true
           expose:
             operator_id: status_op
-            label: Status
+            label: Estado
             description: ''
             use_operator: false
             operator: status_op
@@ -695,7 +695,7 @@ display:
           entity_type: file
           entity_field: status
       sorts: {  }
-      title: Files
+      title: Archivos
       header: {  }
       footer: {  }
       empty:
@@ -704,7 +704,7 @@ display:
           table: views
           field: area_text_custom
           empty: true
-          content: 'No files available.'
+          content: 'No hay archivos disponibles.'
           plugin_id: text_custom
       relationships:
         fid:
@@ -731,13 +731,13 @@ display:
   page_1:
     display_plugin: page
     id: page_1
-    display_title: 'Files overview'
+    display_title: 'Vista general de archivos'
     position: 1
     display_options:
       path: admin/content/files
       menu:
         type: tab
-        title: Files
+        title: Archivos
         description: ''
         menu_name: admin
         weight: 0
@@ -768,7 +768,7 @@ display:
   page_2:
     display_plugin: page
     id: page_2
-    display_title: 'File usage'
+    display_title: 'Usos del archivo'
     position: 2
     display_options:
       display_description: ''
@@ -794,16 +794,16 @@ display:
           id: 0
           total_pages: 0
           tags:
-            previous: '‹ Previous'
-            next: 'Next ›'
+            previous: '‹ Anterior'
+            next: 'Siguiente >'
           expose:
             items_per_page: false
-            items_per_page_label: 'Items per page'
+            items_per_page_label: 'Elementos por página'
             items_per_page_options: '5, 10, 25, 50'
             items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
+            items_per_page_options_all_label: '- Todo -'
             offset: false
-            offset_label: Offset
+            offset_label: Desplazamiento
       filters: {  }
       filter_groups:
         operator: AND
@@ -816,7 +816,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: Entity
+          label: Entidad
           exclude: false
           alter:
             alter_text: false
@@ -866,7 +866,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Entity type'
+          label: 'Tipo de entidad'
           exclude: false
           alter:
             alter_text: false
@@ -915,7 +915,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Registering module'
+          label: 'Registrando módulo'
           exclude: false
           alter:
             alter_text: false
@@ -964,7 +964,7 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
-          label: 'Use count'
+          label: 'Conteo de usos'
           exclude: false
           alter:
             alter_text: false
@@ -1010,12 +1010,12 @@ display:
           decimal: .
           separator: ','
           format_plural: false
-          format_plural_string: "1\x03@count"
+          format_plural_string: !!binary MQNAY291bnQ=
           prefix: ''
           suffix: ''
           plugin_id: numeric
       group_by: false
-      title: 'File usage'
+      title: 'Usos del archivo'
       arguments:
         fid:
           id: fid
@@ -1028,9 +1028,9 @@ display:
           exception:
             value: all
             title_enable: false
-            title: All
+            title: Todo
           title_enable: true
-          title: 'File usage information for {{ arguments.fid }}'
+          title: 'Información de uso del fichero para {{ arguments.fid }}'
           default_argument_type: fixed
           default_argument_options:
             argument: ''

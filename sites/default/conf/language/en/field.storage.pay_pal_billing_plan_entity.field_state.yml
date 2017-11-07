@@ -1,0 +1,10 @@
+settings:
+  allowed_values:
+    -
+      label: CREATED
+    -
+      label: ACTIVE
+    -
+      label: INACTIVE
+    -
+      label: DELETED

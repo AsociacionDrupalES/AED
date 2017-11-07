@@ -1,10 +1,10 @@
 uuid: 8976765c-7298-4a23-8630-a8f3a70948c0
-langcode: en
+langcode: es
 status: true
 dependencies: {  }
 _core:
   default_config_hash: hewPmBgni9jlDK_IjLxUx1HsTbinK-hdl0lOwjbteIY
-name: 'Full HTML'
+name: 'HTML completo'
 format: full_html
 weight: 1
 filters:

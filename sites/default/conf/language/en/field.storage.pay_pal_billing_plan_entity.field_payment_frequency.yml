@@ -1,0 +1,10 @@
+settings:
+  allowed_values:
+    -
+      label: DAILY
+    -
+      label: WEEKLY
+    -
+      label: MONTHLY
+    -
+      label: YEARLY

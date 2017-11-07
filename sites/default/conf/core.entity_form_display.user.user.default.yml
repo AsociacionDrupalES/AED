@@ -1,5 +1,5 @@
 uuid: afc45272-12a1-4ac2-a817-8f8c04a78f08
-langcode: en
+langcode: es
 status: true
 dependencies:
   config:
@@ -12,6 +12,7 @@ dependencies:
     - field_group
     - image
     - link
+    - path
     - user
 third_party_settings:
   field_group:
@@ -104,6 +105,12 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   timezone:
     weight: 4
     settings: {  }
@@ -117,4 +124,5 @@ content:
     weight: 2
     third_party_settings: {  }
     region: content
-hidden: {  }
+hidden:
+  langcode: true

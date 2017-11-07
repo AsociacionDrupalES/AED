@@ -106,4 +106,5 @@ content:
 hidden:
   comment_node_videos: true
   field_videos_ano: true
+  langcode: true
   links: true

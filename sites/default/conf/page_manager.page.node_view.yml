@@ -1,5 +1,5 @@
 uuid: e69164cb-6ff4-4e14-8751-df440705b24c
-langcode: en
+langcode: es
 status: false
 dependencies: {  }
 _core:
@@ -14,4 +14,4 @@ parameters:
   node:
     machine_name: node
     type: 'entity:node'
-    label: Node
+    label: Nodo

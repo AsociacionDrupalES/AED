@@ -1,0 +1,75 @@
+uuid: ad92e9e1-940a-4399-b456-18935de1f057
+langcode: es
+status: true
+dependencies:
+  module:
+    - locale
+_core:
+  default_config_hash: IGyq02Zgyl_6WJczNqeYnXXQR_B_iM-yyOFXOUmVpLk
+id: locale
+label: Traducción
+module: locale
+routes:
+  -
+    route_name: locale.translate_page
+tips:
+  locale-overview:
+    id: locale-overview
+    plugin: text
+    label: 'Traducción de la interfaz de usuario'
+    body: 'Esta página le permite traducir la interfaz de usuario o modificar traducciones existentes. Si ha instalado su sitio web inicialmente en inglés, primero debe añadir otro idioma en la <a href="[site:url]admin/config/regional/language">página de Idiomas</a>, para poder usar esta página.'
+    weight: 1
+  locale-language:
+    id: locale-language
+    plugin: text
+    label: 'Translation language'
+    body: 'Elija el idioma que quiere traducir.'
+    weight: 2
+    attributes:
+      data-id: edit-langcode
+  locale-search:
+    id: locale-search
+    plugin: text
+    label: Buscar
+    body: 'Intruduzca la palabra u oración específica que usted desea traducir, también puede escribir solamente una parte de la palabra.'
+    weight: 3
+    attributes:
+      data-id: edit-string
+  locale-filter:
+    id: locale-filter
+    plugin: text
+    label: 'Filtrar la búsqueda'
+    body: 'Puede buscar cadenas no traducidas si quiere traducir algo que todavía no está traducido. Si quiere modificar una traducción exitente, podría querer buscar solo cadenas traducidas.'
+    weight: 4
+    attributes:
+      data-id: edit-translation
+  locale-submit:
+    id: locale-submit
+    plugin: text
+    label: 'Aplicar su criterio de búsqueda'
+    body: 'Para aplicar su criterio de búsqueda, haga click en el botón <em>Filtrar</em>.'
+    weight: 5
+    attributes:
+      data-id: edit-submit
+  locale-translate:
+    id: locale-translate
+    plugin: text
+    label: Traducir
+    body: 'Puede escribir su propia traducción en los campos de texto en la columna de la derecha. Intente fijarse en cual contexto el texto será usado para traducirlo de la manera apropiada.'
+    weight: 6
+    attributes:
+      data-class: js-form-type-textarea
+  locale-validate:
+    id: locale-validate
+    plugin: text
+    label: 'Validar la traducción'
+    body: 'Cuando haya terminado sus traducciones, haga clic en el botón <em>Guardar traducciones</em>. Usted debe guardar sus traducciones, cada vez antes de cambiar de página o hacer una nueva búsqueda.'
+    weight: 7
+    attributes:
+      data-id: edit-submit--2
+  locale-continue:
+    id: locale-continue
+    plugin: text
+    label: Continuando
+    body: 'Las traducciones que usted haya hecho aquí se utilizarán en la interfaz de usuario de su sitio web. Si quiere utilizarlas en otro sitio o modificarlas en un editor de traducciones externo, puede <a href="[site:url]admin/config/regional/translate/export">exportarlas</a> a un archivo .po e <a href="[site:url]admin/config/regional/translate/import">importarlas</a> después.'
+    weight: 8
