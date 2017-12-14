@@ -8,10 +8,10 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\UrlGeneratorInterface;
 use Drupal\facets\FacetInterface;
-use Drupal\facets\FacetSource\FacetSourcePluginInterface;
 use Drupal\facets\FacetSource\FacetSourcePluginManager;
+use Drupal\facets\FacetSource\SearchApiFacetSourceInterface;
 use Drupal\facets\Processor\ProcessorPluginManager;
-use Drupal\views\Views;
+use Drupal\views\Plugin\views\display\Block;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,20 +39,6 @@ class FacetSettingsForm extends EntityForm {
    * @var \Drupal\facets\Processor\ProcessorPluginManager
    */
   protected $processorPluginManager;
-
-  /**
-   * The module handler.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The url generator.
-   *
-   * @var \Drupal\Core\Routing\UrlGeneratorInterface
-   */
-  protected $urlGenerator;
 
   /**
    * Constructs a FacetForm object.
@@ -120,6 +106,10 @@ class FacetSettingsForm extends EntityForm {
   /**
    * Builds the form for editing and creating a facet.
    *
+   * @param array $form
+   *   The form array for the complete form.
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current form state.
    * @param \Drupal\facets\FacetInterface $facet
    *   The facets facet entity that is being created or edited.
    */
@@ -302,10 +292,6 @@ class FacetSettingsForm extends EntityForm {
         drupal_set_message($message);
         $form_state->setRedirect('entity.facets_facet.edit_form', ['facets_facet' => $facet->id()]);
       }
-
-      if (isset($view_id, $display_plugin) && $display_plugin === 'block') {
-        $facet->setOnlyVisibleWhenFacetSourceIsVisible(FALSE);
-      }
     }
     else {
       drupal_set_message($this->t('Facet %name has been updated.', ['%name' => $facet->getName()]));
@@ -317,36 +303,20 @@ class FacetSettingsForm extends EntityForm {
     }
 
     // Ensure that the caching of the view display is disabled, so the search
-    // correctly returns the facets. First, get the plugin definition of the
-    // Search API display.
-    if (isset($facet_source) && $facet_source instanceof FacetSourcePluginInterface) {
-      $facet_source_display_id = $facet_source->getPluginDefinition()['display_id'];
-      $search_api_display = \Drupal::service('plugin.manager.search_api.display')
-        ->createInstance($facet_source_display_id);
-      $search_api_display_definition = $search_api_display->getPluginDefinition();
-
-      // Get the view of the Search API display and disable caching.
-      if (!empty($search_api_display_definition['view_id'])) {
-        $view_id = $search_api_display_definition['view_id'];
-        $view_display = $search_api_display_definition['view_display'];
-
-        $view = Views::getView($view_id);
-        $view->setDisplay($view_display);
+    // correctly returns the facets.
+    if (isset($facet_source) && $facet_source instanceof SearchApiFacetSourceInterface) {
+      $view = $facet_source->getViewsDisplay();
+      if ($view !== NULL) {
+        if ($view->display_handler instanceof Block) {
+          $facet->setOnlyVisibleWhenFacetSourceIsVisible(FALSE);
+        }
         $view->display_handler->overrideOption('cache', ['type' => 'none']);
         $view->save();
-
         drupal_set_message($this->t('Caching of view %view has been disabled.', ['%view' => $view->storage->label()]));
       }
     }
 
     return $facet;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function delete(array $form, FormStateInterface $form_state) {
-    $form_state->setRedirect('entity.facets_facet.delete_form', ['facets_facet' => $this->getEntity()->id()]);
   }
 
 }

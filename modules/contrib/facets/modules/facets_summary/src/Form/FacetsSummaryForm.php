@@ -32,13 +32,6 @@ class FacetsSummaryForm extends EntityForm {
   protected $facetSummaryStorage;
 
   /**
-   * The entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The plugin manager for facet sources.
    *
    * @var \Drupal\facets\FacetSource\FacetSourcePluginManager
@@ -369,8 +362,6 @@ class FacetsSummaryForm extends EntityForm {
     $values = $form_state->getValues();
 
     // Store processor settings.
-    // @todo Go through all available processors, enable/disable with method on
-    //   processor plugin to allow reaction.
     /** @var \Drupal\facets_summary\FacetsSummaryInterface $facets_summary */
     $facets_summary = $this->entity;
 

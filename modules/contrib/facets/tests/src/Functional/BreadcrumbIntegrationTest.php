@@ -50,14 +50,12 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   public function testGroupingIntegration() {
     $this->editFacetConfig();
     $id = 'keywords';
-    $name = 'Keywords';
-    $this->createFacet($name, $id, 'keywords');
+    $this->createFacet('Keywords', $id, 'keywords');
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
 
     $id = 'type';
-    $name = 'Type';
-    $this->createFacet($name, $id);
+    $this->createFacet('Type', $id);
     $this->resetAll();
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
     $this->drupalPostForm(NULL, ['facet_settings[weight]' => '1'], 'Save');
@@ -76,12 +74,19 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests Breadcrumb integration without grouping.
+   */
+  public function testNonGroupingIntegration() {
+    $this->markTestSkipped('Not yet implemented.');
+  }
+
+  /**
    * Edit the facet configuration with the given values.
    *
    * @param array $config
    *   The new configuration for the facet.
    */
-  public function editFacetConfig(array $config = []) {
+  protected function editFacetConfig(array $config = []) {
     $this->drupalGet('admin/config/search/facets');
     $this->clickLink('Configure', 1);
     $default_config = [
@@ -130,13 +135,6 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
     // Check that the current url still has the initial parameters.
     $curr_url = UrlHelper::parse($this->getUrl());
     $this->assertArraySubset($initial_query, $curr_url['query']);
-  }
-
-  /**
-   * Tests Breadcrumb integration without grouping.
-   */
-  public function testNonGroupingIntegration() {
-    $this->markTestSkipped('Not yet implemented.');
   }
 
 }

@@ -29,11 +29,15 @@ class ShowSummaryProcessor extends ProcessorPluginBase implements BuildProcessor
     if (isset($build['#items'])) {
       /** @var \Drupal\facets\Entity\Facet $facet */
       foreach ($facets as $facet) {
+        if (empty($facet->getActiveItems())) {
+          continue;
+        }
+        $items = $this->getActiveDisplayValues($facet->getResults());
         $facet_summary = [
           '#theme' => 'facets_summary_facet',
           '#label' => $facets_config[$facet->id()]['label'],
           '#separator' => $facets_config[$facet->id()]['separator'],
-          '#items' => $facet->getActiveItems(),
+          '#items' => $items,
           '#facet_id' => $facet->id(),
           '#facet_admin_label' => $facet->getName(),
         ];
@@ -44,17 +48,25 @@ class ShowSummaryProcessor extends ProcessorPluginBase implements BuildProcessor
   }
 
   /**
-   * {@inheritdoc}
+   * Get all active results' display values from hierarchy.
+   *
+   * @param \Drupal\facets\Result\ResultInterface[] $results
+   *   The results to check for active children.
+   *
+   * @return \Drupal\facets\Result\ResultInterface[]
+   *   The active results found.
    */
-  public function isHidden() {
-    return FALSE;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function isLocked() {
-    return FALSE;
+  protected function getActiveDisplayValues(array $results) {
+    $items = [];
+    foreach ($results as $result) {
+      if ($result->isActive()) {
+        $items[] = $result->getDisplayValue();
+      }
+      if ($result->hasActiveChildren()) {
+        $items = array_merge($items, $this->getActiveDisplayValues($result->getChildren()));
+      }
+    }
+    return $items;
   }
 
 }

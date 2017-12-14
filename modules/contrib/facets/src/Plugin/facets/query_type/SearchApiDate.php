@@ -56,8 +56,24 @@ class SearchApiDate extends QueryTypeRangeBase {
   /**
    * {@inheritdoc}
    */
+  public function __construct(array $configuration, $plugin_id, $plugin_definition) {
+    parent::__construct($configuration, $plugin_id, $plugin_definition);
+    $facet = $configuration['facet'];
+    $processors = $facet->getProcessors();
+    $dateProcessorConfig = $processors['date_item']->getConfiguration();
+
+    $configuration = $this->getConfiguration();
+    $configuration['granularity'] = $dateProcessorConfig['granularity'];
+    $configuration['date_display'] = $dateProcessorConfig['date_display'];
+    $configuration['date_format'] = $dateProcessorConfig['date_format'];
+    $this->setConfiguration($configuration);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function calculateRange($value) {
-    if ($this->getDisplayRelative()) {
+    if ($this->getDateDisplay() === 'relative_date') {
       return $this->calculateRangeRelative($value);
     }
     else {
@@ -109,11 +125,10 @@ class SearchApiDate extends QueryTypeRangeBase {
         $stopDate = $dateTime::createFromFormat('Y-m-d\TH:i:s', $value . ':59');
         break;
 
-      case static::FACETAPI_DATE_SECOND:
+      default:
         $startDate = $dateTime::createFromFormat('Y-m-d\TH:i:s', $value);
         $stopDate = $dateTime::createFromFormat('Y-m-d\TH:i:s', $value);
         break;
-
     }
 
     return [
@@ -176,11 +191,10 @@ class SearchApiDate extends QueryTypeRangeBase {
         $stopDate->sub(new \DateInterval('PT1S'));
         break;
 
-      case static::FACETAPI_DATE_SECOND:
+      default:
         $startDate = $dateTime::createFromFormat('Y-m-d\TH:i:s', $value);
         $stopDate = clone $startDate;
         break;
-
     }
 
     return [
@@ -199,7 +213,7 @@ class SearchApiDate extends QueryTypeRangeBase {
    *   An array with a start and end date as unix timestamps.
    */
   public function calculateResultFilter($value) {
-    if ($this->getDisplayRelative()) {
+    if ($this->getDateDisplay() === 'relative_date') {
       return $this->calculateResultFilterRelative($value);
     }
     else {
@@ -213,7 +227,7 @@ class SearchApiDate extends QueryTypeRangeBase {
   public function calculateResultFilterAbsolute($value) {
     $date = new DrupalDateTime();
     $date->setTimestamp($value);
-    $date_display = $this->getDateFormat();
+    $date_format = $this->getDateFormat();
 
     switch ($this->getGranularity()) {
       case static::FACETAPI_DATE_YEAR:
@@ -241,13 +255,13 @@ class SearchApiDate extends QueryTypeRangeBase {
         $raw = $date->format('Y-m-d\TH:i');
         break;
 
-      case static::FACETAPI_DATE_SECOND:
+      default:
         $format = 'd/m/Y H:i:s';
         $raw = $date->format('Y-m-d\TH:i:s');
         break;
-
     }
-    $format = $date_display ? $date_display : $format;
+
+    $format = $date_format ? $date_format : $format;
     return [
       'display' => $date->format($format),
       'raw' => $raw,
@@ -362,7 +376,7 @@ class SearchApiDate extends QueryTypeRangeBase {
         $raw = $date->format('Y-m-d\TH:i:s');
         break;
 
-      case static::FACETAPI_DATE_SECOND:
+      default:
         $rounded = new \DateInterval('P' . $interval->y . 'Y' . $interval->m . 'M' . $interval->d . 'DT' . $interval->h . 'H' . $interval->i . $interval->s . 'S');
         $display = $interval->y ? $this->formatPlural($interval->y, '1 year', '@count years') . ' ' : '';
         $display .= $interval->m ? $this->formatPlural($interval->m, '1 month', '@count months') . ' ' : '';
@@ -384,7 +398,6 @@ class SearchApiDate extends QueryTypeRangeBase {
         }
         $raw = $date->format('Y-m-d\TH:i:s');
         break;
-
     }
 
     return [
@@ -397,23 +410,32 @@ class SearchApiDate extends QueryTypeRangeBase {
    * Retrieve configuration: Granularity to use.
    *
    * Default behaviour an integer for the steps that the facet works in.
+   *
+   * @return int
+   *   The granularity for this config.
    */
   protected function getGranularity() {
-    return $this->facet->getWidgetInstance()->getConfiguration()['granularity'];
+    return $this->getConfiguration()['granularity'];
   }
 
   /**
-   * Retrieve configuration: If the date should be displayed relatively.
+   * Retrieve configuration: Date Display type.
+   *
+   * @return string
+   *   Returns the display mode..
    */
-  protected function getDisplayRelative() {
-    return $this->facet->getWidgetInstance()->getConfiguration()['display_relative'];
+  protected function getDateDisplay() {
+    return $this->getConfiguration()['date_display'];
   }
 
   /**
    * Retrieve configuration: Date display format.
+   *
+   * @return string
+   *   Returns the format.
    */
   protected function getDateFormat() {
-    return $this->facet->getWidgetInstance()->getConfiguration()['date_display'];
+    return $this->getConfiguration()['date_format'];
   }
 
 }

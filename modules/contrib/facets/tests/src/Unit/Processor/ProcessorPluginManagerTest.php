@@ -94,7 +94,7 @@ class ProcessorPluginManagerTest extends UnitTestCase {
   public function testConstruct() {
     $namespaces = new ArrayObject();
     $sut = new ProcessorPluginManager($namespaces, $this->cache, $this->moduleHandler, $this->translator);
-    $this->assertInstanceOf('\Drupal\facets\Processor\ProcessorPluginManager', $sut);
+    $this->assertInstanceOf(ProcessorPluginManager::class, $sut);
   }
 
   /**

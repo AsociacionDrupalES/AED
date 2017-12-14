@@ -64,8 +64,6 @@ class FacetsSummaryBlockDeriver implements ContainerDeriverInterface {
           'admin_label' => $facets_summary->getName(),
           'description' => $this->t('Facets Summary'),
         ] + $base_plugin_definition;
-
-        $sources[] = $this->t('Facets Summary: :facets_summary', [':facets_summary' => $facets_summary->getName()]);
       }
     }
     $this->derivatives[$base_plugin_id] = $plugin_derivatives;

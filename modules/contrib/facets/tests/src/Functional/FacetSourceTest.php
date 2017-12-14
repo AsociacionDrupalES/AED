@@ -31,7 +31,7 @@ class FacetSourceTest extends FacetsTestBase {
 
     // Go to the overview and click the first configure link.
     $this->drupalGet('admin/config/search/facets');
-    $this->assertLink('Configure');
+    $this->assertSession()->linkExists('Configure');
     $this->clickLink('Configure');
   }
 
@@ -43,19 +43,19 @@ class FacetSourceTest extends FacetsTestBase {
     $edit = [
       'filter_key' => 'fq',
     ];
-    $this->assertField('filter_key');
-    $this->assertField('url_processor');
+    $this->assertSession()->fieldExists('filter_key');
+    $this->assertSession()->fieldExists('url_processor');
     $this->drupalPostForm(NULL, $edit, 'Save');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
-    $this->assertUrl('admin/config/search/facets');
-    $this->assertText('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
+    $this->assertSession()->addressEquals('admin/config/search/facets');
+    $this->assertSession()->pageTextContains('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
     $this->clickLink('Configure');
 
     // Test that saving worked filter_key has the new value.
-    $this->assertField('filter_key');
-    $this->assertField('url_processor');
-    $this->assertRaw('fq');
+    $this->assertSession()->fieldExists('filter_key');
+    $this->assertSession()->fieldExists('url_processor');
+    $this->assertSession()->responseContains('fq');
   }
 
   /**
@@ -66,18 +66,18 @@ class FacetSourceTest extends FacetsTestBase {
     $edit = [
       'url_processor' => 'dummy_query',
     ];
-    $this->assertField('filter_key');
-    $this->assertField('url_processor');
+    $this->assertSession()->fieldExists('filter_key');
+    $this->assertSession()->fieldExists('url_processor');
     $this->drupalPostForm(NULL, $edit, 'Save');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
-    $this->assertUrl('admin/config/search/facets');
-    $this->assertText('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
+    $this->assertSession()->addressEquals('admin/config/search/facets');
+    $this->assertSession()->pageTextContains('Facet source search_api:views_block__search_api_test_view__block_1 has been saved.');
     $this->clickLink('Configure');
 
     // Test that saving worked and that the url processor has the new value.
-    $this->assertField('filter_key');
-    $this->assertField('url_processor');
+    $this->assertSession()->fieldExists('filter_key');
+    $this->assertSession()->fieldExists('url_processor');
     /** @var \Behat\Mink\Element\NodeElement[] $elements */
     $elements = $this->xpath('//input[@id=:id]', [':id' => 'edit-url-processor-dummy-query']);
     $this->assertEquals('dummy_query', $elements[0]->getValue());

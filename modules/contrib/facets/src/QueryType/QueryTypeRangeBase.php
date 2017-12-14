@@ -37,7 +37,8 @@ abstract class QueryTypeRangeBase extends QueryTypePluginBase {
         foreach ($active_items as $value) {
           $range = $this->calculateRange($value);
 
-          $item_filter = $query->createConditionGroup('AND', ['facet:' . $field_identifier]);
+          $conjunction = $exclude ? 'OR' : 'AND';
+          $item_filter = $query->createConditionGroup($conjunction, ['facet:' . $field_identifier]);
           $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['start'], $exclude ? '<' : '>=');
           $item_filter->addCondition($this->facet->getFieldIdentifier(), $range['stop'], $exclude ? '>' : '<=');
 
@@ -68,27 +69,51 @@ abstract class QueryTypeRangeBase extends QueryTypePluginBase {
   public function build() {
     $query_operator = $this->facet->getQueryOperator();
 
-    // Go through the results and add facet results grouped by filters
-    // defined by self::calculateResultFilter().
-    if (!empty($this->results)) {
+    // If there were no results or no query object, we can't do anything.
+    if (empty($this->results)) {
+      return $this->facet;
+    }
+
+    $supportedFeatures = array_flip($this->query
+      ->getIndex()
+      ->getServerInstance()
+      ->getBackend()
+      ->getSupportedFeatures());
+
+    // Range grouping is supported.
+    if (isset($supportedFeatures['search_api_granular'])) {
       $facet_results = [];
-      foreach ($this->results as $key => $result) {
+      foreach ($this->results as $result) {
         if ($result['count'] || $query_operator == 'or') {
-          $count = $result['count'];
-          $result_filter = $this->calculateResultFilter(trim($result['filter'], '"'));
-          if (isset($facet_results[$result_filter['raw']])) {
-            $facet_results[$result_filter['raw']]->setCount(
-              $facet_results[$result_filter['raw']]->getCount() + $count
-            );
-          }
-          else {
-            $facet_results[$result_filter['raw']] = new Result($result_filter['raw'], $result_filter['display'], $count);
-          }
+          $result_filter = trim($result['filter'], '"');
+          $facet_results[] = new Result($this->facet, $result_filter, $result_filter, $result['count']);
         }
       }
-
       $this->facet->setResults($facet_results);
+
+      return $this->facet;
     }
+
+    // Non supported backend range grouping.
+    $facet_results = [];
+    foreach ($this->results as $result) {
+      // Go through the results and add facet results grouped by filters
+      // defined by self::calculateResultFilter().
+      if ($result['count'] || $query_operator == 'or') {
+        $count = $result['count'];
+        $result_filter = $this->calculateResultFilter(trim($result['filter'], '"'));
+        if (isset($facet_results[$result_filter['raw']])) {
+          $facet_results[$result_filter['raw']]->setCount(
+            $facet_results[$result_filter['raw']]->getCount() + $count
+          );
+        }
+        else {
+          $facet_results[$result_filter['raw']] = new Result($this->facet, $result_filter['raw'], $result_filter['display'], $count);
+        }
+      }
+    }
+
+    $this->facet->setResults($facet_results);
     return $this->facet;
   }
 

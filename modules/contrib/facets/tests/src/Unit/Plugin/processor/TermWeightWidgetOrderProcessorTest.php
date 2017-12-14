@@ -4,6 +4,7 @@ namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\TermWeightWidgetOrderProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\taxonomy\Entity\Term;
@@ -105,9 +106,10 @@ class TermWeightWidgetOrderProcessorTest extends UnitTestCase {
     // Prepare the results that we use the processor to sort, the raw_value has
     // to match the term_id keys used above in $terms. Display_value and count
     // is not used.
+    $facet = new Facet([], 'facets_facet');
     $this->originalResults = [
-      new Result(1, 10, 100),
-      new Result(2, 20, 200),
+      new Result($facet, 1, 10, 100),
+      new Result($facet, 2, 20, 200),
     ];
 
   }

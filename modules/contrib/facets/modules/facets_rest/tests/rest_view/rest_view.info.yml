@@ -1,0 +1,17 @@
+name: 'Rest view'
+type: module
+description: 'Provides a Search API + rest dependecy.'
+package: 'Search'
+# core: 8.x
+hidden: true
+dependencies:
+  - drupal:rest
+  - search_api:search_api
+  - search_api:search_api_test_db
+  - drupal:views
+
+# Information added by Drupal.org packaging script on 2017-12-02
+version: '8.x-1.0-beta1'
+core: '8.x'
+project: 'facets'
+datestamp: 1512228491

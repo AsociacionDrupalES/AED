@@ -25,7 +25,7 @@ class CheckboxWidgetTest extends WidgetTestBase {
    * Tests widget without filters.
    */
   public function testNoFilterResults() {
-    $facet = new Facet([], 'facets_facet');
+    $facet = $this->facet;
     $facet->setResults($this->originalResults);
 
     $output = $this->widget->build($facet);
@@ -36,10 +36,10 @@ class CheckboxWidgetTest extends WidgetTestBase {
     $this->assertEquals(['js-facets-checkbox-links'], $output['#attributes']['class']);
 
     $expected_links = [
-      $this->buildLinkAssertion('Llama', 10),
-      $this->buildLinkAssertion('Badger', 20),
-      $this->buildLinkAssertion('Duck', 15),
-      $this->buildLinkAssertion('Alpaca', 9),
+      $this->buildLinkAssertion('Llama', 'llama', $facet, 10),
+      $this->buildLinkAssertion('Badger', 'badger', $facet, 20),
+      $this->buildLinkAssertion('Duck', 'duck', $facet, 15),
+      $this->buildLinkAssertion('Alpaca', 'alpaca', $facet, 9),
     ];
     foreach ($expected_links as $index => $value) {
       $this->assertInternalType('array', $output['#items'][$index]);
@@ -55,7 +55,15 @@ class CheckboxWidgetTest extends WidgetTestBase {
    */
   public function testDefaultConfiguration() {
     $default_config = $this->widget->defaultConfiguration();
-    $this->assertEquals(['show_numbers' => FALSE, 'soft_limit' => 0], $default_config);
+    $expected = [
+      'show_numbers' => FALSE,
+      'soft_limit' => 0,
+      'soft_limit_settings' => [
+        'show_less_label' => 'Show less',
+        'show_more_label' => 'Show more',
+      ],
+    ];
+    $this->assertEquals($expected, $default_config);
   }
 
 }

@@ -2,10 +2,15 @@
 
 namespace Drupal\Tests\facets\Kernel\Plugin\query_type;
 
+use Drupal\facets\FacetInterface;
+use Drupal\facets\Result\ResultInterface;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\query_type\SearchApiDate;
+use Drupal\search_api\Backend\BackendInterface;
+use Drupal\search_api\IndexInterface;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
+use Drupal\search_api\ServerInterface;
 
 /**
  * Kernel test for date query type.
@@ -17,6 +22,16 @@ class SearchApiDateTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
+  public static $modules = [
+    'facets',
+    'search_api',
+    'system',
+    'user',
+  ];
+
+  /**
+   * {@inheritdoc}
+   */
   public function setUp() {
     parent::setUp();
 
@@ -24,6 +39,8 @@ class SearchApiDateTest extends KernelTestBase {
     // here as well. The raw value is the UTC, the displayed value is calculated
     // by the PHP timezone - presently.
     date_default_timezone_set('Australia/Sydney');
+
+    $this->installEntitySchema('facets_facet');
   }
 
   /**
@@ -32,43 +49,47 @@ class SearchApiDateTest extends KernelTestBase {
    * @dataProvider resultsProvider
    */
   public function testQueryTypeAnd($granularity, $original_results, $grouped_results) {
-    $query = new SearchApiQuery([], 'search_api_query', []);
-    $facetReflection = new \ReflectionClass('Drupal\facets\Entity\Facet');
+    $backend = $this->prophesize(BackendInterface::class);
+    $backend->getSupportedFeatures()->willReturn([]);
+    $server = $this->prophesize(ServerInterface::class);
+    $server->getBackend()->willReturn($backend);
+    $index = $this->prophesize(IndexInterface::class);
+    $index->getServerInstance()->willReturn($server);
+    $query = $this->prophesize(SearchApiQuery::class);
+    $query->getIndex()->willReturn($index);
+
     $facet = new Facet(
       ['query_operator' => 'AND', 'widget' => 'links'],
       'facets_facet'
     );
-    $widget = $this->getMockBuilder('Drupal\facets\Widget\WidgetPluginInterface')
-      ->disableOriginalConstructor()
-      ->getMock();
-    $widget->method('getConfiguration')
-      ->will($this->returnValue([
+    $facet->addProcessor([
+      'processor_id' => 'date_item',
+      'weights' => [],
+      'settings' => [
         'granularity' => $granularity,
-        'date_display' => '',
-        'display_relative' => FALSE,
-      ]));
-    $widget_instance = $facetReflection->getProperty('widgetInstance');
-    $widget_instance->setAccessible(TRUE);
-    $widget_instance->setValue($facet, $widget);
+        'date_format' => '',
+        'date_display' => 'actual_date',
+      ],
+    ]);
 
     $query_type = new SearchApiDate(
       [
         'facet' => $facet,
-        'query' => $query,
+        'query' => $query->reveal(),
         'results' => $original_results,
       ],
-      'search_api_string',
+      'search_api_date',
       []
     );
 
     $built_facet = $query_type->build();
-    $this->assertInstanceOf('\Drupal\facets\FacetInterface', $built_facet);
+    $this->assertInstanceOf(FacetInterface::class, $built_facet);
 
     $results = $built_facet->getResults();
     $this->assertInternalType('array', $results);
 
     foreach ($grouped_results as $k => $result) {
-      $this->assertInstanceOf('\Drupal\facets\Result\ResultInterface', $results[$k]);
+      $this->assertInstanceOf(ResultInterface::class, $results[$k]);
       $this->assertEquals($result['count'], $results[$k]->getCount());
       $this->assertEquals($result['filter'], $results[$k]->getDisplayValue());
     }
@@ -261,6 +282,16 @@ class SearchApiDateTest extends KernelTestBase {
     $query = new SearchApiQuery([], 'search_api_query', []);
     $facet = new Facet([], 'facets_facet');
 
+    $facet->addProcessor([
+      'processor_id' => 'date_item',
+      'weights' => [],
+      'settings' => [
+        'granularity' => SearchApiDate::FACETAPI_DATE_YEAR,
+        'date_format' => '',
+        'date_display' => 'actual_date',
+      ],
+    ]);
+
     $query_type = new SearchApiDate(
       [
         'facet' => $facet,
@@ -271,7 +302,7 @@ class SearchApiDateTest extends KernelTestBase {
     );
 
     $built_facet = $query_type->build();
-    $this->assertInstanceOf('\Drupal\facets\FacetInterface', $built_facet);
+    $this->assertInstanceOf(FacetInterface::class, $built_facet);
 
     $results = $built_facet->getResults();
     $this->assertInternalType('array', $results);

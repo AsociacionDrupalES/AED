@@ -2,10 +2,13 @@
 
 namespace Drupal\Tests\facets\Kernel\Entity;
 
+use Drupal\Core\TypedData\DataDefinitionInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\Exception\InvalidQueryTypeException;
 use Drupal\facets\FacetSourceInterface;
 use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
+use Drupal\facets\Exception\Exception;
 
 /**
  * Class FacetFacetSourceTest.
@@ -22,6 +25,7 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
    */
   public static $modules = [
     'facets',
+    'facets_custom_widget',
     'facets_search_api_dependency',
     'search_api',
     'search_api_db',
@@ -109,12 +113,12 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
     $entity->setWidget('links');
     $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
 
-    $this->setExpectedException('Drupal\facets\Exception\InvalidQueryTypeException');
+    $this->setExpectedException(InvalidQueryTypeException::class);
     $entity->getQueryType();
   }
 
   /**
-   * Tests invalid query type.
+   * Tests valid query type.
    *
    * @covers ::getQueryType
    * @covers ::getFacetSource
@@ -125,8 +129,87 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
     $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
     $entity->setFieldIdentifier('name');
 
-    $aa = $entity->getQueryType();
-    $this->assertEquals('search_api_string', $aa);
+    $selectedQueryType = $entity->getQueryType();
+    $this->assertEquals('search_api_string', $selectedQueryType);
+  }
+
+  /**
+   * Tests the selection of a query type.
+   *
+   * @covers ::getQueryType
+   * @covers ::pickQueryType
+   */
+  public function testQueryTypeJugglingInvalidWidget() {
+    $entity = new Facet([], 'facets_facet');
+    $entity->setWidget('widget_invalid_qt');
+    $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
+    $entity->setFieldIdentifier('name');
+
+    $this->setExpectedException(InvalidQueryTypeException::class);
+    $entity->getQueryType();
+  }
+
+  /**
+   * Tests the selection of a query type.
+   *
+   * @covers ::getQueryType
+   * @covers ::pickQueryType
+   */
+  public function testQueryTypeJugglingInvalidProcessor() {
+    $entity = new Facet([], 'facets_facet');
+    $entity->setWidget('links');
+    $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
+    $entity->setFieldIdentifier('name');
+    $entity->addProcessor([
+      'processor_id' => 'invalid_qt',
+      'weights' => [],
+      'settings' => [],
+    ]);
+
+    $this->setExpectedException(InvalidQueryTypeException::class);
+    $entity->getQueryType();
+  }
+
+  /**
+   * Tests the selection of a query type.
+   *
+   * @covers ::getQueryType
+   * @covers ::pickQueryType
+   */
+  public function testQueryTypeJugglingInvalidCombo() {
+    $entity = new Facet([], 'facets_facet');
+    $entity->setWidget('numericgranular');
+    $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
+    $entity->setFieldIdentifier('name');
+    $processor = [
+      'processor_id' => 'test_pre_query',
+      'weights' => [],
+      'settings' => [],
+    ];
+    $entity->addProcessor($processor);
+
+    $this->setExpectedException(InvalidQueryTypeException::class);
+    $entity->getQueryType();
+  }
+
+  /**
+   * Test the data definitions.
+   *
+   * @covers \Drupal\facets\FacetSource\FacetSourcePluginInterface::getDataDefinition
+   */
+  public function testDataDefinitions() {
+    // Create and configure facet.
+    $entity = new Facet([], 'facets_facet');
+    $display_name = 'search_api:views_page__search_api_test_view__page_1';
+    $entity->setFacetSourceId($display_name);
+
+    $this->assertInstanceOf(DataDefinitionInterface::class, $entity->getFacetSource()->getDataDefinition('id'));
+    $this->assertInstanceOf(DataDefinitionInterface::class, $entity->getFacetSource()->getDataDefinition('name'));
+    $this->assertInstanceOf(DataDefinitionInterface::class, $entity->getFacetSource()->getDataDefinition('category'));
+
+    // When trying to get a field that doesn't exist, an error should be thrown.
+    $this->setExpectedException(Exception::class);
+    $entity->getFacetSource()->getDataDefinition('llama');
   }
 
 }

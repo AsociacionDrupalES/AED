@@ -33,7 +33,7 @@ class WidgetIntegrationTest extends FacetsTestBase {
 
     $this->setUpExampleStructure();
     $this->insertExampleContent();
-    $this->assertEqual($this->indexItems($this->indexId), 5, '5 items were indexed.');
+    $this->assertEquals($this->indexItems($this->indexId), 5, '5 items were indexed.');
   }
 
   /**
@@ -41,8 +41,7 @@ class WidgetIntegrationTest extends FacetsTestBase {
    */
   public function testCheckboxWidget() {
     $id = 't';
-    $name = 'Facet & checkbox~';
-    $this->createFacet($name, $id);
+    $this->createFacet('Facet & checkbox~', $id);
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
     $this->drupalPostForm(NULL, ['widget' => 'checkbox'], 'Save');
 
@@ -56,8 +55,7 @@ class WidgetIntegrationTest extends FacetsTestBase {
    */
   public function testLinksWidget() {
     $id = 'links_widget';
-    $name = '>.Facet &* Links';
-    $this->createFacet($name, $id);
+    $this->createFacet('>.Facet &* Links', $id);
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
     $this->drupalPostForm(NULL, ['widget' => 'links'], 'Save');
 
@@ -74,14 +72,13 @@ class WidgetIntegrationTest extends FacetsTestBase {
    */
   public function testDropdownWidget() {
     $id = 'select_widget';
-    $name = 'Select';
-    $this->createFacet($name, $id);
+    $this->createFacet('Select', $id);
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
     $this->drupalPostForm(NULL, ['widget' => 'dropdown'], 'Configure widget');
     $this->drupalPostForm(NULL, ['widget' => 'dropdown', 'facet_settings[show_only_one_result]' => TRUE], 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
-    $this->assertText('Displaying 5 search results');
+    $this->assertSession()->pageTextContains('Displaying 5 search results');
     $this->assertFacetLabel('item');
     $this->assertFacetLabel('article');
   }
@@ -91,10 +88,9 @@ class WidgetIntegrationTest extends FacetsTestBase {
    */
   public function testLinksShowHideCount() {
     $id = 'links_widget';
-    $name = '>.Facet &* Links';
     $facet_edit_page = 'admin/config/search/facets/' . $id . '/edit';
 
-    $this->createFacet($name, $id);
+    $this->createFacet('>.Facet &* Links', $id);
 
     // Go to the view and check that the facet links are shown with their
     // default settings.
@@ -142,19 +138,39 @@ class WidgetIntegrationTest extends FacetsTestBase {
    */
   public function testCustomWidget() {
     $id = 'custom_widget';
-    $name = 'Custom widget.';
-    $this->createFacet($name, $id);
+    $this->createFacet('Custom widget.', $id);
 
     $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
 
-    $this->assertNoFieldChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
-    $this->assertNoFieldChecked('edit-facet-settings-show-only-one-result');
+    $this->assertSession()->checkboxNotChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
+    $this->assertSession()->checkboxNotChecked('edit-facet-settings-show-only-one-result');
 
-    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], $this->t('Configure widget'));
-    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], $this->t('Save'));
+    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], 'Configure widget');
+    $this->drupalPostForm(NULL, ['widget' => 'custom_widget'], 'Save');
 
-    $this->assertFieldChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
-    $this->assertFieldChecked('edit-facet-settings-show-only-one-result');
+    $this->assertSession()->checkboxChecked('edit-facet-settings-hide-non-narrowing-result-processor-status');
+    $this->assertSession()->checkboxChecked('edit-facet-settings-show-only-one-result');
+  }
+
+  /**
+   * Tests the facet support for a widget.
+   */
+  public function testSupportsFacet() {
+    $id = 'masked_owl';
+    $this->createFacet('Australian masked owl', $id);
+
+    // Go the the facet edit page and check to see if the custom widget shows
+    // up.
+    $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
+    $this->assertSession()->pageTextContains('Custom widget');
+
+    // Make the ::supportsFacet method on the custom widget return false.
+    \Drupal::state()->set('facets_test_supports_facet', FALSE);
+
+    // Go to the facet edit page and check to see if the custom widget is now
+    // hidden.
+    $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
+    $this->assertSession()->pageTextNotContains('Custom widget');
   }
 
 }

@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\facets\Functional;
 
-use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Language\LanguageInterface;
 use Drupal\search_api\Item\Field;
 use Drupal\taxonomy\Entity\Term;
@@ -27,7 +26,7 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
   protected $vocabulary;
 
   /**
-   * The fieldname for the referenced term.
+   * The field name for the referenced term.
    *
    * @var string
    */
@@ -70,8 +69,8 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     $this->setUpExampleStructure();
 
     // Create a taxonomy_term_reference field on the article and item.
-    $this->fieldName = Unicode::strtolower($this->randomMachineName());
-    $fieldLabel = $this->randomString();
+    $this->fieldName = 'tax_ref_field';
+    $fieldLabel = 'Taxonomy reference field';
 
     $this->createEntityReferenceField('entity_test_mulrev_changed', 'article', $this->fieldName, $fieldLabel, 'taxonomy_term');
     $this->createEntityReferenceField('entity_test_mulrev_changed', 'item', $this->fieldName, $fieldLabel, 'taxonomy_term');
@@ -119,7 +118,7 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     // Verify that the link to the index processors settings page is available.
     $this->drupalGet($this->facetEditPage);
     $this->clickLink('Search api index processor configuration');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
 
     // Enable hierarchical facets and translation of entity ids to its names for
     // a better readability.
@@ -134,18 +133,18 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('Parent 1');
     $this->assertFacetLabel('Parent 2');
-    $this->assertNoLink('Child 1');
-    $this->assertNoLink('Child 2');
-    $this->assertNoLink('Child 3');
-    $this->assertNoLink('Child 4');
+    $this->assertSession()->linkNotExists('Child 1');
+    $this->assertSession()->linkNotExists('Child 2');
+    $this->assertSession()->linkNotExists('Child 3');
+    $this->assertSession()->linkNotExists('Child 4');
 
     // Click the first parent and make sure its children are visible.
     $this->clickLink('Parent 1');
     $this->checkFacetIsActive('Parent 1');
     $this->assertFacetLabel('Child 1');
     $this->assertFacetLabel('Child 2');
-    $this->assertNoLink('Child 3');
-    $this->assertNoLink('Child 4');
+    $this->assertSession()->linkNotExists('Child 3');
+    $this->assertSession()->linkNotExists('Child 4');
   }
 
   /**
@@ -179,6 +178,8 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
       'facet_settings[expand_hierarchy]' => '1',
       'facet_settings[use_hierarchy]' => '1',
       'facet_settings[translate_entity][status]' => '1',
+      'facet_sorting[display_value_widget_order][status]' => '1',
+      'facet_sorting[display_value_widget_order][settings][sort]' => 'ASC',
       'facet_sorting[count_widget_order][status]' => '0',
       'facet_sorting[active_widget_order][status]' => '0',
     ];
@@ -265,7 +266,7 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     }
 
     // Generate 4 child terms.
-    for ($i = 1; $i <= 4; $i++) {
+    foreach (range(1, 4) as $i) {
       $this->terms[$i] = Term::create([
         'name' => sprintf('Child %d', $i),
         'description' => '',
@@ -353,19 +354,6 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
       $this->fieldName => [$this->terms[4]->id()],
     ]);
     $this->entities[6]->save();
-  }
-
-  /**
-   * Convert facet name to machine name.
-   *
-   * @param string $facet_name
-   *   The name of the facet.
-   *
-   * @return string
-   *   The facet name changed to a machine name.
-   */
-  protected function convertNameToMachineName($facet_name) {
-    return preg_replace('@[^a-zA-Z0-9_]+@', '_', strtolower($facet_name));
   }
 
 }

@@ -2,9 +2,9 @@ jquery.ui.slider.pips:
   remote: http://simeydotme.github.io/jQuery-ui-Slider-Pips/
   version: v1.11.3
   license:
-      name: MIT
-      url: https://github.com/simeydotme/jQuery-ui-Slider-Pips/blob/v1.11.3/README.md
-      gpl-compatible: true
+    name: MIT
+    url: https://github.com/simeydotme/jQuery-ui-Slider-Pips/blob/v1.11.3/README.md
+    gpl-compatible: true
   js:
     /libraries/jquery-ui-slider-pips/jquery-ui-slider-pips.min.js: { minified: true }
   css:
@@ -25,3 +25,4 @@ slider:
     - core/drupalSettings
     - core/jquery.once
     - facets_range_widget/jquery.ui.slider.pips
+    - core/jquery.ui.touch-punch

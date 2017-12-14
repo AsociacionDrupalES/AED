@@ -14,5 +14,8 @@
     "irc": "irc://irc.freenode.org/drupal-search-api",
     "source": "git://git.drupal.org/project/facets.git"
   },
-  "license": "GPL-2.0+"
+  "license": "GPL-2.0+",
+  "require-dev": {
+    "drupal/search_api": "~1.5"
+  }
 }

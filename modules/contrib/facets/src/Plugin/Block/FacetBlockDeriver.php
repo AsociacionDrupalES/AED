@@ -67,8 +67,6 @@ class FacetBlockDeriver implements ContainerDeriverInterface {
           'admin_label' => $facet->getName(),
           'description' => $this->t('Facet'),
         ] + $base_plugin_definition;
-
-        $sources[] = $this->t('Facet: :facet', [':facet' => $facet->getName()]);
       }
 
       $this->derivatives[$base_plugin_id] = $plugin_derivatives;

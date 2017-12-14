@@ -18,13 +18,6 @@ use Drupal\facets\Widget\WidgetPluginBase;
 class ArrayWidget extends WidgetPluginBase {
 
   /**
-   * A flag that indicates if we should display the numbers.
-   *
-   * @var bool
-   */
-  protected $showNumbers = FALSE;
-
-  /**
    * {@inheritdoc}
    */
   public function build(FacetInterface $facet) {
@@ -51,7 +44,7 @@ class ArrayWidget extends WidgetPluginBase {
   /**
    * {@inheritdoc}
    */
-  protected function buildListItems($facet, ResultInterface $result) {
+  protected function buildListItems(FacetInterface $facet, ResultInterface $result) {
     if ($children = $result->getChildren()) {
       $items = $this->prepare($result);
 

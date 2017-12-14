@@ -25,7 +25,7 @@ class DropdownWidgetTest extends WidgetTestBase {
    * Tests widget without filters.
    */
   public function testNoFilterResults() {
-    $facet = new Facet([], 'facets_facet');
+    $facet = $this->facet;
     $facet->setResults($this->originalResults);
 
     $output = $this->widget->build($facet);
@@ -36,10 +36,10 @@ class DropdownWidgetTest extends WidgetTestBase {
     $this->assertEquals(['js-facets-dropdown-links'], $output['#attributes']['class']);
 
     $expected_links = [
-      $this->buildLinkAssertion('Llama', 10),
-      $this->buildLinkAssertion('Badger', 20),
-      $this->buildLinkAssertion('Duck', 15),
-      $this->buildLinkAssertion('Alpaca', 9),
+      $this->buildLinkAssertion('Llama', 'llama', $facet, 10),
+      $this->buildLinkAssertion('Badger', 'badger', $facet, 20),
+      $this->buildLinkAssertion('Duck', 'duck', $facet, 15),
+      $this->buildLinkAssertion('Alpaca', 'alpaca', $facet, 9),
     ];
     foreach ($expected_links as $index => $value) {
       $this->assertInternalType('array', $output['#items'][$index]);

@@ -99,7 +99,7 @@ abstract class FacetsTestBase extends BrowserTestBase {
    * @return \Drupal\search_api\ServerInterface
    *   A search server.
    */
-  public function getTestServer($name = 'WebTest server', $id = 'webtest_server', $backend_id = 'search_api_test_backend', array $backend_config = [], $reset = FALSE) {
+  public function getTestServer($name = 'WebTest server', $id = 'webtest_server', $backend_id = 'search_api_db', array $backend_config = [], $reset = FALSE) {
     if ($reset) {
       $server = Server::load($id);
       if ($server) {

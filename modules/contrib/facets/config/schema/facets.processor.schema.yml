@@ -1,3 +1,6 @@
+plugin.plugin_configuration.facets_processor.*:
+  type: config_object
+
 plugin.plugin_configuration.facets_processor.count_widget_widget_order:
   type: mapping
   label: 'Count widget order'
@@ -87,14 +90,36 @@ plugin.plugin_configuration.facets_processor.boolean_item:
       type: string
       label: 'Off value'
 
-plugin.plugin_configuration.facets_processor.url_processor_handler:
-  type: config_object
+plugin.plugin_configuration.facets_processor.dependent_processor:
+  type: sequence
+  label: 'Dependent facet processor'
+  sequence:
+    type: mapping
+    label: Mapping for a processor
+    mapping:
+      enable:
+        type: boolean
+        label: 'Enable for this facet'
+      condition:
+        type: string
+        label: 'Type of condition'
+      values:
+        type: label
+        label: 'The value of the condition'
+      negate:
+        type: boolean
+        label: 'Should the condition be negated'
 
-plugin.plugin_configuration.facets_processor.hide_non_narrowing_result_processor:
-  type: config_object
-
-plugin.plugin_configuration.facets_processor.hide_active_items_processor:
-  type: config_object
-
-plugin.plugin_configuration.facets_processor.list_item:
-  type: config_object
+plugin.plugin_configuration.facets_processor.date_item:
+  type: mapping
+  label: 'Date item processor'
+  mapping:
+    date_display:
+      type: string
+      label: 'Date display'
+    granularity:
+      type: integer
+      label: 'Granularity'
+    date_format:
+      type: string
+      label: 'Date format'

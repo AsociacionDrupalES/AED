@@ -2,6 +2,8 @@
 
 namespace Drupal\Tests\facets\Functional;
 
+use Drupal\facets\Entity\Facet;
+
 /**
  * Shared test methods for facet blocks.
  */
@@ -27,23 +29,34 @@ trait BlockTestTrait {
    *   The display id.
    * @param string $source
    *   Facet source.
+   * @param bool $allowBlockCreation
+   *   Automatically create a block.
    */
-  protected function createFacet($name, $id, $field = 'type', $display_id = 'page_1', $source = 'views_page__search_api_test_view') {
-    $facet_add_page = 'admin/config/search/facets/add-facet';
-
-    $this->drupalGet($facet_add_page);
-
+  protected function createFacet($name, $id, $field = 'type', $display_id = 'page_1', $source = 'views_page__search_api_test_view', $allowBlockCreation = TRUE) {
     $facet_source = "search_api:{$source}__{$display_id}";
-    $form_values = [
+
+    /** @var \Drupal\facets\FacetInterface $facet */
+    $facet = Facet::create([
       'id' => $id,
       'name' => $name,
-      'facet_source_id' => $facet_source,
-      "facet_source_configs[search_api:{$source}__{$display_id}][field_identifier]" => $field,
-    ];
-    $this->drupalPostForm(NULL, ['facet_source_id' => $facet_source], 'Configure facet source');
-    $this->drupalPostForm(NULL, $form_values, 'Save');
+      'weight' => 0,
+    ]);
+    $facet->setFacetSourceId($facet_source);
+    $facet->setFieldIdentifier($field);
+    $facet->setUrlAlias($id);
+    $facet->setWidget('links', ['show_numbers' => TRUE]);
+    $facet->addProcessor([
+      'processor_id' => 'url_processor_handler',
+      'weights' => ['pre_query' => -10, 'build' => -10],
+      'settings' => [],
+    ]);
+    $facet->setEmptyBehavior(['behavior' => 'none']);
+    $facet->setOnlyVisibleWhenFacetSourceIsVisible(TRUE);
+    $facet->save();
 
-    $this->blocks[$id] = $this->createBlock($id);
+    if ($allowBlockCreation) {
+      $this->blocks[$id] = $this->createBlock($id);
+    }
   }
 
   /**
@@ -79,7 +92,7 @@ trait BlockTestTrait {
     $this->drupalGet('admin/structure/block/manage/' . $this->blocks[$id]->id(), ['query' => ['destination' => 'admin']]);
     $this->clickLink($delete_link_title);
     $this->drupalPostForm(NULL, [], $delete_confirm_form_button_title);
-    $this->assertText($orig_success_message);
+    $this->assertSession()->pageTextContains($orig_success_message);
   }
 
 }

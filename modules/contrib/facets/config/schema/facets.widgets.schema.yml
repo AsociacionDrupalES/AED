@@ -32,6 +32,16 @@ facet.widget.config.links:
     soft_limit:
       type: integer
       label: 'Soft limit'
+    soft_limit_settings:
+      type: mapping
+      label: 'Soft limit settings'
+      mapping:
+        show_less_label:
+          type: label
+          label: 'Show less label'
+        show_more_label:
+          type: label
+          label: 'Show more label'
 
 # Config schema for checkbox, you can find the implementation in
 # Drupal\facets\Plugin\facets\widget\CheckboxWidget. Options for this widget are

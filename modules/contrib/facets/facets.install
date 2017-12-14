@@ -22,7 +22,6 @@ function facets_update_8001() {
   // This only works for the 3 default plugins that we previously shipped. So
   // only views that have a page, block, or rest display. The id will get
   // replaced from views_page:foo to search_api:views_page__foo.
-
   $old_ids = ['views_page', 'views_block', 'views_rest'];
 
   /** @var \Drupal\facets\FacetInterface[] $entities */
@@ -79,10 +78,51 @@ function facets_update_8002() {
     }
 
     $database->update('config')
-      ->fields(array(
+      ->fields([
         'data' => serialize($data),
-      ))
+      ])
       ->condition('name', $result->name)
       ->execute();
+  }
+}
+
+/**
+ * WARNING: Facets core search support has been moved into a separate project.
+ *
+ * If you are using this feature, you need do download the "facets_core_search"
+ * module from drupal.org."
+ */
+function facets_update_8003() {
+  \Drupal::database()->delete('key_value')
+    ->condition('collection', 'system.schema')
+    ->condition('name', 'core_search_facets')
+    ->execute();
+}
+
+/**
+ * Migrate facets with date widget to use date processor and links widget.
+ */
+function facets_update_8004() {
+  foreach (Facet::loadMultiple() as $facet) {
+    $widget = $facet->getWidget();
+    if ($widget['type'] === 'datebasic') {
+      // Set widget to use links instead.
+      $facet->setWidget('links', ['show_numbers' => $widget['config']['show_numbers']]);
+      // Migrate widget to processor settings and enable date_item processor.
+      $settings = [
+        'date_format' => $widget['config']['date_display'],
+        'granularity' => $widget['config']['granularity'],
+        'date_display' => 'actual_date',
+      ];
+      if ($widget['config']['display_relative']) {
+        $settings['date_display'] = 'relative_date';
+      }
+      $facet->addProcessor([
+        'processor_id' => 'date_item',
+        'weights' => ['build' => 35],
+        'settings' => $settings,
+      ]);
+      $facet->save();
+    }
   }
 }

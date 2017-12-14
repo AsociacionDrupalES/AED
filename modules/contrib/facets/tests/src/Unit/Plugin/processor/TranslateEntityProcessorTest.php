@@ -10,12 +10,9 @@ use Drupal\Core\Language\LanguageManagerInterface;
 use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\Core\TypedData\DataReferenceDefinitionInterface;
 use Drupal\facets\Entity\Facet;
-use Drupal\facets\Plugin\facets\facet_source\SearchApiDisplay;
 use Drupal\facets\Plugin\facets\processor\TranslateEntityProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\node\Entity\Node;
-use Drupal\search_api\IndexInterface;
-use Drupal\search_api\Item\FieldInterface;
 use Drupal\taxonomy\Entity\Term;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -70,46 +67,31 @@ class TranslateEntityProcessorTest extends UnitTestCase {
     $property_definition->expects($this->any())
       ->method('getTargetDefinition')
       ->willReturn($target_field_definition);
+    $property_definition->expects($this->any())
+      ->method('getDataType')
+      ->willReturn('entity_reference');
     $data_definition = $this->getMock(ComplexDataDefinitionInterface::class);
     $data_definition->expects($this->any())
       ->method('getPropertyDefinition')
       ->willReturn($property_definition);
-
-    // Add the typed data definition to the search api field.
-    $field = $this->getMock(FieldInterface::class);
-    $field->expects($this->any())
-      ->method('getDataDefinition')
-      ->willReturn($data_definition);
-
-    // Add the search api field to the index.
-    $index = $this->getMock(IndexInterface::class);
-    $index->expects($this->any())
-      ->method('getField')
-      ->willReturn($field);
-
-    // Create a search api based facet source and link the index to it.
-    $facet_source = $this->getMockBuilder(SearchApiDisplay::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-    $facet_source->expects($this->any())
-      ->method('getIndex')
-      ->willReturn($index);
+    $data_definition->expects($this->any())
+      ->method('getPropertyDefinitions')
+      ->willReturn([$property_definition]);
 
     // Create the actual facet.
     $this->facet = $this->getMockBuilder(Facet::class)
       ->disableOriginalConstructor()
       ->getMock();
-
-    // Return the configured facet source.
     $this->facet->expects($this->any())
-      ->method('getFacetSource')
-      ->willReturn($facet_source);
+      ->method('getDataDefinition')
+      ->willReturn($data_definition);
+
     // Add a field identifier.
     $this->facet->expects($this->any())
       ->method('getFieldIdentifier')
       ->willReturn('testfield');
 
-    $this->originalResults = [new Result(2, 2, 5)];
+    $this->originalResults = [new Result($this->facet, 2, 2, 5)];
     $this->facet->setResults($this->originalResults);
 
     // Mock language manager.

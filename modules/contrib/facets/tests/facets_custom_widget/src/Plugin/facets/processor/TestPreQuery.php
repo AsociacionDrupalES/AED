@@ -35,8 +35,22 @@ class TestPreQuery extends ProcessorPluginBase implements PreQueryProcessorInter
   /**
    * {@inheritdoc}
    */
+  public function getQueryType() {
+    return 'string';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function preQuery(FacetInterface $facet) {
     drupal_set_message($this->getConfiguration()['test_value']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function supportsFacet(FacetInterface $facet) {
+    return \Drupal::state()->get('facets_test_supports_facet', TRUE);
   }
 
 }

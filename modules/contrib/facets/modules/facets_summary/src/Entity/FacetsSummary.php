@@ -87,7 +87,7 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
   /**
    * Cached information about the processors available for this facet.
    *
-   * @var \Drupal\facets\Processor\ProcessorInterface[]|null
+   * @var \Drupal\facets_summary\Processor\ProcessorInterface[]|null
    *
    * @see loadProcessors()
    */
@@ -137,7 +137,6 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    * {@inheritdoc}
    */
   public function getFacetSource() {
-
     if (!$this->facet_source_instance && $this->facet_source_id) {
       /* @var $facet_source_plugin_manager \Drupal\facets\FacetSource\FacetSourcePluginManager */
       $facet_source_plugin_manager = \Drupal::service('plugin.manager.facets.facet_source');
@@ -176,28 +175,30 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
    *   The loaded processors, keyed by processor ID.
    */
   protected function loadProcessors() {
-    if (!isset($this->processors)) {
-      /* @var $processor_plugin_manager \Drupal\facets\Processor\ProcessorPluginManager */
-      $processor_plugin_manager = \Drupal::service('plugin.manager.facets_summary.processor');
-      $processor_settings = $this->getProcessorConfigs();
+    if (is_array($this->processors)) {
+      return $this->processors;
+    }
 
-      foreach ($processor_plugin_manager->getDefinitions() as $name => $processor_definition) {
-        if (class_exists($processor_definition['class']) && empty($this->processors[$name])) {
-          // Create our settings for this processor.
-          $settings = empty($processor_settings[$name]['settings']) ? [] : $processor_settings[$name]['settings'];
-          $settings['facets_summary'] = $this;
+    /* @var $processor_plugin_manager \Drupal\facets\Processor\ProcessorPluginManager */
+    $processor_plugin_manager = \Drupal::service('plugin.manager.facets_summary.processor');
+    $processor_settings = $this->getProcessorConfigs();
 
-          /* @var $processor \Drupal\facets_summary\Processor\ProcessorInterface */
-          $processor = $processor_plugin_manager->createInstance($name, $settings);
-          $this->processors[$name] = $processor;
-        }
-        elseif (!class_exists($processor_definition['class'])) {
-          \Drupal::logger('facets_summary')
-            ->warning('Processor @id specifies a non-existing @class.', [
-              '@id' => $name,
-              '@class' => $processor_definition['class'],
-            ]);
-        }
+    foreach ($processor_plugin_manager->getDefinitions() as $name => $processor_definition) {
+      if (class_exists($processor_definition['class']) && empty($this->processors[$name])) {
+        // Create our settings for this processor.
+        $settings = empty($processor_settings[$name]['settings']) ? [] : $processor_settings[$name]['settings'];
+        $settings['facets_summary'] = $this;
+
+        /* @var $processor \Drupal\facets_summary\Processor\ProcessorInterface */
+        $processor = $processor_plugin_manager->createInstance($name, $settings);
+        $this->processors[$name] = $processor;
+      }
+      elseif (!class_exists($processor_definition['class'])) {
+        \Drupal::logger('facets_summary')
+          ->warning('Processor @id specifies a non-existing @class.', [
+            '@id' => $name,
+            '@class' => $processor_definition['class'],
+          ]);
       }
     }
 
@@ -265,6 +266,7 @@ class FacetsSummary extends ConfigEntityBase implements FacetsSummaryInterface {
       'weights' => $processor['weights'],
       'settings' => $processor['settings'],
     ];
+
     // Sort the processors so we won't have unnecessary changes.
     ksort($this->processor_configs);
   }

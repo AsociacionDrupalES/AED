@@ -1,4 +1,4 @@
-facets.overview:
+entity.facets_facet.collection:
   path: '/admin/config/search/facets'
   defaults:
     _title: 'Facets'

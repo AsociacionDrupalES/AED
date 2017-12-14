@@ -21,7 +21,9 @@ class FacetController extends ControllerBase {
    *   The facet edit form.
    */
   public function editForm(FacetInterface $facets_facet) {
-    $facet = \Drupal::service('entity_type.manager')->getStorage('facets_facet')->load($facets_facet->id());
+    $facet = $this->entityTypeManager()
+      ->getStorage('facets_facet')
+      ->load($facets_facet->id());
     return $this->entityFormBuilder()->getForm($facet, 'default');
   }
 

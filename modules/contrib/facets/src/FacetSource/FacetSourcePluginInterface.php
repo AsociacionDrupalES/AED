@@ -97,4 +97,12 @@ interface FacetSourcePluginInterface extends PluginFormInterface, DependentPlugi
    */
   public function getSearchKeys();
 
+  /**
+   * Returns a single field's data definition from the facet source.
+   *
+   * @return \Drupal\Core\TypedData\DataDefinitionInterface
+   *   A typed data definition.
+   */
+  public function getDataDefinition($field_name);
+
 }

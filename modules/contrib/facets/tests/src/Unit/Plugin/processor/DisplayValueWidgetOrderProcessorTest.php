@@ -3,6 +3,7 @@
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\DisplayValueWidgetOrderProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\Tests\UnitTestCase;
@@ -34,14 +35,15 @@ class DisplayValueWidgetOrderProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     $this->originalResults = [
-      new Result('thetans', 'thetans', 10),
-      new Result('xenu', 'xenu', 5),
-      new Result('Tom', 'Tom', 15),
-      new Result('Hubbard', 'Hubbard', 666),
-      new Result('FALSE', 'FALSE', 1),
-      new Result('1977', '1977', 20),
-      new Result('2', '2', 22),
+      new Result($facet, 'thetans', 'thetans', 10),
+      new Result($facet, 'xenu', 'xenu', 5),
+      new Result($facet, 'Tom', 'Tom', 15),
+      new Result($facet, 'Hubbard', 'Hubbard', 666),
+      new Result($facet, 'FALSE', 'FALSE', 1),
+      new Result($facet, '1977', '1977', 20),
+      new Result($facet, '2', '2', 22),
     ];
 
     $transliteration = $this->getMockBuilder(TransliterationInterface::class)
@@ -88,9 +90,10 @@ class DisplayValueWidgetOrderProcessorTest extends UnitTestCase {
    * Tests that sorting uses the display value.
    */
   public function testUseActualDisplayValue() {
+    $facet = new Facet([], 'facets_facet');
     $original = [
-      new Result('bb_test', 'Test AA', 10),
-      new Result('aa_test', 'Test BB', 10),
+      new Result($facet, 'bb_test', 'Test AA', 10),
+      new Result($facet, 'aa_test', 'Test BB', 10),
     ];
 
     $sorted_results = $this->processor->sortResults($original[0], $original[1]);
