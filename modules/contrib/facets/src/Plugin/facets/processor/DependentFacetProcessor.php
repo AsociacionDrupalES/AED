@@ -79,7 +79,6 @@ class DependentFacetProcessor extends ProcessorPluginBase implements BuildProces
   public function buildConfigurationForm(array $form, FormStateInterface $form_state, FacetInterface $current_facet) {
     $build = [];
 
-    $processors = $current_facet->getProcessors();
     $config = $this->getConfiguration();
 
     // Loop over all defined blocks and filter them by provider, this builds an

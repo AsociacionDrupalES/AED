@@ -62,6 +62,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
 
     return [
       '#theme' => $this->getFacetItemListThemeHook($facet),
+      '#facet' => $facet,
       '#items' => $items,
       '#attributes' => [
         'data-drupal-facet-id' => $facet->id(),
@@ -83,7 +84,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
    * This allows the following template suggestions:
    *  - facets-item-list--WIDGET_TYPE--FACET_ID
    *  - facets-item-list--WIDGET_TYPE
-   *  - facets-item-list
+   *  - facets-item-list.
    *
    * @param \Drupal\facets\FacetInterface $facet
    *   The facet whose output is being generated.
@@ -122,8 +123,8 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
   /**
    * {@inheritdoc}
    */
-  public function getQueryType(array $query_types) {
-    return $query_types['string'];
+  public function getQueryType() {
+    return NULL;
   }
 
   /**
@@ -156,7 +157,7 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
    * @return array
    *   A renderable array of the result.
    */
-  protected function buildListItems($facet, ResultInterface $result) {
+  protected function buildListItems(FacetInterface $facet, ResultInterface $result) {
     $classes = ['facet-item'];
     $items = $this->prepareLink($result);
 
@@ -232,6 +233,8 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
       '#value' => $result->getDisplayValue(),
       '#show_count' => $this->getConfiguration()['show_numbers'] && ($count !== NULL),
       '#count' => $count,
+      '#facet' => $result->getFacet(),
+      '#raw_value' => $result->getRawValue(),
     ];
   }
 
@@ -240,6 +243,13 @@ abstract class WidgetPluginBase extends PluginBase implements WidgetPluginInterf
    */
   public function isPropertyRequired($name, $type) {
     return FALSE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function supportsFacet(FacetInterface $facet) {
+    return TRUE;
   }
 
 }

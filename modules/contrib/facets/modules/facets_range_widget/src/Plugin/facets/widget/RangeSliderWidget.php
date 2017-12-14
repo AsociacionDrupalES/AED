@@ -54,8 +54,8 @@ class RangeSliderWidget extends SliderWidget {
   /**
    * {@inheritdoc}
    */
-  public function getQueryType(array $query_types) {
-    return $query_types['range'];
+  public function getQueryType() {
+    return 'range';
   }
 
 }

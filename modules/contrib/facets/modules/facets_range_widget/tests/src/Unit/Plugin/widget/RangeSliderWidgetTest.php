@@ -3,14 +3,13 @@
 namespace Drupal\Tests\facets_range_widget\Unit\Plugin\widget;
 
 use Drupal\facets_range_widget\Plugin\facets\widget\RangeSliderWidget;
-use Drupal\Tests\facets\Unit\Plugin\widget\WidgetTestBase;
 
 /**
  * Unit test for widget.
  *
  * @group facets
  */
-class RangeSliderWidgetTest extends WidgetTestBase {
+class RangeSliderWidgetTest extends SliderWidgetTest {
 
   /**
    * {@inheritdoc}
@@ -44,6 +43,24 @@ class RangeSliderWidgetTest extends WidgetTestBase {
       'step' => 1,
     ];
     $this->assertEquals($expected, $default_config);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function testIsPropertyRequired() {
+    $this->assertFalse($this->widget->isPropertyRequired('llama', 'owl'));
+    $this->assertTrue($this->widget->isPropertyRequired('range_slider', 'processors'));
+    $this->assertTrue($this->widget->isPropertyRequired('show_only_one_result', 'settings'));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function testBuild() {
+    $build = parent::testBuild();
+    $this->assertTrue($build['range']);
+    $this->assertEquals([3, 19999], $build['values']);
   }
 
 }

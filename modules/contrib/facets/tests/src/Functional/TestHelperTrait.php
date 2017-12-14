@@ -64,7 +64,7 @@ trait TestHelperTrait {
   protected function assertNoFacetBlocksAppear() {
     foreach ($this->blocks as $block) {
       $this->assertFalse($this->xpath('//div[@id = :id]', [':id' => 'block-' . $block->id()]));
-      $this->assertNoText($block->label());
+      $this->assertSession()->pageTextNotContains($block->label());
     }
   }
 
@@ -74,7 +74,7 @@ trait TestHelperTrait {
   protected function assertFacetBlocksAppear() {
     foreach ($this->blocks as $block) {
       $this->xpath('//div[@id = :id]', [':id' => 'block-' . $block->id()]);
-      $this->assertText($block->label());
+      $this->assertSession()->pageTextContains($block->label());
     }
   }
 
@@ -91,8 +91,8 @@ trait TestHelperTrait {
    *   Another string.
    */
   protected function assertStringPosition($x, $y) {
-    $this->assertText($x);
-    $this->assertText($y);
+    $this->assertSession()->pageTextContains($x);
+    $this->assertSession()->pageTextContains($y);
 
     $x_position = strpos($this->getTextContent(), $x);
     $y_position = strpos($this->getTextContent(), $y);
@@ -109,16 +109,16 @@ trait TestHelperTrait {
    */
   protected function checkClickedFacetUrl(Url $url) {
     $this->drupalGet('search-api-test-fulltext');
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->assertFacetLabel('item');
     $this->assertFacetLabel('article');
 
     $this->clickLink('item');
 
-    $this->assertResponse(200);
+    $this->assertSession()->statusCodeEquals(200);
     $this->checkFacetIsActive('item');
     $this->assertFacetLabel('article');
-    $this->assertUrl($url);
+    $this->assertSession()->addressEquals($url);
   }
 
   /**
@@ -157,6 +157,19 @@ trait TestHelperTrait {
     }
 
     return $links;
+  }
+
+  /**
+   * Convert facet name to machine name.
+   *
+   * @param string $facet_name
+   *   The name of the facet.
+   *
+   * @return string
+   *   The facet name changed to a machine name.
+   */
+  protected function convertNameToMachineName($facet_name) {
+    return preg_replace('@[^a-zA-Z0-9_]+@', '_', strtolower($facet_name));
   }
 
 }

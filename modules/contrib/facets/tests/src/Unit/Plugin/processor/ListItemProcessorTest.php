@@ -2,8 +2,12 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
+use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\Core\Entity\EntityTypeBundleInfo;
+use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\FacetSource\FacetSourcePluginInterface;
+use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\facets\Plugin\facets\processor\ListItemProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\field\Entity\FieldStorageConfig;
@@ -39,10 +43,11 @@ class ListItemProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     $this->results = [
-      new Result(1, 1, 10),
-      new Result(2, 2, 5),
-      new Result(3, 3, 15),
+      new Result($facet, 1, 1, 10),
+      new Result($facet, 2, 2, 5),
+      new Result($facet, 3, 3, 15),
     ];
 
     $config_manager = $this->getMockBuilder(ConfigManager::class)
@@ -57,7 +62,35 @@ class ListItemProcessorTest extends UnitTestCase {
       ->disableOriginalConstructor()
       ->getMock();
 
+    // Create a search api based facet source and make the property definition
+    // return null.
+    $data_definition = $this->getMock(ComplexDataDefinitionInterface::class);
+    $data_definition->expects($this->any())
+      ->method('getPropertyDefinition')
+      ->willReturn(NULL);
+    $facet_source = $this->getMockBuilder(FacetSourcePluginInterface::class)
+      ->disableOriginalConstructor()
+      ->getMock();
+    $facet_source->expects($this->any())
+      ->method('getDataDefinition')
+      ->willReturn($data_definition);
+
+    // Add the plugin manager.
+    $pluginManager = $this->getMockBuilder(FacetSourcePluginManager::class)
+      ->disableOriginalConstructor()
+      ->getMock();
+    $pluginManager->expects($this->any())
+      ->method('hasDefinition')
+      ->willReturn(TRUE);
+    $pluginManager->expects($this->any())
+      ->method('createInstance')
+      ->willReturn($facet_source);
+
     $this->processor = new ListItemProcessor([], 'list_item', [], $config_manager, $entity_field_manager, $entity_type_bundle_info);
+
+    $container = new ContainerBuilder();
+    $container->set('plugin.manager.facets.facet_source', $pluginManager);
+    \Drupal::setContainer($container);
   }
 
   /**
@@ -90,12 +123,14 @@ class ListItemProcessorTest extends UnitTestCase {
     // Config entity field facet.
     $module_field_facet = new Facet([], 'facets_facet');
     $module_field_facet->setFieldIdentifier('test_facet');
+    $module_field_facet->setFacetSourceId('llama_source');
     $module_field_facet->setResults($this->results);
     $module_field_facet->addProcessor([
       'processor_id' => 'list_item',
       'weights' => [],
       'settings' => [],
     ]);
+
     /* @var \Drupal\facets\Result\Result[] $module_field_facet- */
     $module_field_results = $processor->build($module_field_facet, $this->results);
 
@@ -133,6 +168,7 @@ class ListItemProcessorTest extends UnitTestCase {
     // Config entity field facet.
     $module_field_facet = new Facet([], 'facets_facet');
     $module_field_facet->setFieldIdentifier('test_facet');
+    $module_field_facet->setFacetSourceId('llama_source');
     $module_field_facet->setResults($this->results);
     $module_field_facet->addProcessor([
       'processor_id' => 'list_item',
@@ -179,6 +215,7 @@ class ListItemProcessorTest extends UnitTestCase {
     // Base prop facet.
     $base_prop_facet = new Facet([], 'facets_facet');
     $base_prop_facet->setFieldIdentifier('test_facet_baseprop');
+    $base_prop_facet->setFacetSourceId('llama_source');
     $base_prop_facet->setResults($this->results);
     $base_prop_facet->addProcessor([
       'processor_id' => 'list_item',

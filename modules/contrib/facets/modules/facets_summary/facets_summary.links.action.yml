@@ -2,4 +2,4 @@ entity.facets_summary.add_form:
   route_name: entity.facets_summary.add_form
   title: 'Add facet summary'
   appears_on:
-    - facets.overview
+    - entity.facets_facet.collection

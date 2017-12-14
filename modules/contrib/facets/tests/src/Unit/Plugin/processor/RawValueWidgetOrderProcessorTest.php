@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\RawValueWidgetOrderProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\Tests\UnitTestCase;
@@ -33,14 +34,15 @@ class RawValueWidgetOrderProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     $this->originalResults = [
-      new Result('C', 'thetans', 10),
-      new Result('B', 'xenu', 5),
-      new Result('A', 'Tom', 15),
-      new Result('D', 'Hubbard', 666),
-      new Result('E', 'FALSE', 1),
-      new Result('G', '1977', 20),
-      new Result('F', '2', 22),
+      new Result($facet, 'C', 'thetans', 10),
+      new Result($facet, 'B', 'xenu', 5),
+      new Result($facet, 'A', 'Tom', 15),
+      new Result($facet, 'D', 'Hubbard', 666),
+      new Result($facet, 'E', 'FALSE', 1),
+      new Result($facet, 'G', '1977', 20),
+      new Result($facet, 'F', '2', 22),
     ];
 
     $this->processor = new RawValueWidgetOrderProcessor([], 'raw_value_widget_order', []);

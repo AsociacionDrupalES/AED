@@ -10,7 +10,7 @@ use Drupal\facets_summary\FacetsSummaryInterface;
 interface BuildProcessorInterface extends ProcessorInterface {
 
   /**
-   * Is able to alter the render array.
+   * Alter the items in the summary before creating the renderable array.
    *
    * @param \Drupal\facets_summary\FacetsSummaryInterface $facet
    *   The facet being changed.

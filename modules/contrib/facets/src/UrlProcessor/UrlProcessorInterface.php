@@ -34,8 +34,8 @@ interface UrlProcessorInterface {
   /**
    * Sets active items.
    *
-   * Makes sure that the items that are already set in the current request are
-   * remembered when building the facet's urls.
+   * Is called after the url processor is ready retrieving and altering the
+   * active filters to let the facet know about the active items.
    *
    * @param \Drupal\facets\FacetInterface $facet
    *   The facet that is edited.
@@ -57,5 +57,26 @@ interface UrlProcessorInterface {
    *   A string containing the url separator.
    */
   public function getSeparator();
+
+  /**
+   * Returns the active filters.
+   *
+   * @return array
+   *   An array containing the active filters with key being the facet id and
+   *   value being an array of raw values.
+   */
+  public function getActiveFilters();
+
+  /**
+   * Set active filters.
+   *
+   * Allows overriding the active filters, which initially are set by the url
+   * processor logic, to build custom urls.
+   *
+   * @param array $active_filters
+   *   An array containing the active filters with key being the facet id and
+   *   value being an array of raw values.
+   */
+  public function setActiveFilters(array $active_filters);
 
 }

@@ -13,11 +13,12 @@ use Drupal\facets_summary\Processor\ProcessorPluginManager;
 use Drupal\facets_summary\FacetsSummaryInterface;
 
 /**
- * The facet manager.
+ * The facet summary manager.
  *
- * The manager is responsible for interactions with the Search backend, such as
- * altering the query, it is also responsible for executing and building the
- * facet. It is also responsible for running the processors.
+ * The manager wires everything together, it's responsible for gather the
+ * results and creating the summary.
+ * It also runs the processors and returns a renderable array from the build
+ * method.
  */
 class DefaultFacetsSummaryManager {
 
@@ -101,6 +102,10 @@ class DefaultFacetsSummaryManager {
     );
 
     foreach ($facets as $facet) {
+      // Do not build the facet in summary if facet is not rendered.
+      if (!$facet->getActiveItems()) {
+        continue;
+      }
       // For clarity, process facets is called each build.
       // The first facet therefor will trigger the processing. Note that
       // processing is done only once, so repeatedly calling this method will
@@ -155,6 +160,8 @@ class DefaultFacetsSummaryManager {
           '#show_count' => $show_count,
           '#count' => $result->getCount(),
           '#is_active' => TRUE,
+          '#facet' => $result->getFacet(),
+          '#raw_value' => $result->getRawValue(),
         ];
         $item = (new Link($item, $result->getUrl()))->toRenderable();
         $items[] = $item;

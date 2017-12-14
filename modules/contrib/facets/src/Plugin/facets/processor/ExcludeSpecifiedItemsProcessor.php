@@ -58,7 +58,7 @@ class ExcludeSpecifiedItemsProcessor extends ProcessorPluginBase implements Buil
 
     $build['exclude'] = [
       '#title' => $this->t('Exclude items'),
-      '#type' => 'textfield',
+      '#type' => 'textarea',
       '#default_value' => $config['exclude'],
       '#description' => $this->t("Comma separated list of titles or values that should be excluded, matching either an item's title or value."),
     ];

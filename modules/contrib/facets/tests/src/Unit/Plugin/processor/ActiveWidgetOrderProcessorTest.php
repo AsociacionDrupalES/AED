@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\ActiveWidgetOrderProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\Tests\UnitTestCase;
@@ -33,13 +34,14 @@ class ActiveWidgetOrderProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     /** @var \Drupal\facets\Result\Result[] $original_results */
     $original_results = [
-      new Result('Boxer', 'Boxer', 10),
-      new Result('Old Major', 'Old Major', 3),
-      new Result('Minimus', 'Minimus', 60),
-      new Result('Mr Whymper', 'Mr. Whymper', 1),
-      new Result('Clover', 'Clover', 50),
+      new Result($facet, 'Boxer', 'Boxer', 10),
+      new Result($facet, 'Old Major', 'Old Major', 3),
+      new Result($facet, 'Minimus', 'Minimus', 60),
+      new Result($facet, 'Mr Whymper', 'Mr. Whymper', 1),
+      new Result($facet, 'Clover', 'Clover', 50),
     ];
 
     $original_results[1]->setActiveState(TRUE);

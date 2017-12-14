@@ -94,8 +94,6 @@ interface FacetInterface extends ConfigEntityInterface {
   /**
    * Returns the field name of the facet as used in the index.
    *
-   * @TODO: Check if fieldIdentifier can be used as well!
-   *
    * @return string
    *   The name of the facet.
    */
@@ -204,6 +202,14 @@ interface FacetInterface extends ConfigEntityInterface {
    * Returns the limit number for facet items.
    */
   public function getHardLimit();
+
+  /**
+   * Returns the data definition from the facet field.
+   *
+   * @return \Drupal\Core\TypedData\DataDefinitionInterface
+   *   A typed data definition.
+   */
+  public function getDataDefinition();
 
   /**
    * Returns the value of the exclude boolean.

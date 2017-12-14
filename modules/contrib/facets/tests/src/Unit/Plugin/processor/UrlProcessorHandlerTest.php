@@ -3,8 +3,13 @@
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\Exception\InvalidProcessorException;
+use Drupal\facets\FacetSource\FacetSourcePluginManager;
 use Drupal\facets\Plugin\facets\processor\UrlProcessorHandler;
+use Drupal\facets\UrlProcessor\UrlProcessorInterface;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -18,7 +23,7 @@ class UrlProcessorHandlerTest extends UnitTestCase {
    * Tests that the processor correctly throws an exception.
    */
   public function testEmptyProcessorConfiguration() {
-    $this->setExpectedException('\Drupal\facets\Exception\InvalidProcessorException', "The UrlProcessorHandler doesn't have the required 'facet' in the configuration array.");
+    $this->setExpectedException(InvalidProcessorException::class, "The UrlProcessorHandler doesn't have the required 'facet' in the configuration array.");
     new UrlProcessorHandler([], 'test', []);
   }
 
@@ -26,7 +31,7 @@ class UrlProcessorHandlerTest extends UnitTestCase {
    * Tests that the processor correctly throws an exception.
    */
   public function testInvalidProcessorConfiguration() {
-    $this->setExpectedException('\Drupal\facets\Exception\InvalidProcessorException', "The UrlProcessorHandler doesn't have the required 'facet' in the configuration array.");
+    $this->setExpectedException(InvalidProcessorException::class, "The UrlProcessorHandler doesn't have the required 'facet' in the configuration array.");
     new UrlProcessorHandler(['facet' => new \stdClass()], 'test', []);
   }
 
@@ -91,19 +96,19 @@ class UrlProcessorHandlerTest extends UnitTestCase {
    * Sets up a container.
    */
   protected function createContainer() {
-    $url_processor = $this->getMockBuilder('\Drupal\facets\UrlProcessor\UrlProcessorInterface')
+    $url_processor = $this->getMockBuilder(UrlProcessorInterface::class)
       ->disableOriginalConstructor()
       ->getMock();
 
-    $manager = $this->getMockBuilder('\Drupal\facets\FacetSource\FacetSourcePluginManager')
+    $manager = $this->getMockBuilder(FacetSourcePluginManager::class)
       ->disableOriginalConstructor()
       ->getMock();
     $manager->expects($this->exactly(1))
       ->method('createInstance')
       ->willReturn($url_processor);
 
-    $storage = $this->getMock('\Drupal\Core\Entity\EntityStorageInterface');
-    $em = $this->getMockBuilder('\Drupal\Core\Entity\EntityTypeManagerInterface')
+    $storage = $this->getMock(EntityStorageInterface::class);
+    $em = $this->getMockBuilder(EntityTypeManagerInterface::class)
       ->disableOriginalConstructor()
       ->getMock();
     $em->expects($this->exactly(1))

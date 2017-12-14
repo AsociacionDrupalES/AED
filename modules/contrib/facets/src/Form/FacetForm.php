@@ -31,13 +31,6 @@ class FacetForm extends EntityForm {
   protected $facet;
 
   /**
-   * The entity manager.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The processor manager.
    *
    * @var \Drupal\facets\Processor\ProcessorPluginManager
@@ -86,16 +79,6 @@ class FacetForm extends EntityForm {
   }
 
   /**
-   * Returns the widget plugin manager.
-   *
-   * @return \Drupal\facets\Widget\WidgetPluginManager
-   *   The widget plugin manager.
-   */
-  protected function getWidgetPluginManager() {
-    return $this->widgetPluginManager ?: \Drupal::service('plugin.manager.facets.widget');
-  }
-
-  /**
    * Builds the configuration forms for all selected widgets.
    *
    * @param array $form
@@ -117,7 +100,7 @@ class FacetForm extends EntityForm {
     $widget = $facet->getWidgetInstance();
 
     $arguments = ['%widget' => $widget->getPluginDefinition()['label']];
-    if (!$config_form = $widget->buildConfigurationForm([], $form_state, $this->getEntity())) {
+    if (!$config_form = $widget->buildConfigurationForm([], $form_state, $facet)) {
       $type = 'details';
       $config_form = ['#markup' => $this->t('%widget widget needs no configuration.', $arguments)];
     }
@@ -140,12 +123,23 @@ class FacetForm extends EntityForm {
 
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $this->entity;
-    $widget = $facet->getWidgetInstance();
 
     $widget_options = [];
-    foreach ($this->getWidgetPluginManager()->getDefinitions() as $widget_id => $definition) {
+    foreach ($this->widgetPluginManager->getDefinitions() as $widget_id => $definition) {
       $widget_options[$widget_id] = !empty($definition['label']) ? $definition['label'] : $widget_id;
     }
+
+    // Filters all the available widgets to make sure that only those that
+    // this facet applies for are enabled.
+    foreach ($widget_options as $widget_id => $label) {
+      $widget = $this->widgetPluginManager->createInstance($widget_id);
+      if (!$widget->supportsFacet($facet)) {
+        unset($widget_options[$widget_id]);
+      }
+    }
+    unset($widget_id, $label, $widget);
+
+    $widget = $facet->getWidgetInstance();
     $form['widget'] = [
       '#type' => 'radios',
       '#title' => $this->t('Widget'),
@@ -195,10 +189,24 @@ class FacetForm extends EntityForm {
     }
     $enabled_processors = $facet->getProcessors(TRUE);
 
+    // Filters all the available processors to make sure that only those that
+    // this facet applies for are enabled.
+    foreach ($all_processors as $processor_id => $processor) {
+      if (!$processor->supportsFacet($facet)) {
+        unset($all_processors[$processor_id]);
+      }
+    }
+    unset($processor_id, $processor);
+
     $stages = $this->processorPluginManager->getProcessingStages();
     $processors_by_stage = [];
     foreach ($stages as $stage => $definition) {
-      $processors_by_stage[$stage] = $facet->getProcessorsByStage($stage, FALSE);
+      foreach ($facet->getProcessorsByStage($stage, FALSE) as $processor_id => $processor) {
+        if ($processor->supportsFacet($facet)) {
+          $processors_by_stage[$stage][$processor_id] = $processor;
+        }
+      }
+      unset($processor_id, $processor);
     }
 
     $form['#tree'] = TRUE;
@@ -598,8 +606,14 @@ class FacetForm extends EntityForm {
     elseif (preg_match('/[^a-zA-Z0-9_~\.\-]/', $url_alias)) {
       $form_state->setErrorByName('url_alias', $this->t('The URL alias contains characters that are not allowed.'));
     }
-    // @todo: validate if url_alias is already used by another facet with the
-    // same facet source.
+
+    $already_enabled_facets_on_same_source = \Drupal::service('facets.manager')->getFacetsByFacetSourceId($facet->getFacetSourceId());
+    /** @var \Drupal\facets\FacetInterface $other */
+    foreach ($already_enabled_facets_on_same_source as $other) {
+      if ($other->getUrlAlias() === $url_alias && $other->id() !== $facet->id()) {
+        $form_state->setErrorByName('url_alias', $this->t('This alias is already in use for another facet defined on the same source.'));
+      }
+    }
   }
 
   /**
@@ -609,8 +623,6 @@ class FacetForm extends EntityForm {
     $values = $form_state->getValues();
 
     // Store processor settings.
-    // @todo Go through all available processors, enable/disable with method on
-    //   processor plugin to allow reaction.
     /** @var \Drupal\facets\FacetInterface $facet */
     $facet = $this->entity;
 

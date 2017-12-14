@@ -30,7 +30,7 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->setUpExampleStructure();
     $this->insertExampleContent();
-    $this->assertEqual($this->indexItems($this->indexId), 5, '5 items were indexed.');
+    $this->assertEquals(5, $this->indexItems($this->indexId), '5 items were indexed.');
 
     // Make absolutely sure the ::$blocks variable doesn't pass information
     // along between tests.
@@ -42,7 +42,7 @@ class IntegrationTest extends FacetsTestBase {
    */
   public function testFramework() {
     $this->drupalGet('admin/config/search/facets');
-    $this->assertNoText('Facets Summary');
+    $this->assertSession()->pageTextNotContains('Facets Summary');
 
     $values = [
       'name' => 'Owl',
@@ -53,30 +53,30 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalPostForm(NULL, [], 'Save');
 
     $this->drupalGet('admin/config/search/facets');
-    $this->assertText('Facets Summary');
-    $this->assertText('Owl');
+    $this->assertSession()->pageTextContains('Facets Summary');
+    $this->assertSession()->pageTextContains('Owl');
 
     $this->drupalGet('admin/config/search/facets/facet-summary/owl/edit');
-    $this->assertText('No facets found.');
+    $this->assertSession()->pageTextContains('No facets found.');
 
     $this->createFacet('Llama', 'llama');
     $this->drupalGet('admin/config/search/facets');
-    $this->assertText('Llama');
+    $this->assertSession()->pageTextContains('Llama');
 
     // Go back to the facet summary and check that the facets are not checked by
     // default and that they show up in the list here.
     $this->drupalGet('admin/config/search/facets/facet-summary/owl/edit');
-    $this->assertNoText('No facets found.');
-    $this->assertText('Llama');
-    $this->assertNoFieldChecked('edit-facets-llama-checked');
+    $this->assertSession()->pageTextNotContains('No facets found.');
+    $this->assertSession()->pageTextContains('Llama');
+    $this->assertSession()->checkboxNotChecked('edit-facets-llama-checked');
 
     // Post the form and check that no facets are checked after saving the form.
     $this->drupalPostForm(NULL, [], 'Save');
-    $this->assertNoFieldChecked('edit-facets-llama-checked');
+    $this->assertSession()->checkboxNotChecked('edit-facets-llama-checked');
 
     // Enable a facet and check it's status after saving.
     $this->drupalPostForm(NULL, ['facets[llama][checked]' => TRUE], 'Save');
-    $this->assertFieldChecked('edit-facets-llama-checked');
+    $this->assertSession()->checkboxChecked('edit-facets-llama-checked');
 
     $this->configureShowCountProcessor();
     $this->configureResetFacetsProcessor();
@@ -119,8 +119,8 @@ class IntegrationTest extends FacetsTestBase {
     $block = $this->drupalPlaceBlock('facets_summary_block:owl', $block);
 
     $this->drupalGet('search-api-test-fulltext');
-    $this->assertText('Displaying 5 search results');
-    $this->assertText($block->label());
+    $this->assertSession()->pageTextContains('Displaying 5 search results');
+    $this->assertSession()->pageTextContains($block->label());
     $this->assertFacetBlocksAppear();
 
     $this->clickLink('apple');
@@ -147,8 +147,8 @@ class IntegrationTest extends FacetsTestBase {
     $this->drupalPostForm('admin/config/search/facets/facet-summary/owl/edit', $summaries, 'Save');
 
     $this->drupalGet('search-api-test-fulltext');
-    $this->assertText('Displaying 5 search results');
-    $this->assertText($block->label());
+    $this->assertSession()->pageTextContains('Displaying 5 search results');
+    $this->assertSession()->pageTextContains($block->label());
     $this->assertFacetBlocksAppear();
 
     $this->clickLink('apple');
@@ -167,6 +167,58 @@ class IntegrationTest extends FacetsTestBase {
 
     $this->checkShowCountProcessor();
     $this->checkResetFacetsProcessor();
+  }
+
+  /**
+   * Tests "Show a summary of all selected facets".
+   *
+   * Regression test for https://www.drupal.org/node/2878851.
+   */
+  public function testShowSummary() {
+    // Create facets.
+    $this->createFacet('Giraffe', 'giraffe', 'keywords');
+    // Clear all the caches between building the 2 facets - because things fail
+    // otherwise.
+    $this->resetAll();
+    $this->createFacet('Llama', 'llama');
+
+    // Add a summary.
+    $values = [
+      'name' => 'Owlß',
+      'id' => 'owl',
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+
+    // Edit the summary and enable the facets.
+    $summaries = [
+      'facets[giraffe][checked]' => TRUE,
+      'facets[giraffe][label]' => 'Summary giraffe',
+      'facets[llama][checked]' => TRUE,
+      'facets[llama][label]' => 'Summary llama',
+      'facets_summary_settings[show_summary][status]' => TRUE,
+    ];
+    $this->drupalPostForm(NULL, $summaries, 'Save');
+
+    $block = [
+      'region' => 'footer',
+      'id' => str_replace('_', '-', 'owl'),
+      'weight' => 50,
+    ];
+    $block = $this->drupalPlaceBlock('facets_summary_block:owl', $block);
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertText('Displaying 5 search results');
+    $this->clickLink('item');
+
+    /** @var \Behat\Mink\Element\NodeElement[] $list_items */
+    $list_items = $this->getSession()
+      ->getPage()
+      ->findById('block-' . $block->id())
+      ->findAll('css', 'li');
+    $this->assertCount(2, $list_items);
+    $this->assertEquals('Summary llama: item', $list_items[0]->getText());
+    $this->assertEquals('(-) item', $list_items[1]->getText());
   }
 
   /**
@@ -275,6 +327,44 @@ class IntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests for deleting a block.
+   */
+  public function testBlockDelete() {
+    $name = 'Owl';
+    $id = 'owl';
+
+    $values = [
+      'name' => $name,
+      'id' => $id,
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+    $this->drupalPostForm(NULL, [], 'Save');
+
+    $block_settings = [
+      'region' => 'footer',
+      'id' => $id,
+    ];
+    $block = $this->drupalPlaceBlock('facets_summary_block:' . $id, $block_settings);
+
+    $this->drupalGet('admin/structure/block');
+    $this->assertSession()->pageTextContains($block->label());
+
+    $this->drupalGet('admin/structure/block/library/classy');
+    $this->assertSession()->pageTextContains($name);
+
+    // Check for the warning message that additional config entities will be
+    // deleted if the facet summary is removed.
+    $this->drupalGet('admin/config/search/facets/facet-summary/' . $id . '/delete');
+    $this->assertSession()->pageTextContains('The listed configuration will be deleted.');
+    $this->assertSession()->pageTextContains($block->label());
+    $this->drupalPostForm(NULL, [], 'Delete');
+
+    $this->drupalGet('admin/structure/block/library/classy');
+    $this->assertSession()->pageTextNotContains($name);
+  }
+
+  /**
    * Tests configuring show_count processor.
    */
   protected function configureShowCountProcessor() {
@@ -336,7 +426,12 @@ class IntegrationTest extends FacetsTestBase {
     $this->resetAll();
 
     // Place a block and test show_count processor.
-    $this->drupalPlaceBlock('facets_summary_block:show_count', ['region' => 'footer', 'id' => 'show-count']);
+    $blockConfig = [
+      'region' => 'footer',
+      'id' => 'show-count',
+      'label' => 'show-count-block',
+    ];
+    $this->drupalPlaceBlock('facets_summary_block:show_count', $blockConfig);
     $this->drupalGet('search-api-test-fulltext');
 
     $this->assertSession()->pageTextContains('5 results found');
@@ -386,19 +481,88 @@ class IntegrationTest extends FacetsTestBase {
     $this->resetAll();
 
     // Place a block and test reset facets processor.
-    $this->drupalPlaceBlock('facets_summary_block:reset_facets', ['region' => 'footer', 'id' => 'reset-facets']);
+    $blockConfig = [
+      'label' => 'Reset block',
+      'region' => 'footer',
+      'id' => 'reset-facets',
+    ];
+    $this->drupalPlaceBlock('facets_summary_block:reset_facets', $blockConfig);
     $this->drupalGet('search-api-test-fulltext');
 
-    $this->assertSession()->pageTextContains(t('Displaying 5 search results'));
-    $this->assertSession()->pageTextNotContains(t('Reset facets'));
+    $this->assertSession()->pageTextContains('Displaying 5 search results');
+    $this->assertSession()->pageTextNotContains('Reset facets');
 
     $this->clickLink('apple');
-    $this->assertSession()->pageTextContains(t('Displaying 2 search results'));
-    $this->assertSession()->pageTextContains(t('Reset facets'));
+    $this->assertSession()->pageTextContains('Displaying 2 search results');
+    $this->assertSession()->pageTextContains('Reset facets');
 
-    $this->clickLink(t('Reset facets'));
-    $this->assertSession()->pageTextContains(t('Displaying 5 search results'));
-    $this->assertSession()->pageTextNotContains(t('Reset facets'));
+    $this->clickLink('Reset facets');
+    $this->assertSession()->pageTextContains('Displaying 5 search results');
+    $this->assertSession()->pageTextNotContains('Reset facets');
+  }
+
+  /**
+   * Tests  first facet doesn't have any item in for a particular filter.
+   */
+  public function testEmptyFacetLinks() {
+    // Create facets.
+    $this->createFacet('Kepler-442b', 'category', 'category');
+    // Clear all the caches between building the 2 facets - because things fail
+    // otherwise.
+    $this->createFacet('Kepler-438b', 'keywords', 'keywords');
+    $this->resetAll();
+
+    // Create a new item, make sure it doesn't have a "keywords" property at
+    // all.
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+    $this->entities[] = $entity_test_storage->create([
+      'name' => 'Test with no category',
+      'body' => 'test test',
+      'type' => 'item',
+      'keywords' => ['rotten orange'],
+    ])->save();
+
+    $this->indexItems($this->indexId);
+
+    // Add a facets summary entity.
+    $values = [
+      'name' => 'Kepler planets',
+      'id' => 'kepler',
+      'facet_source_id' => 'search_api:views_page__search_api_test_view__page_1',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/add-facet-summary', $values, 'Save');
+
+    // Place the block.
+    $block = [
+      'region' => 'footer',
+      'id' => 'kplanets',
+      'weight' => -10,
+    ];
+    $summary_block = $this->drupalPlaceBlock('facets_summary_block:kepler', $block);
+
+    // Enable the facets for the summary.
+    $summaries = [
+      'facets[category][checked]' => TRUE,
+      'facets[category][weight]' => 0,
+      'facets[keywords][checked]' => TRUE,
+      'facets[keywords][weight]' => 1,
+      'facets_summary_settings[reset_facets][status]' => 1,
+      'facets_summary_settings[reset_facets][settings][link_text]' => 'Reset',
+    ];
+    $this->drupalPostForm('admin/config/search/facets/facet-summary/kepler/edit', $summaries, 'Save');
+
+    // Go to the search view, and check that the summary, as well as the facets
+    // are shown on the page.
+    $this->drupalGet('search-api-test-fulltext');
+    $web_assert = $this->assertSession();
+    $web_assert->pageTextContains('Displaying 6 search results');
+    $this->assertFacetBlocksAppear();
+    $web_assert->pageTextContains($summary_block->label());
+
+    // Filter on the item type.
+    $this->clickLink('rotten orange');
+    $web_assert->pageTextContains('Test with no category');
   }
 
 }

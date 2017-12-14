@@ -93,7 +93,7 @@ class WidgetPluginManagerTest extends UnitTestCase {
   public function testConstruct() {
     $namespaces = new ArrayObject();
     $sut = new WidgetPluginManager($namespaces, $this->cache, $this->moduleHandler, $this->translator);
-    $this->assertInstanceOf('\Drupal\facets\Widget\WidgetPluginManager', $sut);
+    $this->assertInstanceOf(WidgetPluginManager::class, $sut);
   }
 
   /**

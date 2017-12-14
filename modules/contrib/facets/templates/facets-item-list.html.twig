@@ -15,27 +15,32 @@
  *   string or render array.
  * - context: A list of contextual data associated with the list. May contain:
  *   - list_style: The ID of the widget plugin this facet uses.
+ * - facet: The facet for this result item.
+ *   - id: the machine name for the facet.
+ *   - label: The facet label.
  *
  * @see facets_preprocess_facets_item_list()
  *
  * @ingroup themeable
  */
 #}
-{% if context.list_style %}
-  {%- set attributes = attributes.addClass('item-list__' ~ context.list_style) %}
-{% endif %}
-{% if items or empty %}
-  {%- if title is not empty -%}
-    <h3>{{ title }}</h3>
-  {%- endif -%}
+<div class="facets-widget- {{- context.list_style -}} ">
+  {% if context.list_style %}
+    {%- set attributes = attributes.addClass('item-list__' ~ context.list_style) %}
+  {% endif %}
+  {% if items or empty %}
+    {%- if title is not empty -%}
+      <h3>{{ title }}</h3>
+    {%- endif -%}
 
-  {%- if items -%}
-    <{{ list_type }}{{ attributes }}>
-      {%- for item in items -%}
-        <li{{ item.attributes }}>{{ item.value }}</li>
-      {%- endfor -%}
-    </{{ list_type }}>
-  {%- else -%}
-    {{- empty -}}
-  {%- endif -%}
-{%- endif %}
+    {%- if items -%}
+      <{{ list_type }}{{ attributes }}>
+        {%- for item in items -%}
+          <li{{ item.attributes }}>{{ item.value }}</li>
+        {%- endfor -%}
+      </{{ list_type }}>
+    {%- else -%}
+      {{- empty -}}
+    {%- endif -%}
+  {%- endif %}
+</div>

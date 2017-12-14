@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
+use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\CountWidgetOrderProcessor;
 use Drupal\facets\Result\Result;
 use Drupal\Tests\UnitTestCase;
@@ -33,10 +34,11 @@ class CountWidgetOrderProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     $this->originalResults = [
-      new Result('llama', 'llama', 10),
-      new Result('badger', 'badger', 5),
-      new Result('duck', 'duck', 15),
+      new Result($facet, 'llama', 'llama', 10),
+      new Result($facet, 'badger', 'badger', 5),
+      new Result($facet, 'duck', 'duck', 15),
     ];
 
     $this->processor = new CountWidgetOrderProcessor([], 'count_widget_order', []);

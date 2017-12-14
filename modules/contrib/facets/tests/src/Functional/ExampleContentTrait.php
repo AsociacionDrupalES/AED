@@ -75,7 +75,7 @@ trait ExampleContentTrait {
     $count = \Drupal::entityQuery('entity_test_mulrev_changed')
       ->count()
       ->execute() - $count;
-    $this->assertEqual($count, 5, "$count items inserted.");
+    $this->assertEquals($count, 5, "$count items inserted.");
   }
 
   /**

@@ -3,7 +3,9 @@
 namespace Drupal\Tests\facets\Unit\Plugin\query_type;
 
 use Drupal\facets\Entity\Facet;
+use Drupal\facets\FacetInterface;
 use Drupal\facets\Plugin\facets\query_type\SearchApiString;
+use Drupal\facets\Result\ResultInterface;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\Tests\UnitTestCase;
 
@@ -42,13 +44,13 @@ class SearchApiStringTest extends UnitTestCase {
     );
 
     $built_facet = $query_type->build();
-    $this->assertInstanceOf('\Drupal\facets\FacetInterface', $built_facet);
+    $this->assertInstanceOf(FacetInterface::class, $built_facet);
 
     $results = $built_facet->getResults();
     $this->assertInternalType('array', $results);
 
     foreach ($original_results as $k => $result) {
-      $this->assertInstanceOf('\Drupal\facets\Result\ResultInterface', $results[$k]);
+      $this->assertInstanceOf(ResultInterface::class, $results[$k]);
       $this->assertEquals($result['count'], $results[$k]->getCount());
       $this->assertEquals($result['filter'], $results[$k]->getDisplayValue());
     }
@@ -83,13 +85,13 @@ class SearchApiStringTest extends UnitTestCase {
     );
 
     $built_facet = $query_type->build();
-    $this->assertInstanceOf('\Drupal\facets\FacetInterface', $built_facet);
+    $this->assertInstanceOf(FacetInterface::class, $built_facet);
 
     $results = $built_facet->getResults();
     $this->assertInternalType('array', $results);
 
     foreach ($original_results as $k => $result) {
-      $this->assertInstanceOf('\Drupal\facets\Result\ResultInterface', $results[$k]);
+      $this->assertInstanceOf(ResultInterface::class, $results[$k]);
       $this->assertEquals($result['count'], $results[$k]->getCount());
       $this->assertEquals($result['filter'], $results[$k]->getDisplayValue());
     }
@@ -112,7 +114,7 @@ class SearchApiStringTest extends UnitTestCase {
     );
 
     $built_facet = $query_type->build();
-    $this->assertInstanceOf('\Drupal\facets\FacetInterface', $built_facet);
+    $this->assertInstanceOf(FacetInterface::class, $built_facet);
 
     $results = $built_facet->getResults();
     $this->assertInternalType('array', $results);

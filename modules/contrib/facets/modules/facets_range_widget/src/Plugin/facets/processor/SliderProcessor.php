@@ -13,7 +13,7 @@ use Drupal\facets\Result\Result;
  * @FacetsProcessor(
  *   id = "slider",
  *   label = @Translation("Slider"),
- *   description = @Translation("Add results for all the steps beteen min and max range."),
+ *   description = @Translation("Add results for all the steps between min and max range."),
  *   stages = {
  *     "post_query" = 5
  *   }
@@ -36,7 +36,14 @@ class SliderProcessor extends ProcessorPluginBase implements PostQueryProcessorI
         'count' => (int) $result->getCount(),
       ];
     }
+    uasort($simple_results, function ($a, $b) {
+      if ($a['value'] === $b['value']) {
+        return 0;
+      }
+      return $a['value'] < $b['value'] ? -1 : 1;
+    });
 
+    $step = $config['step'];
     if ($config['min_type'] == 'fixed') {
       $min = $config['min_value'];
       $max = $config['max_value'];
@@ -44,16 +51,19 @@ class SliderProcessor extends ProcessorPluginBase implements PostQueryProcessorI
     else {
       $min = reset($simple_results)['value'];
       $max = end($simple_results)['value'];
+      // If max is not divisible by step, we should add the remainder to max to
+      // make sure that we don't lose any possible values.
+      if ($max % $step !== 0) {
+        $max = $max + ($step - $max % $step);
+      }
     }
-
-    $step = $config['step'];
 
     // Creates an array of all results between min and max by the step from the
     // configuration.
     $new_results = [];
     for ($i = $min; $i <= $max; $i += $step) {
       $count = isset($simple_results['f_' . $i]) ? $simple_results['f_' . $i]['count'] : 0;
-      $new_results[] = new Result((float) $i, (float) $i, $count);
+      $new_results[] = new Result($facet, (float) $i, (float) $i, $count);
     }
 
     // Overwrite the current facet values with the generated results.

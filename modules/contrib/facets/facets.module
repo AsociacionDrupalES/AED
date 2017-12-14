@@ -30,10 +30,10 @@ function facets_help($route_name, RouteMatchInterface $route_match) {
       $output .= '<p>' . t('Facets test') . '</p>';
       return $output;
 
-    case 'facets.overview':
+    case 'entity.facets_facet.collection':
       $output = '';
       $output .= '<p>' . t('Below is a list of facets grouped by facetsources they are associated with. A facetsource is the instance where the facet does the actual filtering, for example a View on a Search API index.') . '</p>';
-      $output .= '<p>' . t('The facets weight can be changed with drag and drop withing the same facet source. Although you can drag and drop a facet under any facet source, this change will not be performed on save.') . '</p>';
+      $output .= '<p>' . t('The facets weight can be changed with drag and drop within the same facet source. Although you can drag and drop a facet under any facet source, this change will not be performed on save.') . '</p>';
       return $output;
   }
 }
@@ -46,6 +46,8 @@ function facets_theme($existing, $type, $theme, $path) {
     'facets_result_item' => [
       'base hook' => 'facets_result_item',
       'variables' => [
+        'facet' => NULL,
+        'raw_value' => '',
         'value' => '',
         'show_count' => FALSE,
         'count' => NULL,
@@ -54,6 +56,7 @@ function facets_theme($existing, $type, $theme, $path) {
     ],
     'facets_item_list' => [
       'variables' => [
+        'facet' => NULL,
         'items' => [],
         'title' => '',
         'list_type' => 'ul',
@@ -68,9 +71,6 @@ function facets_theme($existing, $type, $theme, $path) {
 
 /**
  * Implements hook_search_api_query_alter().
- *
- * @param \Drupal\search_api\Query\QueryInterface $query
- *   Generates query for facet search.
  */
 function facets_search_api_query_alter(QueryInterface &$query) {
   if ($query->getIndex()->getServerInstance()->supportsFeature('search_api_facets')) {
@@ -214,7 +214,7 @@ function facets_entity_predelete(EntityInterface $entity) {
  *
  * @see https://www.drupal.org/node/1842756
  */
-function facets_preprocess_facets_item_list(&$variables) {
+function facets_preprocess_facets_item_list(array &$variables) {
   template_preprocess_item_list($variables);
 }
 
@@ -284,7 +284,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
     $active_results = [];
     $active_facets = [];
     foreach ($facets as $facet) {
-      if ($active_items = $facet->getActiveItems()) {
+      if (count($facet->getActiveItems()) > 0) {
         // Add the facet as a cacheable dependency.
         $breadcrumb->addCacheableDependency($facet);
         /** @var \Drupal\facets\UrlProcessor\UrlProcessorInterface $url_processor */
@@ -312,7 +312,6 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
     // without all the other request parameters; with this we could implement:
     // @see https://www.drupal.org/node/2861586
     // TODO handle not grouped facets.
-
     /** @var \Drupal\facets\Result\ResultInterface[] $facet_results */
     foreach ($active_results as $facet_alias => $facet_results) {
       $facet_used_result[] = $facet_alias;
@@ -322,7 +321,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
 
       // Because we can't get the desired url trough a url processor method
       // we iterate each result url and remove the facet params that haven't
-      // been used on previous crumbs
+      // been used on previous crumbs.
       foreach ($facet_results as $res) {
         $facet_url = $res->getUrl();
         /** @var \Drupal\Core\Url $facet_url */

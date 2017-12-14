@@ -4,6 +4,7 @@ namespace Drupal\Tests\facets\Unit\Plugin\processor;
 
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\Plugin\facets\processor\CountLimitProcessor;
+use Drupal\facets\Processor\ProcessorPluginManager;
 use Drupal\facets\Result\Result;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -35,10 +36,11 @@ class CountLimitProcessorTest extends UnitTestCase {
   protected function setUp() {
     parent::setUp();
 
+    $facet = new Facet([], 'facets_facet');
     $this->originalResults = [
-      new Result('llama', 'llama', 10),
-      new Result('badger', 'badger', 5),
-      new Result('duck', 'duck', 15),
+      new Result($facet, 'llama', 'llama', 10),
+      new Result($facet, 'badger', 'badger', 5),
+      new Result($facet, 'duck', 'duck', 15),
     ];
 
     $processor_id = 'count_limit';
@@ -47,11 +49,11 @@ class CountLimitProcessorTest extends UnitTestCase {
     $processor_definitions = [
       $processor_id => [
         'id' => $processor_id,
-        'class' => 'Drupal\facets\Plugin\facets\processor\CountLimitProcessor',
+        'class' => CountLimitProcessor::class,
       ],
     ];
 
-    $manager = $this->getMockBuilder('Drupal\facets\Processor\ProcessorPluginManager')
+    $manager = $this->getMockBuilder(ProcessorPluginManager::class)
       ->disableOriginalConstructor()
       ->getMock();
     $manager->expects($this->any())

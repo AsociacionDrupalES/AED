@@ -46,7 +46,7 @@ class LanguageIntegrationTest extends FacetsTestBase {
 
     $this->setUpExampleStructure();
     $this->insertExampleContent();
-    $this->assertEqual($this->indexItems($this->indexId), 5, '5 items were indexed.');
+    $this->assertEquals($this->indexItems($this->indexId), 5, '5 items were indexed.');
 
     // Make absolutely sure the ::$blocks variable doesn't pass information
     // along between tests.
@@ -66,15 +66,15 @@ class LanguageIntegrationTest extends FacetsTestBase {
     // Go to the search view with a language prefix and click on one of the
     // facets.
     $this->drupalGet('xx-lolspeak/search-api-test-fulltext');
-    $this->assertText('item');
-    $this->assertText('article');
+    $this->assertSession()->pageTextContains('item');
+    $this->assertSession()->pageTextContains('article');
     $this->clickLink('item');
 
     // Check that the language code is still in the url.
     $this->assertTrue(strpos($this->getUrl(), 'xx-lolspeak/'), 'Found the language code in the url');
-    $this->assertResponse(200);
-    $this->assertText('item');
-    $this->assertText('article');
+    $this->assertSession()->statusCodeEquals(200);
+    $this->assertSession()->pageTextContains('item');
+    $this->assertSession()->pageTextContains('article');
   }
 
   /**
@@ -142,7 +142,7 @@ class LanguageIntegrationTest extends FacetsTestBase {
 
     // Translate the facet.
     $this->drupalGet('admin/config/search/facets/' . $facet_id . '/edit/translate/xx-lolspeak/add');
-    $this->drupalPostForm(NULL, ['translation[config_names][facets.facet.barn_owl][url_alias]' => 'tyto_alba'],'Save translation');
+    $this->drupalPostForm(NULL, ['translation[config_names][facets.facet.barn_owl][url_alias]' => 'tyto_alba'], 'Save translation');
 
     // Go to the search view again and check that we now have the translated
     // facet in the url.
@@ -151,7 +151,7 @@ class LanguageIntegrationTest extends FacetsTestBase {
     $this->clickLink('item');
     $this->assertTrue(strpos($this->getUrl(), 'xx-lolspeak/'), 'Found the language code in the url');
     $this->assertTrue(strpos($this->getUrl(), 'tyto_alba'), 'Found the facet in the url');
-   }
+  }
 
   /**
    * Tests facets where the count is different per language.

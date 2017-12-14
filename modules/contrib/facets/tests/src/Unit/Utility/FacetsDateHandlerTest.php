@@ -4,9 +4,14 @@ namespace Drupal\Tests\facets\Unit\Utility;
 
 use Drupal\Core\Datetime\DateFormatter;
 use Drupal\Core\DependencyInjection\ContainerBuilder;
+use Drupal\Core\Entity\EntityManagerInterface;
+use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Language\Language;
+use Drupal\Core\Language\LanguageManagerInterface;
+use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\facets\Utility\FacetsDateHandler;
 use Drupal\Tests\UnitTestCase;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Unit test for Date Handler Service.
@@ -38,9 +43,9 @@ class FacetsDateHandlerTest extends UnitTestCase {
   public function setUp() {
     parent::setUp();
 
-    $entity_storage = $this->getMock('Drupal\Core\Entity\EntityStorageInterface');
+    $entity_storage = $this->getMock(EntityStorageInterface::class);
 
-    $em = $this->getMock('Drupal\Core\Entity\EntityManagerInterface');
+    $em = $this->getMock(EntityManagerInterface::class);
     $em->expects($this->any())
       ->method('getStorage')
       ->with('date_format')
@@ -48,11 +53,11 @@ class FacetsDateHandlerTest extends UnitTestCase {
 
     $language = new Language(['id' => 'en']);
 
-    $lm = $this->getMock('Drupal\Core\Language\LanguageManagerInterface');
+    $lm = $this->getMock(LanguageManagerInterface::class);
     $lm->method('getCurrentLanguage')
       ->willReturn($language);
-    $st = $this->getMock('Drupal\Core\StringTranslation\TranslationInterface');
-    $rs = $this->getMock('Symfony\Component\HttpFoundation\RequestStack');
+    $st = $this->getMock(TranslationInterface::class);
+    $rs = $this->getMock(RequestStack::class);
     $cf = $this->getConfigFactoryStub();
 
     $config_factory = $this->getConfigFactoryStub([

@@ -29,6 +29,10 @@ services:
     class: Drupal\facets\Utility\FacetsDateHandler
     arguments:
       - '@date.formatter'
+  facets.utility.url_generator:
+    class: Drupal\facets\Utility\FacetsUrlGenerator
+    arguments:
+      - '@plugin.manager.facets.url_processor'
   facets.event_subscriber:
     class: Drupal\facets\EventSubscriber
     arguments: ['@plugin.manager.block']

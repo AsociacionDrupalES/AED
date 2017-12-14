@@ -93,6 +93,6 @@ function facets_summary_theme_suggestions_facets_summary_facet_result(array $var
  *
  * @see https://www.drupal.org/node/1842756
  */
-function facets_summary_preprocess_facets_summary_item_list(&$variables) {
+function facets_summary_preprocess_facets_summary_item_list(array &$variables) {
   template_preprocess_item_list($variables);
 }
