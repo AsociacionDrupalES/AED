@@ -34,6 +34,7 @@ module:
   layout_discovery: 0
   link: 0
   linked_image_field: 0
+  mailsystem: 0
   menu_link_attributes: 0
   menu_ui: 0
   node: 0
@@ -53,6 +54,7 @@ module:
   slick_views: 0
   social_links_simple: 0
   stage_file_proxy: 0
+  swiftmailer: 0
   system: 0
   taxonomy: 0
   text: 0
