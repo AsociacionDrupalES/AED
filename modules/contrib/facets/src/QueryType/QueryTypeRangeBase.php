@@ -22,13 +22,7 @@ abstract class QueryTypeRangeBase extends QueryTypePluginBase {
       $operator = $this->facet->getQueryOperator();
       $field_identifier = $this->facet->getFieldIdentifier();
       $exclude = $this->facet->getExclude();
-      $options['search_api_facets'][$field_identifier] = [
-        'field' => $field_identifier,
-        'limit' => $this->facet->getHardLimit(),
-        'operator' => $this->facet->getQueryOperator(),
-        'min_count' => $this->facet->getMinCount(),
-        'missing' => FALSE,
-      ];
+      $options['search_api_facets'][$field_identifier] = $this->getFacetOptions();
 
       // Add the filter to the query if there are active values.
       $active_items = $this->facet->getActiveItems();

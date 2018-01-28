@@ -30,6 +30,7 @@ class FacetTest extends KernelTestBase {
    */
   public static $modules = [
     'facets',
+    'taxonomy',
   ];
 
   /**

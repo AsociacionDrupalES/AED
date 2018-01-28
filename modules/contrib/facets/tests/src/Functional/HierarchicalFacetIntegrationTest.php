@@ -204,6 +204,35 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests sorting by weight of a taxonomy term.
+   */
+  public function testWeightSort() {
+    $edit = [
+      'facet_settings[translate_entity][status]' => '1',
+      'facet_sorting[term_weight_widget_order][status]' => '1',
+    ];
+    $this->drupalPostForm($this->facetEditPage, $edit, 'Save');
+
+    $this->parents['Parent 1']->setWeight(15);
+    $this->parents['Parent 1']->save();
+    $this->parents['Parent 2']->setWeight(25);
+    $this->parents['Parent 2']->save();
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('Parent 1');
+    $this->assertFacetLabel('Parent 2');
+    $this->assertStringPosition('Parent 1', 'Parent 2');
+
+    $this->parents['Parent 2']->setWeight(5);
+    $this->parents['Parent 2']->save();
+
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('Parent 1');
+    $this->assertFacetLabel('Parent 2');
+    $this->assertStringPosition('Parent 2', 'Parent 1');
+  }
+
+  /**
    * Verify the "Enable parent when child gets disabled" option is working.
    */
   protected function verifyEnableParentWhenChildGetsDisabledOption() {
@@ -239,13 +268,20 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
     $this->drupalPostForm(NULL, $edit, 'Save');
     $this->drupalGet('search-api-test-fulltext');
 
-    // Enable a child under Parent 2.
     $this->clickLink('Child 4');
+    $this->checkFacetIsActive('Child 4');
+    $this->clickLink('Child 3');
+    $this->checkFacetIsActive('Child 3');
     $this->checkFacetIsActive('Child 4');
     $this->checkFacetIsNotActive('Parent 2');
 
-    // Uncheck the facet again and see if Parent 2 is active now.
     $this->clickLink('(-) Child 4');
+    $this->checkFacetIsActive('Child 3');
+    $this->checkFacetIsNotActive('Child 4');
+    $this->checkFacetIsNotActive('Parent 2');
+
+    $this->clickLink('(-) Child 3');
+    $this->checkFacetIsNotActive('Child 3');
     $this->checkFacetIsNotActive('Child 4');
     $this->checkFacetIsActive('Parent 2');
   }
@@ -288,6 +324,49 @@ class HierarchicalFacetIntegrationTest extends FacetsTestBase {
 
     $this->terms[4]->parent = [$this->parents['Parent 2']->id()];
     $this->terms[4]->save();
+  }
+
+  /**
+   * Tests hierarchy breadcrumbs.
+   */
+  public function testHierarchyBreadcrumb() {
+    $this->drupalGet('admin/config/search/facets');
+    $this->clickLink('Configure', 1);
+    $default_config = [
+      'filter_key' => 'f',
+      'url_processor' => 'query_string',
+      'breadcrumb[active]' => TRUE,
+      'breadcrumb[group]' => TRUE,
+    ];
+    $this->drupalPostForm(NULL, $default_config, 'Save');
+
+    $block = [
+      'region' => 'footer',
+      'label' => 'Breadcrumbs',
+      'provider' => 'system',
+    ];
+    $this->drupalPlaceBlock('system_breadcrumb_block', $block);
+    $this->resetAll();
+
+    $edit = [
+      'facet_settings[expand_hierarchy]' => '1',
+      'facet_settings[use_hierarchy]' => '1',
+      'facet_settings[translate_entity][status]' => '1',
+      'facet_sorting[display_value_widget_order][status]' => '1',
+      'facet_sorting[display_value_widget_order][settings][sort]' => 'ASC',
+      'facet_sorting[count_widget_order][status]' => '0',
+      'facet_sorting[active_widget_order][status]' => '0',
+    ];
+    $this->drupalPostForm($this->facetEditPage, $edit, 'Save');
+
+    $initial_query = ['search_api_fulltext' => 'foo', 'test_param' => 1];
+    $this->drupalGet('search-api-test-fulltext', ['query' => $initial_query]);
+    $this->clickLink('Child 2');
+    $this->checkFacetIsActive('Child 2');
+
+    $this->assertSession()->pageTextContains('hierarchical facet: Parent 1');
+    $this->clickLink('hierarchical facet: Parent 1');
+    $this->checkFacetIsActive('Parent 1');
   }
 
   /**

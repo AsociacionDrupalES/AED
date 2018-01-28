@@ -387,11 +387,7 @@ class ViewsTest extends SearchApiBrowserTestBase {
     for ($i = 0; $i < 3; ++$i) {
       // Flush the page-level caches to make sure the Views cache plugin is
       // used (so we could reproduce the bug if it's there).
-      // @todo Remove "cache.render" once we depend on Drupal 8.4+.
-      \Drupal::getContainer()->get('cache.render')->deleteAll();
-      if (\Drupal::getContainer()->has('cache.page')) {
-        \Drupal::getContainer()->get('cache.page')->deleteAll();
-      }
+      \Drupal::getContainer()->get('cache.page')->deleteAll();
       \Drupal::getContainer()->get('cache.dynamic_page_cache')->deleteAll();
       $this->submitForm([], 'Search');
       $this->assertSession()->addressEquals('search-api-test');
@@ -892,6 +888,29 @@ class ViewsTest extends SearchApiBrowserTestBase {
     $this->submitForm($edit, 'Add and configure contextual filters');
     $this->submitForm([], 'Apply');
     $this->submitForm([], 'Save');
+  }
+
+  /**
+   * Checks whether highlighting of results works correctly.
+   *
+   * @see views.view.search_api_test_cache.yml
+   */
+  public function testHighlighting() {
+    // Add the Highlight processor to the search index.
+    $index = Index::load('database_search_index');
+    $processor = $this->container
+      ->get('search_api.plugin_helper')
+      ->createProcessorPlugin($index, 'highlight');
+    $index->addProcessor($processor);
+    $index->save();
+
+    $path = 'search-api-test-search-view-caching-none';
+    $this->drupalGet($path);
+    $this->assertSession()->responseContains('foo bar baz');
+
+    $options['query']['search_api_fulltext'] = 'foo';
+    $this->drupalGet($path, $options);
+    $this->assertSession()->responseContains('<strong>foo</strong> bar baz');
   }
 
   /**

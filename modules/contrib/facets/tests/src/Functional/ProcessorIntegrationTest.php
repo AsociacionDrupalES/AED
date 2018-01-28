@@ -146,7 +146,7 @@ class ProcessorIntegrationTest extends FacetsTestBase {
 
     $index = $this->getIndex();
 
-    // Index the taxonomy and entity reference fields.
+    // Index a boolean field.
     $boolean_field = new Field($index, $field_name);
     $boolean_field->setType('integer');
     $boolean_field->setPropertyPath($field_name);
@@ -201,6 +201,96 @@ class ProcessorIntegrationTest extends FacetsTestBase {
 
     $this->drupalGet('search-api-test-fulltext');
     $this->assertFacetLabel('Øn');
+  }
+
+  /**
+   * Tests the for configuration of granularity processor.
+   */
+  public function testNumericGranularity() {
+    $field_name = 'field_integer';
+    $field_storage = FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'entity_test_mulrev_changed',
+      'type' => 'integer',
+    ]);
+    $field_storage->save();
+    $field = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'item',
+    ]);
+    $field->save();
+    $field = FieldConfig::create([
+      'field_storage' => $field_storage,
+      'bundle' => 'article',
+    ]);
+    $field->save();
+
+    $index = $this->getIndex();
+
+    // Index the taxonomy and entity reference fields.
+    $integerField = new Field($index, $field_name);
+    $integerField->setType('integer');
+    $integerField->setPropertyPath($field_name);
+    $integerField->setDatasourceId('entity:entity_test_mulrev_changed');
+    $integerField->setLabel('IntegerField');
+    $index->addField($integerField);
+
+    $index->save();
+    $this->indexItems($this->indexId);
+
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+
+    foreach ([30, 35, 40, 100] as $val) {
+      $entity_test_storage->create([
+        'name' => 'foo bar baz',
+        'body' => 'test test int',
+        'type' => 'item',
+        'keywords' => ['orange'],
+        'category' => 'item_category',
+        $field_name => $val,
+      ])->save();
+    }
+
+    $this->indexItems($this->indexId);
+
+    $facet_id = "integer";
+
+    // Create facet.
+    $this->editForm = 'admin/config/search/facets/' . $facet_id . '/edit';
+    $this->createFacet("Integer", $facet_id, $field_name);
+
+    // Check values.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('100');
+    $this->assertFacetLabel('30');
+    $this->assertFacetLabel('35');
+    $this->assertFacetLabel('40');
+
+    $form = [
+      'facet_settings[granularity_item][status]' => TRUE,
+    ];
+    $this->drupalPostForm($this->editForm, $form, 'Save');
+
+    // Check values.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('30 (1)');
+    $this->assertFacetLabel('35');
+    $this->assertFacetLabel('40');
+    $this->assertFacetLabel('100');
+
+    $form = [
+      'facet_settings[granularity_item][status]' => TRUE,
+      'facet_settings[granularity_item][settings][granularity]' => 10,
+    ];
+    $this->drupalPostForm($this->editForm, $form, 'Save');
+
+    // Check values.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertFacetLabel('30 (2)');
+    $this->assertEmpty($this->findFacetLink('35'));
+    $this->assertFacetLabel('40');
+    $this->assertFacetLabel('100');
   }
 
   /**
@@ -716,6 +806,7 @@ class ProcessorIntegrationTest extends FacetsTestBase {
     $this->assertSession()->pageTextNotContains('Boolean item label');
     $this->assertSession()->pageTextNotContains('Transform UID to user name');
     $this->assertSession()->pageTextNotContains('Transform entity ID to label');
+    $this->assertSession()->pageTextNotContains('Sort by taxonomy term weight');
   }
 
   /**
@@ -739,13 +830,56 @@ class ProcessorIntegrationTest extends FacetsTestBase {
       }
       // These processors are hidden by default, see also
       // ::testHiddenProcessors.
-      if (in_array($processor->getPluginId(), ['boolean_item', 'translate_entity', 'uid_to_username_callback'])) {
+      $hiddenProcessors = [
+        'boolean_item',
+        'translate_entity',
+        'uid_to_username_callback',
+      ];
+      if (in_array($processor->getPluginId(), $hiddenProcessors)) {
         continue;
       }
 
       $this->drupalPostForm(NULL, ["facet_settings[{$processor->getPluginId()}][status]" => '1'], 'Save');
       $this->assertSession()->statusCodeEquals(200);
     }
+  }
+
+  /**
+   * Tests the list item processor with underscores in the bundle.
+   */
+  public function testEntityTranslateWithUnderScores() {
+    entity_test_create_bundle('test_with_underscore', "Test with underscore", 'entity_test_mulrev_changed');
+    $entity_test_storage = \Drupal::entityTypeManager()
+      ->getStorage('entity_test_mulrev_changed');
+
+    // Add an entity with basic page content type.
+    $entity_test_storage->create([
+      'name' => 'llama',
+      'body' => 'llama.',
+      'type' => 'test_with_underscore',
+    ])->save();
+    $this->indexItems($this->indexId);
+
+    $facet_id = 'owl';
+    $editForm = 'admin/config/search/facets/' . $facet_id . '/edit';
+    $this->createFacet('Owl', $facet_id);
+
+    // Go to the overview and check that the machine names are used as facets.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertSession()->pageTextContains('Displaying 11 search results');
+    $this->assertFacetLabel('test_with_underscore');
+
+    // Edit the facet to use the list_item processor.
+    $edit = [
+      'facet_settings[list_item][status]' => TRUE,
+    ];
+    $this->drupalPostForm($editForm, $edit, 'Save');
+
+    // Go back to the overview and check that now the label is being used
+    // instead.
+    $this->drupalGet('search-api-test-fulltext');
+    $this->assertSession()->pageTextContains('Displaying 11 search results');
+    $this->assertFacetLabel('Test with underscore');
   }
 
 }

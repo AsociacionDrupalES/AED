@@ -2,16 +2,19 @@
 
 namespace Drupal\Tests\facets\Unit\Plugin\query_type;
 
+use Drupal\Core\DependencyInjection\ContainerBuilder;
 use Drupal\facets\Entity\Facet;
 use Drupal\facets\FacetInterface;
+use Drupal\facets\Plugin\facets\processor\GranularItemProcessor;
 use Drupal\facets\Plugin\facets\query_type\SearchApiGranular;
+use Drupal\facets\Processor\ProcessorPluginManager;
 use Drupal\search_api\Backend\BackendInterface;
 use Drupal\search_api\IndexInterface;
 use Drupal\facets\Result\ResultInterface;
-use Drupal\facets\Widget\WidgetPluginInterface;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api\ServerInterface;
 use Drupal\Tests\UnitTestCase;
+use Prophecy\Argument;
 
 /**
  * Unit test for granular query type.
@@ -19,6 +22,32 @@ use Drupal\Tests\UnitTestCase;
  * @group facets
  */
 class SearchApiGranularTest extends UnitTestCase {
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setUp() {
+    parent::setUp();
+
+    $processor_id = 'granularity_item';
+    $processor_definitions = [
+      $processor_id => [
+        'id' => $processor_id,
+        'class' => GranularItemProcessor::class,
+      ],
+    ];
+
+    $granularityProcessor = new GranularItemProcessor(['granularity' => 10], 'granularity_item', []);
+
+    $processor_manager = $this->prophesize(ProcessorPluginManager::class);
+    $processor_manager->getDefinitions()->willReturn($processor_definitions);
+    $processor_manager->createInstance('granularity_item', Argument::any())
+      ->willReturn($granularityProcessor);
+
+    $container = new ContainerBuilder();
+    $container->set('plugin.manager.facets.processor', $processor_manager->reveal());
+    \Drupal::setContainer($container);
+  }
 
   /**
    * Tests string query type without executing the query with an "AND" operator.
@@ -37,14 +66,11 @@ class SearchApiGranularTest extends UnitTestCase {
       ['query_operator' => 'AND', 'widget' => 'links'],
       'facets_facet'
     );
-    $facetReflection = new \ReflectionClass(Facet::class);
-    $widget = $this->getMockBuilder(WidgetPluginInterface::class)
-      ->disableOriginalConstructor()
-      ->getMock();
-    $widget->method('getConfiguration')->will($this->returnValue(['granularity' => 10]));
-    $widget_instance = $facetReflection->getProperty('widgetInstance');
-    $widget_instance->setAccessible(TRUE);
-    $widget_instance->setValue($facet, $widget);
+    $facet->addProcessor([
+      'processor_id' => 'granularity_item',
+      'weights' => [],
+      'settings' => ['granularity' => 10],
+    ]);
 
     // Results for the widget.
     $original_results = [

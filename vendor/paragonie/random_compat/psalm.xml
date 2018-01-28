@@ -8,7 +8,6 @@
         <directory name="lib" />
     </projectFiles>
     <issueHandlers>
-        <DuplicateClass errorLevel="info" />
         <InvalidOperand errorLevel="info" />
         <UndefinedConstant errorLevel="info" />
         <MissingReturnType errorLevel="info" />

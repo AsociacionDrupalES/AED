@@ -40,7 +40,7 @@ abstract class QueryTypePluginBase extends PluginBase implements QueryTypeInterf
   /**
    * The results for the facet.
    *
-   * @var \Drupal\facets\Result\ResultInterface[]
+   * @var array[]
    */
   protected $results;
 
@@ -78,6 +78,22 @@ abstract class QueryTypePluginBase extends PluginBase implements QueryTypeInterf
   public function calculateDependencies() {
     $this->addDependency('module', $this->getPluginDefinition()['provider']);
     return $this->dependencies;
+  }
+
+  /**
+   * Builds facet options that will be send to the backend.
+   *
+   * @return array
+   *   An array of default options for the facet.
+   */
+  protected function getFacetOptions() {
+    return [
+      'field' => $this->facet->getFieldIdentifier(),
+      'limit' => $this->facet->getHardLimit(),
+      'operator' => $this->facet->getQueryOperator(),
+      'min_count' => $this->facet->getMinCount(),
+      'missing' => FALSE,
+    ];
   }
 
 }

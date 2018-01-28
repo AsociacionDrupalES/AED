@@ -560,7 +560,6 @@ class SearchApiQuery extends QueryPluginBase {
       foreach ($result->getFields(FALSE) as $field_id => $field) {
         if ($field->getValues()) {
           $path = $field->getCombinedPropertyPath();
-          $values[$path] = $field->getValues();
           try {
             $property = $field->getDataDefinition();
             // For configurable processor-defined properties, our Views field
@@ -570,13 +569,13 @@ class SearchApiQuery extends QueryPluginBase {
             // correctly.
             if ($property instanceof ConfigurablePropertyInterface) {
               $path .= '|' . $field_id;
-              $values[$path] = $field->getValues();
             }
           }
           catch (SearchApiException $e) {
             // If we're not able to retrieve the data definition at this point,
             // it doesn't really matter.
           }
+          $values[$path] = $field->getValues();
         }
       }
 

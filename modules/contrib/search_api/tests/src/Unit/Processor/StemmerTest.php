@@ -7,6 +7,8 @@ use Drupal\search_api\Item\Field;
 use Drupal\search_api\Item\ItemInterface;
 use Drupal\search_api\Plugin\search_api\data_type\value\TextValue;
 use Drupal\search_api\Plugin\search_api\processor\Stemmer;
+use Drupal\search_api\Query\QueryInterface;
+use Drupal\search_api\SearchApiException;
 use Drupal\Tests\UnitTestCase;
 
 /**
@@ -70,6 +72,53 @@ class StemmerTest extends UnitTestCase {
     $this->assertEquals('tie', $value->toText());
     $value = $field_de->getValues()[0];
     $this->assertEquals('ties', $value->toText());
+  }
+
+  /**
+   * Tests the preprocessSearchQuery() method.
+   *
+   * @param string[]|null $languages
+   *   The languages to set for the query.
+   * @param bool $should_process
+   *   Whether keys are expected to be processed by the processor or not.
+   *
+   * @covers ::preprocessSearchQuery
+   *
+   * @dataProvider preprocessSearchQueryDataProvider
+   */
+  public function testPreprocessSearchQuery(array $languages = NULL, $should_process) {
+    /** @var \Drupal\search_api\Query\QueryInterface|\PHPUnit_Framework_MockObject_MockObject $query */
+    $query = $this->getMock(QueryInterface::class);
+    $query->method('getLanguages')->willReturn($languages);
+    // Unfortunately, returning a reference (as getKeys() has to do for
+    // processing to work) doesn't seem to be possible with a mock object. But
+    // since the only code we really want to test is the language check, using
+    // an exception works just as well, and is quite simple.
+    $query->method('getKeys')->willThrowException(new SearchApiException());
+
+    try {
+      $this->processor->preprocessSearchQuery($query);
+      $this->assertFalse($should_process, "Keys weren't processed but should have been.");
+    }
+    catch (SearchApiException $e) {
+      $this->assertTrue($should_process, "Keys were processed but shouldn't have been.");
+    }
+  }
+
+  /**
+   * Provides sets of arguments for testPreprocessSearchQuery().
+   *
+   * @return array[]
+   *   Arrays of arguments for testPreprocessSearchQuery().
+   */
+  public function preprocessSearchQueryDataProvider() {
+    return [
+      'language-less query' => [NULL, TRUE],
+      'English query' => [['en'], TRUE],
+      'Non-English query' => [['de'], FALSE],
+      'Multilingual query (including English)' => [['en', 'fr', 'es'], TRUE],
+      'Multilingual query (not including English)' => [['de', 'it'], FALSE],
+    ];
   }
 
   /**

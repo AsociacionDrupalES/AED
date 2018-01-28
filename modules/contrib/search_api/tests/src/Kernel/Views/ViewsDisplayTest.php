@@ -40,6 +40,7 @@ class ViewsDisplayTest extends KernelTestBase {
 
     $this->installEntitySchema('entity_test_mulrev_changed');
     $this->installEntitySchema('search_api_task');
+    $this->installConfig('search_api');
 
     // Do not use a batch for tracking the initial items after creating an
     // index when running the tests via the GUI. Otherwise, it seems Drupal's
@@ -47,12 +48,6 @@ class ViewsDisplayTest extends KernelTestBase {
     if (!Utility::isRunningInCli()) {
       \Drupal::state()->set('search_api_use_tracking_batch', FALSE);
     }
-
-    // Set tracking page size so tracking will work properly.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
 
     $this->installConfig([
       'search_api_test_example_content',

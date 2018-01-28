@@ -47,12 +47,7 @@ class QueryTest extends KernelTestBase {
     $this->installSchema('search_api', ['search_api_item']);
     $this->installEntitySchema('entity_test_mulrev_changed');
     $this->installEntitySchema('search_api_task');
-
-    // Set tracking page size so tracking will work properly.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
+    $this->installConfig('search_api');
 
     // Create a test server.
     $server = Server::create([
@@ -107,18 +102,23 @@ class QueryTest extends KernelTestBase {
     $this->assertEquals($level, $query->getProcessingLevel());
     $query->addTag('andrew_hill');
 
-    $_SESSION['messages']['status'] = [];
+    // @todo Use \Drupal::messenger() once we depend on Drupal 8.5+. See
+    //   #2931730.
+    drupal_get_messages();
     $query->execute();
-    $messages = $_SESSION['messages']['status'];
-    $_SESSION['messages']['status'] = [];
+    $messages = drupal_get_messages();
 
     $methods = $this->getCalledMethods('processor');
     if ($hooks_and_processors_invoked) {
+      // @todo Replace "status" with MessengerInterface::TYPE_STATUS once we
+      //   depend on Drupal 8.5+. See #2931730.
       $expected = [
-        'Funky blue note',
-        'Search id: ',
-        'Stepping into tomorrow',
-        'Llama',
+        'status' => [
+          'Funky blue note',
+          'Search id: ',
+          'Stepping into tomorrow',
+          'Llama',
+        ],
       ];
       $this->assertEquals($expected, $messages);
       $this->assertTrue($query->getOption('tag query alter hook'));

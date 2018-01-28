@@ -14,11 +14,13 @@ use Drupal\Core\Url;
 use Drupal\node\NodeInterface;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\IndexInterface;
+use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Plugin\search_api\datasource\ContentEntityTaskManager;
 use Drupal\search_api\Plugin\search_api\datasource\EntityDatasourceInterface;
+use Drupal\search_api\Plugin\views\argument\SearchApiTerm as TermArgument;
+use Drupal\search_api\Plugin\views\filter\SearchApiTerm as TermFilter;
 use Drupal\search_api\Plugin\views\query\SearchApiQuery;
 use Drupal\search_api\SearchApiException;
-use Drupal\search_api\Plugin\search_api\datasource\ContentEntity;
 use Drupal\search_api\Task\IndexTaskManager;
 use Drupal\views\ViewEntityInterface;
 
@@ -515,6 +517,40 @@ function search_api_search_api_index_update(IndexInterface $index) {
         ]);
       }
     }
+  }
+}
+
+/**
+ * Implements hook_views_plugins_argument_alter().
+ */
+function search_api_views_plugins_argument_alter(array &$plugins) {
+  // We have to include the term argument handler like this, since adding it
+  // directly (i.e., with an annotation) would cause fatal errors on sites
+  // without the Taxonomy module.
+  if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+    $plugins['search_api_term'] = [
+      'plugin_type' => 'argument',
+      'id' => 'search_api_term',
+      'class' => TermArgument::class,
+      'provider' => 'search_api',
+    ];
+  }
+}
+
+/**
+ * Implements hook_views_plugins_filter_alter().
+ */
+function search_api_views_plugins_filter_alter(array &$plugins) {
+  // We have to include the term filter handler like this, since adding it
+  // directly (i.e., with an annotation) would cause fatal errors on sites
+  // without the Taxonomy module.
+  if (\Drupal::moduleHandler()->moduleExists('taxonomy')) {
+    $plugins['search_api_term'] = [
+      'plugin_type' => 'filter',
+      'id' => 'search_api_term',
+      'class' => TermFilter::class,
+      'provider' => 'search_api',
+    ];
   }
 }
 

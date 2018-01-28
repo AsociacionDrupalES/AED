@@ -153,7 +153,7 @@ class FacetCloneForm extends EntityForm {
     drupal_set_message($this->t('Facet cloned to :label', [':label' => $facet->label()]));
 
     // Redirect the user to the view admin form.
-    $form_state->setRedirectUrl($this->entity->toUrl('edit-form'));
+    $form_state->setRedirectUrl($facet->toUrl('edit-form'));
   }
 
 }

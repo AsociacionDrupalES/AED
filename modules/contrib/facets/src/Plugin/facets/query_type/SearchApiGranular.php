@@ -23,7 +23,7 @@ class SearchApiGranular extends QueryTypeRangeBase {
   public function calculateRange($value) {
     return [
       'start' => $value,
-      'stop' => $value + $this->getGranularity(),
+      'stop' => (int) $value + $this->getGranularity(),
     ];
   }
 
@@ -31,9 +31,19 @@ class SearchApiGranular extends QueryTypeRangeBase {
    * {@inheritdoc}
    */
   public function calculateResultFilter($value) {
+    assert($this->getGranularity() > 0);
     return [
       'display' => $value - ($value % $this->getGranularity()),
       'raw' => $value - ($value % $this->getGranularity()) ,
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function getFacetOptions() {
+    return parent::getFacetOptions() + [
+      'granularity' => $this->getGranularity(),
     ];
   }
 
@@ -42,11 +52,11 @@ class SearchApiGranular extends QueryTypeRangeBase {
    *
    * Default behaviour an integer for the steps that the facet works in.
    *
-   * @return mixed
+   * @return int
    *   If not an integer the inheriting class needs to deal with calculations.
    */
   protected function getGranularity() {
-    return $this->facet->getWidgetInstance()->getConfiguration()['granularity'];
+    return $this->facet->getProcessors()['granularity_item']->getConfiguration()['granularity'];
   }
 
 }

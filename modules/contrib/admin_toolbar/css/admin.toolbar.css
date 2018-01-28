@@ -23,7 +23,7 @@
   background-color: #f5f5f2;
 }
 
-.toolbar-tray-horizontal ul li.menu-item {
+.toolbar-tray-horizontal ul li li.menu-item {
   border-top: none transparent;
   border-right: 1px solid #dddddd;
   border-bottom: 1px solid #dddddd;

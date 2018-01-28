@@ -185,7 +185,7 @@ function theme_search_api_form_item_list(array $variables) {
  */
 function theme_search_api_server(array $variables) {
   // Get the search server.
-  /** @var $server \Drupal\search_api\ServerInterface */
+  /** @var \Drupal\search_api\ServerInterface $server */
   $server = $variables['server'];
 
   $output = '';
@@ -296,7 +296,7 @@ function theme_search_api_server(array $variables) {
  * Implements hook_preprocess_search_api_index().
  */
 function search_api_preprocess_search_api_index(array &$variables) {
-  /** @var $index \Drupal\search_api\IndexInterface */
+  /** @var \Drupal\search_api\IndexInterface $index */
   $index = $variables['index'];
 
   if ($index->status()) {
@@ -331,7 +331,7 @@ function search_api_preprocess_search_api_index(array &$variables) {
  */
 function theme_search_api_index(array $variables) {
   // Get the index.
-  /** @var $index \Drupal\search_api\IndexInterface */
+  /** @var \Drupal\search_api\IndexInterface $index */
   $index = $variables['index'];
   $server = $index->hasValidServer() ? $index->getServerInstance() : NULL;
   $tracker = $index->hasValidTracker() ? $index->getTrackerInstance() : NULL;

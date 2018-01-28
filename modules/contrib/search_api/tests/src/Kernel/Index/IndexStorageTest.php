@@ -35,16 +35,11 @@ class IndexStorageTest extends KernelTestBase {
 
     $this->installSchema('system', 'key_value_expire');
     $this->installEntitySchema('search_api_task');
+    $this->installConfig('search_api');
 
     $this->storage = $this->container
       ->get('entity_type.manager')
       ->getStorage('search_api_index');
-
-    // Set the default tracker since that's needed when creating a bare index.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('default_tracker', 'default')
-      ->save();
   }
 
   /**

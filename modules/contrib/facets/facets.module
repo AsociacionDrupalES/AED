@@ -7,6 +7,8 @@
 
 use Drupal\Component\Utility\Html;
 use Drupal\Core\Breadcrumb\Breadcrumb;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Language\LanguageInterface;
 use Drupal\Core\Link;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\facets\Entity\Facet;
@@ -243,7 +245,8 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
 
   foreach ($facet_sources_definitions as $definition) {
     /* @var \Drupal\facets\FacetSource\FacetSourcePluginBase $facet_source_plugin */
-    $facet_source_plugin = $facet_source_manager->createInstance($definition['id']);
+    $facetsource_id = $definition['id'];
+    $facet_source_plugin = $facet_source_manager->createInstance($facetsource_id);
 
     // If the current facet source is not being rendered, don't do anything with
     // these facet sources.
@@ -251,7 +254,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
       continue;
     }
 
-    $source_id = str_replace(':', '__', $definition['id']);
+    $source_id = str_replace(':', '__', $facetsource_id);
     /** @var \Drupal\facets\FacetSourceInterface $facet_source */
     $facet_source = $facet_source_storage->load($source_id);
 
@@ -266,8 +269,8 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
     $breadcrumb->addCacheableDependency($facet_source);
 
     // Process the facets if they are not already processed.
-    $facet_manager->processFacets();
-    $facets = $facet_manager->getFacetsByFacetSourceId($definition['id']);
+    $facet_manager->processFacets($facetsource_id);
+    $facets = $facet_manager->getFacetsByFacetSourceId($facetsource_id);
 
     // Sort facets by weight.
     uasort($facets, function (FacetInterface $a, FacetInterface $b) {
@@ -292,7 +295,7 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
         $facet_manager->build($facet);
 
         foreach ($facet->getResults() as $result) {
-          if ($result->isActive()) {
+          if ($result->isActive() || $result->hasActiveChildren()) {
             // Clone the result so we can mark it as inactive to be added to the
             // url parameters when calling buildUrls.
             $cloned_result = clone $result;
@@ -339,9 +342,87 @@ function facets_system_breadcrumb_alter(Breadcrumb &$breadcrumb, RouteMatchInter
 
       // Set the new query and create the link.
       $facet_url->setOption('query', $query);
-      $crumb_text = $active_facets[$facet_alias]->label() . ': ' . implode(', ', $facet_crumb_items);
+      if (!empty($facet_source->getBreadcrumbSettings()['before'])) {
+        $crumb_text = $active_facets[$facet_alias]->label() . ': ' . implode(', ', $facet_crumb_items);
+      }
+      else {
+        $crumb_text = implode(', ', $facet_crumb_items);
+      };
       $link = Link::fromTextAndUrl($crumb_text, $facet_url);
       $breadcrumb->addLink($link);
     }
+  }
+}
+
+/**
+ * Implements hook_language_switch_links_alter
+ */
+function facets_language_switch_links_alter(array &$links, $type, \Drupal\Core\Url $url) {
+  /** @var \Drupal\Core\Language\LanguageManagerInterface $languageManager */
+  $languageManager = \Drupal::languageManager();
+  $language_interface = $languageManager->getCurrentLanguage();
+  /** @var \Drupal\facets\FacetInterface[] $allFacets */
+  $allFacets = \Drupal::entityTypeManager()
+    ->getStorage('facets_facet')
+    ->loadMultiple();
+
+  /** @var \Drupal\facets\UrlProcessor\UrlProcessorPluginManager $urlProcessorManager */
+  $urlProcessorManager = \Drupal::service('plugin.manager.facets.url_processor');
+
+  foreach ($links as &$link) {
+    if ($link['language']->getId() === $language_interface->getId()) {
+      continue;
+    }
+
+    foreach ($allFacets as $facet) {
+      if (!isset($link['query'][$facet->getFacetSourceConfig()->getFilterKey()])) {
+        continue;
+      }
+
+      $configName = 'facets.facet.' . $facet->id();
+      $untranslatedAlias = $languageManager->getLanguageConfigOverride($language_interface->getId(), $configName)->get('url_alias');
+      $translatedAlias = $languageManager->getLanguageConfigOverride($link['language']->getId(), $configName)->get('url_alias');
+
+      // If we don't have a translated alias, that means we're trying to create
+      // a link to the original language.
+      if ($translatedAlias === NULL) {
+        $translatedAlias = \Drupal::config($configName)->getOriginal('url_alias', FALSE);
+      }
+      // If we don't have an untranslated alias, we're trying to create a link
+      // from the original language.
+      if ($untranslatedAlias === NULL) {
+        $untranslatedAlias = \Drupal::config($configName)->getOriginal('url_alias', FALSE);
+      }
+
+      /** @var \Drupal\facets\UrlProcessor\UrlProcessorInterface $urlProcessor */
+      $urlProcessor = $urlProcessorManager
+        ->createInstance($facet
+          ->getFacetSourceConfig()
+          ->getUrlProcessorName(), ['facet' => $facet]
+        );
+
+      foreach ($link['query'][$facet->getFacetSourceConfig()->getFilterKey()] as &$filters) {
+        $separator = $urlProcessor->getSeparator();
+        $filters = preg_replace(
+          '/(' . $untranslatedAlias . ")$separator/",
+          $translatedAlias . $separator,
+          $filters
+        );
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function facets_form_facets_facet_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  $facet_sources = [];
+  foreach (\Drupal::service('plugin.manager.facets.facet_source')->getDefinitions() as $facet_source_id => $definition) {
+    $facet_sources[$definition['id']] = !empty($definition['label']) ? $definition['label'] : $facet_source_id;
+  }
+
+  if (count($facet_sources) == 0) {
+    unset($form['actions']);
   }
 }

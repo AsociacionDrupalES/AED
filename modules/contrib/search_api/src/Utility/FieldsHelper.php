@@ -87,7 +87,7 @@ class FieldsHelper implements FieldsHelperInterface {
    *   The entity type manager.
    * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entityFieldManager
    *   The entity field manager.
-   * @param EntityTypeBundleInfoInterface $entityBundleInfo
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entityBundleInfo
    *   The entity type bundle info service.
    * @param \Drupal\search_api\Utility\DataTypeHelperInterface $dataTypeHelper
    *   The data type helper service.
@@ -248,9 +248,14 @@ class FieldsHelper implements FieldsHelperInterface {
           // set our own combined ID as the field identifier as kind of a hack,
           // to easily be able to add the field values to $property_values
           // afterwards.
+          // In case the first part of the property path refers to a
+          // processor-defined property, we need to use the processor to
+          // retrieve the value. Otherwise, we extract it normally from the
+          // data object.
           $property = NULL;
-          if (isset($properties[$property_path])) {
-            $property = $properties[$property_path];
+          $property_name = Utility::splitPropertyPath($property_path, FALSE)[0];
+          if (isset($properties[$property_name])) {
+            $property = $properties[$property_name];
           }
           if ($property instanceof ProcessorPropertyInterface) {
             $field_info = [

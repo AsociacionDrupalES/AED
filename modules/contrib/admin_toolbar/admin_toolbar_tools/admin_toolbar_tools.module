@@ -29,17 +29,6 @@ function admin_toolbar_tools_toolbar() {
 }
 
 /**
- * Implements hook_toolbar_alter().
- */
-function admin_toolbar_tools_toolbar_alter(&$items) {
-  // Use lazybuilder for links so the page is cacheable.
-  $items['administration']['tray']['toolbar_administration'] = [
-    '#lazy_builder' => ['admin_toolbar_tools.toolbar_handler:lazyBuilder', []],
-    '#create_placeholder' => TRUE,
-  ];
-}
-
-/**
  * Implements hook_help().
  */
 function admin_toolbar_tools_help($route_name, RouteMatchInterface $route_match) {
@@ -88,8 +77,18 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
     }
   }
 
+  // Adding a menu link to clean the Views cache.
+  if ($moduleHandler->moduleExists('views')) {
+    $links['admin_toolbar_tools.flush_views'] = [
+      'title' => t('Flush views cache'),
+      'route_name' => 'admin_toolbar_tools.flush_views',
+      'menu_name' => 'admin',
+      'parent' => 'admin_toolbar_tools.flush',
+    ];
+  }
+
   // Adds common links to entities.
-  foreach ($content_entities as $module_name => $entities) {
+  foreach ($content_entities as $entities) {
     $content_entity_bundle = $entities['content_entity_bundle'];
     $content_entity = $entities['content_entity'];
     foreach ($entityTypeManager->getStorage($content_entity_bundle)->loadMultiple() as $machine_name => $bundle) {
@@ -539,19 +538,45 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
   $manager = \Drupal::service('plugin.manager.menu.local_task');
   foreach ($links as $key => $link) {
 
-    // Ignore menu links that have no route name or are not in the admin menu.
-    // @todo Use configuration for admin menu name once added in
-    //   https://www.drupal.org/node/1869638.
-    if (empty($link['route_name']) || !isset($link['menu_name']) || $link['menu_name'] !== 'admin') {
+    // Ignore menu links that have no route name.
+    if (empty($link['route_name'])) {
       continue;
     }
+
+    // Ignore links that are not in the admin menu, include parents in the
+    // check as they inherit the menu name from the parent if not set.
+    $link_to_check = $link;
+    do {
+      // @todo Use configuration for admin menu name once added in
+      // https://www.drupal.org/node/1869638.
+      if (isset($link_to_check['menu_name'])) {
+        // If the link belongs to the admin menu, then skip this loop and
+        // look for local tasks.
+        if ($link_to_check['menu_name'] === 'admin') {
+          break;
+        }
+        else {
+          // If it is explicitly not in the admin menu, skip.
+          continue 2;
+        }
+      }
+
+      if (!empty($link_to_check['parent']) && isset($links[$link_to_check['parent']])) {
+        $link_to_check = $links[$link_to_check['parent']];
+      }
+      else {
+        // No parent and we found no menu_name, skip.
+        continue 2;
+      }
+    } while ($link_to_check);
+
     $route = $link['route_name'];
     $route_local_tasks = $manager->getLocalTasksForRoute($route);
     if (empty($route_local_tasks[0])) {
       continue;
     }
 
-    foreach ($route_local_tasks[0] as $plugin_id => $task_plugin) {
+    foreach ($route_local_tasks[0] as $task_plugin) {
       $definition = $task_plugin->getPluginDefinition();
       $local_route = $definition['route_name'];
       if (empty($local_route)) {
@@ -596,7 +621,7 @@ function admin_toolbar_tools_menu_links_discovered_alter(&$links) {
       // "Content>Comment" also has "File" as a tab then we decide to
       // set this one as parent of the added link if not the current tab
       // will be the parent.
-      if (!empty($link['parent'])) {
+      if (!empty($link['parent']) && isset($links[$link['parent']])) {
         $parentlink = $links[$link['parent']];
         $parentlink_route = $parentlink['route_name'];
         $parent_primary = $manager->getLocalTasks($parentlink_route, 0);

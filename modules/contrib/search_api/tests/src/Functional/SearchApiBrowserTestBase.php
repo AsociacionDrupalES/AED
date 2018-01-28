@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\search_api\Functional;
 
-use Drupal\Component\Utility\Html;
 use Drupal\node\Entity\NodeType;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
@@ -193,29 +192,6 @@ abstract class SearchApiBrowserTestBase extends BrowserTestBase {
     $task_manager = \Drupal::getContainer()->get('search_api.task_manager');
     $task_manager->executeAllTasks();
     $this->assertEquals(0, $task_manager->getTasksCount(), 'No more pending tasks.');
-  }
-
-  /**
-   * Checks for meta refresh tag and, if found, calls drupalGet() recursively.
-   *
-   * This function looks for the "http-equiv" attribute to be set to "Refresh"
-   * and is case-sensitive.
-   *
-   * @todo Remove once we depend on Drupal 8.4+.
-   */
-  protected function checkForMetaRefresh() {
-    $refresh = $this->cssSelect('meta[http-equiv="Refresh"]');
-    if (!empty($refresh) && (!isset($this->maximumMetaRefreshCount) || $this->metaRefreshCount < $this->maximumMetaRefreshCount)) {
-      // Parse the content attribute of the meta tag for the format:
-      // "[delay]: URL=[page_to_redirect_to]".
-      if (preg_match('/\d+;\s*URL=(?<url>.*)/i', $refresh[0]->getAttribute('content'), $match)) {
-        ++$this->metaRefreshCount;
-        $this->drupalGet($this->getAbsoluteUrl(Html::decodeEntities($match['url'])));
-        $this->checkForMetaRefresh();
-      }
-    }
-    // Reset refresh count.
-    $this->metaRefreshCount = 0;
   }
 
 }

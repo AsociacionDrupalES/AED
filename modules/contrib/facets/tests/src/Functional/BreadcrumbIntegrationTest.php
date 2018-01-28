@@ -81,6 +81,34 @@ class BreadcrumbIntegrationTest extends FacetsTestBase {
   }
 
   /**
+   * Tests enabling + disabling the breadcrumb label prefix.
+   */
+  public function testBreadcrumbLabel() {
+    $id = 'type';
+    $this->createFacet('Type', $id);
+    $this->resetAll();
+    $this->drupalGet('admin/config/search/facets/' . $id . '/edit');
+    $this->drupalPostForm(NULL, ['facet_settings[weight]' => '1'], 'Save');
+    $this->editFacetConfig(['breadcrumb[before]' => FALSE]);
+
+    $initial_query = ['search_api_fulltext' => 'foo'];
+    $this->drupalGet('search-api-test-fulltext', ['query' => $initial_query]);
+
+    $this->clickLink('item');
+    $breadcrumb = $this->getSession()->getPage()->find('css', '.breadcrumb');
+    $this->assertFalse(strpos($breadcrumb->getText(), 'Type'));
+    $breadcrumb->findLink('item');
+
+    $this->editFacetConfig(['breadcrumb[before]' => TRUE]);
+
+    $initial_query = ['search_api_fulltext' => 'foo'];
+    $this->drupalGet('search-api-test-fulltext', ['query' => $initial_query]);
+    $this->clickLink('item');
+    $breadcrumb = $this->getSession()->getPage()->find('css', '.breadcrumb');
+    $this->assertTrue(strpos($breadcrumb->getText(), 'Type'));
+  }
+
+  /**
    * Edit the facet configuration with the given values.
    *
    * @param array $config

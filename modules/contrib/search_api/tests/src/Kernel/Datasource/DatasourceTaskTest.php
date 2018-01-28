@@ -96,10 +96,7 @@ class DatasourceTaskTest extends KernelTestBase {
       $language->save();
     }
 
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
+    $this->installConfig('search_api');
 
     // Create a test server.
     $this->server = Server::create([

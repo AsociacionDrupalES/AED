@@ -9,6 +9,22 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Url;
 use Drupal\user\Entity\Role;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function admin_toolbar_links_access_filter_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help.
+    case 'help.page.admin_toolbar_links_access_filter':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t("The Admin Toolbar Links Access Filter module Provides a workaround for the common problem that users with <em>Use the administration pages and help</em> permission see menu links they don't have access permission for. Once the issue <a href='@url'>Hide empty admin categories</a> be solved, this module will be deprecated.", ['@url' => Url::fromUri('https://www.drupal.org/node/296693')->toString()]) . '</p>';
+
+      return $output;
+  }
+}
 
 /**
  * Implements hook_preprocess_menu().
@@ -152,6 +168,7 @@ function admin_toolbar_links_access_filter_is_overview_page($route_name) {
     return !empty($controller) && in_array($controller, $overview_page_controllers);
   }
   catch (RouteNotFoundException $ex) {
+
   }
   return FALSE;
 }

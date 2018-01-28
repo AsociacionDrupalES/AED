@@ -74,14 +74,9 @@ class IndexChangesTest extends KernelTestBase {
     $this->installEntitySchema('entity_test_mulrev_changed');
     $this->installEntitySchema('search_api_task');
     $this->installEntitySchema('user');
+    $this->installConfig('search_api');
 
     $this->taskManager = $this->container->get('search_api.task_manager');
-
-    // Set tracking page size so tracking will work properly.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
 
     User::create([
       'uid' => 1,

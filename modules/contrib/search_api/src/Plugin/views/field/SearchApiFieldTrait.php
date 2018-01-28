@@ -2,6 +2,7 @@
 
 namespace Drupal\search_api\Plugin\views\field;
 
+use Drupal\Component\Render\MarkupInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Entity\TypedData\EntityDataDefinitionInterface;
@@ -105,6 +106,15 @@ trait SearchApiFieldTrait {
    * @see \Drupal\search_api\Plugin\views\field\SearchApiFieldTrait::extractProcessorProperty()
    */
   protected $propertyReplacements = [];
+
+  /**
+   * Cached array of index fields grouped by combined property path.
+   *
+   * @var \Drupal\search_api\Item\FieldInterface[][]|null
+   *
+   * @see \Drupal\search_api\Plugin\views\field\SearchApiFieldTrait::getFieldsForPropertyPath()
+   */
+  protected $fieldsByCombinedPropertyPath;
 
   /**
    * The fields helper.
@@ -221,6 +231,7 @@ trait SearchApiFieldTrait {
     $options = parent::defineOptions();
 
     $options['link_to_item'] = ['default' => FALSE];
+    $options['use_highlighting'] = ['default' => FALSE];
 
     if ($this->isMultiple()) {
       $options['multi_type'] = ['default' => 'separator'];
@@ -248,6 +259,13 @@ trait SearchApiFieldTrait {
       '#title' => $this->t('Link this field to its item'),
       '#description' => $this->t('Display this field as a link to its original entity or item.'),
       '#default_value' => $this->options['link_to_item'],
+    ];
+
+    $form['use_highlighting'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Use highlighted field data'),
+      '#description' => $this->t('Display field with matches of the search keywords highlighted, if available.'),
+      '#default_value' => $this->options['use_highlighting'],
     ];
 
     if ($this->isMultiple()) {
@@ -441,6 +459,7 @@ trait SearchApiFieldTrait {
 
         $property_values = $this->getValuesToExtract($values, $combined_property_path, $dependents);
         $this->extractPropertyValues($values, $combined_property_path, $property_values, $dependents);
+        $this->checkHighlighting($values, $combined_property_path);
       }
     }
   }
@@ -623,7 +642,7 @@ trait SearchApiFieldTrait {
         // (conditionally). To keep it consistent, we make it single-valued
         // here, too.
         if ($combined_property_path !== '_object') {
-          $row->{$combined_property_path} = $row->_relationship_objects[$combined_parent_path];
+          $row->$combined_property_path = $row->_relationship_objects[$combined_parent_path];
         }
         continue;
       }
@@ -757,7 +776,7 @@ trait SearchApiFieldTrait {
     $row->_relationship_objects[$combined_property_path] = [];
     $set_values = $is_required && !isset($row->{$combined_property_path});
     if ($set_values) {
-      $row->{$combined_property_path} = [];
+      $row->$combined_property_path = [];
     }
     foreach ($dummy_field->getValues() as $value) {
       if (!$this->checkEntityAccess($value, $combined_property_path)) {
@@ -838,12 +857,12 @@ trait SearchApiFieldTrait {
       // we have no objects for this property, we needn't bother anyways, of
       // course.
       if (!in_array($combined_property_path, $dependents)
-          || isset($row->{$combined_property_path})
+          || isset($row->$combined_property_path)
           || empty($row->_relationship_objects[$combined_property_path])) {
         continue;
       }
 
-      $row->{$combined_property_path} = [];
+      $row->$combined_property_path = [];
 
       // Iterate over the typed data objects, extract their values and set
       // the relationship objects for the next iteration of the outer loop
@@ -856,10 +875,150 @@ trait SearchApiFieldTrait {
       // If we just set any field values on the result row, clean them up
       // by merging them together (currently it's an array of arrays, but
       // it should be just a flat array).
-      if ($row->{$combined_property_path}) {
-        $row->{$combined_property_path} = call_user_func_array('array_merge', $row->{$combined_property_path});
+      if ($row->$combined_property_path) {
+        $row->$combined_property_path = call_user_func_array('array_merge', $row->$combined_property_path);
       }
     }
+  }
+
+  /**
+   * Replaces extracted property values with highlighted field values.
+   *
+   * @param \Drupal\views\ResultRow[] $values
+   *   The Views result rows for which highlighted field values should be added
+   *   where applicable and possible.
+   * @param string $combined_property_path
+   *   The combined property path of the property for which to add data.
+   */
+  protected function checkHighlighting(array $values, $combined_property_path) {
+    // If using highlighting data wasn't enabled, we can skip all of this
+    // anyways.
+    if (empty($this->options['use_highlighting'])) {
+      return;
+    }
+
+    // Since (currently) only fields can be highlighted, not arbitrary
+    // properties, we needn't even bother if there are no matching fields.
+    $fields = $this->getFieldsForPropertyPath($combined_property_path);
+    if (!$fields) {
+      return;
+    }
+
+    if (!empty($this->propertyReplacements[$combined_property_path])) {
+      $combined_property_path = $this->propertyReplacements[$combined_property_path];
+    }
+
+    foreach ($values as $row) {
+      // We only want highlighting data if we even wanted (and, thus, extracted)
+      // the property's values in the first place.
+      if (!isset($row->$combined_property_path)) {
+        continue;
+      }
+      $highlighted_data = $row->_item->getExtraData('highlighted_fields');
+      if (!$highlighted_data) {
+        continue;
+      }
+      $highlighted_data = array_intersect_key($highlighted_data, $fields);
+      if ($highlighted_data) {
+        // There might be multiple fields with highlight data here, in rare
+        // cases, but it's unclear how to combine them, or choose one over the
+        // other, anyways, so just take the first one.
+        $values = reset($highlighted_data);
+        $values = $this->combineHighlightedValues($row->$combined_property_path, $values);
+        $row->$combined_property_path = $values;
+      }
+    }
+  }
+
+  /**
+   * Retrieves all of the index's fields that match the given property path.
+   *
+   * @param string $combined_property_path
+   *   The combined property path to look for.
+   *
+   * @return \Drupal\search_api\Item\FieldInterface[]
+   *   All index fields with the given combined property path, keyed by field
+   *   ID.
+   */
+  protected function getFieldsForPropertyPath($combined_property_path) {
+    if (!isset($this->fieldsByCombinedPropertyPath)) {
+      $this->fieldsByCombinedPropertyPath = [];
+      foreach ($this->getIndex()->getFields() as $field_id => $field) {
+        $this->fieldsByCombinedPropertyPath[$field->getCombinedPropertyPath()][$field_id] = $field;
+      }
+    }
+    $this->fieldsByCombinedPropertyPath += [$combined_property_path => []];
+    return $this->fieldsByCombinedPropertyPath[$combined_property_path];
+  }
+
+  /**
+   * Combines raw field values with highlighted ones to get a complete set.
+   *
+   * If highlighted field values are set on the result item, not all values
+   * might be included, but only the ones with matches. Since we still want to
+   * show all values, of course, we need to combine the highlighted values with
+   * the ones we extracted.
+   *
+   * @param array $extracted_values
+   *   All values for a field.
+   * @param array $highlighted_values
+   *   A subset of field values that are highlighted.
+   *
+   * @return array
+   *   An array of normal and highlighted field values, avoiding duplicates as
+   *   well as possible.
+   */
+  protected function combineHighlightedValues(array $extracted_values, array $highlighted_values) {
+    // Make sure the arrays have consecutive numeric indices. (Is always the
+    // case for $extracted_values.)
+    $highlighted_values = array_values($highlighted_values);
+
+    // Pre-sanitize the highlighted values with a very permissive setting to
+    // make sure the highlighting HTML won't be escaped later.
+    foreach ($highlighted_values as $i => $value) {
+      if (!($value instanceof MarkupInterface)) {
+        $highlighted_values[$i] = $this->sanitizeValue($value, 'xss_admin');
+      }
+    }
+
+    $extracted_count = count($extracted_values);
+    $highlight_count = count($highlighted_values);
+    // If there are (at least) as many highlighted values as normal ones, we are
+    // done here.
+    if ($highlight_count >= $extracted_count) {
+      return $highlighted_values;
+    }
+
+    // We now compute a "normalized" representation for all (extracted and
+    // highlighted) values to be able to find duplicates.
+    $normalize = function ($value) {
+      $value = (string) $value;
+      $value = strip_tags($value);
+      $value = html_entity_decode($value);
+      return $value;
+    };
+    $normalized_extracted = array_map($normalize, $extracted_values);
+    $normalized_highlighted = array_map($normalize, $highlighted_values);
+    $normalized_extracted = array_diff($normalized_extracted, $normalized_highlighted);
+
+    // Make sure that we have no more than $extracted_count values in total.
+    while (count($normalized_extracted) + $highlight_count > $extracted_count) {
+      array_pop($normalized_extracted);
+    }
+
+    // Now combine the two arrays, maintaining the original order by taking a
+    // highlighted value only where the extracted value was removed (probably/
+    // hopefully by the array_diff()).
+    $values = [];
+    for ($i = 0; $i < $extracted_count; ++$i) {
+      if (isset($normalized_extracted[$i])) {
+        $values[] = $extracted_values[$i];
+      }
+      else {
+        $values[] = array_shift($highlighted_values);
+      }
+    }
+    return $values;
   }
 
   /**
@@ -1028,11 +1187,11 @@ trait SearchApiFieldTrait {
     if (!empty($this->propertyReplacements[$property_path])) {
       $property_path = $this->propertyReplacements[$property_path];
     }
-    if (!empty($values->{$property_path})) {
+    if (!empty($values->$property_path)) {
       // Although it's undocumented, the field handler base class assumes items
       // will always be arrays. See #2648012 for documenting this.
       $items = [];
-      foreach ((array) $values->{$property_path} as $i => $value) {
+      foreach ((array) $values->$property_path as $i => $value) {
         $item = [
           'value' => $value,
         ];
@@ -1083,6 +1242,28 @@ trait SearchApiFieldTrait {
       return $this->getRenderer()->render($render);
     }
     return '';
+  }
+
+  /**
+   * Sanitizes the value for output.
+   *
+   * @param mixed $value
+   *   The value being rendered.
+   * @param string|null $type
+   *   (optional) The type of sanitization needed. If not provided,
+   *   \Drupal\Component\Utility\Html::escape() is used.
+   *
+   * @return \Drupal\views\Render\ViewsRenderPipelineMarkup
+   *   Returns the safe value.
+   *
+   * @see \Drupal\views\Plugin\views\HandlerBase::sanitizeValue()
+   */
+  public function sanitizeValue($value, $type = NULL) {
+    // Pass-through values that are already markup objects.
+    if ($value instanceof MarkupInterface) {
+      return $value;
+    }
+    return parent::sanitizeValue($value, $type);
   }
 
   /**

@@ -1,3 +1,24 @@
+Admin Toolbar 8.1.22, 2017-XX-XX
+--------------------------------
+Changes since 8.1.21:
+
+- #2929061 by romainj, dsnopek, adriancid: admin_toolbar_links_access_filter
+  doesn't do anything unless admin_toolbar is enabled.
+- #2928836 by eme: One extra pixel line under the admin toolbar.
+- #2925501 by eme, adriancid, RumyanaRuseva: Menu does not take changes into
+  account (caching issue).
+- #2927914 by adriancid: Parameter comment indentation must be 3 spaces.
+- #2927911 by adriancid: Remove unused variables.
+- #2927905 by adriancid: All dependencies must be prefixed with the project 
+  name.
+- #2925327 by Berdir, adriancid: Better check for is-link-in-admin-menu for
+  local task links.
+- #2922046 by mikejw, adriancid, Berdir, BrianLewisDesign: Notice: Undefined
+  index: entity.eform_type.collection in 
+  admin_toolbar_tools_menu_links_discovered_alter.
+- #2925128 by adriancid: Create the module help page for the Admin Toolbar Links
+  Access Filter submodule.
+
 Admin Toolbar 8.1.21, 2017-11-20
 --------------------------------
 Changes since 8.1.20:

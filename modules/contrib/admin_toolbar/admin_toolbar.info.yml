@@ -6,10 +6,10 @@ type: module
 # core: 8.x
 
 dependencies:
-  - toolbar
+  - drupal:toolbar
 
-# Information added by Drupal.org packaging script on 2017-11-20
-version: '8.x-1.21'
+# Information added by Drupal.org packaging script on 2018-01-02
+version: '8.x-1.22'
 core: '8.x'
 project: 'admin_toolbar'
-datestamp: 1511190792
+datestamp: 1514888588

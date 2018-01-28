@@ -126,3 +126,26 @@ function facets_update_8004() {
     }
   }
 }
+
+/**
+ * Migrate facets with granular widget to use date processors + links widget.
+ */
+function facets_update_8005() {
+  foreach (Facet::loadMultiple() as $facet) {
+    $widget = $facet->getWidget();
+    if ($widget['type'] === 'numericgranular') {
+      // Set widget to use links instead.
+      $facet->setWidget('links', ['show_numbers' => $widget['config']['show_numbers']]);
+      // Migrate widget to processor settings and enable date_item processor.
+      $settings = [
+        'granularity' => $widget['config']['granularity'],
+      ];
+      $facet->addProcessor([
+        'processor_id' => 'granularity_item',
+        'weights' => ['build' => 35],
+        'settings' => $settings,
+      ]);
+      $facet->save();
+    }
+  }
+}

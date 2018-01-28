@@ -243,7 +243,7 @@ class ContentEntityDatasourceTest extends KernelTestBase {
    */
   protected function getItemIds(array $bundles = NULL, array $languages = NULL) {
     $discovered_ids = [];
-    for ($page = 0; ; ++$page) {
+    for ($page = 0;; ++$page) {
       $new_ids = $this->datasource->getPartialItemIds($page, $bundles, $languages);
       if ($new_ids === NULL) {
         break;

@@ -44,6 +44,7 @@ class CliTest extends KernelTestBase {
     $this->installSchema('search_api', ['search_api_item']);
     $this->installEntitySchema('entity_test_mulrev_changed');
     $this->installEntitySchema('search_api_task');
+    $this->installConfig('search_api');
 
     // Create a test server.
     $this->server = Server::create([
@@ -53,13 +54,6 @@ class CliTest extends KernelTestBase {
       'backend' => 'search_api_test',
     ]);
     $this->server->save();
-
-    // Manually set the tracking page size since the module's default
-    // configuration is not installed automatically in kernel tests.
-    \Drupal::configFactory()
-      ->getEditable('search_api.settings')
-      ->set('tracking_page_size', 100)
-      ->save();
 
     // Disable the use of batches for item tracking to simulate a CLI
     // environment.

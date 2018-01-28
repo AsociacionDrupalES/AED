@@ -146,6 +146,16 @@ class FacetSourceEditForm extends EntityForm {
       '#title' => $this->t('Append active facets to breadcrumb'),
       '#default_value' => isset($breadcrumb_settings['active']) ? $breadcrumb_settings['active'] : FALSE,
     ];
+    $form['breadcrumb']['before'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Show facet label before active facet'),
+      '#default_value' => isset($breadcrumb_settings['before']) ? $breadcrumb_settings['before'] : TRUE,
+      '#states' => [
+        'visible' => [
+          ':input[name="breadcrumb[active]"]' => ['checked' => TRUE],
+        ],
+      ],
+    ];
     $form['breadcrumb']['group'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Group active items under same crumb (not implemented yet - now always grouping)'),

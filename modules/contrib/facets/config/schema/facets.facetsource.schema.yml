@@ -24,6 +24,9 @@ facets.facet_source.*:
         active:
           type: boolean
           label: 'Append active facets to breadcrumb'
+        before:
+          type: boolean
+          label: 'Show facet label before active facet'
         group:
           type: boolean
           label: 'Group active items under same crumb'

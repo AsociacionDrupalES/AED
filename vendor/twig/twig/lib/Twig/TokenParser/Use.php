@@ -57,8 +57,6 @@ class Twig_TokenParser_Use extends Twig_TokenParser
         $stream->expect(Twig_Token::BLOCK_END_TYPE);
 
         $this->parser->addTrait(new Twig_Node(array('template' => $template, 'targets' => new Twig_Node($targets))));
-
-        return new Twig_Node();
     }
 
     public function getTag()
@@ -66,5 +64,3 @@ class Twig_TokenParser_Use extends Twig_TokenParser
         return 'use';
     }
 }
-
-class_alias('Twig_TokenParser_Use', 'Twig\TokenParser\UseTokenParser', false);

@@ -100,8 +100,6 @@ class ErrorHandler
     private static $stackedErrors = array();
     private static $stackedErrorLevels = array();
     private static $toStringException = null;
-    private static $silencedErrorCache = array();
-    private static $silencedErrorCount = 0;
     private static $exitCode = 0;
 
     /**
@@ -409,28 +407,7 @@ class ErrorHandler
             $errorAsException = self::$toStringException;
             self::$toStringException = null;
         } elseif (!$throw && !($type & $level)) {
-            if (!isset(self::$silencedErrorCache[$id = $file.':'.$line])) {
-                $lightTrace = $this->tracedErrors & $type ? $this->cleanTrace(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 3), $type, $file, $line, false) : array();
-                $errorAsException = new SilencedErrorContext($type, $file, $line, $lightTrace);
-            } elseif (isset(self::$silencedErrorCache[$id][$message])) {
-                $lightTrace = null;
-                $errorAsException = self::$silencedErrorCache[$id][$message];
-                ++$errorAsException->count;
-            } else {
-                $lightTrace = array();
-                $errorAsException = null;
-            }
-
-            if (100 < ++self::$silencedErrorCount) {
-                self::$silencedErrorCache = $lightTrace = array();
-                self::$silencedErrorCount = 1;
-            }
-            if ($errorAsException) {
-                self::$silencedErrorCache[$id][$message] = $errorAsException;
-            }
-            if (null === $lightTrace) {
-                return;
-            }
+            $errorAsException = new SilencedErrorContext($type, $file, $line);
         } else {
             if ($scope) {
                 $errorAsException = new ContextErrorException($logMessage, 0, $type, $file, $line, $context);
@@ -441,7 +418,19 @@ class ErrorHandler
             // Clean the trace by removing function arguments and the first frames added by the error handler itself.
             if ($throw || $this->tracedErrors & $type) {
                 $backtrace = $backtrace ?: $errorAsException->getTrace();
-                $lightTrace = $this->cleanTrace($backtrace, $type, $file, $line, $throw);
+                $lightTrace = $backtrace;
+
+                for ($i = 0; isset($backtrace[$i]); ++$i) {
+                    if (isset($backtrace[$i]['file'], $backtrace[$i]['line']) && $backtrace[$i]['line'] === $line && $backtrace[$i]['file'] === $file) {
+                        $lightTrace = array_slice($lightTrace, 1 + $i);
+                        break;
+                    }
+                }
+                if (!($throw || $this->scopedErrors & $type)) {
+                    for ($i = 0; isset($lightTrace[$i]); ++$i) {
+                        unset($lightTrace[$i]['args']);
+                    }
+                }
                 $this->traceReflector->setValue($errorAsException, $lightTrace);
             } else {
                 $this->traceReflector->setValue($errorAsException, array());
@@ -498,13 +487,13 @@ class ErrorHandler
                 $this->loggers[$type][0],
                 ($type & $level) ? $this->loggers[$type][1] : LogLevel::DEBUG,
                 $logMessage,
-                $errorAsException ? array('exception' => $errorAsException) : array(),
+                array('exception' => $errorAsException),
             );
         } else {
             try {
                 $this->isRecursive = true;
                 $level = ($type & $level) ? $this->loggers[$type][1] : LogLevel::DEBUG;
-                $this->loggers[$type][0]->log($level, $logMessage, $errorAsException ? array('exception' => $errorAsException) : array());
+                $this->loggers[$type][0]->log($level, $logMessage, array('exception' => $errorAsException));
             } finally {
                 $this->isRecursive = false;
             }
@@ -545,6 +534,9 @@ class ErrorHandler
                 }
             } elseif ($exception instanceof \ErrorException) {
                 $message = 'Uncaught '.$exception->getMessage();
+                if ($exception instanceof ContextErrorException) {
+                    $e['context'] = $exception->getContext();
+                }
             } else {
                 $message = 'Uncaught Exception: '.$exception->getMessage();
             }
@@ -652,25 +644,17 @@ class ErrorHandler
      *
      * The most important feature of this is to prevent
      * autoloading until unstackErrors() is called.
-     *
-     * @deprecated since version 3.4, to be removed in 4.0.
      */
     public static function stackErrors()
     {
-        @trigger_error('Support for stacking errors is deprecated since Symfony 3.4 and will be removed in 4.0.', E_USER_DEPRECATED);
-
         self::$stackedErrorLevels[] = error_reporting(error_reporting() | E_PARSE | E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR);
     }
 
     /**
      * Unstacks stacked errors and forwards to the logger.
-     *
-     * @deprecated since version 3.4, to be removed in 4.0.
      */
     public static function unstackErrors()
     {
-        @trigger_error('Support for unstacking errors is deprecated since Symfony 3.4 and will be removed in 4.0.', E_USER_DEPRECATED);
-
         $level = array_pop(self::$stackedErrorLevels);
 
         if (null !== $level) {
@@ -705,24 +689,5 @@ class ErrorHandler
             new UndefinedMethodFatalErrorHandler(),
             new ClassNotFoundFatalErrorHandler(),
         );
-    }
-
-    private function cleanTrace($backtrace, $type, $file, $line, $throw)
-    {
-        $lightTrace = $backtrace;
-
-        for ($i = 0; isset($backtrace[$i]); ++$i) {
-            if (isset($backtrace[$i]['file'], $backtrace[$i]['line']) && $backtrace[$i]['line'] === $line && $backtrace[$i]['file'] === $file) {
-                $lightTrace = array_slice($lightTrace, 1 + $i);
-                break;
-            }
-        }
-        if (!($throw || $this->scopedErrors & $type)) {
-            for ($i = 0; isset($lightTrace[$i]); ++$i) {
-                unset($lightTrace[$i]['args'], $lightTrace[$i]['object']);
-            }
-        }
-
-        return $lightTrace;
     }
 }

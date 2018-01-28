@@ -178,7 +178,7 @@ class FacetFacetSourceTest extends EntityKernelTestBase {
    */
   public function testQueryTypeJugglingInvalidCombo() {
     $entity = new Facet([], 'facets_facet');
-    $entity->setWidget('numericgranular');
+    $entity->setWidget('widget_date_qt');
     $entity->setFacetSourceId('search_api:views_page__search_api_test_view__page_1');
     $entity->setFieldIdentifier('name');
     $processor = [

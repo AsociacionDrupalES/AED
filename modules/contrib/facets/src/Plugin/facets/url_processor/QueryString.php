@@ -100,7 +100,22 @@ class QueryString extends UrlProcessorPluginBase {
           // Enable parent id again if exists.
           $parent_ids = $facet->getHierarchyInstance()->getParentIds($result->getRawValue());
           if (isset($parent_ids[0]) && $parent_ids[0]) {
-            $filter_params[] = $this->urlAlias . $this->getSeparator() . $parent_ids[0];
+            // Get the parents children.
+            $child_ids = $facet->getHierarchyInstance()->getNestedChildIds($parent_ids[0]);
+
+            // Check if there are active siblings.
+            $active_sibling = FALSE;
+            if ($child_ids) {
+              foreach ($results as $result2) {
+                if ($result2->isActive() && $result2->getRawValue() != $result->getRawValue() && in_array($result2->getRawValue(), $child_ids)) {
+                  $active_sibling = TRUE;
+                  continue;
+                }
+              }
+            }
+            if (!$active_sibling) {
+              $filter_params[] = $this->urlAlias . $this->getSeparator() . $parent_ids[0];
+            }
           }
         }
       }

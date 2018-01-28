@@ -37,7 +37,6 @@ use Drupal\facets_summary\FacetsSummaryInterface;
  *     "processor_configs",
  *   },
  *   links = {
- *     "canonical" = "/admin/config/search/facets",
  *     "add-form" = "/admin/config/search/facets/add-facet-summary",
  *     "edit-form" = "/admin/config/search/facets/facet-summary/{facets_summary}/edit",
  *     "settings-form" = "/admin/config/search/facets/facet-summary{facets_summary}/settings",

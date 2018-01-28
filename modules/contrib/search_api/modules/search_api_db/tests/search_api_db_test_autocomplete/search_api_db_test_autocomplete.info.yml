@@ -8,8 +8,8 @@ dependencies:
 # core: 8.x
 hidden: true
 
-# Information added by Drupal.org packaging script on 2017-10-14
-version: '8.x-1.5'
+# Information added by Drupal.org packaging script on 2017-12-24
+version: '8.x-1.6'
 core: '8.x'
 project: 'search_api'
-datestamp: 1507989257
+datestamp: 1514109797

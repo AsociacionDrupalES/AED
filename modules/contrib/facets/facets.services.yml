@@ -21,7 +21,6 @@ services:
     class: Drupal\facets\FacetManager\DefaultFacetManager
     arguments:
       - '@plugin.manager.facets.query_type'
-      - '@plugin.manager.facets.widget'
       - '@plugin.manager.facets.facet_source'
       - '@plugin.manager.facets.processor'
       - '@entity_type.manager'

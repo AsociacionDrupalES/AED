@@ -74,9 +74,11 @@ abstract class ViewsDisplayBase extends DisplayPluginBase {
    */
   public function isRenderedInCurrentRequest() {
     $plugin_definition = $this->getPluginDefinition();
-    $current_route = $this->getCurrentRouteMatch()->getRouteName();
-    $view_route = 'view.' . $plugin_definition['view_id'] . '.' . $plugin_definition['view_display'];
-    return $current_route == $view_route;
+    $current_route = $this->getCurrentRouteMatch();
+    $view_id = $current_route->getParameter('view_id');
+    $display_id = $current_route->getParameter('display_id');
+    return $view_id === $plugin_definition['view_id'] &&
+        $display_id === $plugin_definition['view_display'];
   }
 
   /**

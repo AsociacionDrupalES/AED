@@ -703,7 +703,7 @@ class ContentEntity extends DatasourcePluginBase implements EntityDatasourceInte
 
     if (isset($page)) {
       $page_size = $this->getConfigValue('tracking_page_size');
-      assert('$page_size', 'Tracking page size is not set.');
+      assert($page_size, 'Tracking page size is not set.');
       $select->range($page * $page_size, $page_size);
       // For paging to reliably work, a sort should be present.
       $entity_id = $this->getEntityType()->getKey('id');

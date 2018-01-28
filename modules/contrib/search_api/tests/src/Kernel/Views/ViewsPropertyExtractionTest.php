@@ -37,17 +37,23 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
    *
    * @param string $property_path
    *   The combined property path of the field.
-   * @param string $expected
-   *   The expected value on the row.
+   * @param string|string[] $expected
+   *   The expected value(s) on the row.
    * @param bool $pre_set
    *   (optional) Whether to pre-set the values on the row (to check whether
    *   they're correctly passed through).
    * @param bool $return_fields
    *   (optional) Whether to return any fields for the index.
+   * @param bool $set_highlighting
+   *   (optional) Whether to set highlighting data on the field. (Only makes
+   *   sense if $return_fields is TRUE.)
+   * @param string|string[]|null $processor_property_value
+   *   (optional) If set, the value(s) to set for processor-generated
+   *   properties.
    *
    * @dataProvider propertyExtractionDataProvider
    */
-  public function testPropertyExtraction($property_path, $expected, $pre_set = FALSE, $return_fields = TRUE) {
+  public function testPropertyExtraction($property_path, $expected, $pre_set = FALSE, $return_fields = TRUE, $set_highlighting = FALSE, $processor_property_value = NULL) {
     $datasource_id = 'entity:user';
 
     /** @var \Drupal\search_api\IndexInterface|\PHPUnit_Framework_MockObject_MockObject $index */
@@ -58,33 +64,41 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
     $property2->method('defaultConfiguration')->willReturn([]);
     $property2->method('getClass')->willReturn(StringData::class);
     $index->method('getPropertyDefinitions')->willReturnMap([
-      [NULL, [
-        'property1' => new ProcessorProperty([
-          'processor_id' => 'processor1',
-        ]),
-      ]],
-      [$datasource_id, [
-        'property2' => $property2,
-      ]],
+      [
+        NULL,
+        [
+          'property1' => new ProcessorProperty([
+            'processor_id' => 'processor1',
+          ]),
+        ],
+      ],
+      [
+        $datasource_id,
+        [
+          'property2' => $property2,
+        ],
+      ],
     ]);
     $generate_add_field_values = function ($value) {
       return function (ItemInterface $item) use ($value) {
         foreach ($item->getFields() as $field) {
-          $values = [$value];
+          $values = (array) $value;
           $config = $field->getConfiguration();
-          if (!empty($config[$value])) {
-            $values = [$config[$value]];
+          if (is_scalar($value) && !empty($config[$value])) {
+            $values = (array) $config[$value];
           }
           $field->setValues($values);
         }
       };
     };
+    $value1 = $processor_property_value ?: 'Processor 1';
     $processor1 = $this->getMock(ProcessorInterface::class);
     $processor1->method('addFieldValues')
-      ->willReturnCallback($generate_add_field_values('Processor 1'));
+      ->willReturnCallback($generate_add_field_values($value1));
+    $value2 = $processor_property_value ?: 'Processor 2';
     $processor2 = $this->getMock(ProcessorInterface::class);
     $processor2->method('addFieldValues')
-      ->willReturnCallback($generate_add_field_values('Processor 2'));
+      ->willReturnCallback($generate_add_field_values($value2));
     $index->method('getProcessor')->willReturnMap([
       ['processor1', $processor1],
       ['processor2', $processor2],
@@ -133,7 +147,11 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
       'search_api field' => 'test',
     ];
     $field = new SearchApiStandard($configuration, '', []);
-    $field->init($view, $display);
+    $options = [
+      'link_to_item' => TRUE,
+      'use_highlighting' => TRUE,
+    ];
+    $field->init($view, $display, $options);
     $field->query();
 
     $user = User::create([
@@ -141,8 +159,9 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
     ]);
     $object = $user->getTypedData();
     $id = Utility::createCombinedId($datasource_id, $user->id());
+    $item = $fields_helper->createItemFromObject($index, $object, $id);
     $row = new ResultRow([
-      '_item' => $fields_helper->createItemFromObject($index, $object, $id),
+      '_item' => $item,
       '_object' => $object,
       '_relationship_objects' => [
         NULL => [$object],
@@ -152,24 +171,31 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
     if ($pre_set) {
       $row->$property_path = ['Pre-set'];
     }
-    // For the configurable property, also set the values for special property
-    // path.
-    if ($property_path === 'entity:user/property2' && $return_fields) {
+    // For the configurable property, also set the values for the special
+    // property path.
+    if ($property_path === 'entity:user/property2') {
       $special_path = "$property_path|test";
       if ($pre_set) {
         $row->$special_path = ['Pre-set'];
       }
-      // Whether that special property path will actually used by the field
+      // Whether that special property path will actually be used by the field
       // plugin depends on whether it finds a matching field.
       if ($return_fields) {
         $property_path = $special_path;
       }
     }
+    if ($set_highlighting) {
+      $item->setExtraData('highlighted_fields', [
+        'test' => [
+          '<strong>Highlighted</strong> value',
+        ],
+      ]);
+    }
     $values = [$row];
 
     $field->preRender($values);
 
-    $this->assertEquals([$expected], $row->$property_path);
+    $this->assertEquals((array) $expected, $row->$property_path);
   }
 
   /**
@@ -182,13 +208,105 @@ class ViewsPropertyExtractionTest extends KernelTestBase {
    */
   public function propertyExtractionDataProvider() {
     return [
-      'extract normal property' => ['entity:user/name', 'Test user'],
-      'use normal property' => ['entity:user/name', 'Pre-set', TRUE],
-      'extract processor property' => ['property1', 'Processor 1'],
-      'use processor property' => ['property1', 'Pre-set', TRUE],
-      'extract configurable property' => ['entity:user/property2', 'Override'],
-      'use configurable property' => ['entity:user/property2', 'Pre-set', TRUE],
-      'use overridden configurable property' => ['entity:user/property2', 'Processor 2', FALSE, FALSE],
+      'extract normal property' => [
+        'entity:user/name',
+        'Test user',
+      ],
+      'use normal property' => [
+        'entity:user/name',
+        'Pre-set',
+        TRUE,
+      ],
+      'extract processor property' => [
+        'property1',
+        'Processor 1',
+      ],
+      'use processor property' => [
+        'property1',
+        'Pre-set',
+        TRUE,
+      ],
+      'extract configurable property' => [
+        'entity:user/property2',
+        'Override',
+      ],
+      'use configurable property' => [
+        'entity:user/property2',
+        'Pre-set',
+        TRUE,
+      ],
+      'use overridden configurable property' => [
+        'entity:user/property2',
+        'Processor 2',
+        FALSE,
+        FALSE,
+      ],
+      'highlighted property 1' => [
+        'entity:user/name',
+        '<strong>Highlighted</strong> value',
+        FALSE,
+        TRUE,
+        TRUE,
+      ],
+      'highlighted property 2' => [
+        'entity:user/name',
+        '<strong>Highlighted</strong> value',
+        TRUE,
+        TRUE,
+        TRUE,
+      ],
+      'highlighted processor property 1' => [
+        'property1',
+        '<strong>Highlighted</strong> value',
+        FALSE,
+        TRUE,
+        TRUE,
+      ],
+      'highlighted processor property 2' => [
+        'property1',
+        '<strong>Highlighted</strong> value',
+        TRUE,
+        TRUE,
+        TRUE,
+      ],
+      'highlighted configurable property 1' => [
+        'entity:user/property2',
+        '<strong>Highlighted</strong> value',
+        FALSE,
+        TRUE,
+        TRUE,
+      ],
+      'highlighted configurable property 2' => [
+        'entity:user/property2',
+        '<strong>Highlighted</strong> value',
+        TRUE,
+        TRUE,
+        TRUE,
+      ],
+      'multi-value highlighting 1' => [
+        'property1',
+        ['<strong>Highlighted</strong> value', 'Other value'],
+        FALSE,
+        TRUE,
+        TRUE,
+        ['Highlighted value', 'Other value'],
+      ],
+      'multi-value highlighting 2' => [
+        'property1',
+        ['Other value', '<strong>Highlighted</strong> value'],
+        FALSE,
+        TRUE,
+        TRUE,
+        ['Other value', 'Highlighted value'],
+      ],
+      'multi-value highlighting 3' => [
+        'property1',
+        ['Other value', '<strong>Highlighted</strong> value'],
+        FALSE,
+        TRUE,
+        TRUE,
+        ['Other value', 'Foobar'],
+      ],
     ];
   }
 

@@ -25,5 +25,12 @@
   "license": "GPL-2.0+",
   "require-dev": {
     "drupal/search_api_autocomplete": "@dev"
+  },
+  "extra": {
+    "drush": {
+      "services": {
+        "drush.services.yml": "^9"
+      }
+    }
   }
 }

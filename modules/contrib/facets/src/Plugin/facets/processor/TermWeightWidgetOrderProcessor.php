@@ -4,6 +4,9 @@ namespace Drupal\facets\Plugin\facets\processor;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\Core\TypedData\ComplexDataDefinitionInterface;
+use Drupal\Core\TypedData\DataReferenceDefinitionInterface;
+use Drupal\facets\FacetInterface;
 use Drupal\facets\Processor\SortProcessorPluginBase;
 use Drupal\facets\Result\Result;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -84,6 +87,31 @@ class TermWeightWidgetOrderProcessor extends SortProcessorPluginBase implements 
       return 0;
     }
     return ($term_a->getWeight() < $term_b->getWeight()) ? -1 : 1;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function supportsFacet(FacetInterface $facet) {
+    $data_definition = $facet->getDataDefinition();
+    if ($data_definition->getDataType() === 'entity_reference') {
+      return TRUE;
+    }
+    if (!($data_definition instanceof ComplexDataDefinitionInterface)) {
+      return FALSE;
+    }
+
+    $data_definition = $facet->getDataDefinition();
+    $property_definitions = $data_definition->getPropertyDefinitions();
+    foreach ($property_definitions as $definition) {
+      if ($definition instanceof DataReferenceDefinitionInterface
+        && $definition->getDataType() === 'entity_reference'
+        && $definition->getConstraint('EntityType') === 'taxonomy_term'
+      ) {
+        return TRUE;
+      }
+    }
+    return FALSE;
   }
 
 }

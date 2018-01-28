@@ -5,10 +5,10 @@ facet.widget.config.slider:
   label: 'List of range widget configuration'
   mapping:
     prefix:
-      type: string
+      type: label
       label: 'Prefix'
     suffix:
-      type: string
+      type: label
       label: 'Suffix'
     min_type:
       type: string
@@ -25,3 +25,30 @@ facet.widget.config.slider:
     step:
       type: float
       label: 'Step'
+
+facet.widget.config.range_slider:
+  type: facet.widget.default_config
+  label: 'List of range widget configuration'
+  mapping:
+    prefix:
+      type: label
+      label: 'Prefix'
+    suffix:
+      type: label
+      label: 'Suffix'
+    min_type:
+      type: string
+      label: 'Minimum type'
+    min_value:
+      type: float
+      label: 'Minimum value'
+    max_type:
+      type: string
+      label: 'Maximum type'
+    max_value:
+      type: float
+      label: 'Maximum value'
+    step:
+      type: float
+      label: 'Step'
+

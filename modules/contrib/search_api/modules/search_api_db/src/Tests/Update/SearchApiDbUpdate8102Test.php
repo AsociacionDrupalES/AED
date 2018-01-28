@@ -2,8 +2,8 @@
 
 namespace Drupal\search_api_db\Tests\Update;
 
+use Drupal\FunctionalTests\Update\UpdatePathTestBase;
 use Drupal\search_api_db\Tests\DatabaseTestsTrait;
-use Drupal\system\Tests\Update\UpdatePathTestBase;
 
 /**
  * Tests whether search_api_db_update_8102() works correctly.
@@ -11,8 +11,6 @@ use Drupal\system\Tests\Update\UpdatePathTestBase;
  * @group search_api
  *
  * @see https://www.drupal.org/node/2884451
- *
- * @todo Change parent class once we depend on Drupal 8.4+.
  */
 class SearchApiDbUpdate8102Test extends UpdatePathTestBase {
 

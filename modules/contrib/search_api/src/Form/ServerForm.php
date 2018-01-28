@@ -186,7 +186,6 @@ class ServerForm extends EntityForm {
         $form['backend_config']['#type'] = 'details';
         $form['backend_config']['#title'] = $this->t('Configure %plugin backend', ['%plugin' => $backend->label()]);
         $form['backend_config']['#open'] = TRUE;
-        $form['backend_config']['#optional'] = FALSE;
       }
     }
     // Only notify the user of a missing backend plugin if we're editing an
@@ -197,7 +196,6 @@ class ServerForm extends EntityForm {
     }
     $form['backend_config'] += [
       '#type' => 'container',
-      '#optional' => TRUE,
     ];
     $form['backend_config']['#attributes']['id'] = 'search-api-backend-config-form';
     $form['backend_config']['#tree'] = TRUE;
