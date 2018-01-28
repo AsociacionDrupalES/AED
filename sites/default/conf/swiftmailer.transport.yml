@@ -1,0 +1,11 @@
+transport: smtp
+smtp_host: smtp.mailgun.org
+smtp_port: 25
+smtp_encryption: '0'
+smtp_username: postmaster@mg.asociaciondrupal.es
+smtp_password: 886a26564f18735784db9d982a4f49b3
+sendmail_path: /usr/sbin/sendmail
+sendmail_mode: bs
+spool_directory: ''
+_core:
+  default_config_hash: 0SeYZshzgoabDrbz-junYqeQOQ9BypPv2gaFcnqKy0M

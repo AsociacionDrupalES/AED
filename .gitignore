@@ -1,3 +1,9 @@
+vendor/
+!/core/assets/vendor/
+modules/contrib
+themes/contrib
+profiles/contrib
+
 # Ignore configuration files that may contain sensitive information.
 sites/*/settings.local.php
 
