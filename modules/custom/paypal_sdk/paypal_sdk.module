@@ -22,5 +22,13 @@ function paypal_sdk_theme() {
       'template' => 'agreement-list-tables',
       'variables' => ['tables' => NULL],
     ],
+    'paypal_sdk__agreement_placeholder_link' => [
+      'template' => 'paypal-sdk--agreement-placeholder-link',
+      'variables' => ['plan_id' => NULL],
+    ],
+    'paypal_sdk__agreement_link' => [
+      'template' => 'paypal-sdk--agreement-link',
+      'variables' => ['url' => NULL],
+    ],
   ];
 }

@@ -89,9 +89,9 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
      * Since twe need a fresh link for each user and since the API is so slow, we return
      * a placeholder and replace it via ajax with the generated link.
      * */
-    $placeholder = [
-      '#type' => 'markup',
-      '#markup' => '<div class="placeholder-agreement-link" data-agreement-plan-id="' . $plan_id . '">' . t('Subscription link loading...') . '</div>',
+    $build = [
+      '#theme' => 'paypal_sdk__agreement_placeholder_link',
+      '#plan_id' => $plan_id,
       '#attached' => [
         'library' => ['paypal_sdk/generate-link'],
         'drupalSettings' => [
@@ -102,7 +102,7 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
       ]
     ];
 
-    return render($placeholder);
+    return render($build);
   }
 
 }

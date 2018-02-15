@@ -14,7 +14,7 @@
           url: drupalSettings.ppssFieldFormatter.url,
           data: {id: agreementPlanId}
         }).always(function (data) {
-          $placeholder.replaceWith(data.link);
+          $placeholder.replaceWith(data.res);
         });
 
       });

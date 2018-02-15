@@ -34,9 +34,17 @@ class PaypalSDKController extends ControllerBase {
     /** @var \PayPal\Api\Payer $payer */
     $payer = $agreement->getPayer();
 
+    $plan_id = $agreement->getDescription();
+    $agreement_id = $agreement->getId();
+
+    // Append new agreement.
+    $agreementMapping = $this->config('config.paypal_mapping')->get('mapping');
+
+    // @fixme if you create a plan $this->config('config.paypal_mapping')->get('mapping') will still keep the old conf.
+    // list($entity, $agreementField) = explode('-', $agreementMapping[$plan_id]);
+    $agreementField = 'field_paypal_agreement_id';
 
     // If the current user is anonymous and the email does not exist on any user, create a new account.
-
     if (Drupal::currentUser()->isAnonymous()) {
 
       // The email (user) already exist?
@@ -49,6 +57,7 @@ class PaypalSDKController extends ControllerBase {
         $user->enforceIsNew();
         $user->setEmail($payer->getPayerInfo()->getEmail());
         $user->setUsername($payer->getPayerInfo()->getEmail());
+        $user->set($agreementField, $agreement_id);
         //$user->addRole('socio'); ?
         $user->activate();
         $user->save();
@@ -59,28 +68,24 @@ class PaypalSDKController extends ControllerBase {
       }
       else {
         $user = $existingUser;
+        $user->set($agreementField, $agreement_id);
+        $user->save();
       }
 
     }
     else {
-      $user = Drupal::currentUser();
+      $uid = Drupal::currentUser()->id();
+      $user = User::load($uid);
+      $user->set($agreementField, $agreement_id);
+      $user->save();
     }
 
-    // Append new agreement.
-    $agreementMapping = $this->config('config.paypal_mapping')->get('mapping');
-    $plan_id = $agreement->getDescription();
-    list($entity, $agreementField) = explode('-', $agreementMapping[$plan_id]);
-    $userEntity = User::load($user->id());
-    $userEntity->{$agreementField}->appendItem($agreement->getId());
-
-    $userEntity->save();
     return $this->redirect('<front>');
 
-// Debug
-//    return array(
-//      '#markup' => '<pre>' . $agreement->toJSON(JSON_PRETTY_PRINT) . '</pre>',
-//    );
-
+    // Debug
+    //    return array(
+    //      '#markup' => '<pre>' . $agreement->toJSON(JSON_PRETTY_PRINT) . '</pre>',
+    //    );
   }
 
   /**
@@ -337,6 +342,9 @@ class PaypalSDKController extends ControllerBase {
    * Generates an agreement link and returns it for ajax calls.
    */
   public function getAgreementLink() {
+    $build = [
+      '#theme' => 'paypal_sdk__agreement_link'
+    ];
     $request = Drupal::request();
     $plan_id = $request->get('id');
 
@@ -344,23 +352,13 @@ class PaypalSDKController extends ControllerBase {
     /** @var BillingAgreement $pba */
     $pba = Drupal::service('paypal.billing.agreement');
     $url = $pba->getUserAgreementLink($plan_id);
-    $res = '';
 
     if ($url) {
-      /** @var Drupal\Core\GeneratedLink $link */
-      $link = Link::fromTextAndUrl(
-        'Subscribe',
-        Url::fromUri($url, array(
-          'absolute' => TRUE,
-          'attributes' => array(
-            'target' => '_blank',
-            'class' => array('paypal-subscribe-link')
-          )
-        )))->toRenderable();
-
-      $res = render($link);
+      $build['#url'] = $url;
     }
 
-    return new JsonResponse(['link' => $res]);
+    $res = render($build);
+
+    return new JsonResponse(['res' => $res]);
   }
 }
