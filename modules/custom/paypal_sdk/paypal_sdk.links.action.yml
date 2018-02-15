@@ -1,0 +1,5 @@
+paypal_sdk.plan_add_form:
+  route_name: paypal_sdk.plan_add_form
+  title: 'Add PayPal billing plan'
+  appears_on:
+    - paypal_sdk.billing_plan_list

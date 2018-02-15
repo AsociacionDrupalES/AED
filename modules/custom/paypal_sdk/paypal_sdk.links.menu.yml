@@ -1,0 +1,31 @@
+paypal_sdk.store:
+  route_name: paypal_sdk.store
+  parent: system.admin
+  description: 'Administer store'
+  title: PayPal subscriptions
+  weight: 0
+
+# PayPal billing plan menu items definition
+paypal_sdk_plan_list:
+  title: 'PayPal subscription plans'
+  route_name: paypal_sdk.billing_plan_list
+  description: 'Manage here the plans to which users can subscribe.'
+  parent: paypal_sdk.store
+  weight: 1
+
+# PayPal agreements menu items definition
+paypal_sdk_agreement_list:
+  title: 'PayPal Agreements'
+  route_name: paypal_sdk.agreements_list
+  description: 'List of subscriptions made by users.'
+  parent: paypal_sdk.store
+  weight: 2
+
+# Paypal Configuration
+paypal_sdk.config:
+ title: 'Settings'
+ route_name: paypal_sdk.config.form
+ parent: paypal_sdk.store
+ description: 'Configure PayPal simple subscription'
+ title: Paypal SDK
+ weight: 3

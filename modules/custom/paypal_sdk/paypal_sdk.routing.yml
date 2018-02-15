@@ -1,0 +1,110 @@
+# Response routes.
+
+# Catches the paypal response.
+paypal_sdk.process_response:
+  path: '/paypal/subscribe/response/process'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::processResponse'
+    _title: 'PayPal response'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Catches the paypal response when the user do not accept the agreement.
+paypal_sdk.process_cancelled_response:
+  path: '/paypal/subscribe/response/cancelled'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::cancelledResponse'
+    _title: 'PayPal cancelled response'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Returns an agreement link
+paypal_sdk.generate_agreement_link:
+  path: '/paypal/agreement/get-agreement-link'
+  methods: [POST]
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::getAgreementLink'
+    _title: 'PayPal agreement link'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+
+# Plan routes
+paypal_sdk.billing_plan_list:
+  path: '/admin/store/billing-plan/list'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::billingPlanList'
+    _title: 'Billing plan list'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Edit form for PayPal Plans.
+paypal_sdk.plan_add_form:
+  path: '/admin/plan/add'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanAddForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Edit form for PayPal Plans.
+paypal_sdk.plan_edit_form:
+  path: '/admin/plan/edit/{plan_id}'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanEditForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Delete plan confirm form.
+paypal_sdk.plan_delete_form:
+  path: '/admin/plan/delete/{plan_id}'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanDeleteForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Delete plan confirm form.
+paypal_sdk.plan_update_status_form:
+  path: '/admin/plan/update-status/{plan_id}/{status}'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\PlanUpdateStatusForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+
+# Agreements routes.
+# Agreement list.
+paypal_sdk.agreements_list:
+  path: '/admin/store/agreements/list'
+  defaults:
+    _controller: '\Drupal\paypal_sdk\Controller\PaypalSDKController::AgreementsList'
+    _title: 'Agreements list'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+# Agreement State
+paypal_sdk.agreement_update_status_form:
+  path: '/admin/agreement/update-status/{agreement_id}/{status}'
+  defaults:
+    _form: '\Drupal\paypal_sdk\Form\AgreementUpdateStatusForm'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+
+# Administration routes.
+
+# Paypal configuration form.
+paypal_sdk.config.form:
+  path: '/admin/config/system/paypal-sdk'
+  defaults:
+    _form: 'Drupal\paypal_sdk\Form\PaypalAdminForm'
+    _title: 'Paypal SDK'
+  requirements:
+    _permission: 'subscribe paypal products'
+
+paypal_sdk.store:
+  path: '/admin/store'
+  defaults:
+    _controller: '\Drupal\system\Controller\SystemController::systemAdminMenuBlockPage'
+    _title: 'Store'
+  requirements:
+    _permission: 'access administration pages'
