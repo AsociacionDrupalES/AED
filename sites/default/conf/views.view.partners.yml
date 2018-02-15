@@ -11,7 +11,6 @@ dependencies:
     - system.menu.main
     - taxonomy.vocabulary.anios
   content:
-    - 'taxonomy_term:anios:e39bed2b-f012-4786-9559-fb010b77022d'
     - 'taxonomy_term:anios:eb67f744-dd13-40a5-88f0-89892c782e3f'
   module:
     - image
@@ -309,7 +308,7 @@ display:
           admin_label: ''
           operator: or
           value:
-            388: 388
+            428: 428
           group: 1
           exposed: false
           expose:
@@ -503,7 +502,7 @@ display:
           empty: false
           tokenize: false
           content:
-            value: "<p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>\n<ul>\n    <li>Presencia del logo en la web corporativa de la AED</li>\n    <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>\n    <li>Patrocinio Bronce en la <a href=\"http://2016.drupalcamp.es/\">Drupalcamp Spain 2016</a>en Granada y acceso preferente al modo Plata u Oro en caso de desearlo.</li>\n    <li>Patrocinio Drupal Day 2016.</li>\n    <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante 2016. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>\n    <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>\n    <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>\n    <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>\n    <li>Acceso al grupo de Linkedin: <a href=\"https://www.linkedin.com/grp/home?gid=8125102\">linkedin</a></li>\n</ul>\n<a class=\"btn-black\" href=\"/contact/feedback\">Colabora con nosotros</a>."
+            value: "<p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>\n<ul>\n    <li>Presencia del logo en la web corporativa de la AED</li>\n    <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>\n    <li>Patrocinio Bronce en la <a href=\"http://drupalcamp.es/\">Drupalcamp Spain</a> y acceso preferente al modo Plata u Oro en caso de desearlo.</li>\n    <li>Patrocinio Drupal Day.</li>\n    <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante el año. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>\n    <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>\n    <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>\n    <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>\n    <li>Acceso al grupo de Linkedin: <a href=\"https://www.linkedin.com/grp/home?gid=8125102\">linkedin</a></li>\n</ul>\n<a class=\"btn-black\" href=\"/contact/feedback\">Colabora con nosotros</a>."
             format: full_html
           plugin_id: text
       pager:
