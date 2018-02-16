@@ -1,0 +1,28 @@
+uuid: d5f34034-61b9-4dc8-9d44-1649f1258789
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.teaser
+    - field.field.node.subscriptions.body
+    - node.type.subscriptions
+  module:
+    - text
+    - user
+id: node.subscriptions.teaser
+targetEntityType: node
+bundle: subscriptions
+mode: teaser
+content:
+  body:
+    label: hidden
+    type: text_summary_or_trimmed
+    weight: 101
+    settings:
+      trim_length: 600
+    third_party_settings: {  }
+    region: content
+  links:
+    weight: 100
+    region: content
+hidden: {  }
