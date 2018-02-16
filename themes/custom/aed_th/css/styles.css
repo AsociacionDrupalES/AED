@@ -479,6 +479,56 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   margin: 0 0 20px;
 }
 
+/* The animation code */
+@keyframes smooth-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: .3;
+  }
+}
+
+.placeholder-agreement-link {
+  margin: 0 auto;
+  width: 40%;
+}
+
+.placeholder-agreement-link > div {
+  border: 2px solid;
+  padding: 30px;
+  text-align: center;
+  background: #16165f;
+  color: white;
+  font-size: 22px;
+  opacity: .3;
+}
+
+.placeholder-agreement-link > p {
+  text-align: center;
+  animation: smooth-blink 2s infinite;
+  animation-direction: alternate;
+}
+
+.paypal-subscribe-link-container {
+  margin: 0 auto;
+  width: 40%;
+}
+
+.paypal-subscribe-link-container .paypal-subscribe-link {
+  padding: 30px;
+  text-align: center;
+  background: #16165f;
+  color: white;
+  font-size: 22px;
+  border-radius: 4px;
+  display: block;
+}
+
+.paypal-subscribe-link-container .paypal-subscribe-link:hover {
+  background: #36366f;
+}
+
 .btn-black {
   color: white;
   text-transform: uppercase;
