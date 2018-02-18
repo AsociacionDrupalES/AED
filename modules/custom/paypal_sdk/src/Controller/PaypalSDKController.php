@@ -35,57 +35,16 @@ class PaypalSDKController extends ControllerBase {
     $payer = $agreement->getPayer();
 
     $plan_id = $agreement->getDescription();
-    $agreement_id = $agreement->getId();
+    $plan = $pba->getPlan($plan_id);
 
-    // Append new agreement.
-    $agreementMapping = $this->config('config.paypal_mapping')->get('mapping');
-
-    // @fixme if you create a plan $this->config('config.paypal_mapping')->get('mapping') will still keep the old conf.
-    // list($entity, $agreementField) = explode('-', $agreementMapping[$plan_id]);
-    $agreementField = 'field_paypal_agreement_id';
-
-    // If the current user is anonymous and the email does not exist on any user, create a new account.
-    if (Drupal::currentUser()->isAnonymous()) {
-
-      // The email (user) already exist?
-      $existingUser = user_load_by_mail($payer->getPayerInfo()->getEmail());
-
-      if (!$existingUser) {
-        // If user does not exists, create a new one.
-        $user = User::create();
-        $user->set("init", 'mail');
-        $user->enforceIsNew();
-        $user->setEmail($payer->getPayerInfo()->getEmail());
-        $user->setUsername($payer->getPayerInfo()->getEmail());
-        $user->set($agreementField, $agreement_id);
-        //$user->addRole('socio'); ?
-        $user->activate();
-        $user->save();
-
-        _user_mail_notify('register_no_approval_required', $user);
-        // user_login_finalize($user);
-        drupal_set_message(t('Subscription successful. We sent you an activation email.'));
-      }
-      else {
-        $user = $existingUser;
-        $user->set($agreementField, $agreement_id);
-        $user->save();
-      }
-
-    }
-    else {
-      $uid = Drupal::currentUser()->id();
-      $user = User::load($uid);
-      $user->set($agreementField, $agreement_id);
-      $user->save();
-    }
+    // Lets modules to do things with te response.
+    Drupal::moduleHandler()->invokeAll('paypal_agreement_response_ok', [
+      'agreement' => $agreement,
+      'plan' => $plan,
+      'payer' => $payer
+    ]);
 
     return $this->redirect('<front>');
-
-    // Debug
-    //    return array(
-    //      '#markup' => '<pre>' . $agreement->toJSON(JSON_PRETTY_PRINT) . '</pre>',
-    //    );
   }
 
   /**
@@ -340,11 +299,10 @@ class PaypalSDKController extends ControllerBase {
 
   /**
    * Generates an agreement link and returns it for ajax calls.
+   * @throws \Exception
    */
   public function getAgreementLink() {
-    $build = [
-      '#theme' => 'paypal_sdk__agreement_link'
-    ];
+    $build = ['#theme' => 'paypal_sdk__agreement_link'];
     $request = Drupal::request();
     $plan_id = $request->get('id');
 
@@ -355,9 +313,12 @@ class PaypalSDKController extends ControllerBase {
 
     if ($url) {
       $build['#url'] = $url;
+      $res = render($build);
+    }
+    else {
+      $res = $this->t('Cant load link. Contact with the administrator.');
     }
 
-    $res = render($build);
 
     return new JsonResponse(['res' => $res]);
   }

@@ -305,6 +305,10 @@ class BillingAgreement {
   function getUserAgreementLink($plan_id) {
     $originalPlan = $this->getPlan($plan_id);
 
+    if (!$originalPlan) {
+      return FALSE;
+    }
+
     // @fixme Since the start date is required at the "plan form" but really is not part of a paypal plan we need to figure out how to catch this value from a plan to use it here because the agreement is who really needs a starting date. Maybe we can save this start day on the plan as a "extra data"?
     $utcTimezone = new \DateTimeZone('UTC');
     $start_date = new \DateTime('NOW', $utcTimezone);

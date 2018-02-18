@@ -1,0 +1,4 @@
+user view agreement plan on profile:
+  title: 'User view agreement plans on profile:'
+  description: 'View associated PayPal agreements plans.'
+  restrict access: true

@@ -2,6 +2,7 @@
 
 namespace Drupal\paypal_sdk\Plugin\Field\FieldFormatter;
 
+use Drupal;
 use Drupal\Core\Url;
 use Drupal\Core\Link;
 use Drupal\Core\Field\FormatterBase;
@@ -9,7 +10,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\paypal_sdk\Services\BillingAgreement;
 use Drupal\paypal_sdk\Controller\PaypalSDKController;
-use Symfony\Component\Validator\Constraints\DateTime;
+use Drupal\user\Entity\User;
 
 
 /**
@@ -60,7 +61,12 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
 
     foreach ($items as $delta => $item) {
       $agreement_id = $item->getString();
-      $elements[$delta] = ['#markup' => $this->viewValue($agreement_id)];
+      $view_value = $this->viewValue($agreement_id);
+
+      if ($view_value !== NULL) {
+        $elements[$delta] = ['#markup' => $view_value];
+      }
+
     }
 
     return $elements;
@@ -84,6 +90,11 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
     /** @var BillingAgreement $pba */
     $pba = \Drupal::service('paypal.billing.agreement');
     $plan = $pba->getPlan($agreement->getDescription());
+
+    if (!$plan) {
+      return NULL;
+    }
+
     $plan_payment_definitions_arr = $plan->getPaymentDefinitions();
     /** @var \PayPal\Api\PaymentDefinition $plan_payment_definitions */
     $plan_payment_definitions = $plan_payment_definitions_arr[0];
