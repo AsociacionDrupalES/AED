@@ -1,10 +1,10 @@
-uuid: a815adfe-a386-480e-9723-9d008e575ec3
+uuid: 5c093eae-2f37-49f1-ba74-a2403535e2c2
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.node.subscriptions.body
-    - field.field.node.subscriptions.field_subscription_link
+    - field.field.node.subscriptions.field_subscription
     - node.type.subscriptions
   module:
     - path
@@ -30,7 +30,7 @@ content:
     region: content
     settings: {  }
     third_party_settings: {  }
-  field_subscription_link:
+  field_subscription:
     weight: 122
     settings: {  }
     third_party_settings: {  }

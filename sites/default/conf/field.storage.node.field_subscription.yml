@@ -1,18 +1,18 @@
-uuid: d8a1f87c-3d47-4042-981e-323c961a6e46
+uuid: 0cccae71-c1f6-4c32-919c-dcf0c52dcaa9
 langcode: en
 status: true
 dependencies:
   module:
     - node
     - paypal_sdk
-id: node.field_subscription_link
-field_name: field_subscription_link
+id: node.field_subscription
+field_name: field_subscription
 entity_type: node
 type: paypal_subscribe_field_type
 settings: {  }
 module: paypal_sdk
 locked: false
-cardinality: -1
+cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false

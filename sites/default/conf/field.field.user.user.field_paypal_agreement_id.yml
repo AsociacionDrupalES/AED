@@ -1,4 +1,4 @@
-uuid: c90eba8e-7a31-4fd5-b575-5813b2f7a09b
+uuid: 29e66549-107e-4cf2-a210-7490e2169ce5
 langcode: en
 status: true
 dependencies:
@@ -13,7 +13,7 @@ id: user.user.field_paypal_agreement_id
 field_name: field_paypal_agreement_id
 entity_type: user
 bundle: user
-label: 'Paypal Agreement ID'
+label: Suscripción
 description: ''
 required: false
 translatable: false

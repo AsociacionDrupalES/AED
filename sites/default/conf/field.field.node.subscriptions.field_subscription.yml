@@ -1,17 +1,17 @@
-uuid: df65818d-8831-465d-8df1-9f5e0a09b8e7
+uuid: 8554469f-e30c-488f-9217-e4c1f0f9f273
 langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_subscription_link
+    - field.storage.node.field_subscription
     - node.type.subscriptions
   module:
     - paypal_sdk
-id: node.subscriptions.field_subscription_link
-field_name: field_subscription_link
+id: node.subscriptions.field_subscription
+field_name: field_subscription
 entity_type: node
 bundle: subscriptions
-label: 'Subscription link'
+label: Subscription
 description: ''
 required: false
 translatable: false

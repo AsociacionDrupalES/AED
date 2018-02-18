@@ -1,10 +1,10 @@
-uuid: 167d03aa-01bd-4413-a83a-9e44755c2271
+uuid: da622c3e-fff6-4cff-b76c-23df93069866
 langcode: en
 status: true
 dependencies:
   config:
     - field.field.node.subscriptions.body
-    - field.field.node.subscriptions.field_subscription_link
+    - field.field.node.subscriptions.field_subscription
     - node.type.subscriptions
   module:
     - paypal_sdk
@@ -22,9 +22,9 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
-  field_subscription_link:
+  field_subscription:
     weight: 102
-    label: hidden
+    label: above
     settings:
       link_text: Subscribe
     third_party_settings: {  }
@@ -33,6 +33,4 @@ content:
   links:
     weight: 100
     region: content
-    settings: {  }
-    third_party_settings: {  }
 hidden: {  }
