@@ -91,6 +91,13 @@ class BillingAgreement {
       $this->apiContext = new ApiContext(
         new OAuthTokenCredential($this->configFactory->get('config.paypal_credentials')->get('client_id'), $this->configFactory->get('config.paypal_credentials')->get('client_secret'))
       );
+
+      $this->apiContext->setConfig(
+        array(
+          'mode' => 'live',
+        )
+      );
+
     }
 
   }
