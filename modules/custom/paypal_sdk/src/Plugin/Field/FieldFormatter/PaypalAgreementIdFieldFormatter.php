@@ -123,8 +123,8 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
       ['data' => render($name_and_desc)],
       // ['data' => $plan_payment_definitions->getType()],
       ['data' => $plan_amount->getValue() . ' ' . $plan_amount->getCurrency()],
-      ['data' => $start_date->format('m/d/Y')],
-      ['data' => $next_billing_date->format('m/d/Y')],
+      ['data' => $start_date->format('d/m/Y')],
+      ['data' => $next_billing_date->format('d/m/Y')],
       ['data' => $agreement->getState()],
     ];
 
@@ -162,6 +162,7 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
     $build['table'] = [
       '#theme' => 'table',
       '#header' => $table_header,
+      '#attributes' => ['class' => ['agreements-table']],
       '#rows' => [
         $table_rows
       ],

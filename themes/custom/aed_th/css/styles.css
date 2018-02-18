@@ -529,6 +529,47 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   background: #36366f;
 }
 
+.field--type-paypal-agreement-id-field-type {
+  margin: 30px 0;
+}
+
+.agreements-table {
+  border: 1px solid grey;
+}
+
+.agreements-table thead {
+  /**/
+}
+
+.agreements-table thead tr {
+  /**/
+}
+
+.agreements-table thead tr th {
+  background: #ebebeb;
+  padding: 10px;
+  text-align: left;
+}
+
+.agreements-table tbody {
+  /**/
+}
+
+.agreements-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.agreements-table tbody tr td {
+  vertical-align: text-bottom;
+  padding: 10px;
+  text-align: left;
+}
+
+.agreements-table tbody tr td a {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 .btn-black {
   color: white;
   text-transform: uppercase;

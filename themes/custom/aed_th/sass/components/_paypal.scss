@@ -48,3 +48,42 @@
   }
 }
 
+.field--type-paypal-agreement-id-field-type {
+  margin: 30px 0;
+}
+
+.agreements-table {
+  border: 1px solid grey;
+  thead {
+    /**/
+    tr { /**/
+
+      th {
+        background: #ebebeb;
+        padding: 10px;
+        text-align: left;
+      }
+    }
+  }
+
+  tbody {
+    /**/
+    tr {
+
+      &:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      td {
+        vertical-align: text-bottom;
+        padding: 10px;
+        text-align: left;
+
+        a {
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
