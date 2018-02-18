@@ -76,6 +76,7 @@ function paypal_sdk_paypal_agreement_response_ok($agreement, $plan, $payer) {
     else {
       $user = $existingUser;
       $user->set($agreementField, $agreement_id);
+      $user->addRole('socio_2018');
       $user->save();
       drupal_set_message(t('Subscription successful. Since your email exist in this site we associated the subscription to you account.'));
     }
@@ -85,6 +86,7 @@ function paypal_sdk_paypal_agreement_response_ok($agreement, $plan, $payer) {
     $uid = Drupal::currentUser()->id();
     $user = User::load($uid);
     $user->set($agreementField, $agreement_id);
+    $user->addRole('socio_2018');
     $user->save();
     drupal_set_message(t('Subscription successful.'));
   }
