@@ -69,10 +69,7 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
     $elements = [];
 
     foreach ($items as $delta => $item) {
-      /** @var Drupal\Core\TypedData\Plugin\DataType\StringData $a */
-      $plan_id = $item->get('plan_id');
-
-      $elements[$delta] = ['#markup' => $this->viewValue($plan_id->getCastedValue())];
+      $elements[$delta] = ['#markup' => $this->viewValue($item)];
     }
 
     return $elements;
@@ -81,17 +78,18 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
   /**
    * Generate the output appropriate for one field item.
    *
-   * @param $plan_id
+   * @param $item
    * @return array
    */
-  protected function viewValue($plan_id) {
+  protected function viewValue($item) {
     /*
      * Since twe need a fresh link for each user and since the API is so slow, we return
      * a placeholder and replace it via ajax with the generated link.
      * */
     $build = [
       '#theme' => 'paypal_sdk__agreement_placeholder_link',
-      '#plan_id' => $plan_id,
+      '#plan_id' => $item->plan_id,
+      '#start_date' => $item->agreement_start_choice,
       '#attached' => [
         'library' => ['paypal_sdk/generate-link'],
         'drupalSettings' => [

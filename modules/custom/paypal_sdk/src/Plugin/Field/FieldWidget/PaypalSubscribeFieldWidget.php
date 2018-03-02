@@ -2,15 +2,12 @@
 
 namespace Drupal\paypal_sdk\Plugin\Field\FieldWidget;
 
-use Drupal\Core\Entity\Entity;
-use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Datetime\Entity\DateFormat;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Entity\Query\QueryFactory;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\paypal_sdk\Services\BillingAgreement;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Plugin implementation of the 'paypal_subscribe_field_widget' widget.
@@ -62,7 +59,7 @@ class PaypalSubscribeFieldWidget extends WidgetBase {
    * {@inheritdoc}
    */
   public function formElement(FieldItemListInterface $items, $delta, array $element, array &$form, FormStateInterface $form_state) {
-
+    $now = new DrupalDateTime();
     $options = ['' => 'none'];
     $cache = \Drupal::cache();
 
@@ -81,15 +78,40 @@ class PaypalSubscribeFieldWidget extends WidgetBase {
       $cache->set('paypal_sdk_options_list', $options);
     }
 
+    $element['plan_id'] = [
+      '#type' => 'select',
+      '#options' => $options,
+      '#title' => t('Select the subscription'),
+      '#default_value' => isset($items[$delta]->plan_id) ? $items[$delta]->plan_id : '',
+      '#required' => FALSE,
+      '#min' => 1,
+    ];
 
-    $element['plan_id'] = $element + [
-        '#type' => 'select',
-        '#options' => $options,
-        '#title' => t('Select the subscription'),
-        '#default_value' => isset($items[$delta]->plan_id) ? $items[$delta]->plan_id : NULL,
-        '#required' => FALSE,
-        '#min' => 1,
-      ];
+    $element['agreement_start_choice'] = [
+      '#title' => t('When should the agreement start?'),
+      '#type' => 'select',
+      '#options' => [
+        'ipso_facto' => $this->t('Immediately'),
+        'first_of_month' => $this->t('The first day of the next month'),
+        'first_of_year' => $this->t('The first day of the next year'),
+      ],
+      '#default_value' => isset($items[$delta]->agreement_start_choice) ? $items[$delta]->agreement_start_choice : 'ipso_facto',
+    ];
+
+//    $date_format = DateFormat::load('html_date')->getPattern();
+//    $time_format = DateFormat::load('html_time')->getPattern();
+//
+//    $element['start_date'] = [
+//      '#title' => $this->t('Start date'),
+//      '#type' => 'datetime',
+//      '#date_date_element' => 'date',
+//      '#date_time_element' => 'time',
+//      '#date_year_range' => $now->format('Y') . ':+10',
+//      '#description' => $this->t('If you selected custom date please set up the right one.'),
+//      '#default_value' => isset($items[$delta]->start_date) ? $items[$delta]->start_date : $now,
+//      '#date_date_format' => $date_format,
+//      '#date_time_format' => $time_format,
+//    ];
 
     return $element;
   }

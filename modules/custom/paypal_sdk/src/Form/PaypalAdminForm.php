@@ -35,61 +35,110 @@ class PaypalAdminForm extends ConfigFormBase {
    * @return array
    */
   protected function getEditableConfigNames() {
-    return ['config.paypal_credentials', 'config.paypal_mapping'];
+    return ['config.paypal_mapping', 'paypal_sdk.settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state, $plan_id = NULL) {
-    $paypal_credentials = $this->config('config.paypal_credentials');
-    $paypal_mapping = $this->config('config.paypal_mapping');
+    $config = $this->config('paypal_sdk.settings');
+//    $paypal_mapping = $this->config('config.paypal_mapping');
 
-    $form['credentials']['client_id'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Client ID'),
-      '#description' => 'Paypal application Client ID',
-      '#maxlength' => 255,
-      '#required' => TRUE,
-      '#default_value' => $paypal_credentials->get('client_id') ? $paypal_credentials->get('client_id') : '',
-    );
 
-    $form['credentials']['client_secret'] = array(
-      '#type' => 'textfield',
+    $form['environment'] = array(
+      '#type' => 'radios',
       '#title' => t('Client Secret'),
-      '#description' => 'Paypal application Client Secret',
-      '#maxlength' => 255,
-      '#required' => TRUE,
-      '#default_value' => $paypal_credentials->get('client_secret') ? $paypal_credentials->get('client_secret') : '',
+      '#options' => [
+        'sandbox' => $this->t('Use SANDBOX credentials'),
+        'live' => $this->t('Use LIVE credentials'),
+      ],
+      '#default_value' => $config->get('environment'),
     );
 
+    $form['sandbox_credentials'] = array(
+      '#type' => 'fieldset',
+      '#title' => $this->t('Sandbox credentials'),
+      '#states' => [
+        'visible' => [
+          ':input[name="environment"]' => array('value' => 'sandbox'),
+        ],
+      ],
 
-    if ($paypal_credentials->get('client_id') && $paypal_credentials->get('client_secret')) {
+      'sandbox_client_id' => [
+        '#type' => 'textfield',
+        '#title' => t('Client ID'),
+        '#description' => 'Paypal application Client ID',
+        '#maxlength' => 255,
+//        '#required' => TRUE,
+        '#default_value' => $config->get('sandbox_client_id'),
+      ],
 
-      $form['assign_plans_to_field'] = array(
-        '#type' => 'fieldset',
-        '#title' => t('Contactsettings'),
-        '#collapsible' => FALSE,
-        '#description' => t('Please assign to each subscription plan a user field (can be the same if you want.)'),
-      );
+      'sandbox_client_secret' => [
+        '#type' => 'textfield',
+        '#title' => t('Client Secret'),
+        '#description' => 'Paypal application Client Secret',
+        '#maxlength' => 255,
+//        '#required' => TRUE,
+        '#default_value' => $config->get('sandbox_client_secret'),
+      ]
+    );
 
-      // Create Agreement payments field mappings.
-      $PlanOptions = $this->getActivePlans();
-      $agreementMap = $this->getAgreementFieldsOptions();
-      $default = $paypal_mapping->get('mapping');
+    $form['live_credentials'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Live credentials'),
+      '#states' => [
+        'visible' => [
+          ':input[name="environment"]' => array('value' => 'live'),
+        ],
+      ],
 
-      foreach ($PlanOptions as $k => $plan) {
-        $form['assign_plans_to_field']['mapping'][$k] = array(
-          '#type' => 'select',
-          '#title' => $plan . t(' Plan'),
-          '#options' => $agreementMap,
-          '#description' => '',
-          '#default_value' => $default[$k],
-          '#empty_option' => '-- Select Agreement Field --',
-          '#required' => TRUE
-        );
-      }
-    }
+      'live_client_id' => [
+        '#type' => 'textfield',
+        '#title' => t('Client ID'),
+        '#description' => 'Paypal application Client ID',
+        '#maxlength' => 255,
+//        '#required' => TRUE,
+        '#default_value' => $config->get('live_client_id'),
+      ],
+
+      'live_client_secret' => [
+        '#type' => 'textfield',
+        '#title' => t('Client Secret'),
+        '#description' => 'Paypal application Client Secret',
+        '#maxlength' => 255,
+//        '#requireyd' => TRUE,
+        '#default_value' => $config->get('live_client_secret'),
+      ]
+    ];
+
+
+//    if ($paypal_credentials->get('client_id') && $paypal_credentials->get('client_secret')) {
+//
+//      $form['assign_plans_to_field'] = array(
+//        '#type' => 'fieldset',
+//        '#title' => t('Contactsettings'),
+//        '#collapsible' => FALSE,
+//        '#description' => t('Please assign to each subscription plan a user field (can be the same if you want.)'),
+//      );
+//
+//      // Create Agreement payments field mappings.
+//      $PlanOptions = $this->getActivePlans();
+//      $agreementMap = $this->getAgreementFieldsOptions();
+//      $default = $paypal_mapping->get('mapping');
+//
+//      foreach ($PlanOptions as $k => $plan) {
+//        $form['assign_plans_to_field']['mapping'][$k] = array(
+//          '#type' => 'select',
+//          '#title' => $plan . t(' Plan'),
+//          '#options' => $agreementMap,
+//          '#description' => '',
+//          '#default_value' => $default[$k],
+//          '#empty_option' => '-- Select Agreement Field --',
+//          '#required' => TRUE
+//        );
+//      }
+//    }
 
     return parent::buildForm($form, $form_state);
   }
@@ -99,23 +148,26 @@ class PaypalAdminForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
 
-    // Set PayPal credentials.
-    $this->config('config.paypal_credentials')
-      ->set('client_id', $form_state->getValue(array('client_id')))
-      ->set('client_secret', $form_state->getValue(array('client_secret')))
+    $this->config('paypal_sdk.settings')
+      ->set('environment', $form_state->getValue('environment'))
+      ->set('live_client_id', $form_state->getValue('live_client_id'))
+      ->set('live_client_secret', $form_state->getValue('live_client_secret'))
+      ->set('sandbox_client_id', $form_state->getValue('sandbox_client_id'))
+      ->set('sandbox_client_secret', $form_state->getValue('sandbox_client_secret'))
       ->save();
 
     // Set agreement field mappings.
-    $planList = array_keys($this->getActivePlans());
-    foreach ($planList as $plan_id) {
-      if ($form_state->getValue(array($plan_id))) {
-        $mapping[$plan_id] = $form_state->getValue(array($plan_id));
-      }
-    }
+//    $planList = array_keys($this->getActivePlans());
+//    foreach ($planList as $plan_id) {
+//      if ($form_state->getValue(array($plan_id))) {
+//        $mapping[$plan_id] = $form_state->getValue(array($plan_id));
+//      }
+//    }
+//
+//    $this->config('config.paypal_mapping')
+//      ->set('mapping', $mapping)
+//      ->save();
 
-    $this->config('config.paypal_mapping')
-      ->set('mapping', $mapping)
-      ->save();
     parent::submitForm($form, $form_state);
   }
 
