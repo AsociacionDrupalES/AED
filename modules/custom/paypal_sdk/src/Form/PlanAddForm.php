@@ -98,7 +98,8 @@ class PlanAddForm extends FormBase {
     $form['amount_options']['tax'] = [
       '#title' => $this->t('Tax'),
       '#type' => 'number',
-      '#description' => $this->t('Specify the applied tax. For example 0.21 (Spanish tax).'),
+      '#step' => 0.01,
+      '#description' => $this->t('Specify the applied tax. For example 0,21 (Spanish tax).'),
     ];
 
     $form['frequency_options'] = [
