@@ -24,7 +24,7 @@ content:
     region: content
   field_subscription:
     weight: 102
-    label: above
+    label: hidden
     settings:
       link_text: Subscribe
     third_party_settings: {  }
@@ -33,4 +33,6 @@ content:
   links:
     weight: 100
     region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden: {  }

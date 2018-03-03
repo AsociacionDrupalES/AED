@@ -324,16 +324,6 @@ display:
             value: "<h2>Socios</h2>\n<p>\n    ¿Ya eres socio y no apareces en este listado? <a href=\"[site:login-url-or-user-url]\">Habilítalo ahora</a>\n</p>"
             format: full_html
           plugin_id: text
-        result:
-          id: result
-          table: views
-          field: result
-          relationship: none
-          group_type: group
-          admin_label: ''
-          empty: false
-          content: 'Mostrando @start - @end de @total'
-          plugin_id: result
       footer: {  }
       empty: {  }
       relationships: {  }
