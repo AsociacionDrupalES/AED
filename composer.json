@@ -21,7 +21,9 @@
         "drupal/search_api": "^1.6",
         "drupal/slick_views": "^1.0@RC",
         "drupal/stage_file_proxy": "^1.0@alpha",
-        "drupal/video_embed_field": "^1.5"
+        "drupal/video_embed_field": "^1.5",
+        "paypal/rest-api-sdk-php": "^1.12",
+        "drush/drush": "8.1.16"
     },
     "replace": {
         "drupal/core": "^8.4"

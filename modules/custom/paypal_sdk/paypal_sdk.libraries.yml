@@ -3,3 +3,13 @@ toolbar:
   css:
     component:
       assets/css/styles.paypal_sdk.css: {}
+
+generate-link:
+  version: VERSION
+  js:
+    assets/js/generate-link.behavior.js: {}
+  dependencies:
+    - core/jquery
+    - core/jquery.once
+    - core/drupal.ajax
+    - core/drupalSettings

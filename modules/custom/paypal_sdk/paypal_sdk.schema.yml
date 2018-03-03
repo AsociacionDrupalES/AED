@@ -1,0 +1,17 @@
+paypal_sdk.credentials:
+  type: config_object
+  label: 'Paypal Credentials'
+  mapping:
+    client_id:
+      type: text
+      label: 'Client ID'
+    client_secret:
+      type: text
+      label: 'Client Secret'
+paypal_sdk.mapping:
+  type: config_object
+  label: 'Paypal Agreement fields plan mappings'
+  mapping:
+    mapping:
+      type: text
+      label: 'Field Mapping'

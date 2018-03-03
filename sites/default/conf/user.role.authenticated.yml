@@ -24,6 +24,7 @@ permissions:
   - 'unflag video_visualizado'
   - 'use search_api_sorts'
   - 'use text format filtered_html'
+  - 'user view agreement plan on profile'
   - 'view any partner_companies profile'
   - 'view any socio profile'
   - 'view company entities'

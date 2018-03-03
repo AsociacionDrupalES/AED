@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\user\Entity\User;
+
 define('PAYPAL_BILLING_PLAN_TYPE_FIXED', 'fixed');
 
 /**
@@ -18,5 +20,75 @@ function paypal_sdk_theme() {
       'template' => 'plan-list-tables',
       'variables' => ['tables' => NULL],
     ],
+    'agreement_list_tables' => [
+      'template' => 'agreement-list-tables',
+      'variables' => ['tables' => NULL],
+    ],
+    'paypal_sdk__agreement_placeholder_link' => [
+      'template' => 'paypal-sdk--agreement-placeholder-link',
+      'variables' => ['plan_id' => NULL, 'start_date' => NULL],
+    ],
+    'paypal_sdk__agreement_link' => [
+      'template' => 'paypal-sdk--agreement-link',
+      'variables' => ['url' => NULL],
+    ],
   ];
+}
+
+/**
+ * Implements hook_paypal_agreement_response_ok().
+ *
+ * Register a new user and set the associate the agreement.
+ */
+function paypal_sdk_paypal_agreement_response_ok($agreement, $plan, $payer) {
+  $agreement_id = $agreement->getId();
+
+  // Append new agreement.
+  $agreementMapping = Drupal::getContainer()->get('config.factory')->get('config.paypal_mapping')->get('mapping');
+
+  // @fixme if you create a plan $this->config('config.paypal_mapping')->get('mapping') will still keep the old conf.
+  // list($entity, $agreementField) = explode('-', $agreementMapping[$plan_id]);
+  $agreementField = 'field_paypal_agreement_id';
+
+  // If the current user is anonymous and the email does not exist on any user, create a new account.
+  if (Drupal::currentUser()->isAnonymous()) {
+
+    // The email (user) already exist?
+    $existingUser = user_load_by_mail($payer->getPayerInfo()->getEmail());
+
+    if (!$existingUser) {
+      // If user does not exists, create a new one.
+      $user = User::create();
+      $user->set("init", 'mail');
+      $user->enforceIsNew();
+      $user->setEmail($payer->getPayerInfo()->getEmail());
+      $user->setUsername($payer->getPayerInfo()->getEmail());
+      $user->set($agreementField, $agreement_id);
+      $user->addRole('socio');
+      $user->addRole('socio_' . date("Y"));
+      $user->activate();
+      $user->save();
+
+      _user_mail_notify('register_no_approval_required', $user);
+      // user_login_finalize($user);
+      drupal_set_message(t('Subscription successful. We sent you an activation email.'));
+    }
+    else {
+      $user = $existingUser;
+      $user->set($agreementField, $agreement_id);
+      $user->addRole('socio_' . date("Y"));
+      $user->save();
+      drupal_set_message(t('Subscription successful. Since your email exist in this site we associated the subscription to your account.'));
+    }
+
+  }
+  else {
+    $uid = Drupal::currentUser()->id();
+    $user = User::load($uid);
+    $user->set($agreementField, $agreement_id);
+    $user->addRole('socio_' . date("Y"));
+    $user->save();
+    drupal_set_message(t('Subscription successful.'));
+  }
+
 }

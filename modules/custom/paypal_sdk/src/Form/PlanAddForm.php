@@ -26,96 +26,116 @@ class PlanAddForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, $plan_id = NULL) {
     $form['#title'] = $this->t('Plan add');
 
-    $form['name'] = array(
+    $payment_cycles = array_combine(
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 24, 36, 48],
+      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 24, 36, 48]
+    );
+
+    $form['name'] = [
       '#title' => $this->t('Name'),
+      '#required' => TRUE,
       '#type' => 'textfield',
       '#description' => $this->t('The name of the PayPal billing plan entity.'),
-    );
+    ];
 
-    $form['description'] = array(
+    $form['description'] = [
       '#title' => $this->t('Description'),
       '#type' => 'textfield',
-    );
+      '#required' => TRUE,
+    ];
 
-
-    $form['payment_amount'] = array(
-      '#title' => $this->t('Payment amount'),
-      '#type' => 'number',
-    );
-
-    $form['accepted_payment_method'] = array(
-      '#title' => $this->t('Accepted payment methods'),
+    $form['plan_type'] = [
+      '#title' => $this->t('Plan type'),
       '#type' => 'select',
       '#options' => [
-        'paypal' => 'PayPal',
-        'credit_card' => 'Credit Card',
+        'INFINITE' => 'INFINITE',
+        'FIXED' => 'FIXED'
       ],
-    );
+      '#description' => $this->t('INFINITE will never end until the client cancel the agreement. FIXED will finish on the specified amount of cycles.'),
+      '#default_value' => 'INFINITE',
+      '#required' => TRUE,
+    ];
 
-    $form['payment_currency'] = array(
+    $form['options_type_fixed'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Fixed plan type options'),
+      '#states' => [
+        'visible' => [
+          ':input[name="plan_type"]' => ['value' => 'FIXED'],
+        ]
+      ]
+    ];
+
+    $form['options_type_fixed']['payment_cycles'] = [
+      '#title' => $this->t('Payment cycles'),
+      '#type' => 'select',
+      '#options' => $payment_cycles,
+      '#description' => $this->t('Specify how many times the plan will be charged. After the last charge gets applied the plan will be finished'),
+      '#default_value' => 12,
+    ];
+
+    $form['amount_options'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Amount'),
+    ];
+
+    $form['amount_options']['payment_amount'] = [
+      '#title' => $this->t('Payment amount'),
+      '#type' => 'number',
+      '#description' => $this->t('Set the value as an integer or as a decimal (use a dot for the decimal part). '),
+      '#required' => TRUE,
+    ];
+
+    $form['amount_options']['payment_currency'] = [
       '#title' => $this->t('Payment currency'),
       '#type' => 'select',
       '#options' => [
         'EUR' => 'EUR',
         'USD' => 'USD',
       ],
-    );
+    ];
 
-    $payment_cycles = array_combine(
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 24, 36, 48],
-      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 24, 36, 48]
-    );
+    $form['amount_options']['tax'] = [
+      '#title' => $this->t('Tax'),
+      '#type' => 'number',
+      '#description' => $this->t('Specify the applied tax. For example 0.21 (Spanish tax).'),
+    ];
 
+    $form['frequency_options'] = [
+      '#type' => 'fieldset',
+      '#title' => $this->t('Frequency'),
+      '#description' => $this->t('If you select an interval of 3 and a "Monthly" frequency it means: "When a client subscribes to this plan It fill be charged every 3 months".'),
+    ];
 
-    $form['payment_cycles'] = array(
-      '#title' => $this->t('Payment cycles'),
-      '#type' => 'select',
-      '#options' => $payment_cycles,
-    );
+    $form['frequency_options']['payment_frequency_interval'] = [
+      '#title' => $this->t('Payment frequency interval'),
+      '#min' => 1,
+      '#max' => 50,
+      '#type' => 'number',
+      '#default_value' => 1,
+      '#required' => TRUE,
+    ];
 
-    $form['payment_frequency'] = array(
+    $form['frequency_options']['payment_frequency'] = [
       '#title' => $this->t('Payment frequency'),
       '#type' => 'select',
-      '#description' => $this->t('Si has seleccionado "FIXED" como tipo de plan, selecciona aquí la periodicidad con la que se emitirá un cobro. Por ejemplo, si quieres cobrarle al usuario una vez al mes selecciona "MONTHLY"'),
       '#options' => [
         'DAY' => 'DAILY',
         'WEEK' => 'WEEKLY',
         'MONTH' => 'MONTHLY',
         'YEAR' => 'YEARLY',
       ],
-    );
-
-    $form['payment_frequency_interval'] = array(
-      '#title' => $this->t('Payment frequency interval'),
-      '#type' => 'number',
-      '#description' => $this->t('A billing agreement can be for a determined period, eg: for 6 months, or just be a subscription with no expiration. In the first case select "FIXED" and setup the frequencies.'),
-    );
-
-    $form['payment_type'] = array(
-      '#title' => $this->t('Payment type'),
-      '#type' => 'select',
-      '#options' => ['REGULAR' => 'REGULAR', 'TRIAL' => 'TRIAL'],
-    );
-
-    $form['plan_type'] = array(
-      '#title' => $this->t('Plan type'),
-      '#type' => 'select',
-      '#options' => ['INFINITE' => 'INFINITE', 'FIXED' => 'FIXED'],
-    );
-
-    $form['plan_start'] = array(
-      '#title' => $this->t('Plan start'),
-      '#type' => 'date',
-      '#description' => $this->t('Especifica cuando arrancar con la suscripción. Por defecto se inicia en el mismo momento que el usuario la completa pero se puede desplazar hacia adelante.'),
-    );
+      '#default_value' => 'MONTH',
+    ];
 
     $form['actions']['#type'] = 'actions';
 
-    $form['actions']['submit'] = array(
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Save'),
       '#button_type' => 'primary',
-    );
+    ];
+
     return $form;
   }
 
@@ -123,7 +143,7 @@ class PlanAddForm extends FormBase {
    * {@inheritdoc}
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
-    // @todo implementar validaciones.
+    // @todo implement validations.
   }
 
   /**
@@ -132,20 +152,7 @@ class PlanAddForm extends FormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     /** @var BillingAgreement $pba */
     $pba = Drupal::service('paypal.billing.agreement');
-
-    $data = [
-      'name' => $form_state->getValue('name'),
-      'description' => $form_state->getValue('description'),
-      'type' => $form_state->getValue('plan_type'),
-      'payment_cycles' => $form_state->getValue('payment_cycles'),
-      'payment_type' => $form_state->getValue('payment_type'),
-      'payment_frequency' => $form_state->getValue('payment_frequency'),
-      'payment_frequency_interval' => $form_state->getValue('payment_frequency_interval'),
-      'payment_amount' => $form_state->getValue('payment_amount'),
-      'payment_currency' => $form_state->getValue('payment_currency'),
-    ];
-
-    $result = $pba->createPlan($data);
+    $result = $pba->createPlan($form_state->getValues());
 
     if ($result !== FALSE) {
       drupal_set_message($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been created.', ['@name' => $result->getName(), '@id' => $result->getId()]));

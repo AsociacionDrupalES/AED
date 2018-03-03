@@ -2,10 +2,10 @@
 
 namespace Drupal\paypal_sdk\Services;
 
-use Drupal;
 use Drupal\Core\Url;
-use Drupal\paypal_sdk\Entity\PayPalBillingPlanEntity;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use PayPal\Api\Agreement;
+use PayPal\Api\AgreementStateDescriptor;
 use PayPal\Api\ChargeModel;
 use PayPal\Api\Currency;
 use PayPal\Api\MerchantPreferences;
@@ -26,20 +26,84 @@ use PayPal\Rest\ApiContext;
  */
 class BillingAgreement {
 
+  /**
+   *
+   */
+  const PLAN_ACTIVE = 'ACTIVE';
+
+  /**
+   *
+   */
+  const PLAN_INACTIVE = 'INACTIVE';
+
+  /**
+   *
+   */
+  const PLAN_CREATED = 'CREATED';
+
+  /**
+   *
+   */
+  const AGREEMENT_PENDING = 'PENDING';
+
+  /**
+   *
+   */
+  const AGREEMENT_ACTIVE = 'Active';
+
+  /**
+   *
+   */
+  const AGREEMENT_SUSPENDED = 'Suspended';
+
+  /**
+   *
+   */
+  const AGREEMENT_CANCELED = 'Canceled';
+
+  /**
+   *
+   */
+  const AGREEMENT_EXPIRED = 'Expired';
+
+  const AGREEMENT_REACTIVE = 'Re Active';
+
+  /**
+   * @var \PayPal\Rest\ApiContext
+   */
   private $apiContext;
 
   /**
-   * Constructor.
-   * @param string $clientId
-   * @param string $clientSecret
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  public function __construct($clientId, $clientSecret) {
+  private $configFactory;
+
+
+  /**
+   * BillingAgreement constructor.
+   *
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   */
+  public function __construct(ConfigFactoryInterface $config_factory) {
     $this->apiContext = &drupal_static(__FUNCTION__, FALSE);
+    $this->configFactory = $config_factory;
+
+    $config = $this->configFactory->get('paypal_sdk.settings');
+    $env = $config->get('environment');
+    $client_id = $config->get($env . '_client_id');
+    $client_secret = $config->get($env . '_client_secret');
 
     if (!$this->apiContext) {
       $this->apiContext = new ApiContext(
-        new OAuthTokenCredential($clientId, $clientSecret)
+        new OAuthTokenCredential($client_id, $client_secret)
       );
+
+      $this->apiContext->setConfig(
+        array(
+          'mode' => $env,
+        )
+      );
+
     }
 
   }
@@ -47,21 +111,23 @@ class BillingAgreement {
   /**
    * Creates a plan.
    *
-   * @param PayPalBillingPlanEntity $entity @todo should be a more generic object?
    * @return bool|\PayPal\Api\Plan $plan
    */
   public function createPlan($data) {
+    // Cycles must be 0 if the plan type is "infinite".
+    $cycles = $data['plan_type'] == "FIXED" ? $data['payment_cycles'] : 0;
     $plan = new Plan();
 
     $plan
       ->setName($data['name'])
       ->setDescription($data['description'])
-      ->setType($data['type']);
+      ->setType($data['plan_type']);
 
     $paymentDefinition = new PaymentDefinition();
-    $cycles = $data['type'] == "FIXED" ? $data['payment_cycles'] : 0;
-    $paymentDefinition->setName('Regular Payments')// dinamizar
-    ->setType($data['payment_type'])
+
+    $paymentDefinition
+      ->setName('Regular Payments')// dinamizar
+      ->setType('REGULAR')
       ->setFrequency($data['payment_frequency'])
       ->setFrequencyInterval($data['payment_frequency_interval'])
       ->setCycles($cycles)
@@ -70,35 +136,43 @@ class BillingAgreement {
         'currency' => $data['payment_currency']
       )));
 
-    // @todo hacer opcional.
-    $chargeModel = new ChargeModel();
-    $chargeModel->setType('TAX')
-      ->setAmount(new Currency(array(
-        'value' => $data['payment_amount'] * .21,
-        'currency' => $data['payment_currency']
-      )));
+    if ($data['tax'] !== '' && $data['tax'] !== '0') {
+      // Taxes
+      $chargeModel = new ChargeModel();
 
-    $paymentDefinition->setChargeModels(array($chargeModel));
+      $chargeModel->setType('TAX')
+        ->setAmount(new Currency(array(
+          'value' => $data['payment_amount'] * $data['tax'],
+          'currency' => $data['payment_currency']
+        )));
 
-    $merchantPreferences = new MerchantPreferences();
+      // Sample Shipping costs
+      // $chargeModel = new ChargeModel();
+      // $chargeModel->setType('SHIPPING')
+      //   ->setAmount(new Currency(array(
+      //    'value' => "10",
+      //    'currency' => "EUR"
+      //  )));
+
+      $paymentDefinition->setChargeModels(array($chargeModel));
+    }
+
     $returnURL = Url::fromUri('internal:/paypal/subscribe/response/process/', ['absolute' => TRUE])->toString();
     $cancelURL = Url::fromUri('internal:/paypal/subscribe/response/cancelled/', ['absolute' => TRUE])->toString();
 
+    $merchantPreferences = new MerchantPreferences();
     $merchantPreferences
       ->setReturnUrl($returnURL)
       ->setCancelUrl($cancelURL)
       ->setAutoBillAmount("yes")
       ->setInitialFailAmountAction("CONTINUE")
       ->setMaxFailAttempts("0");
-//    ->setSetupFee(new Currency(array('value' => 1, 'currency' => $entity->get('field_payment_currency')->value)));
-
 
     $plan->setPaymentDefinitions(array($paymentDefinition));
     $plan->setMerchantPreferences($merchantPreferences);
 
     try {
       $createdPlan = $plan->create($this->apiContext);
-      //$this->setState();
       return $createdPlan;
     } catch (\Exception $e) {
       drupal_set_message($e->getMessage(), "error");
@@ -129,6 +203,11 @@ class BillingAgreement {
       $patchRequest = new PatchRequest();
       $patchRequest->addPatch($patch);
       $plan->update($patchRequest, $this->apiContext);
+
+      // Crear Paypal SDK cache.
+      $cache = \Drupal::cache();
+      $cache->invalidate('paypal_sdk_options_list');
+
       return TRUE;
 
     } catch (\Exception $e) {
@@ -142,13 +221,13 @@ class BillingAgreement {
    * @param string $plan_id ID of the plan
    * @param array $values key value plan nuew values.
    *
+   * @todo implemebnt updates https://paypal.github.io/PayPal-PHP-SDK/sample/doc/billing/UpdatePlanPaymentDefinitions.html
    * @return bool
    */
   public function updatePlan($plan_id, $values) {
     $plan = $this->getPlan($plan_id);
 
     try {
-//      $this->setState($plan, 'CREATED');
       $patch = new Patch();
 
       $patch
@@ -159,11 +238,9 @@ class BillingAgreement {
       $patchRequest = new PatchRequest();
       $patchRequest->addPatch($patch);
       $plan->update($patchRequest, $this->apiContext);
-//      $this->setState($plan, 'ACTIVE');
-      return TRUE;
+      return $plan;
 
     } catch (\Exception $e) {
-//      $this->setState($plan, 'ACTIVE');
       return FALSE;
     }
 
@@ -196,13 +273,12 @@ class BillingAgreement {
    *  }
    *
    * @param array $options @todo meter en las opciones la posibilidad de especificar el state del listado que queremos por ejemplo. O el page_size, etc.
-   * @return \PayPal\Api\PlanList
+   * @return \PayPal\Api\PlanList|boolean
    */
   public function getAllPlans($options = []) {
 
     $params = array_merge([
-      'page_size' => 20,
-      'status' => 'CREATED'
+      'page_size' => '20',
     ], $options);
 
     try {
@@ -229,6 +305,11 @@ class BillingAgreement {
 
     try {
       $plan->delete($this->apiContext);
+
+      // Crear Paypal SDK cache.
+      $cache = \Drupal::cache();
+      $cache->invalidate('paypal_sdk_options_list');
+
       return TRUE;
     } catch (\Exception $e) {
       drupal_set_message($e->getMessage(), "error");
@@ -241,42 +322,44 @@ class BillingAgreement {
    * Generates a link for a new agreement.
    *
    * @param string $plan_id
+   * @param string $start_date_choice Indicates the start date concept.
    * @return bool|null|string
    */
-  function getUserAgreementLink($plan_id) {
-    // Get the rellated entity
-    // @todo move to a method
-    $query = Drupal::entityQuery('pay_pal_billing_plan_entity');
-    $query->condition('field_id', $plan_id, '=');
-    $result = $query->execute();
-
-    if (!$result) {
-      // @todo lanzar un error
-    }
-
-    $node_storage = Drupal::entityTypeManager()->getStorage('pay_pal_billing_plan_entity');
-    $entity = $node_storage->load(reset($result));
-    $field_start_date_value = $entity->get('field_start_date')->value;
-
+  function getUserAgreementLink($plan_id, $start_date_choice) {
     $originalPlan = $this->getPlan($plan_id);
 
-    // Time to compare dates
+    if (!$originalPlan) {
+      return FALSE;
+    }
+
     $utcTimezone = new \DateTimeZone('UTC');
-    $dateTimeNow = new \DateTime('NOW', $utcTimezone);
-    $dateTimeField = new \DateTime($field_start_date_value, $utcTimezone);
+    $base_date = new \DateTime('NOW', $utcTimezone);
 
-    $firstDate = $dateTimeNow->format('Y-m-d');
-    $secondDate = $dateTimeField->format('Y-m-d');
+    switch ($start_date_choice) {
+      default:
+      case 'ipso_facto':
+        // We can not mark the start date with "NOW",
+        // so we move it forward a few minutes.
+        $base_date->modify('+10 minutes');
+        $start_date = $base_date;
+        break;
+      case 'first_of_month':
+        $base_date->modify('+1 months');
+        $calc_str_date = $base_date->format('Y') . '-' . $base_date->format('m') . '-01';
+        $start_date = new \DateTime($calc_str_date, $utcTimezone);
+        break;
+      case 'first_of_year':
+        $base_date->modify('+1 years');
+        $calc_str_date = $base_date->format('Y') . '-01-01';
+        $start_date = new \DateTime($calc_str_date, $utcTimezone);
+        break;
+    }
 
-    $start_date = ($firstDate == $secondDate) ? $dateTimeNow : $dateTimeField;
-
-    // We can not mark the start date with "NOW", so we move ti forward a few minutes.
-    $start_date->modify('+10 minutes');
 
     $agreement = new Agreement();
     $agreement
       ->setName($originalPlan->getName())
-      ->setDescription($originalPlan->getDescription())
+      ->setDescription($originalPlan->getId())
       ->setStartDate($start_date->format('c'));
 
     $plan = new Plan();
@@ -289,14 +372,11 @@ class BillingAgreement {
 
     try {
       $agreement = $agreement->create($this->apiContext);
-      $approvalUrl = $agreement->getApprovalLink();
-
+      return $agreement->getApprovalLink();
     } catch (\Exception $e) {
       var_dump(json_decode($e->getData()));
       return FALSE;
     }
-
-    return $approvalUrl;
   }
 
   /**
@@ -320,4 +400,62 @@ class BillingAgreement {
 
   }
 
+  /**
+   * @param array $options
+   *
+   * @return array|bool
+   */
+  public function getAllAgreements($options = []) {
+    $params = array_merge([
+      'page_size' => 20,
+      'status' => 'ACTIVE'
+    ], $options);
+
+    try {
+
+      $agreementList = Agreement::getList($params);
+
+      return $agreementList;
+
+    } catch (\Exception $e) {
+      drupal_set_message($e->getMessage(), "error");
+      return FALSE;
+    }
+  }
+
+
+  /**
+   * @param $agreementId
+   * @param $params
+   */
+  public function getAgreement($agreementId) {
+    $agreement = Agreement::get($agreementId, $this->apiContext);
+
+    return $agreement;
+  }
+
+  public function cancelAgreement($agreementId) {
+    $agreement = $this->getAgreement($agreementId);
+    $agreementStateDescriptor = new AgreementStateDescriptor();
+    $agreementStateDescriptor->setNote('Canceling Agreement');
+
+    return $agreement->cancel($agreementStateDescriptor, $this->apiContext);
+  }
+
+
+  public function suspendAgreement($agreementId) {
+    $agreement = $this->getAgreement($agreementId);
+    $agreementStateDescriptor = new AgreementStateDescriptor();
+    $agreementStateDescriptor->setNote('Suspending Agreement');
+
+    return $agreement->suspend($agreementStateDescriptor, $this->apiContext);
+  }
+
+  public function reactivateAgreement($agreementId) {
+    $agreement = $this->getAgreement($agreementId);
+    $agreementStateDescriptor = new AgreementStateDescriptor();
+    $agreementStateDescriptor->setNote('Reactivating Agreement');
+
+    return $agreement->reActivate($agreementStateDescriptor, $this->apiContext);
+  }
 }

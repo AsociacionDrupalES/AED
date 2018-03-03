@@ -69,10 +69,7 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
     $elements = [];
 
     foreach ($items as $delta => $item) {
-      /** @var Drupal\Core\TypedData\Plugin\DataType\StringData $a */
-      $subscription_id = $item->get('subscription_id');
-
-      $elements[$delta] = ['#markup' => $this->viewValue($subscription_id->getCastedValue())];
+      $elements[$delta] = ['#markup' => $this->viewValue($item)];
     }
 
     return $elements;
@@ -81,34 +78,29 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
   /**
    * Generate the output appropriate for one field item.
    *
-   * @param $subscription_id
-   * @return string The textual output generated.
-   * The textual output generated.
-   * @internal param \Drupal\Core\Field\FieldItemInterface $item One field
-   *   item.*   One field item.
-   *
+   * @param $item
+   * @return array
    */
-  protected function viewValue($subscription_id) {
-    /** @var BillingAgreement $pba */
-    $pba = Drupal::service('paypal.billing.agreement');
-    $url = $pba->getUserAgreementLink($subscription_id);
+  protected function viewValue($item) {
+    /*
+     * Since twe need a fresh link for each user and since the API is so slow, we return
+     * a placeholder and replace it via ajax with the generated link.
+     * */
+    $build = [
+      '#theme' => 'paypal_sdk__agreement_placeholder_link',
+      '#plan_id' => $item->plan_id,
+      '#start_date' => $item->agreement_start_choice,
+      '#attached' => [
+        'library' => ['paypal_sdk/generate-link'],
+        'drupalSettings' => [
+          'ppssFieldFormatter' => [
+            'url' => Url::fromRoute('paypal_sdk.generate_agreement_link')->toString()
+          ]
+        ]
+      ]
+    ];
 
-
-    if ($url) {
-      /** @var Drupal\Core\GeneratedLink $link */
-      $link = Link::fromTextAndUrl(
-        $this->getSetting('link_text'),
-        Url::fromUri($url, array(
-          'absolute' => TRUE,
-          'attributes' => array(
-            'class' => array('paypal-subscribe-link')
-          )
-        )))->toRenderable();
-
-      return render($link);
-    }
-
-    return '';
+    return render($build);
   }
 
 }

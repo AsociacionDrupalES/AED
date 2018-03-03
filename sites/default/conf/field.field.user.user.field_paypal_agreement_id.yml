@@ -1,0 +1,25 @@
+uuid: 29e66549-107e-4cf2-a210-7490e2169ce5
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.user.field_paypal_agreement_id
+  module:
+    - paypal_sdk
+    - user
+_core:
+  default_config_hash: MUt2g3sRenl_jgNeGx5kORLW6W1oXOWfLp745jwbOcA
+id: user.user.field_paypal_agreement_id
+field_name: field_paypal_agreement_id
+entity_type: user
+bundle: user
+label: Suscripción
+description: ''
+required: false
+translatable: false
+default_value:
+  -
+    value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: paypal_agreement_id_field_type

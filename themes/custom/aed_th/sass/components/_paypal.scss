@@ -1,0 +1,89 @@
+/* The animation code */
+@keyframes smooth-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: .3;
+  }
+}
+
+.placeholder-agreement-link {
+  margin: 0 auto;
+  width: 40%;
+
+  > div {
+    border: 2px solid;
+    padding: 30px;
+    text-align: center;
+    background: #16165f;
+    color: white;
+    font-size: 22px;
+    opacity: .3;
+  }
+
+  > p {
+    text-align: center;
+    animation: smooth-blink 2s infinite;
+    animation-direction: alternate
+  }
+}
+
+.paypal-subscribe-link-container {
+  margin: 0 auto;
+  width: 40%;
+
+  .paypal-subscribe-link {
+    padding: 30px;
+    text-align: center;
+    background: #16165f;
+    color: white;
+    font-size: 22px;
+    border-radius: 4px;
+    display: block;
+
+    &:hover {
+      background: #36366f;
+    }
+  }
+}
+
+.field--type-paypal-agreement-id-field-type {
+  margin: 30px 0;
+}
+
+.agreements-table {
+  border: 1px solid grey;
+  thead {
+    /**/
+    tr { /**/
+
+      th {
+        background: #ebebeb;
+        padding: 10px;
+        text-align: left;
+      }
+    }
+  }
+
+  tbody {
+    /**/
+    tr {
+
+      &:nth-child(even) {
+        background: #f9f9f9;
+      }
+
+      td {
+        vertical-align: text-bottom;
+        padding: 10px;
+        text-align: left;
+
+        a {
+          font-weight: bold;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}

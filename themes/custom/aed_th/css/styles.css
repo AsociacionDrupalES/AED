@@ -479,6 +479,97 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   margin: 0 0 20px;
 }
 
+/* The animation code */
+@keyframes smooth-blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: .3;
+  }
+}
+
+.placeholder-agreement-link {
+  margin: 0 auto;
+  width: 40%;
+}
+
+.placeholder-agreement-link > div {
+  border: 2px solid;
+  padding: 30px;
+  text-align: center;
+  background: #16165f;
+  color: white;
+  font-size: 22px;
+  opacity: .3;
+}
+
+.placeholder-agreement-link > p {
+  text-align: center;
+  animation: smooth-blink 2s infinite;
+  animation-direction: alternate;
+}
+
+.paypal-subscribe-link-container {
+  margin: 0 auto;
+  width: 40%;
+}
+
+.paypal-subscribe-link-container .paypal-subscribe-link {
+  padding: 30px;
+  text-align: center;
+  background: #16165f;
+  color: white;
+  font-size: 22px;
+  border-radius: 4px;
+  display: block;
+}
+
+.paypal-subscribe-link-container .paypal-subscribe-link:hover {
+  background: #36366f;
+}
+
+.field--type-paypal-agreement-id-field-type {
+  margin: 30px 0;
+}
+
+.agreements-table {
+  border: 1px solid grey;
+}
+
+.agreements-table thead {
+  /**/
+}
+
+.agreements-table thead tr {
+  /**/
+}
+
+.agreements-table thead tr th {
+  background: #ebebeb;
+  padding: 10px;
+  text-align: left;
+}
+
+.agreements-table tbody {
+  /**/
+}
+
+.agreements-table tbody tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.agreements-table tbody tr td {
+  vertical-align: text-bottom;
+  padding: 10px;
+  text-align: left;
+}
+
+.agreements-table tbody tr td a {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
 .btn-black {
   color: white;
   text-transform: uppercase;

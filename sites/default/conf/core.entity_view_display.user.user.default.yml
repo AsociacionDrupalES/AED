@@ -5,11 +5,13 @@ dependencies:
   config:
     - field.field.user.user.field_expose_my_profile
     - field.field.user.user.field_name
+    - field.field.user.user.field_paypal_agreement_id
     - field.field.user.user.field_social_links
     - field.field.user.user.user_picture
   module:
     - image
     - link
+    - paypal_sdk
     - user
 _core:
   default_config_hash: L2mtwGWH_7wDRCMIR4r_Iu_jmvQ10DV1L8ht8iNZ5qY
@@ -26,6 +28,13 @@ content:
     third_party_settings: {  }
     type: string
     region: content
+  field_paypal_agreement_id:
+    type: paypal_agreement_id_field_formatter
+    weight: 4
+    region: content
+    label: above
+    settings: {  }
+    third_party_settings: {  }
   field_social_links:
     weight: 2
     label: above
@@ -40,9 +49,9 @@ content:
     region: content
   member_for:
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   user_picture:
     label: hidden
     settings:

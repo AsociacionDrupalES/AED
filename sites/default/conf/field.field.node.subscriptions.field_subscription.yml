@@ -1,0 +1,21 @@
+uuid: 8554469f-e30c-488f-9217-e4c1f0f9f273
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_subscription
+    - node.type.subscriptions
+  module:
+    - paypal_sdk
+id: node.subscriptions.field_subscription
+field_name: field_subscription
+entity_type: node
+bundle: subscriptions
+label: Subscription
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings: {  }
+field_type: paypal_subscribe_field_type

@@ -1,0 +1,19 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - paypal_sdk
+    - user
+id: user.field_paypal_agreement_id
+field_name: field_paypal_agreement_id
+entity_type: user
+type: paypal_agreement_id_field_type
+settings:
+  max_length: '255'
+module: paypal_sdk
+locked: false
+cardinality: -1
+translatable: true
+indexes: {  }
+persist_with_no_fields: false
+custom_storage: false

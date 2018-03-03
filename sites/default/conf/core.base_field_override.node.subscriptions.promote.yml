@@ -1,0 +1,22 @@
+uuid: cf814d2a-e6e1-43a1-b54a-72e343c1ccbe
+langcode: en
+status: true
+dependencies:
+  config:
+    - node.type.subscriptions
+id: node.subscriptions.promote
+field_name: promote
+entity_type: node
+bundle: subscriptions
+label: 'Promoted to front page'
+description: ''
+required: false
+translatable: true
+default_value:
+  -
+    value: 0
+default_value_callback: ''
+settings:
+  on_label: 'On'
+  off_label: 'Off'
+field_type: boolean
