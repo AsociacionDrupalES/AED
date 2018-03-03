@@ -23,9 +23,7 @@
         "drupal/stage_file_proxy": "^1.0@alpha",
         "drupal/video_embed_field": "^1.5",
         "paypal/rest-api-sdk-php": "^1.12",
-        "drush/drush": "8.1.16"
-    },
-    "replace": {
+        "drush/drush": "^9.2",
         "drupal/core": "^8.4"
     },
     "minimum-stability": "dev",
