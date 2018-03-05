@@ -20,6 +20,9 @@ widget:
   config:
     show_numbers: true
     soft_limit: 0
+    soft_limit_settings:
+      show_less_label: 'Show less'
+      show_more_label: 'Show more'
 query_operator: or
 use_hierarchy: false
 expand_hierarchy: false
@@ -28,8 +31,8 @@ hard_limit: 0
 exclude: false
 only_visible_when_facet_source_is_visible: true
 processor_configs:
-  display_value_widget_order:
-    processor_id: display_value_widget_order
+  term_weight_widget_order:
+    processor_id: term_weight_widget_order
     weights:
       sort: -10
     settings:
