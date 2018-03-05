@@ -14,6 +14,7 @@ weight: -10
 group: ''
 skin: default
 breakpoints: 0
+optimized: false
 options:
   options__active_tab: ''
   settings:
@@ -54,7 +55,7 @@ options:
     speed: 500
     swipe: true
     swipeToSlide: false
-    edgeFriction: 0.35
+    edgeFriction: 0.35000000000002
     touchMove: true
     touchThreshold: 5
     useCSS: true
