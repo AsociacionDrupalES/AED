@@ -87,7 +87,7 @@ a:focus, a:hover {
 }
 
 img {
-  width: 100%;
+  max-width: 100%;
   height: auto;
   vertical-align: top;
 }
@@ -456,6 +456,13 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   display: inline-block;
 }
 
+.messages {
+  margin: 20px 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1100px;
+}
+
 .overlay {
   position: fixed;
   top: 0;
@@ -633,8 +640,9 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
 
 .user--view-mode-compact .field--name-user-picture img {
   width: 50px;
-  height: 50px;
+  height: auto;
   vertical-align: top;
+  max-width: none;
 }
 
 .user--view-mode-compact .user-details {
@@ -1871,6 +1879,10 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   min-height: 32px;
 }
 
+.node--type-article.node--view-mode-teaser .image-wrapper img {
+  width: 100%;
+}
+
 .node--type-article.node--view-mode-teaser .image-wrapper .field--name-node-post-date {
   font-size: 18px;
   color: white;
@@ -2452,6 +2464,17 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
 .view-members .view-header a {
   color: #00CAE8;
   margin-left: 4px;
+}
+
+.view-members .view-filters .form-item-field-name-value {
+  display: inline-block;
+  margin: 0;
+}
+
+.view-members .view-filters .form-actions {
+  display: inline-block;
+  vertical-align: top;
+  margin: 18px 0 0 10px;
 }
 
 .view-members .views-row {
