@@ -25,7 +25,8 @@
         "paypal/rest-api-sdk-php": "^1.12",
         "drush/drush": "^9.2",
         "drupal/core": "^8.4",
-        "drupal/config_ignore": "^2.1"
+        "drupal/config_ignore": "^2.1",
+        "cweagans/composer-patches": "^1.6"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -57,6 +58,11 @@
             "drush/contrib/{$name}": ["type:drupal-drush"],
             "modules/custom/{$name}": ["type:drupal-custom-module"],
             "themes/custom/{$name}": ["type:drupal-custom-theme"]
+        },
+        "patches": {
+            "drupal/swiftmailer": {
+                "Notice: Undefined index: filter_format :: https://www.drupal.org/project/swiftmailer/issues/2948607": "https://www.drupal.org/files/issues/2948607-2.patch"
+            }
         }
     },
     "autoload": {
