@@ -135,7 +135,7 @@ function aed_th_form_alter(&$form, $form_state, $form_id) {
     $pass_label = t($form['pass']['#title'] . ' ' . $request_password);
     $form['pass']['#title'] = $pass_label;
 
-    $still_not_subscribed_url = Link::fromTextAndUrl(t('Still not a member?'), Url::fromUri('internal:/node/322'))->toString();
+    $still_not_subscribed_url = Link::fromTextAndUrl(t('Still not a member?'), Url::fromUri('internal:/node/2990'))->toString();
 
     $form['actions']['still_not_subscribed'] = [
       '#type' => 'markup',
