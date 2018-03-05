@@ -26,6 +26,19 @@
 
   }
 
+  .view-filters {
+    .form-item-field-name-value {
+      display: inline-block;
+      margin: 0;
+    }
+
+    .form-actions {
+      display: inline-block;
+      vertical-align: top;
+      margin: 18px 0 0 10px;
+    }
+  }
+
   .views-row {
     border-bottom: 1px solid #cdcdcd;
     padding-bottom: 25px;

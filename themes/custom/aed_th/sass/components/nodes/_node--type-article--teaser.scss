@@ -5,6 +5,10 @@
     position: relative;
     min-height: 32px;
 
+    img {
+      width: 100%;
+    }
+
     .field--name-node-post-date {
       font-size: 18px;
       color: white;
