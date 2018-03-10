@@ -1923,6 +1923,55 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   font-weight: 700;
 }
 
+.node--type-article.node--view-mode-views-teaser .image-wrapper {
+  position: relative;
+  min-height: 32px;
+}
+
+.node--type-article.node--view-mode-views-teaser .image-wrapper img {
+  width: 100%;
+}
+
+.node--type-article.node--view-mode-views-teaser .image-wrapper .field--name-node-post-date {
+  font-size: 18px;
+  color: white;
+  font-weight: 700;
+  background: rgba(0, 0, 0, 0.71);
+  padding: 6px 10px 4px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.node--type-article.node--view-mode-views-teaser h2 {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.node--type-article.node--view-mode-views-teaser h2 a {
+  color: white;
+  background: black;
+  display: block;
+  padding: 28px 10px 30px;
+}
+
+.node--type-article.node--view-mode-views-teaser .field--name-node-submitted-by {
+  color: white;
+  font-size: 16px;
+  background: #007382;
+  padding: 16px 10px 17px;
+}
+
+.node--type-article.node--view-mode-views-teaser .field--name-node-submitted-by > * {
+  display: inline-block;
+}
+
+.node--type-article.node--view-mode-views-teaser .field--name-node-submitted-by .username {
+  color: white;
+  font-weight: 700;
+}
+
 .node--type-groups.node--view-mode-teaser {
   position: relative;
   overflow: hidden;
