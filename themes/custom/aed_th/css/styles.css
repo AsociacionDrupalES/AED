@@ -2243,6 +2243,7 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   display: block;
   position: relative;
   min-height: 118.05px;
+  border: 1px solid #ccc;
 }
 
 .node--type-videos.node--view-mode-teaser .field--name-field-video-url a:before {
@@ -2259,6 +2260,7 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
 
 .node--type-videos.node--view-mode-teaser .field--name-field-video-url img {
   vertical-align: top;
+  width: 100%;
 }
 
 .node--type-videos.node--view-mode-teaser h2 {
@@ -2744,27 +2746,62 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   background: #424242;
 }
 
+.view-videos .views-exposed-form {
+  margin-bottom: 30px;
+}
+
+.view-videos .views-exposed-form > .form--inline {
+  display: table;
+  width: 100%;
+}
+
+.view-videos .views-exposed-form > .form--inline .form-type-textfield {
+  margin: 0;
+  float: none;
+  display: table-cell;
+  vertical-align: top;
+  clear: none;
+  width: 100%;
+  padding-right: 10px;
+}
+
+.view-videos .views-exposed-form > .form--inline .form-type-textfield > label {
+  display: none;
+}
+
+.view-videos .views-exposed-form > .form--inline .form-type-textfield > input {
+  padding: 16px 11px 15px;
+}
+
+.view-videos .views-exposed-form > .form--inline .form-actions {
+  margin: 0;
+  float: none;
+  clear: none;
+  display: table-cell;
+  vertical-align: top;
+}
+
 .view-videos .view-content::after {
   clear: both;
   content: "";
   display: table;
 }
 
-.view-videos .views-row {
+.view-videos .view-content .views-row {
   margin-bottom: 30px;
 }
 
 @media screen and (min-width: 768px) {
-  .view-videos .views-row {
+  .view-videos .view-content .views-row {
     width: calc(33.333333333% - 26.666666667px);
     float: left;
     margin-right: 40px;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
   }
-  .view-videos .views-row:nth-child(3n+1) {
+  .view-videos .view-content .views-row:nth-child(3n+1) {
     clear: left;
   }
-  .view-videos .views-row:nth-child(3n+3) {
+  .view-videos .view-content .views-row:nth-child(3n+3) {
     clear: right;
     margin-right: 0;
   }
