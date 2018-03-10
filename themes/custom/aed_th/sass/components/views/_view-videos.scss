@@ -1,27 +1,63 @@
 .view-videos {
 
-  .view-content {
-    @include clearfix;
-  }
-
-  .views-row {
+  .views-exposed-form {
     margin-bottom: 30px;
 
-    @include media($tab) {
-      width: calc(33.333333333% - 26.666666667px);
-      float: left;
-      margin-right: 40px;
-      margin-bottom: 70px;
+    > .form--inline {
+      display: table;
+      width: 100%;
 
-      &:nth-child(3n+1) {
-        clear: left;
+      .form-type-textfield {
+        margin: 0;
+        float: none;
+        display: table-cell;
+        vertical-align: top;
+        clear: none;
+        width: 100%;
+        padding-right: 10px;
+
+        > label {
+          display: none;
+        }
+
+        > input {
+          padding: 16px 11px 15px;
+        }
       }
 
-      &:nth-child(3n+3) {
-        clear: right;
-        margin-right: 0;
+      .form-actions {
+        margin: 0;
+        float: none;
+        clear: none;
+        display: table-cell;
+        vertical-align: top;
       }
 
+    }
+  }
+
+  .view-content {
+    @include clearfix;
+
+    .views-row {
+      margin-bottom: 30px;
+
+      @include media($tab) {
+        width: calc(33.333333333% - 26.666666667px);
+        float: left;
+        margin-right: 40px;
+        margin-bottom: 40px;
+
+        &:nth-child(3n+1) {
+          clear: left;
+        }
+
+        &:nth-child(3n+3) {
+          clear: right;
+          margin-right: 0;
+        }
+
+      }
     }
   }
 

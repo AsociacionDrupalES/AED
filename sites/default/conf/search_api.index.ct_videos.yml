@@ -10,6 +10,7 @@ dependencies:
     - field.storage.node.field_videos_idioma
     - field.storage.node.field_videos_evento
     - field.storage.node.field_videos_ano
+    - field.storage.node.body
     - search_api.server.videos
   module:
     - search_api
@@ -23,7 +24,7 @@ field_settings:
     label: Title
     datasource_id: 'entity:node'
     property_path: title
-    type: string
+    type: text
   field_video_ponente:
     label: Ponente
     datasource_id: 'entity:node'
@@ -80,6 +81,15 @@ field_settings:
     dependencies:
       config:
         - field.storage.node.field_videos_ano
+  body:
+    label: Body
+    datasource_id: 'entity:node'
+    property_path: body
+    type: text
+    boost: 0.8
+    dependencies:
+      config:
+        - field.storage.node.body
 datasource_settings:
   'entity:node':
     bundles:
@@ -94,13 +104,13 @@ processor_settings:
   ignorecase:
     fields:
       - title
-      - name
-      - name_1
     weights:
       preprocess_index: -10
       preprocess_query: -10
-  rendered_item: {  }
+    all_fields: false
   aggregated_field: {  }
+  rendered_item: {  }
+  entity_status: {  }
   highlight:
     highlight: always
     excerpt: true
@@ -110,9 +120,10 @@ processor_settings:
     suffix: '</strong>'
     weights:
       postprocess_query: 0
-  entity_status: {  }
+    highlight_partial: false
 tracker_settings:
-  default: {  }
+  default:
+    indexing_order: fifo
 options:
   index_directly: true
   cron_limit: 50

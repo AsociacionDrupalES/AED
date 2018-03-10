@@ -8,6 +8,7 @@
       display: block;
       position: relative;
       min-height: 118.05px;
+      border: 1px solid #ccc;
 
       &:before {
         content: "";
@@ -25,6 +26,7 @@
 
     img {
       vertical-align: top;
+      width: 100%;
     }
 
   }
