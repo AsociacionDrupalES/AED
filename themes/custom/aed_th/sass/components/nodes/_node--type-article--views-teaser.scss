@@ -1,0 +1,56 @@
+// VM "Views teaser"
+.node--type-article.node--view-mode-views-teaser {
+
+  .image-wrapper {
+    position: relative;
+    min-height: 32px;
+
+    img {
+      width: 100%;
+    }
+
+    .field--name-node-post-date {
+      font-size: 18px;
+      color: white;
+      font-weight: 700;
+      background: rgba(0, 0, 0, 0.71);
+      padding: 6px 10px 4px;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+  }
+
+  h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0;
+
+    a {
+      color: white;
+      background: black;
+      display: block;
+      padding: 28px 10px 30px;
+    }
+
+  }
+
+  .field--name-node-submitted-by {
+    color: white;
+    font-size: 16px;
+    background: #007382;
+    padding: 16px 10px 17px;
+
+    > * {
+      display: inline-block;
+    }
+
+    .username {
+      color: white;
+      font-weight: 700;
+    }
+
+  }
+
+}

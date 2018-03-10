@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.rss
     - core.entity_view_mode.node.teaser
+    - core.entity_view_mode.node.views_teaser
     - node.type.article
   module:
     - node
@@ -182,7 +183,8 @@ display:
       row:
         type: 'entity:node'
         options:
-          view_mode: teaser
+          relationship: none
+          view_mode: views_teaser
       sorts:
         created:
           field: created
@@ -248,6 +250,8 @@ display:
         use_more_always: false
         use_more_text: false
         header: false
+        style: false
+        row: false
       use_more_always: true
       use_more_text: 'View more news'
       header:
@@ -262,6 +266,18 @@ display:
           tokenize: false
           content: News
           plugin_id: text_custom
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: teaser
     cache_metadata:
       max-age: -1
       contexts:

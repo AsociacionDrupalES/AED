@@ -1,0 +1,14 @@
+uuid: 9a0e50ab-962d-490f-84b9-69df6a6073c5
+langcode: en
+status: true
+dependencies: {  }
+name: 1100_x_200
+label: '1100 x 200'
+effects:
+  c9ead6fb-f4a3-4e10-a5bf-3b6851c75ded:
+    uuid: c9ead6fb-f4a3-4e10-a5bf-3b6851c75ded
+    id: image_scale_and_crop
+    weight: 1
+    data:
+      width: 1100
+      height: 200
