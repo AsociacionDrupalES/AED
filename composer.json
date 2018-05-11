@@ -24,7 +24,7 @@
         "drupal/video_embed_field": "^1.5",
         "paypal/rest-api-sdk-php": "^1.12",
         "drush/drush": "^9.2",
-        "drupal/core": "^8.4",
+        "drupal/core": "^8.5",
         "drupal/config_ignore": "^2.1",
         "cweagans/composer-patches": "^1.6"
     },
