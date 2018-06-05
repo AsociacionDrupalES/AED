@@ -26,7 +26,8 @@
         "drush/drush": "^9.2",
         "drupal/core": "^8.5",
         "drupal/config_ignore": "^2.1",
-        "cweagans/composer-patches": "^1.6"
+        "cweagans/composer-patches": "^1.6",
+        "drupal/field_permissions": "^1.0@RC"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

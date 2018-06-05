@@ -40,4 +40,5 @@ permissions:
   - 'view field_partner_year_sponsor'
   - 'view field_web_page'
   - 'view own commerce_order entities'
+  - 'view own field_paypal_agreement_id'
   - 'view own socio profile'
