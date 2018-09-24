@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.subscriptions.body
+    - field.field.node.subscriptions.field_subscription
     - node.type.subscriptions
   module:
     - text
@@ -25,5 +26,7 @@ content:
   links:
     weight: 100
     region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   field_subscription: true
