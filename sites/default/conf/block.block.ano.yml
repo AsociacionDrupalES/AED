@@ -20,6 +20,7 @@ settings:
   label: Año
   provider: facets
   label_display: visible
+  block_id: ano
 visibility:
   request_path:
     id: request_path

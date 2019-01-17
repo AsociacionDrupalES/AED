@@ -20,6 +20,7 @@ settings:
   label: Idioma
   provider: facets
   label_display: visible
+  block_id: idioma
 visibility:
   request_path:
     id: request_path

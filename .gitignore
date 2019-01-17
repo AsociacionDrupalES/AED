@@ -1,5 +1,5 @@
 vendor/
-!/core/assets/vendor/
+core
 modules/contrib
 themes/contrib
 profiles/contrib

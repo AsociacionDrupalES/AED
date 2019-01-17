@@ -20,6 +20,7 @@ settings:
   label: Audiencia
   provider: facets
   label_display: visible
+  block_id: audiencia
 visibility:
   request_path:
     id: request_path
