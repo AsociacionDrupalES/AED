@@ -5,12 +5,13 @@
   "repository": "https://github.com/AsociacionDrupalES/AED",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp build",
+    "watch": "gulp sw"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "*",
+    "gulp": "^3.9.1",
     "gulp-util": "*",
     "gulp-filter": "*",
     "gulp-sass": "*",
