@@ -25,7 +25,8 @@
         "drupal/field_permissions": "^1.0@RC",
         "paypal/rest-api-sdk-php": "^1.14",
         "drupal/stage_file_proxy": "^1.0@alpha",
-        "cweagans/composer-patches": "^1.6"
+        "cweagans/composer-patches": "^1.6",
+        "drupal/google_analytics": "^3.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
