@@ -47,7 +47,7 @@ content:
     third_party_settings: {  }
     type: link
     region: content
-  member_for:
+  member_years:
     weight: 3
     region: content
     settings: {  }
@@ -63,3 +63,4 @@ content:
     region: content
 hidden:
   field_expose_my_profile: true
+  member_for: true
