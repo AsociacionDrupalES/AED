@@ -1,7 +1,10 @@
 <?php
 
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Render\BubbleableMetadata;
+use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
+use Drupal\user\UserInterface;
 
 function aed_user_token_info() {
   return array(
@@ -48,4 +51,42 @@ function aed_user_tokens($type, $tokens, array $data, array $options, Bubbleable
   }
 
   return $replacements;
+}
+
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function aed_user_entity_extra_field_info() {
+  $fields['user']['user']['display']['member_years'] = [
+    'label' => t('Años que fue socio'),
+    'description' => t("Muestra los años en los que este usuario ha sido socio."),
+    'weight' => 0,
+  ];
+
+  return $fields;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view() for user entities.
+ */
+function aed_user_user_view(array &$build, UserInterface $account, EntityViewDisplayInterface $display) {
+  if ($display->getComponent('member_years')) {
+
+    $roles = $account->getRoles(TRUE);
+    $years = [];
+
+    foreach ($roles as $role_id) {
+      if (strpos($role_id, 'socio_') !== FALSE) {
+        $full_role = Role::load($role_id);
+        $years[] = explode(' ', $full_role->get('label'))[1];
+      }
+    }
+
+
+    $build['member_years'] = [
+      '#type' => 'item',
+      '#markup' => '<h4 class="label">' . t('Años en los que has sido socio:') . '</h4> ' . implode(', ', $years),
+    ];
+  }
 }
