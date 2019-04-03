@@ -538,6 +538,7 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
 
 .field--type-paypal-agreement-id-field-type {
   margin: 30px 0;
+  clear: both;
 }
 
 .agreements-table {
