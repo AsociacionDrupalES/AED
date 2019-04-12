@@ -11,7 +11,7 @@ dependencies:
     - system.menu.main
     - taxonomy.vocabulary.anios
   content:
-    - 'taxonomy_term:anios:eb67f744-dd13-40a5-88f0-89892c782e3f'
+    - 'taxonomy_term:anios:21e327df-bd02-43a5-ac36-69fe680f26f2'
   module:
     - image
     - link
@@ -308,7 +308,7 @@ display:
           admin_label: ''
           operator: or
           value:
-            428: 428
+            429: 429
           group: 1
           exposed: false
           expose:
@@ -418,7 +418,7 @@ display:
           admin_label: ''
           operator: or
           value:
-            428: 428
+            429: 429
           group: 1
           exposed: true
           expose:
