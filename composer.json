@@ -57,6 +57,9 @@
             },
             "drupal/config_ignore": {
                 "Support for export filtering via Drush :: https://www.drupal.org/project/config_ignore/issues/2857247": "https://www.drupal.org/files/issues/support_for_export-2857247-12.patch"
+            },
+            "drupal/core": {
+                "Updating Drupal 8.6.x to twig 1.40.0 causes twig exceptions": "https://www.drupal.org/files/issues/2019-04-29/3051269-45.patch"
             }
         }
     },
