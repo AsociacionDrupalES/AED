@@ -8,6 +8,6 @@ fetch:
 notification:
   emails:
     - asociacion@drupal.es
-  threshold: all
+  threshold: security
 _core:
   default_config_hash: 2QzULf0zovJQx3J06Y9rufzzfi-CY2CTTlEfJJh2Qyw
