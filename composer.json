@@ -53,7 +53,7 @@
         },
         "patches": {
             "drupal/config_ignore": {
-                "Support for export filtering via Drush :: https://www.drupal.org/project/config_ignore/issues/2857247": "https://www.drupal.org/files/issues/2018-04-19/support-for-export-2857247-18.patch"
+                "Support for export filtering via Drush :: https://www.drupal.org/project/config_ignore/issues/2857247": "https://www.drupal.org/files/issues/support_for_export-2857247-12.patch"
             }
         }
     },
