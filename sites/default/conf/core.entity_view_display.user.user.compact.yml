@@ -26,7 +26,6 @@ third_party_settings:
       label: Content
       format_type: html_element
       format_settings:
-        label: Content
         element: div
         show_label: false
         label_element: h3
@@ -45,7 +44,7 @@ mode: compact
 content:
   field_name:
     type: string
-    weight: 2
+    weight: 1
     label: hidden
     settings:
       link_to_entity: false
@@ -53,7 +52,7 @@ content:
     region: content
   field_social_links:
     type: social_links_simple
-    weight: 3
+    weight: 2
     label: hidden
     settings:
       target: _blank
@@ -61,11 +60,6 @@ content:
       url_plain: false
       rel: 0
       trim_length: '80'
-    third_party_settings: {  }
-    region: content
-  member_years:
-    weight: 0
-    settings: {  }
     third_party_settings: {  }
     region: content
   user_picture:
@@ -81,3 +75,4 @@ hidden:
   field_expose_my_profile: true
   field_paypal_agreement_id: true
   member_for: true
+  member_years: true
