@@ -12,4 +12,4 @@ Recuerda personalizar la configuración de settings.local.php para que se pueda 
 **¡NO OLVIDES HACER TODO ESTO EN LA RAMA "dev"!**
 
 #### Si tienes dudas sobre cómo contribuir:
-* [Guía paso a paso para contribuir a la web de la AED](https://github.com/AsociacionDrupalES/AED/wiki/Gu%C3%ADa-paso-a-paso-para-contribuir-a-la-web-de-la-AED)
+* [Guía paso a paso para contribuir a la web de la AED](https://github.com/AsociacionDrupalES/AED/wiki/Gu%C3%ADa-paso-a-paso-para-contribuir-a-la-web-de-la-AED).
