@@ -5,5 +5,4 @@ dependencies: {  }
 name: Nivel
 vid: video_nivel
 description: 'Video - nivel'
-hierarchy: 0
 weight: 0

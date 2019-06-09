@@ -5,5 +5,4 @@ dependencies: {  }
 name: Idioma
 vid: video_idioma
 description: 'Video - idioma'
-hierarchy: 0
 weight: 0

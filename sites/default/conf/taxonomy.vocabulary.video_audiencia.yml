@@ -5,5 +5,4 @@ dependencies: {  }
 name: Audiencia
 vid: video_audiencia
 description: 'Video - audiencia'
-hierarchy: 0
 weight: 0

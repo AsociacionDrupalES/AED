@@ -5,5 +5,4 @@ dependencies: {  }
 name: Evento
 vid: video_evento
 description: 'Video - evento'
-hierarchy: 0
 weight: 0

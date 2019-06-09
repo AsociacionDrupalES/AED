@@ -6,6 +6,7 @@ dependencies:
     - core.entity_view_mode.user.compact
     - field.field.user.user.field_expose_my_profile
     - field.field.user.user.field_name
+    - field.field.user.user.field_paypal_agreement_id
     - field.field.user.user.field_social_links
     - field.field.user.user.user_picture
     - image.style.thumbnail
@@ -34,6 +35,7 @@ third_party_settings:
         speed: fast
         id: ''
         classes: user-details
+      region: content
 _core:
   default_config_hash: C3k_McOy8bL8rTnIjspy5OfFdgqV1z6OdGZaI-tO5eM
 id: user.user.compact
@@ -61,6 +63,11 @@ content:
       trim_length: '80'
     third_party_settings: {  }
     region: content
+  member_years:
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+    region: content
   user_picture:
     type: image
     weight: 0
@@ -72,4 +79,5 @@ content:
     region: content
 hidden:
   field_expose_my_profile: true
+  field_paypal_agreement_id: true
   member_for: true

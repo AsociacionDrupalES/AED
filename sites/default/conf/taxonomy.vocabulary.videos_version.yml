@@ -5,5 +5,4 @@ dependencies: {  }
 name: Versión
 vid: videos_version
 description: 'Vídeos - versión'
-hierarchy: 0
 weight: 0

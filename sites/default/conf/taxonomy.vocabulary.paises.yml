@@ -5,5 +5,4 @@ dependencies: {  }
 name: 'Países y regiones'
 vid: paises
 description: 'Estructura todos los países, comunidades, provincias'
-hierarchy: 1
 weight: 0

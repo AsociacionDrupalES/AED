@@ -5,5 +5,4 @@ dependencies: {  }
 name: Años
 vid: anios
 description: 'Utilizado internamente para indicar los periodos en los que una empresa ha participado.'
-hierarchy: 0
 weight: 0
