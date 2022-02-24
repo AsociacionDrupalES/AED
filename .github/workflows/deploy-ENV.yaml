@@ -1,0 +1,40 @@
+## Github actions to execute  deploy-ENV jobs based on branch
+
+name: deploy_ENV
+
+on:
+  push:
+    branches:
+      - master
+      - dev 
+
+env:
+  JENKINS_HOST: https://jenkins.asociaciondrupal.es
+
+jobs:
+  launch_jenkins_deploy:
+    name: Launch jenkins deploy-ENV job
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Decide Jenkins job to run
+        uses: kanga333/variable-mapper@master
+        with:
+          key: ${{ github.ref }}
+          map: |
+            {
+              "master": {
+                "JENKINS_JOB": "${{ secrets.JENKINS_JOB_PROD }}"
+              },
+              "dev": {
+                "JENKINS_JOB": "${{ secrets.JENKINS_JOB_DEV }}"
+              }
+            }
+      -
+        name: Trigger Jenkins Job
+        uses: sbitio/trigger-jenkins-job@v1.3
+        with:
+          JENKINS_USER: ${{ secrets.JENKINS_USER }}
+          JENKINS_TOKEN: ${{ secrets.JENKINS_TOKEN }}
+          JENKINS_HOST: ${{ env.JENKINS_HOST }}
+          JENKINS_JOB: ${{ env.JENKINS_JOB }}
