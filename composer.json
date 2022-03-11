@@ -4,7 +4,7 @@
     "type": "project",
     "license": "GPL-2.0+",
     "require": {
-        "drupal/core": "^8.6",
+        "drupal/core": "^8.9",
         "composer/installers": "^1.6",
         "drupal/swiftmailer": "^1.0@beta",
         "drupal/admin_toolbar": "^1.26",
@@ -16,7 +16,7 @@
         "drupal/honeypot": "^1.29",
         "drupal/menu_link_attributes": "^1.0",
         "drupal/page_manager": "^4.0@beta",
-        "drupal/pathauto": "^1.4",
+        "drupal/pathauto": "^1",
         "drupal/search_api": "^1.12",
         "drupal/slick_views": "^1.0",
         "drupal/video_embed_field": "^2.0",
