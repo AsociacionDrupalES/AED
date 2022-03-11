@@ -24,7 +24,7 @@
         "drupal/config_ignore": "^2.1",
         "drupal/field_permissions": "^1.0@RC",
         "paypal/rest-api-sdk-php": "^1.14",
-        "drupal/stage_file_proxy": "^1.0@alpha",
+        "drupal/stage_file_proxy": "^1",
         "cweagans/composer-patches": "^1.6",
         "drupal/google_analytics": "^3.0"
     },
