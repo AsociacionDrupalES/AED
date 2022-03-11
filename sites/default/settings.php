@@ -720,3 +720,9 @@ if (file_exists(__DIR__ . '/settings.local.php')) {
 
 $settings['install_profile'] = 'standard';
 $config_directories['sync'] = 'sites/default/conf';
+
+// Automatically generated include for settings managed by ddev.
+$ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
+if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
+  require $ddev_settings;
+}

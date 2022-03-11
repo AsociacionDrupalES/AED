@@ -32,7 +32,11 @@
     "prefer-stable": true,
     "config": {
         "preferred-install": "dist",
-        "autoloader-suffix": "Drupal8"
+        "autoloader-suffix": "Drupal8",
+        "allow-plugins": {
+            "composer/installers": true,
+            "cweagans/composer-patches": true
+        }
     },
     "extra": {
         "_readme": [
