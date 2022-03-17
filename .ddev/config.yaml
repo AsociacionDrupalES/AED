@@ -1,8 +1,8 @@
-name: aed
+name: AED
 type: drupal8
-docroot: ""
-php_version: "7.2"
-webserver_type: apache-fpm
+docroot: .
+php_version: "7.4"
+webserver_type: nginx-fpm
 router_http_port: "80"
 router_https_port: "443"
 xdebug_enabled: false
@@ -13,7 +13,7 @@ mysql_version: ""
 nfs_mount_enabled: false
 mutagen_enabled: false
 use_dns_when_possible: true
-composer_version: "1"
+composer_version: "2"
 web_environment: []
 
 # Key features of ddev's config.yaml:
@@ -82,7 +82,7 @@ web_environment: []
 # Please take care with this because it can cause great confusion.
 
 # upload_dir: custom/upload/dir
-# would set the destination path for ddev import-files to <docroot>/custom/upload/dir 
+# would set the destination path for ddev import-files to <docroot>/custom/upload/dir
 
 # working_dir:
 #   web: /var/www/html
