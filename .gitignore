@@ -20,3 +20,5 @@ sites/default/files
 *.sql
 
 drush
+/.ht.router.php
+/INSTALL.txt

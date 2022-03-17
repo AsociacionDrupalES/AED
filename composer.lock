@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "51d7363df110e604db11ab027e0a01a6",
+    "content-hash": "8dd7c912bc2db5d2c49c92da95f931ea",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2751,10 +2751,54 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "support": {
-                "source": "https://github.com/drupal/core/tree/8.9.20"
-            },
             "time": "2021-11-17T21:24:28+00:00"
+        },
+        {
+            "name": "drupal/core-composer-scaffold",
+            "version": "9.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/drupal/core-composer-scaffold.git",
+                "reference": "a9dd9def8891e1c388719474720b57d3fe929a2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/a9dd9def8891e1c388719474720b57d3fe929a2f",
+                "reference": "a9dd9def8891e1c388719474720b57d3fe929a2f",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1 || ^2",
+                "php": ">=7.3.0"
+            },
+            "conflict": {
+                "drupal-composer/drupal-scaffold": "*"
+            },
+            "require-dev": {
+                "composer/composer": "^1.8@stable"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Drupal\\Composer\\Plugin\\Scaffold\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\Composer\\Plugin\\Scaffold\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "description": "A flexible Composer project scaffold builder.",
+            "homepage": "https://www.drupal.org/project/drupal",
+            "keywords": [
+                "drupal"
+            ],
+            "time": "2022-02-24T17:40:56+00:00"
         },
         {
             "name": "drupal/ctools",

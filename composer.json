@@ -27,7 +27,8 @@
         "drupal/stage_file_proxy": "^1",
         "cweagans/composer-patches": "^1.6",
         "drupal/google_analytics": "^3.0",
-        "drupal/redis": "^1.5"
+        "drupal/redis": "^1.5",
+        "drupal/core-composer-scaffold": "^9.3"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
