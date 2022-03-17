@@ -721,8 +721,32 @@ if (file_exists(__DIR__ . '/settings.local.php')) {
 $settings['install_profile'] = 'standard';
 $config_directories['sync'] = 'sites/default/conf';
 
+/**
+ * Redis
+ */
+$settings['redis.connection']['host'] = '127.0.0.1';
+$settings['redis.connection']['port'] = 6379;
+$settings['redis.connection']['interface'] = 'PhpRedis';
+$settings['container_yamls'][] = $app_root . 'modules/contrib/redis/example.services.yml';
+$settings['cache']['default'] = 'cache.backend.redis';
+$settings['queue']['default'] = 'queue.redis';
+
+// Always set the fast backend for bootstrap, discover and config, otherwise
+// this gets lost when redis is enabled.
+$settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+
+/**
+ * DDEV
+ */
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
   require $ddev_settings;
+}
+
+// Include settings required for Redis cache.
+if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
+  include __DIR__ . '/settings.ddev.redis.php';
 }
