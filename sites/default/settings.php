@@ -797,22 +797,6 @@ if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
 }
 
 /**
- * Redis
- */
-$settings['redis.connection']['host'] = '127.0.0.1';
-$settings['redis.connection']['port'] = 6379;
-$settings['redis.connection']['interface'] = 'PhpRedis';
-$settings['container_yamls'][] = $app_root . 'modules/contrib/redis/example.services.yml';
-$settings['cache']['default'] = 'cache.backend.redis';
-$settings['queue']['default'] = 'queue.redis';
-
-// Always set the fast backend for bootstrap, discover and config, otherwise
-// this gets lost when redis is enabled.
-$settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-$settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-$settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
-
-/**
  * DDEV
  */
 // Automatically generated include for settings managed by ddev.
@@ -823,6 +807,16 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
 $settings['migrate_node_migrate_type_classic'] = FALSE;
 
 // Include settings required for Redis cache.
-if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
+# (sbitio) We want this redis config in all environments.
+#if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
+if (file_exists(__DIR__ . '/settings.ddev.redis.php')) {
   include __DIR__ . '/settings.ddev.redis.php';
 }
+# Tweak ddev redis config.
+$settings['redis.connection']['interface'] = 'PhpRedis';
+$settings['queue']['default'] = 'queue.redis';
+// Always set the fast backend for bootstrap, discover and config, otherwise
+// this gets lost when redis is enabled.
+$settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
+$settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
