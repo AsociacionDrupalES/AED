@@ -50,6 +50,7 @@ module:
   paypal_sdk: 0
   quickedit: 0
   rdf: 0
+  redis: 0
   search_api: 0
   search_api_db: 0
   shortcut: 0
