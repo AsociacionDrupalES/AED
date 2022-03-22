@@ -28,7 +28,8 @@
         "cweagans/composer-patches": "^1.6",
         "drupal/google_analytics": "^3.0",
         "drupal/redis": "^1.5",
-        "drupal/core-composer-scaffold": "^9.3"
+        "drupal/core-composer-scaffold": "^9.3",
+        "vlucas/phpdotenv": "^5.4"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -69,7 +70,10 @@
     "autoload": {
         "psr-4": {
             "Drupal\\Core\\Composer\\": "core/lib/Drupal/Core/Composer"
-        }
+        },
+        "files": [
+            "load.environment.php"
+        ]
     },
     "scripts": {
         "pre-autoload-dump": "Drupal\\Core\\Composer\\Composer::preAutoloadDump",

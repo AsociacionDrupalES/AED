@@ -5,6 +5,7 @@ themes/contrib
 profiles/contrib
 
 # Ignore configuration files that may contain sensitive information.
+.env
 sites/*/settings.local.php
 
 # Ignore SimpleTest multi-site environment.
