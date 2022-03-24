@@ -11,6 +11,9 @@ $config['system.performance']['js']['gzip'] = FALSE;
 $config['system.cron']['threshold']['autorun'] = 0; // D8
 $config['automated_cron']['interval'] = 0;          // D9
 
+// Change default syslog format and add the severity.
+$config['syslog.settings']['format'] = '!base_url|!timestamp|!type,!severity|!ip|!request_uri|!referer|!uid|!link|!message';
+
 /**
  * Http client config.
  */

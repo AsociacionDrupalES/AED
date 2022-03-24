@@ -19,7 +19,6 @@ module:
   contextual: 0
   ctools: 0
   datetime: 0
-  dblog: 0
   dynamic_page_cache: 0
   editor: 0
   email_registration: 0
@@ -61,6 +60,7 @@ module:
   social_links_simple: 0
   stage_file_proxy: 0
   swiftmailer: 0
+  syslog: 0
   system: 0
   taxonomy: 0
   text: 0
