@@ -261,7 +261,7 @@ $databases = [];
  * directory in the public files path. The setting below allows you to set
  * its location.
  */
-$settings['config_sync_directory'] = 'sites/default/conf';
+# $settings['config_sync_directory'] = '/directory/outside/webroot';
 
 /**
  * Settings:
@@ -290,7 +290,7 @@ $settings['config_sync_directory'] = 'sites/default/conf';
  *   $settings['hash_salt'] = file_get_contents('/home/example/salt.txt');
  * @endcode
  */
-$settings['hash_salt'] = '7_fnW7Jp7yriSW4XQXQb6r5cL9_cLGj3_4Fg6aBbrYj0eksty0o57BlewiK3uqfdxarZk8ISow';
+$settings['hash_salt'] = '';
 
 /**
  * Deployment identifier.
@@ -792,6 +792,16 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
  * Keep this code block at the end of this file to take full effect.
  */
 #
+# if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
+#   include $app_root . '/' . $site_path . '/settings.local.php';
+# }
+
+/**
+ * Project settings.
+ */
+if (file_exists($app_root . '/' . $site_path . '/settings.overrides.php')) {
+  include $app_root . '/' . $site_path . '/settings.overrides.php';
+}
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
 }
@@ -804,7 +814,6 @@ $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
   require $ddev_settings;
 }
-$settings['migrate_node_migrate_type_classic'] = FALSE;
 
 // Include settings required for Redis cache.
 # (sbitio) We want this redis config in all environments.
