@@ -799,6 +799,13 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 /**
  * Project settings.
  */
+// Include settings required for Redis cache.
+# (sbitio) We want this redis config in all environments.
+#if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
+if (file_exists(__DIR__ . '/settings.ddev.redis.php') && $_SERVER['REDIS_ENABLED'] == 'true') {
+  include __DIR__ . '/settings.ddev.redis.php';
+}
+
 if (file_exists($app_root . '/' . $site_path . '/settings.overrides.php')) {
   include $app_root . '/' . $site_path . '/settings.overrides.php';
 }
@@ -809,26 +816,8 @@ if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
 }
 
-/**
- * DDEV
- */
 // Automatically generated include for settings managed by ddev.
 $ddev_settings = dirname(__FILE__) . '/settings.ddev.php';
 if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
   require $ddev_settings;
 }
-
-// Include settings required for Redis cache.
-# (sbitio) We want this redis config in all environments.
-#if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
-if (file_exists(__DIR__ . '/settings.ddev.redis.php')) {
-  include __DIR__ . '/settings.ddev.redis.php';
-}
-# Tweak ddev redis config.
-$settings['redis.connection']['interface'] = 'PhpRedis';
-$settings['queue']['default'] = 'queue.redis';
-// Always set the fast backend for bootstrap, discover and config, otherwise
-// this gets lost when redis is enabled.
-$settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
-$settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
-$settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
