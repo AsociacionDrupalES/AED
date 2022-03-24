@@ -802,6 +802,9 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 if (file_exists($app_root . '/' . $site_path . '/settings.overrides.php')) {
   include $app_root . '/' . $site_path . '/settings.overrides.php';
 }
+if (file_exists($app_root . '/' . $site_path . '/settings.sbitio.php')) {
+  include $app_root .  '/' . $site_path . '/settings.sbitio.php';
+}
 if (file_exists($app_root . '/' . $site_path . '/settings.local.php')) {
   include $app_root . '/' . $site_path . '/settings.local.php';
 }
