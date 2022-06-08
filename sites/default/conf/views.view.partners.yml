@@ -11,7 +11,7 @@ dependencies:
     - system.menu.main
     - taxonomy.vocabulary.anios
   content:
-    - 'taxonomy_term:anios:21e327df-bd02-43a5-ac36-69fe680f26f2'
+    - 'taxonomy_term:anios:605cbb9d-6eb9-446f-958b-53fac7cff9d2'
   module:
     - image
     - link
@@ -26,7 +26,6 @@ description: ''
 tag: ''
 base_table: node_field_data
 base_field: nid
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -180,6 +179,8 @@ display:
           id: status
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
         type:
           id: type
@@ -190,6 +191,9 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
       sorts:
         random:
           id: random
@@ -289,6 +293,8 @@ display:
           id: status
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
         type:
           id: type
@@ -299,6 +305,9 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
         field_anos_patrocinados_target_id:
           id: field_anos_patrocinados_target_id
           table: node__field_anos_patrocinados
@@ -308,7 +317,7 @@ display:
           admin_label: ''
           operator: or
           value:
-            429: 429
+            432: 432
           group: 1
           exposed: false
           expose:
@@ -317,6 +326,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -399,6 +410,8 @@ display:
           id: status
           expose:
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
           group: 1
         type:
           id: type
@@ -409,6 +422,9 @@ display:
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
         field_anos_patrocinados_target_id:
           id: field_anos_patrocinados_target_id
           table: node__field_anos_patrocinados
@@ -418,7 +434,7 @@ display:
           admin_label: ''
           operator: or
           value:
-            429: 429
+            432: 432
           group: 1
           exposed: true
           expose:
@@ -427,6 +443,8 @@ display:
             description: ''
             use_operator: false
             operator: field_anos_patrocinados_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: anyos_patrocinados
             required: false
             remember: false
@@ -444,6 +462,12 @@ display:
               socio_2018: '0'
               socio_2019: '0'
               socio_2020: '0'
+              socio_2021: '0'
+              socio_2022: '0'
+              socio_2023: '0'
+              socio_2024: '0'
+              socio_2025: '0'
+              socio_2026: '0'
             reduce: false
           is_grouped: false
           group_info:
