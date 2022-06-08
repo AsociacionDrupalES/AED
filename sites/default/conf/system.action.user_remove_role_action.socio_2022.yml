@@ -1,0 +1,14 @@
+uuid: 2f8c7306-7679-4507-ba40-507419fcff32
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2022
+  module:
+    - user
+id: user_remove_role_action.socio_2022
+label: 'Remove the Socio 2022 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: socio_2022

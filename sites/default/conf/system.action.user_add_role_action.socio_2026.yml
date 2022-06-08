@@ -1,0 +1,14 @@
+uuid: 96c22005-b4fb-4b67-8c2d-2af4054e9245
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2026
+  module:
+    - user
+id: user_add_role_action.socio_2026
+label: 'Add the Socio 2026 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio_2026
