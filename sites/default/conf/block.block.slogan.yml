@@ -17,8 +17,8 @@ plugin: 'block_content:4409cc2c-7a5b-47fb-8acc-34042982b215'
 settings:
   id: 'block_content:4409cc2c-7a5b-47fb-8acc-34042982b215'
   label: Slogan
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full

@@ -16,23 +16,23 @@ bundle: subscriptions
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 101
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 101
     region: content
   field_subscription:
-    weight: 102
+    type: paypal_subscribe_field_formatter
     label: hidden
     settings:
       link_text: Subscribe
     third_party_settings: {  }
-    type: paypal_subscribe_field_formatter
+    weight: 102
     region: content
   links:
-    weight: 100
-    region: content
     settings: {  }
     third_party_settings: {  }
+    weight: 100
+    region: content
 hidden: {  }

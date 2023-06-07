@@ -18,18 +18,18 @@ plugin: page_title_block
 settings:
   id: page_title_block
   label: 'Page title'
-  provider: core
   label_display: '0'
+  provider: core
 visibility:
   request_path:
     id: request_path
-    pages: /node
     negate: true
     context_mapping: {  }
+    pages: /node
   'entity_bundle:node':
     id: 'entity_bundle:node'
-    bundles:
-      article: article
     negate: true
     context_mapping:
       node: '@node.node_route_context:node'
+    bundles:
+      article: article

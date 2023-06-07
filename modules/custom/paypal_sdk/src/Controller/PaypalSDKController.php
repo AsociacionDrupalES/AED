@@ -4,11 +4,9 @@ namespace Drupal\paypal_sdk\Controller;
 
 use Drupal;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Link;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\paypal_sdk\Services\BillingAgreement;
-use Drupal\user\Entity\User;
-use PayPal\Api\Agreement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -52,7 +50,7 @@ class PaypalSDKController extends ControllerBase {
    * @return mixed
    */
   public function cancelledResponse() {
-    drupal_set_message(t('Your subscription has been cancelled.'));
+    $this->messenger()->addMessage(t('Your subscription has been cancelled.'));
     return $this->redirect('<front>');
   }
 

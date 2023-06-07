@@ -22,15 +22,18 @@ mode: teaser
 content:
   field_header_image:
     type: image
-    weight: 0
     label: hidden
     settings:
-      image_style: 540x340
       image_link: content
+      image_style: 540x340
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   body: true
   field_attachments: true
   field_tags: true
   links: true
+  search_api_excerpt: true

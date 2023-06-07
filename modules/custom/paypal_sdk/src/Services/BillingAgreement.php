@@ -2,6 +2,7 @@
 
 namespace Drupal\paypal_sdk\Services;
 
+use Drupal\Core\Messenger\MessengerInterface;
 use Drupal\Core\Url;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use PayPal\Api\Agreement;
@@ -78,15 +79,21 @@ class BillingAgreement {
    */
   private $configFactory;
 
+  /**
+   * @var \Drupal\Core\Messenger\MessengerInterface
+   */
+  private MessengerInterface $messenger;
+
 
   /**
    * BillingAgreement constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    */
-  public function __construct(ConfigFactoryInterface $config_factory) {
+  public function __construct(ConfigFactoryInterface $config_factory, MessengerInterface $messenger) {
     $this->apiContext = &drupal_static(__FUNCTION__, FALSE);
     $this->configFactory = $config_factory;
+    $this->messenger = $messenger;
 
     $config = $this->configFactory->get('paypal_sdk.settings');
     $env = $config->get('environment');
@@ -175,7 +182,7 @@ class BillingAgreement {
       $createdPlan = $plan->create($this->apiContext);
       return $createdPlan;
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return FALSE;
     }
   }
@@ -258,7 +265,7 @@ class BillingAgreement {
       return $plan;
 
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->mess($e->getMessage(), "error");
       return FALSE;
     }
 
@@ -287,7 +294,7 @@ class BillingAgreement {
       return $planList;
 
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return FALSE;
     }
 
@@ -312,7 +319,7 @@ class BillingAgreement {
 
       return TRUE;
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return FALSE;
     }
   }
@@ -374,7 +381,6 @@ class BillingAgreement {
       $agreement = $agreement->create($this->apiContext);
       return $agreement->getApprovalLink();
     } catch (\Exception $e) {
-      var_dump(json_decode($e->getData()));
       return FALSE;
     }
   }
@@ -394,7 +400,7 @@ class BillingAgreement {
       return $agreement;
 
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return "Error finalizando el agreement.";
     }
 
@@ -418,7 +424,7 @@ class BillingAgreement {
       return $agreementList;
 
     } catch (\Exception $e) {
-      drupal_set_message($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return FALSE;
     }
   }

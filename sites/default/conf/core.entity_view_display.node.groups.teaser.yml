@@ -19,16 +19,17 @@ mode: teaser
 content:
   field_group_image:
     type: image
-    weight: 1
-    region: content
     label: hidden
     settings:
-      image_style: local_group_image_style
       image_link: ''
+      image_style: local_group_image_style
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
+    weight: 1
+    region: content
   field_group_url:
     type: link
-    weight: 0
     label: hidden
     settings:
       trim_length: 80
@@ -37,6 +38,8 @@ content:
       rel: '0'
       target: '0'
     third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   links: true
+  search_api_excerpt: true

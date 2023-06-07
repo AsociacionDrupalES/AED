@@ -1,0 +1,9 @@
+uuid: a2e310a6-ced6-43dd-ac5e-f31143281989
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2023
+label: 'Socio 2023'
+weight: 5
+is_admin: null
+permissions: {  }

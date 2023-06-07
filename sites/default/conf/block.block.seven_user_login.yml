@@ -18,10 +18,12 @@ plugin: user_login_block
 settings:
   id: user_login_block
   label: '<none>'
-  provider: user
   label_display: visible
+  provider: user
 visibility:
   request_path:
     id: request_path
     negate: true
-    pages: "/cart\n/checkout/*"
+    pages: |-
+      /cart
+      /checkout/*

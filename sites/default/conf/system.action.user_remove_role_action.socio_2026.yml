@@ -1,0 +1,14 @@
+uuid: b19ba891-3e10-4b16-a466-9c30200a4313
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2026
+  module:
+    - user
+id: user_remove_role_action.socio_2026
+label: 'Remove the Socio 2026 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: socio_2026

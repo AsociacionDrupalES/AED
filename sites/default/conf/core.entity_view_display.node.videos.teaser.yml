@@ -27,13 +27,13 @@ mode: teaser
 content:
   field_video_url:
     type: video_embed_field_thumbnail
-    weight: 0
-    region: content
     label: hidden
     settings:
       image_style: medium
       link_image_to: content
     third_party_settings: {  }
+    weight: 0
+    region: content
 hidden:
   body: true
   comment_node_videos: true

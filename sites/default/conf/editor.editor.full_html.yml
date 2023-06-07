@@ -62,8 +62,6 @@ settings:
   plugins:
     stylescombo:
       styles: 'a.btn-black | Button black'
-    language:
-      language_list: un
 image_upload:
   status: true
   scheme: public

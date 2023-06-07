@@ -11,7 +11,7 @@ dependencies:
     - system.menu.main
     - taxonomy.vocabulary.anios
   content:
-    - 'taxonomy_term:anios:21e327df-bd02-43a5-ac36-69fe680f26f2'
+    - 'taxonomy_term:anios:605cbb9d-6eb9-446f-958b-53fac7cff9d2'
   module:
     - image
     - link
@@ -26,117 +26,36 @@ description: ''
 tag: ''
 base_table: node_field_data
 base_field: nid
-core: 8.x
 display:
   default:
-    display_plugin: default
     id: default
     display_title: Master
+    display_plugin: default
     position: 0
     display_options:
-      access:
-        type: perm
-        options:
-          perm: 'access content'
-      cache:
-        type: tag
-        options: {  }
-      query:
-        type: views_query
-        options:
-          disable_sql_rewrite: false
-          distinct: false
-          replica: false
-          query_comment: ''
-          query_tags: {  }
-      exposed_form:
-        type: basic
-        options:
-          submit_button: Apply
-          reset_button: false
-          reset_button_label: Reset
-          exposed_sorts_label: 'Sort by'
-          expose_sort_order: false
-          sort_asc_label: Asc
-          sort_desc_label: Desc
-      pager:
-        type: some
-        options:
-          items_per_page: 16
-          offset: 0
-      style:
-        type: slick
-        options:
-          vanilla: true
-          optionset: default
-          skin: ''
-          background: false
-          layout: ''
-          caption:
-            title: '0'
-            field_logo: '0'
-            field_webpage: '0'
-          optionset_thumbnail: ''
-          skin_thumbnail: ''
-          skin_arrows: ''
-          skin_dots: ''
-          thumbnail_caption: ''
-          grid_header: ''
-          grid: null
-          grid_medium: null
-          grid_small: null
-          visible_items: null
-          preserve_keys: false
-          image: ''
-          thumbnail: ''
-          overlay: ''
-          title: ''
-          link: ''
-          class: ''
-          id: ''
-          override: false
-          overridables:
-            arrows: '0'
-            autoplay: '0'
-            dots: '0'
-            draggable: '0'
-            infinite: '0'
-            mouseWheel: '0'
-            randomize: '0'
-            variableWidth: '0'
-          cache: -1
-          current_view_mode: block_1
-      row:
-        type: 'entity:node'
-        options:
-          relationship: none
-          view_mode: teaser
+      title: 'Empresas colaboradoras'
       fields:
         title:
           id: title
           table: node_field_data
           field: title
+          relationship: none
+          group_type: group
+          admin_label: ''
           entity_type: node
           entity_field: title
+          plugin_id: field
           label: ''
+          exclude: false
           alter:
             alter_text: false
             make_link: false
             absolute: false
-            trim: false
             word_boundary: false
             ellipsis: false
             strip_tags: false
+            trim: false
             html: false
-          hide_empty: false
-          empty_zero: false
-          settings:
-            link_to_entity: true
-          plugin_id: field
-          relationship: none
-          group_type: group
-          admin_label: ''
-          exclude: false
           element_type: ''
           element_class: ''
           element_label_type: ''
@@ -146,9 +65,13 @@ display:
           element_wrapper_class: ''
           element_default_classes: true
           empty: ''
+          hide_empty: false
+          empty_zero: false
           hide_alter_empty: true
           click_sort_column: value
           type: string
+          settings:
+            link_to_entity: true
           group_column: value
           group_columns: {  }
           group_rows: true
@@ -169,27 +92,29 @@ display:
           table: node__field_webpage
           field: field_webpage
           plugin_id: field
-      filters:
-        status:
-          value: '1'
-          table: node_field_data
-          field: status
-          plugin_id: boolean
-          entity_type: node
-          entity_field: status
-          id: status
-          expose:
-            operator: ''
-          group: 1
-        type:
-          id: type
-          table: node_field_data
-          field: type
-          value:
-            partner: partner
-          entity_type: node
-          entity_field: type
-          plugin_id: bundle
+      pager:
+        type: some
+        options:
+          offset: 0
+          items_per_page: 16
+      exposed_form:
+        type: basic
+        options:
+          submit_button: Apply
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: false
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+      access:
+        type: perm
+        options:
+          perm: 'access content'
+      cache:
+        type: tag
+        options: {  }
+      empty: {  }
       sorts:
         random:
           id: random
@@ -198,12 +123,97 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: random
           order: ASC
-          exposed: false
           expose:
             label: ''
-          plugin_id: random
-      title: 'Empresas colaboradoras'
+            field_identifier: random
+          exposed: false
+      arguments: {  }
+      filters:
+        status:
+          id: status
+          table: node_field_data
+          field: status
+          entity_type: node
+          entity_field: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
+          expose:
+            operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
+        type:
+          id: type
+          table: node_field_data
+          field: type
+          entity_type: node
+          entity_field: type
+          plugin_id: bundle
+          value:
+            partner: partner
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
+      style:
+        type: slick
+        options:
+          caption:
+            title: '0'
+            field_logo: '0'
+            field_webpage: '0'
+          optionset: default
+          class: ''
+          id: ''
+          image: ''
+          link: ''
+          overlay: ''
+          title: ''
+          vanilla: true
+          layout: ''
+          cache: -1
+          skin: ''
+          background: false
+          grid: null
+          grid_medium: null
+          grid_small: null
+          current_view_mode: block_1
+          grid_header: ''
+          overridables:
+            arrows: '0'
+            autoplay: '0'
+            dots: '0'
+            draggable: '0'
+            infinite: '0'
+            mouseWheel: '0'
+            randomize: '0'
+            variableWidth: '0'
+          thumbnail: ''
+          optionset_thumbnail: ''
+          skin_thumbnail: ''
+          thumbnail_caption: ''
+          override: false
+          skin_arrows: ''
+          skin_dots: ''
+          preserve_keys: false
+          visible_items: null
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: teaser
+      query:
+        type: views_query
+        options:
+          query_comment: ''
+          disable_sql_rewrite: false
+          distinct: false
+          replica: false
+          query_tags: {  }
+      relationships: {  }
+      link_display: custom_url
+      link_url: /node
       header:
         area:
           id: area
@@ -212,12 +222,12 @@ display:
           relationship: none
           group_type: group
           admin_label: Intro
+          plugin_id: text
           empty: false
-          tokenize: false
           content:
             value: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur corporis dicta eius eos eveniet illum labore laudantium perspiciatis quibusdam sit, velit veritatis. Enim facilis, in labore laudantium quia soluta?Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur corporis dicta eius eos eveniet illum labore laudantium perspiciatis quibusdam sit, velit veritatis. Enim facilis, in labore laudantium quia soluta?'
             format: basic_html
-          plugin_id: text
+          tokenize: false
       footer:
         area:
           id: area
@@ -226,18 +236,24 @@ display:
           relationship: none
           group_type: group
           admin_label: 'Footing text'
-          empty: false
-          tokenize: false
-          content:
-            value: "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur corporis dicta eius eos eveniet illum labore laudantium perspiciatis quibusdam sit, velit veritatis. Enim facilis, in labore laudantium quia soluta?\n\n<ul>\n    <li>Lorem ipsum dolor sit amet, consectetur.</li>\n    <li>Lorem ipsum dolor sit amet, consectetur.</li>\n    <li>Lorem ipsum dolor sit amet, consectetur.</li>\n    <li>Lorem ipsum dolor sit amet, consectetur.</li>\n    <li>Lorem ipsum dolor sit amet, consectetur.</li>\n</ul>\n\n<a href=\"#\">COLABORA CON NOSOTROS</a>"
-            format: full_html
           plugin_id: text
-      empty: {  }
-      relationships: {  }
-      arguments: {  }
+          empty: false
+          content:
+            value: |-
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aspernatur, consectetur corporis dicta eius eos eveniet illum labore laudantium perspiciatis quibusdam sit, velit veritatis. Enim facilis, in labore laudantium quia soluta?
+
+              <ul>
+                  <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                  <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                  <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                  <li>Lorem ipsum dolor sit amet, consectetur.</li>
+                  <li>Lorem ipsum dolor sit amet, consectetur.</li>
+              </ul>
+
+              <a href="#">COLABORA CON NOSOTROS</a>
+            format: full_html
+          tokenize: false
       display_extenders: {  }
-      link_url: /node
-      link_display: custom_url
     cache_metadata:
       max-age: 0
       contexts:
@@ -249,56 +265,42 @@ display:
         - 'config:field.storage.node.field_logo'
         - 'config:field.storage.node.field_webpage'
   block_1:
-    display_plugin: block
     id: block_1
     display_title: Block
+    display_plugin: block
     position: 1
     display_options:
-      display_extenders: {  }
-      use_more: true
-      defaults:
-        use_more: false
-        use_more_always: false
-        use_more_text: false
-        header: false
-        footer: false
-        pager: false
-        link_display: false
-        link_url: false
-        filters: false
-        filter_groups: false
-      use_more_always: true
-      use_more_text: 'See all'
-      header: {  }
-      footer: {  }
       pager:
         type: some
         options:
-          items_per_page: 0
           offset: 0
-      link_display: page_1
-      link_url: /node
+          items_per_page: 0
       filters:
         status:
-          value: '1'
+          id: status
           table: node_field_data
           field: status
-          plugin_id: boolean
           entity_type: node
           entity_field: status
-          id: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
           expose:
             operator: ''
-          group: 1
+            operator_limit_selection: false
+            operator_list: {  }
         type:
           id: type
           table: node_field_data
           field: type
-          value:
-            partner: partner
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          value:
+            partner: partner
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
         field_anos_patrocinados_target_id:
           id: field_anos_patrocinados_target_id
           table: node__field_anos_patrocinados
@@ -306,9 +308,10 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: taxonomy_index_tid
           operator: or
           value:
-            429: 429
+            432: 432
           group: 1
           exposed: false
           expose:
@@ -317,6 +320,8 @@ display:
             description: ''
             use_operator: false
             operator: ''
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: ''
             required: false
             remember: false
@@ -337,16 +342,34 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
-          limit: true
           vid: anios
+          type: select
           hierarchy: false
+          limit: true
           error_message: true
-          plugin_id: taxonomy_index_tid
       filter_groups:
         operator: AND
         groups:
           1: AND
+      defaults:
+        pager: false
+        use_more: false
+        use_more_always: false
+        use_more_text: false
+        link_display: false
+        link_url: false
+        filters: false
+        filter_groups: false
+        header: false
+        footer: false
+      use_more: true
+      use_more_always: true
+      use_more_text: 'See all'
+      link_display: page_1
+      link_url: /node
+      header: {  }
+      footer: {  }
+      display_extenders: {  }
     cache_metadata:
       max-age: 0
       contexts:
@@ -359,56 +382,58 @@ display:
         - 'config:field.storage.node.field_logo'
         - 'config:field.storage.node.field_webpage'
   page_1:
-    display_plugin: page
     id: page_1
     display_title: Page
+    display_plugin: page
     position: 2
     display_options:
-      display_extenders: {  }
-      path: partners
-      style:
-        type: html_list
+      pager:
+        type: full
         options:
-          row_class: ''
-          default_row_class: true
-          uses_fields: false
-          type: ul
-          wrapper_class: item-list
-          class: ''
-      defaults:
-        style: false
-        row: false
-        filters: false
-        filter_groups: false
-        header: false
-        footer: false
-        pager: false
-      row:
-        type: 'entity:node'
-        options:
-          relationship: none
-          view_mode: views_teaser
+          offset: 0
+          items_per_page: 24
+          total_pages: null
+          id: 0
+          tags:
+            next: ››
+            previous: ‹‹
+            first: '« First'
+            last: 'Last »'
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          quantity: 9
       filters:
         status:
-          value: '1'
+          id: status
           table: node_field_data
           field: status
-          plugin_id: boolean
           entity_type: node
           entity_field: status
-          id: status
+          plugin_id: boolean
+          value: '1'
+          group: 1
           expose:
             operator: ''
-          group: 1
+            operator_limit_selection: false
+            operator_list: {  }
         type:
           id: type
           table: node_field_data
           field: type
-          value:
-            partner: partner
           entity_type: node
           entity_field: type
           plugin_id: bundle
+          value:
+            partner: partner
+          expose:
+            operator_limit_selection: false
+            operator_list: {  }
         field_anos_patrocinados_target_id:
           id: field_anos_patrocinados_target_id
           table: node__field_anos_patrocinados
@@ -416,9 +441,10 @@ display:
           relationship: none
           group_type: group
           admin_label: ''
+          plugin_id: taxonomy_index_tid
           operator: or
           value:
-            429: 429
+            432: 432
           group: 1
           exposed: true
           expose:
@@ -427,6 +453,8 @@ display:
             description: ''
             use_operator: false
             operator: field_anos_patrocinados_target_id_op
+            operator_limit_selection: false
+            operator_list: {  }
             identifier: anyos_patrocinados
             required: false
             remember: false
@@ -444,6 +472,12 @@ display:
               socio_2018: '0'
               socio_2019: '0'
               socio_2020: '0'
+              socio_2021: '0'
+              socio_2022: '0'
+              socio_2023: '0'
+              socio_2024: '0'
+              socio_2025: '0'
+              socio_2026: '0'
             reduce: false
           is_grouped: false
           group_info:
@@ -458,25 +492,37 @@ display:
             default_group_multiple: {  }
             group_items: {  }
           reduce_duplicates: false
-          type: select
-          limit: true
           vid: anios
+          type: select
           hierarchy: false
+          limit: true
           error_message: true
-          plugin_id: taxonomy_index_tid
       filter_groups:
         operator: AND
         groups:
           1: AND
-      menu:
-        type: normal
-        title: 'Empresas colaboradoras'
-        description: ''
-        expanded: false
-        parent: ''
-        weight: -46
-        context: '0'
-        menu_name: main
+      style:
+        type: html_list
+        options:
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+          type: ul
+          wrapper_class: item-list
+          class: ''
+      row:
+        type: 'entity:node'
+        options:
+          relationship: none
+          view_mode: views_teaser
+      defaults:
+        pager: false
+        style: false
+        row: false
+        filters: false
+        filter_groups: false
+        header: false
+        footer: false
       header:
         area:
           id: area
@@ -485,12 +531,14 @@ display:
           relationship: none
           group_type: group
           admin_label: Intro
-          empty: false
-          tokenize: false
-          content:
-            value: "<h2>Empresas colaboradoras</h2>\n<p>La Asociación Española de Drupal y las empresas colaboradoras participan juntas en la expansión de Drupal en la comunidad de habla hispana y principalmente de España promoviendo su uso, organizando todo tipo de eventos y sprints. Convirtiéndote en una empresa colaboradora, ayudas a la Asociación a que podamos seguir organizando la Drupal Camp y el Drupal Day entre otros eventos un año más. Contacta con nosotros para más detalles de qué incluye el paquete de colaboración.</p>"
-            format: full_html
           plugin_id: text
+          empty: false
+          content:
+            value: |-
+              <h2>Empresas colaboradoras</h2>
+              <p>La Asociación Española de Drupal y las empresas colaboradoras participan juntas en la expansión de Drupal en la comunidad de habla hispana y principalmente de España promoviendo su uso, organizando todo tipo de eventos y sprints. Convirtiéndote en una empresa colaboradora, ayudas a la Asociación a que podamos seguir organizando la Drupal Camp y el Drupal Day entre otros eventos un año más. Contacta con nosotros para más detalles de qué incluye el paquete de colaboración.</p>
+            format: full_html
+          tokenize: false
       footer:
         area:
           id: area
@@ -499,33 +547,36 @@ display:
           relationship: none
           group_type: group
           admin_label: 'Footing text'
-          empty: false
-          tokenize: false
-          content:
-            value: "<p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>\n<ul>\n    <li>Presencia del logo en la web corporativa de la AED</li>\n    <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>\n    <li>Patrocinio Bronce en la <a href=\"http://drupalcamp.es/\">Drupalcamp Spain</a> y acceso preferente al modo Plata u Oro en caso de desearlo.</li>\n    <li>Patrocinio Drupal Day.</li>\n    <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante el año. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>\n    <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>\n    <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>\n    <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>\n    <li>Acceso al grupo de Linkedin: <a href=\"https://www.linkedin.com/grp/home?gid=8125102\">linkedin</a></li>\n</ul>\n<a class=\"btn-black\" href=\"/contact/feedback\">Colabora con nosotros</a>."
-            format: full_html
           plugin_id: text
-      pager:
-        type: full
-        options:
-          items_per_page: 24
-          offset: 0
-          id: 0
-          total_pages: null
-          tags:
-            previous: ‹‹
-            next: ››
-            first: '« First'
-            last: 'Last »'
-          expose:
-            items_per_page: false
-            items_per_page_label: 'Items per page'
-            items_per_page_options: '5, 10, 25, 50'
-            items_per_page_options_all: false
-            items_per_page_options_all_label: '- All -'
-            offset: false
-            offset_label: Offset
-          quantity: 9
+          empty: false
+          content:
+            value: |-
+              <p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>
+              <ul>
+                  <li>Presencia del logo en la web corporativa de la AED</li>
+                  <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>
+                  <li>Patrocinio Bronce en la <a href="http://drupalcamp.es/">Drupalcamp Spain</a> y acceso preferente al modo Plata u Oro en caso de desearlo.</li>
+                  <li>Patrocinio Drupal Day.</li>
+                  <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante el año. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>
+                  <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>
+                  <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>
+                  <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>
+                  <li>Acceso al grupo de Linkedin: <a href="https://www.linkedin.com/grp/home?gid=8125102">linkedin</a></li>
+              </ul>
+              <a class="btn-black" href="/contact/feedback">Colabora con nosotros</a>.
+            format: full_html
+          tokenize: false
+      display_extenders: {  }
+      path: partners
+      menu:
+        type: normal
+        title: 'Empresas colaboradoras'
+        description: ''
+        weight: -46
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: 0
       contexts:

@@ -18,12 +18,12 @@ plugin: 'facet_block:idioma'
 settings:
   id: 'facet_block:idioma'
   label: Idioma
-  provider: facets
   label_display: visible
+  provider: facets
   block_id: idioma
 visibility:
   request_path:
     id: request_path
-    pages: /videos
     negate: false
     context_mapping: {  }
+    pages: /videos
