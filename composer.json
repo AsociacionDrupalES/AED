@@ -65,7 +65,11 @@
             "modules/custom/{$name}": ["type:drupal-custom-module"],
             "themes/custom/{$name}": ["type:drupal-custom-theme"]
         },
-        "patches": {}
+        "patches": {
+            "drupal/core": {
+                "Syslog error": "https://www.drupal.org/files/issues/2023-07-12/3333215-22.patch"
+            }
+        }
     },
     "autoload": {
         "psr-4": {
