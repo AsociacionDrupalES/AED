@@ -10,3 +10,13 @@ $settings['queue']['default'] = 'queue.redis';
 $settings['cache']['bins']['bootstrap'] = 'cache.backend.chainedfast';
 $settings['cache']['bins']['discovery'] = 'cache.backend.chainedfast';
 $settings['cache']['bins']['config'] = 'cache.backend.chainedfast';
+
+$settings['config_exclude_modules'] = [
+  'devel_generate',
+  'stage_file_proxy',
+  'config_inspector',
+  'devel',
+  'migrate_devel',
+  'upgrade_status',
+  'upgrade_rector',
+];

@@ -32,6 +32,7 @@ module:
   field_ui: 0
   file: 0
   filter: 0
+  google_analytics: 0
   help: 0
   history: 0
   honeypot: 0
@@ -62,7 +63,6 @@ module:
   slick_ui: 0
   slick_views: 0
   social_links_simple: 0
-  stage_file_proxy: 0
   swiftmailer: 0
   syslog: 0
   system: 0
@@ -72,7 +72,6 @@ module:
   toolbar: 0
   tour: 0
   update: 0
-  upgrade_status: 0
   user: 0
   video_embed_field: 0
   views_ui: 0

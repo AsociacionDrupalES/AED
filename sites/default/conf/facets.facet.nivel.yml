@@ -11,6 +11,8 @@ id: nivel
 name: Nivel
 weight: 0
 min_count: 1
+missing: false
+missing_label: others
 url_alias: nivel
 facet_source_id: 'search_api:views_page__videos__page_video'
 field_identifier: field_videos_nivel
@@ -18,6 +20,10 @@ query_operator: and
 hard_limit: 0
 exclude: false
 use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
 expand_hierarchy: false
 enable_parent_when_child_gets_disabled: true
 widget:
@@ -32,6 +38,7 @@ empty_behavior:
   behavior: none
 only_visible_when_facet_source_is_visible: true
 show_only_one_result: false
+show_title: null
 processor_configs:
   term_weight_widget_order:
     processor_id: term_weight_widget_order
