@@ -33,7 +33,8 @@
         "drupal/slick": "^2.9",
         "drupal/config_filter": "^2.0",
         "drupal/core-recommended": "^9",
-        "drupal/core-project-message": "^9"
+        "drupal/core-project-message": "^9",
+        "drupal/classy": "^1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -2,13 +2,16 @@ name: AED th
 type: theme
 description: My Awesome theme
 package: Other
-core_version_requirement: ^8 || ^9
+core_version_requirement: ^8 || ^9 || ^10
 base theme: classy
 
 libraries:
   - aed_th/global-aed-theme
 
 ckeditor_stylesheets:
+  - css/styles.css
+
+ckeditor5-stylesheets:
   - css/styles.css
 
 regions:
