@@ -11,7 +11,6 @@ dependencies:
     - contact
     - field_permissions
     - filter
-    - google_analytics
     - media
     - node
     - paypal_sdk
@@ -30,7 +29,6 @@ permissions:
   - 'edit own comments'
   - 'edit own groups content'
   - 'edit own partner content'
-  - 'opt-in or out of google analytics tracking'
   - 'post comments'
   - 'skip comment approval'
   - 'use text format filtered_html'
