@@ -316,7 +316,7 @@ class PaypalSDKController extends ControllerBase {
 
     if ($url) {
       $build['#url'] = $url;
-      $res = render($build);
+      $res = \Drupal::service('renderer')->render($build);
     }
     else {
       $res = $this->t('Cant load link. Contact with the administrator.');
