@@ -34,7 +34,8 @@
         "drupal/config_filter": "^2.0",
         "drupal/core-recommended": "^9",
         "drupal/core-project-message": "^9",
-        "drupal/classy": "^1.0"
+        "drupal/classy": "^1.0",
+        "drupal/core-vendor-hardening": "^10.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -46,7 +47,8 @@
             "cweagans/composer-patches": true,
             "drupal/core-composer-scaffold": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "drupal/core-project-message": true
+            "drupal/core-project-message": true,
+            "drupal/core-vendor-hardening": true
         }
     },
     "extra": {
@@ -70,6 +72,14 @@
             "drupal/core": {
                 "Syslog error": "https://www.drupal.org/files/issues/2023-07-12/3333215-22.patch"
             }
+        },
+        "drupal-scaffold": {
+            "locations": {
+                "web-root": "."
+            },
+            "file-mapping": {
+                "[web-root]/README.md": false
+            }
         }
     },
     "autoload": {
@@ -81,12 +91,6 @@
         ]
     },
     "scripts": {
-        "pre-autoload-dump": "Drupal\\Core\\Composer\\Composer::preAutoloadDump",
-        "post-autoload-dump": [
-          "Drupal\\Core\\Composer\\Composer::ensureHtaccess"
-        ],
-        "post-package-install": "Drupal\\Core\\Composer\\Composer::vendorTestCodeCleanup",
-        "post-package-update": "Drupal\\Core\\Composer\\Composer::vendorTestCodeCleanup"
     },
     "repositories": [
         {
