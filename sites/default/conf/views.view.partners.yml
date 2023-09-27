@@ -165,7 +165,6 @@ display:
             field_webpage: '0'
           optionset: default
           class: ''
-          id: ''
           image: ''
           link: ''
           overlay: ''
@@ -173,13 +172,14 @@ display:
           vanilla: true
           layout: ''
           cache: -1
-          skin: ''
           background: false
           grid: null
           grid_medium: null
           grid_small: null
           current_view_mode: block_1
           grid_header: ''
+          id: ''
+          skin: ''
           overridables:
             arrows: '0'
             autoplay: '0'

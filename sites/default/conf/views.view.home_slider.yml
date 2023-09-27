@@ -231,7 +231,6 @@ display:
             field_image_slide: '0'
           optionset: home_style
           class: ''
-          id: ''
           image: field_image_slide
           link: ''
           overlay: ''
@@ -239,13 +238,14 @@ display:
           vanilla: true
           layout: ''
           cache: -1
-          skin: default
           background: false
           grid: null
           grid_medium: null
           grid_small: null
           current_view_mode: block_1
           grid_header: ''
+          id: ''
+          skin: default
           overridables:
             arrows: '0'
             autoplay: '0'

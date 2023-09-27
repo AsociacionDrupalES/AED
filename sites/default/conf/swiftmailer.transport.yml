@@ -6,4 +6,4 @@ smtp_credential_provider: swiftmailer
 smtp_credentials:
   swiftmailer:
     username: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
-    password: 'XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE'
+    password: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
