@@ -5,4 +5,4 @@ dependencies: {  }
 id: comment_node_product_display
 label: 'Product display comment'
 target_entity_type_id: node
-description: null
+description: ''
