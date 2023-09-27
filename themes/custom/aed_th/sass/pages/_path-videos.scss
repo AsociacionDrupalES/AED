@@ -86,7 +86,13 @@ body.path-videos {
 
       }
 
+      .facet-item input,
+      .facet-item label {
+        display: none;
+      }
+
       a {
+        display: block !important;
         color: white;
         display: block;
         padding: 3px 10px 3px 20px;
