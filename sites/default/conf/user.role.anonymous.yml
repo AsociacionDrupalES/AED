@@ -9,6 +9,7 @@ dependencies:
     - contact
     - filter
     - media
+    - paypal_sdk
     - system
 _core:
   default_config_hash: j5zLMOdJBqC0bMvSdth5UebkprJB8g_2FXHqhfpJzow
@@ -21,5 +22,6 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'access user profiles'
+  - 'subscribe paypal products'
   - 'use text format filtered_html'
   - 'view media'
