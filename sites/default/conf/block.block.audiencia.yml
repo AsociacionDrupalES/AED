@@ -18,12 +18,12 @@ plugin: 'facet_block:audiencia'
 settings:
   id: 'facet_block:audiencia'
   label: Audiencia
-  provider: facets
   label_display: visible
+  provider: facets
   block_id: audiencia
 visibility:
   request_path:
     id: request_path
-    pages: /videos
     negate: false
     context_mapping: {  }
+    pages: /videos

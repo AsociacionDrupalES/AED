@@ -18,12 +18,12 @@ plugin: 'facet_block:nivel'
 settings:
   id: 'facet_block:nivel'
   label: Nivel
-  provider: facets
   label_display: visible
+  provider: facets
   block_id: nivel
 visibility:
   request_path:
     id: request_path
-    pages: /videos
     negate: false
     context_mapping: {  }
+    pages: /videos

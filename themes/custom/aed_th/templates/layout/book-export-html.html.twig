@@ -34,11 +34,11 @@
       to be exported as printer-friendly HTML.
     #}
 
-  {% for i in 1..depth-1 if depth > 1 %}
+  {% for i in 1..depth-1|filter(depth > 1) %}
     <div class="section-{{ i }}">
   {% endfor %}
   {{ contents }}
-  {% for i in 1..depth-1 if depth > 1 %}
+  {% for i in 1..depth-1|filter(depth > 1) %}
     </div>
   {% endfor %}
   </body>

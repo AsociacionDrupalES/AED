@@ -9,8 +9,8 @@ _core:
   default_config_hash: SVy48utsf4KUVUlWN4SVRrgkTEeEcXJsQnz7WCg7atA
 id: default
 name: default
-label: Default
 weight: -10
+label: Default
 group: ''
 skin: default
 breakpoints: 0
@@ -21,14 +21,22 @@ options:
     mobileFirst: false
     asNavFor: ''
     accessibility: true
+    regionLabel: carousel
+    useGroupRole: true
+    instructionsText: ''
     adaptiveHeight: false
     autoplay: false
-    autoplaySpeed: 3000
+    useAutoplayToggleButton: true
+    pauseIcon: slick-pause-icon
+    playIcon: slick-play-icon
     pauseOnHover: true
     pauseOnDotsHover: false
+    pauseOnFocus: true
+    autoplaySpeed: 3000
     arrows: true
-    prevArrow: '<button type="button" data-role="none" class="slick-prev" aria-label="Previous" tabindex="0" role="button">Previous</button>'
-    nextArrow: '<button type="button" data-role="none" class="slick-next" aria-label="Next" tabindex="0" role="button">Next</button>'
+    prevArrow: Previous
+    nextArrow: Next
+    arrowsPlacement: ''
     downArrow: false
     downArrowTarget: ''
     downArrowOffset: 0

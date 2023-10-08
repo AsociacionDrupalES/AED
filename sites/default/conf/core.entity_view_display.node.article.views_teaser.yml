@@ -21,16 +21,19 @@ bundle: article
 mode: views_teaser
 content:
   field_header_image:
-    weight: 0
+    type: image
     label: hidden
     settings:
-      image_style: 1100_x_200
       image_link: ''
+      image_style: 1100_x_200
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
-    type: image
+    weight: 0
     region: content
 hidden:
   body: true
   field_attachments: true
   field_tags: true
   links: true
+  search_api_excerpt: true

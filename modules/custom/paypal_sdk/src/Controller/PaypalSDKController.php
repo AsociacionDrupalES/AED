@@ -4,11 +4,9 @@ namespace Drupal\paypal_sdk\Controller;
 
 use Drupal;
 use Drupal\Core\Controller\ControllerBase;
-use Drupal\Core\Link;
+use Drupal\Core\Messenger\Messenger;
 use Drupal\Core\Url;
 use Drupal\paypal_sdk\Services\BillingAgreement;
-use Drupal\user\Entity\User;
-use PayPal\Api\Agreement;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
@@ -52,7 +50,7 @@ class PaypalSDKController extends ControllerBase {
    * @return mixed
    */
   public function cancelledResponse() {
-    drupal_set_message(t('Your subscription has been cancelled.'));
+    $this->messenger()->addMessage(t('Your subscription has been cancelled.'));
     return $this->redirect('<front>');
   }
 
@@ -112,11 +110,12 @@ class PaypalSDKController extends ControllerBase {
       ],
     );
 
-    if (count($planList->getPlans()) == 0) {
+    $plan_list = $planList->getPlans();
+    if (empty($plan_list) || count($plan_list) == 0) {
       return $table;
     }
 
-    foreach ($planList->getPlans() as $k => $plan) {
+    foreach ($plan_list as $k => $plan) {
       /** @var \PayPal\Api\Plan $plan */
 
       $table['contacts'][$k]['name'] = array(
@@ -318,7 +317,7 @@ class PaypalSDKController extends ControllerBase {
 
     if ($url) {
       $build['#url'] = $url;
-      $res = render($build);
+      $res = \Drupal::service('renderer')->render($build);
     }
     else {
       $res = $this->t('Cant load link. Contact with the administrator.');

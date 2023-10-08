@@ -1,0 +1,14 @@
+uuid: d17fa976-9ab1-4095-9794-77f3ebbbbb34
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2021
+  module:
+    - user
+id: user_remove_role_action.socio_2021
+label: 'Remove the Socio 2021 role from the selected user(s)'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: socio_2021

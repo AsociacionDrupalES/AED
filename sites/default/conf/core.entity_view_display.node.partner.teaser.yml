@@ -21,21 +21,21 @@ mode: teaser
 content:
   field_logo:
     type: field_linked_image
-    weight: 0
     label: hidden
     settings:
       image_style: ''
       image_link: field_webpage
     third_party_settings: {  }
+    weight: 0
     region: content
   field_slogan:
     type: string
-    weight: 1
-    region: content
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
+    region: content
 hidden:
   body: true
   field_anos_patrocinados: true

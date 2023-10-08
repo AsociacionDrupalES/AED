@@ -83,7 +83,7 @@ class PlanDeleteForm extends ConfirmFormBase {
     $result = $pba->deletePlan($this->id);
 
     if ($result) {
-      drupal_set_message($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been deleted.', ['@name' => $name, '@id' => $this->id]));
+      $this->messenger()->addMessage($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been deleted.', ['@name' => $name, '@id' => $this->id]));
     }
 
     $form_state->setRedirectUrl($this->getCancelUrl());

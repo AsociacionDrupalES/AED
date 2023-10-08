@@ -96,7 +96,7 @@ class AgreementUpdateStatusForm extends ConfirmFormBase {
     }
 
     if ($result) {
-      drupal_set_message($this->t('The Agreement with ID <strong>@id</strong> has been updated.', ['@id' => $this->id]));
+      $this->messenger()->addMessage($this->t('The Agreement with ID <strong>@id</strong> has been updated.', ['@id' => $this->id]));
       // TODO: Improve how clean the cache based on the field.
       // The field is being used only in user entities but should allow be used
       // in any entity.

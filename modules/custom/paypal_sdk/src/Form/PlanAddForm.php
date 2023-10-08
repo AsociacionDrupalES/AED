@@ -156,7 +156,7 @@ class PlanAddForm extends FormBase {
     $result = $pba->createPlan($form_state->getValues());
 
     if ($result !== FALSE) {
-      drupal_set_message($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been created.', ['@name' => $result->getName(), '@id' => $result->getId()]));
+      $this->messenger()->addMessage($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been created.', ['@name' => $result->getName(), '@id' => $result->getId()]));
     }
 
     $form_state->setRedirectUrl(Url::fromRoute('paypal_sdk.billing_plan_list'));

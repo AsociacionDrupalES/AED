@@ -120,7 +120,7 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
 
     $table_rows = [
       ['data' => $agreementId],
-      ['data' => render($name_and_desc)],
+      ['data' => \Drupal::service('renderer')->render($name_and_desc)],
       // ['data' => $plan_payment_definitions->getType()],
       ['data' => $plan_amount->getValue() . ' ' . $plan_amount->getCurrency()],
       ['data' => $start_date->format('d/m/Y')],
@@ -155,7 +155,7 @@ class PaypalAgreementIdFieldFormatter extends FormatterBase {
       }
 
       $renderable_links = ['#markup' => implode(' | ', $links)];
-      $table_rows[] = ['data' => render($renderable_links)];
+      $table_rows[] = ['data' => \Drupal::service('renderer')->render($renderable_links)];
       $table_header[] = $this->t('Actions');
     }
 

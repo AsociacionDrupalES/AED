@@ -1,8 +1,8 @@
-(function ($) {
+(function (Drupal, $, once) {
   Drupal.behaviors.mainMenu = {
     attach: function (context, settings) {
 
-      $(context).find('#block-aed-th-main-menu').once('main-menu').each(function () {
+      $(once('main-menu', '#block-aed-th-main-menu', context)).each(function () {
         var $this = $(this);
         var $hiddenMenu = $this.find('.hidden-menu');
         var $menuOpen = $this.find('.menu-open');
@@ -38,7 +38,7 @@
 
       });
 
-      $(context).find('[href="/user/login"]').once('main-menu').each(function () {
+      $(once('main-menu', '[href="/user/login"]', context)).each(function () {
         var $a = $(this);
         var $loginBlock = $(context).find('.user-login-overlay');
         var $closeLoginBlock = $loginBlock.find('.close');
@@ -64,4 +64,4 @@
 
     }
   };
-})(jQuery);
+}(Drupal, jQuery, once));

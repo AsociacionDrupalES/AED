@@ -1,0 +1,9 @@
+uuid: e5728fb7-d1ca-4420-ba75-d2220d1c8abb
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2024
+label: 'Socio 2024'
+weight: 6
+is_admin: null
+permissions: {  }

@@ -1,8 +1,8 @@
-(function ($, Drupal) {
+(function (Drupal, $, once) {
   Drupal.behaviors.ppssGenerateLink = {
     attach: function (context, settings) {
       /////////////////
-      $('[data-agreement-plan-id]').once().each(function (e) {
+      $(once('data-agreement-plan-id', '[data-agreement-plan-id]')).each(function (e) {
         var $placeholder = $(this);
         var agreementPlanId = $(this).data('agreement-plan-id');
         var agreementStartDate = $(this).data('agreement-start-date');
@@ -26,4 +26,4 @@
     }
   };
 
-})(jQuery, Drupal);
+})(Drupal, jQuery, once);
