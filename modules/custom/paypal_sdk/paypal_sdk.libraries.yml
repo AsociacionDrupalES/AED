@@ -9,7 +9,8 @@ generate-link:
   js:
     assets/js/generate-link.behavior.js: {}
   dependencies:
+    - core/drupal
     - core/jquery
-    - core/jquery.once
+    - core/once
     - core/drupal.ajax
     - core/drupalSettings

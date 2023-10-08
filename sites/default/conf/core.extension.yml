@@ -5,13 +5,13 @@ module:
   aed_user: 0
   automated_cron: 0
   blazy: 0
+  blazy_ui: 0
   block: 0
   block_content: 0
   breakpoint: 0
   chosen: 0
   chosen_lib: 0
-  ckeditor: 0
-  color: 0
+  ckeditor5: 0
   comment: 0
   config: 0
   config_filter: 0
@@ -52,8 +52,6 @@ module:
   path: 0
   path_alias: 0
   paypal_sdk: 0
-  quickedit: 0
-  rdf: 0
   redis: 0
   search_api: 0
   search_api_db: 0
@@ -62,7 +60,6 @@ module:
   slick_ui: 0
   slick_views: 0
   social_links_simple: 0
-  stage_file_proxy: 0
   swiftmailer: 0
   syslog: 0
   system: 0
@@ -72,7 +69,6 @@ module:
   toolbar: 0
   tour: 0
   update: 0
-  upgrade_status: 0
   user: 0
   video_embed_field: 0
   views_ui: 0
@@ -83,7 +79,6 @@ module:
 theme:
   stable: 0
   classy: 0
-  bartik: 0
-  seven: 0
   aed_th: 0
+  claro: 0
 profile: standard

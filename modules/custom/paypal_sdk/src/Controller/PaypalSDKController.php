@@ -110,11 +110,12 @@ class PaypalSDKController extends ControllerBase {
       ],
     );
 
-    if (count($planList->getPlans()) == 0) {
+    $plan_list = $planList->getPlans();
+    if (empty($plan_list) || count($plan_list) == 0) {
       return $table;
     }
 
-    foreach ($planList->getPlans() as $k => $plan) {
+    foreach ($plan_list as $k => $plan) {
       /** @var \PayPal\Api\Plan $plan */
 
       $table['contacts'][$k]['name'] = array(
@@ -316,7 +317,7 @@ class PaypalSDKController extends ControllerBase {
 
     if ($url) {
       $build['#url'] = $url;
-      $res = render($build);
+      $res = \Drupal::service('renderer')->render($build);
     }
     else {
       $res = $this->t('Cant load link. Contact with the administrator.');
