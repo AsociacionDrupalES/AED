@@ -8,7 +8,3 @@ weight: -6
 is_admin: null
 permissions:
   - 'change own username'
-  - 'create field_pagina_web'
-  - 'edit own field_pagina_web'
-  - 'edit own socio profile'
-  - 'view own socio profile'

@@ -1,4 +1,4 @@
 services:
   paypal.billing.agreement:
     class: Drupal\paypal_sdk\Services\BillingAgreement
-    arguments: ['@config.factory']
+    arguments: ['@config.factory', '@messenger']

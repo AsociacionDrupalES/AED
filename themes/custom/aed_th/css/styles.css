@@ -3422,7 +3422,13 @@ body.path-videos .region--left-wrapper .block-facets li:last-child {
   margin-bottom: 0;
 }
 
+body.path-videos .region--left-wrapper .block-facets .facet-item input,
+body.path-videos .region--left-wrapper .block-facets .facet-item label {
+  display: none;
+}
+
 body.path-videos .region--left-wrapper .block-facets a {
+  display: block !important;
   color: white;
   display: block;
   padding: 3px 10px 3px 20px;

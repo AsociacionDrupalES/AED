@@ -4,8 +4,8 @@ status: true
 dependencies: {  }
 id: home_style
 name: home_style
-label: 'Home style'
 weight: 0
+label: 'Home style'
 group: ''
 skin: ''
 breakpoints: 0
@@ -16,14 +16,22 @@ options:
     mobileFirst: false
     asNavFor: ''
     accessibility: false
+    regionLabel: carousel
+    useGroupRole: true
+    instructionsText: ''
     adaptiveHeight: false
     autoplay: true
-    autoplaySpeed: 7000
+    useAutoplayToggleButton: true
+    pauseIcon: slick-pause-icon
+    playIcon: slick-play-icon
     pauseOnHover: true
     pauseOnDotsHover: false
+    pauseOnFocus: true
+    autoplaySpeed: 7000
     arrows: false
-    prevArrow: '<button type="button" data-role="none" class="slick-prev" aria-label="Previous" tabindex="0" role="button">Previous</button>'
-    nextArrow: '<button type="button" data-role="none" class="slick-next" aria-label="Next" tabindex="0" role="button">Next</button>'
+    prevArrow: Previous
+    nextArrow: Next
+    arrowsPlacement: ''
     downArrow: false
     downArrowTarget: ''
     downArrowOffset: 0

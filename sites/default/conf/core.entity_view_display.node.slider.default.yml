@@ -16,20 +16,23 @@ bundle: slider
 mode: default
 content:
   body:
-    label: hidden
     type: text_default
-    weight: 1
+    label: hidden
     settings: {  }
     third_party_settings: {  }
+    weight: 1
     region: content
   field_image_slide:
     type: image
-    weight: 2
-    region: content
     label: hidden
     settings:
-      image_style: ''
       image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
+    weight: 2
+    region: content
 hidden:
   links: true
+  search_api_excerpt: true

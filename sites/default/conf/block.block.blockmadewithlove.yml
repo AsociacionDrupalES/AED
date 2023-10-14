@@ -17,8 +17,8 @@ plugin: 'block_content:7f323fe5-e469-45a4-b278-8cf88d659775'
 settings:
   id: 'block_content:7f323fe5-e469-45a4-b278-8cf88d659775'
   label: 'Block made with love'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full

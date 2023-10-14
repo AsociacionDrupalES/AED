@@ -16,16 +16,18 @@ bundle: groups
 mode: default
 content:
   field_group_image:
-    weight: 102
+    type: image
     label: above
     settings:
-      image_style: ''
       image_link: ''
+      image_style: ''
+      image_loading:
+        attribute: lazy
     third_party_settings: {  }
-    type: image
+    weight: 102
     region: content
   field_group_url:
-    weight: 103
+    type: link
     label: above
     settings:
       trim_length: 80
@@ -34,11 +36,12 @@ content:
       rel: ''
       target: ''
     third_party_settings: {  }
-    type: link
+    weight: 103
     region: content
   links:
-    weight: 100
-    region: content
     settings: {  }
     third_party_settings: {  }
-hidden: {  }
+    weight: 100
+    region: content
+hidden:
+  search_api_excerpt: true
