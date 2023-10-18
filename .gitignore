@@ -1,27 +1,27 @@
 vendor/
-core
-modules/contrib
-themes/contrib
-profiles/contrib
+web/core
+web/modules/contrib
+web/themes/contrib
+web/profiles/contrib
 
 # Ignore configuration files that may contain sensitive information.
 .env
-sites/*/settings.local.php
-sites/*/settings.ddev.php
+web/sites/*/settings.local.php
+web/sites/*/settings.ddev.php
 
 # Ignore SimpleTest multi-site environment.
-sites/simpletest
+web/sites/simpletest
 
 # IDE's
 .idea
 
 # Fuera el dir files.-
-sites/default/files
+web/sites/default/files
 
 # NO dbs.
 *.sql
 *.sql.gz
 
 drush
-/.ht.router.php
-/INSTALL.txt
+web/.ht.router.php
+web/INSTALL.txt
