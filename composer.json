@@ -29,7 +29,8 @@
         "drupal/google_analytics": "^3.0",
         "drupal/redis": "^1.5",
         "drupal/core-composer-scaffold": "^9.3",
-        "vlucas/phpdotenv": "^5.4"
+        "vlucas/phpdotenv": "^5.4",
+        "drupal/views_data_export": "^1.1"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -38,7 +39,8 @@
         "autoloader-suffix": "Drupal8",
         "allow-plugins": {
             "composer/installers": true,
-            "cweagans/composer-patches": true
+            "cweagans/composer-patches": true,
+            "drupal/core-composer-scaffold": false
         }
     },
     "extra": {
