@@ -1,0 +1,14 @@
+uuid: 42d31dd7-3a08-441a-9f65-6956bd39931b
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2021
+  module:
+    - user
+id: user_add_role_action.socio_2021
+label: 'Add the Socio 2021 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio_2021

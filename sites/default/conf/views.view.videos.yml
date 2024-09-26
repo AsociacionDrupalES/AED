@@ -13,7 +13,6 @@ description: ''
 tag: ''
 base_table: search_api_index_ct_videos
 base_field: search_api_id
-core: 8.x
 display:
   default:
     display_plugin: default
@@ -177,6 +176,8 @@ display:
               socio_2018: '0'
               socio_2019: '0'
               socio_2020: '0'
+            operator_limit_selection: false
+            operator_list: {  }
           is_grouped: false
           group_info:
             label: ''
@@ -192,8 +193,8 @@ display:
           parse_mode: terms
           min_length: null
           fields:
-            title: title
-            body: body
+            - body
+            - title
           plugin_id: search_api_fulltext
       sorts:
         field_videos_ano:

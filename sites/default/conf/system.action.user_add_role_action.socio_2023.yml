@@ -1,0 +1,14 @@
+uuid: 5dfdadb6-0ec8-420d-80e6-a164088d9777
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.socio_2023
+  module:
+    - user
+id: user_add_role_action.socio_2023
+label: 'Add the Socio 2023 role to the selected user(s)'
+type: user
+plugin: user_add_role_action
+configuration:
+  rid: socio_2023
