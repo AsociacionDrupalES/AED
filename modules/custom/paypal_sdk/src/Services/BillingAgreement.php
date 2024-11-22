@@ -265,7 +265,7 @@ class BillingAgreement {
       return $plan;
 
     } catch (\Exception $e) {
-      $this->mess($e->getMessage(), "error");
+      $this->messenger->addError($e->getMessage());
       return FALSE;
     }
 
