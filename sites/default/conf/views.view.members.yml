@@ -416,11 +416,7 @@ display:
           plugin_id: text
           empty: false
           content:
-            value: |-
-              <h2>Socios</h2>
-              <p>
-                  ¿Ya eres socio y no apareces en este listado? <a href="[site:login-url-or-user-url]">Habilítalo ahora</a>
-              </p>
+            value: "<h2>Socios</h2>\r\n<p>\r\n    ¿Ya eres socio y no apareces en este listado? <a href=\"[site:login-url]\">Habilítalo ahora</a>\r\n</p>"
             format: full_html
           tokenize: false
       footer: {  }
