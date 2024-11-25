@@ -1,0 +1,9 @@
+uuid: 426d9c74-76ac-4197-bd04-90f6c8f84db6
+langcode: en
+status: true
+dependencies: {  }
+id: socio_2025
+label: 'socio 2025'
+weight: 7
+is_admin: null
+permissions: {  }

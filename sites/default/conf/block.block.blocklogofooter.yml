@@ -17,8 +17,8 @@ plugin: 'block_content:796e22ac-50df-497d-8055-b91778f63480'
 settings:
   id: 'block_content:796e22ac-50df-497d-8055-b91778f63480'
   label: 'Block logo footer'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full

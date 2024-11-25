@@ -17,8 +17,8 @@ plugin: 'block_content:fcffc4c7-f917-46e5-99a5-7b306c9544d9'
 settings:
   id: 'block_content:fcffc4c7-f917-46e5-99a5-7b306c9544d9'
   label: 'Block Copyright AED'
-  provider: block_content
   label_display: '0'
+  provider: block_content
   status: true
   info: ''
   view_mode: full

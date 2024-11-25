@@ -18,12 +18,12 @@ plugin: 'facet_block:ano'
 settings:
   id: 'facet_block:ano'
   label: Año
-  provider: facets
   label_display: visible
+  provider: facets
   block_id: ano
 visibility:
   request_path:
     id: request_path
-    pages: /videos
     negate: false
     context_mapping: {  }
+    pages: /videos

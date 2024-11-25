@@ -1,7 +1,20 @@
 uuid: bada6d73-6db2-49c8-9a79-c0cf25b5efe7
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  config:
+    - filter.format.filtered_html
+    - node.type.groups
+    - node.type.partner
+  module:
+    - comment
+    - contact
+    - field_permissions
+    - filter
+    - media
+    - node
+    - paypal_sdk
+    - system
 _core:
   default_config_hash: dJ0L2DNSj5q6XVZAGsuVDpJTh5UeYkIPwKrUOOpr8YI
 id: authenticated
@@ -9,7 +22,6 @@ label: 'usuario autenticado'
 weight: -9
 is_admin: false
 permissions:
-  - 'access checkout'
   - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
@@ -17,29 +29,10 @@ permissions:
   - 'edit own comments'
   - 'edit own groups content'
   - 'edit own partner content'
-  - 'flag video_visualizado'
-  - 'opt-in or out of google analytics tracking'
   - 'post comments'
   - 'skip comment approval'
   - 'subscribe paypal products'
-  - 'unflag video_visualizado'
-  - 'use search_api_sorts'
   - 'use text format filtered_html'
   - 'user view agreement plan on profile'
-  - 'view any partner_companies profile'
-  - 'view any socio profile'
-  - 'view company entities'
-  - 'view field_anos_que_ha_participado'
-  - 'view field_eslogan'
-  - 'view field_image'
-  - 'view field_logo_compacto'
-  - 'view field_name'
-  - 'view field_pagina_web'
-  - 'view field_partner_compact_logo'
-  - 'view field_partner_logo'
-  - 'view field_partner_web'
-  - 'view field_partner_year_sponsor'
-  - 'view field_web_page'
-  - 'view own commerce_order entities'
+  - 'view media'
   - 'view own field_paypal_agreement_id'
-  - 'view own socio profile'

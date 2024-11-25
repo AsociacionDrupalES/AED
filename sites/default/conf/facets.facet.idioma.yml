@@ -9,12 +9,23 @@ dependencies:
     - search_api
 id: idioma
 name: Idioma
-url_alias: idioma
 weight: 0
 min_count: 1
-show_only_one_result: false
-field_identifier: field_videos_idioma
+missing: false
+missing_label: others
+url_alias: idioma
 facet_source_id: 'search_api:views_page__videos__page_video'
+field_identifier: field_videos_idioma
+query_operator: and
+hard_limit: 0
+exclude: false
+use_hierarchy: false
+keep_hierarchy_parents_active: false
+hierarchy:
+  type: taxonomy
+  config: {  }
+expand_hierarchy: false
+enable_parent_when_child_gets_disabled: true
 widget:
   type: links
   config:
@@ -23,13 +34,11 @@ widget:
     soft_limit_settings:
       show_less_label: 'Show less'
       show_more_label: 'Show more'
-query_operator: and
-use_hierarchy: false
-expand_hierarchy: false
-enable_parent_when_child_gets_disabled: true
-hard_limit: 0
-exclude: false
+empty_behavior:
+  behavior: none
 only_visible_when_facet_source_is_visible: true
+show_only_one_result: false
+show_title: null
 processor_configs:
   term_weight_widget_order:
     processor_id: term_weight_widget_order
@@ -48,5 +57,3 @@ processor_configs:
       pre_query: -10
       build: -10
     settings: {  }
-empty_behavior:
-  behavior: none

@@ -100,7 +100,7 @@ class PaypalSubscribeFieldFormatter extends FormatterBase {
       ]
     ];
 
-    return render($build);
+    return \Drupal::service('renderer')->render($build);
   }
 
 }

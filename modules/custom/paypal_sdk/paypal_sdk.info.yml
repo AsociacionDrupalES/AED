@@ -1,7 +1,7 @@
 name: 'PayPal Simple Subscription'
 type: module
 description: 'Adds a subscription field for paypal agreements.'
-core: 8.x
+core_version_requirement: ^8 || ^9 || ^10
 package: PayPal
 dependencies:
   - datetime

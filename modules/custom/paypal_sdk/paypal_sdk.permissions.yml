@@ -2,3 +2,6 @@ user view agreement plan on profile:
   title: 'User view agreement plans on profile:'
   description: 'View associated PayPal agreements plans.'
   restrict access: true
+subscribe paypal products:
+  title: 'Subscribe to PayPal products:'
+  description: 'Allow users to subscribe to PayPal products.'

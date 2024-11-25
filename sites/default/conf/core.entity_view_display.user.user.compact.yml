@@ -21,20 +21,20 @@ third_party_settings:
       children:
         - field_name
         - field_social_links
-      parent_name: ''
-      weight: 1
       label: Content
+      parent_name: ''
+      region: content
+      weight: 1
       format_type: html_element
       format_settings:
+        classes: user-details
+        id: ''
         element: div
         show_label: false
         label_element: h3
         attributes: ''
         effect: none
         speed: fast
-        id: ''
-        classes: user-details
-      region: content
 _core:
   default_config_hash: C3k_McOy8bL8rTnIjspy5OfFdgqV1z6OdGZaI-tO5eM
 id: user.user.compact
@@ -44,15 +44,14 @@ mode: compact
 content:
   field_name:
     type: string
-    weight: 1
     label: hidden
     settings:
       link_to_entity: false
     third_party_settings: {  }
+    weight: 1
     region: content
   field_social_links:
     type: social_links_simple
-    weight: 2
     label: hidden
     settings:
       target: _blank
@@ -61,18 +60,22 @@ content:
       rel: 0
       trim_length: '80'
     third_party_settings: {  }
+    weight: 2
     region: content
   user_picture:
     type: image
-    weight: 0
-    settings:
-      image_style: thumbnail
-      image_link: content
-    third_party_settings: {  }
     label: hidden
+    settings:
+      image_link: content
+      image_style: thumbnail
+      image_loading:
+        attribute: lazy
+    third_party_settings: {  }
+    weight: 0
     region: content
 hidden:
   field_expose_my_profile: true
   field_paypal_agreement_id: true
   member_for: true
   member_years: true
+  search_api_excerpt: true

@@ -183,7 +183,7 @@ class PlanEditForm extends FormBase {
 //      drupal_set_message($this->t('The plan <strong>@name</strong> with ID <strong>@id</strong> has been updated.', ['@name' => $result->getName(), '@id' => $result->getId()]));
 //    }
 
-    drupal_set_message($this->t('Sorry updates are not implemented yet.'), 'warning');
+    $this->messenger()->addMessage($this->t('Sorry updates are not implemented yet.'), 'warning');
 
     $form_state->setRedirectUrl(Url::fromRoute('paypal_sdk.billing_plan_list'));
 

@@ -29,9 +29,8 @@ paypal_sdk_plan_list:
 
 # Paypal Configuration
 paypal_sdk.config:
- title: 'Settings'
+ title: 'Paypal SDK Settings'
  route_name: paypal_sdk.config.form
  parent: paypal_sdk.subscriptions
  description: 'Configure PayPal simple subscription'
- title: Paypal SDK
  weight: 3
