@@ -257,10 +257,10 @@ class PaypalSDKController extends ControllerBase {
       $table['contacts'][$k]['operations'] = array(
         '#type' => 'operations',
         '#links' => [
-          'edit' => [
-            'title' => t('Edit'),
-            // 'url' => Url::fromRoute('paypal_sdk.agreement_edit_form', ['agreemen_id' => $agreement->getId()])
-          ],
+          // 'edit' => [
+          //   'title' => t('Edit'),
+          //   'url' => Url::fromRoute('paypal_sdk.agreement_edit_form', ['agreemen_id' => $agreement->getId()])
+          // ],
         ],
       );
 
