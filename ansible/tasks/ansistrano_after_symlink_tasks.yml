@@ -30,6 +30,6 @@
     command: 'curl -X BAN "http://{{ item }}/.*" -H "Host: {{ domain_env }}" --fail -s -o /dev/null'
     log:
       enabled: false
-  with_items: "{{ varnish_servers | default(['127.0.0.1']) }}"
+  with_items: "{{ varnish_servers | default(['127.0.0.1:6081']) }}"
   when: appenv == 'pro'
   run_once: true
