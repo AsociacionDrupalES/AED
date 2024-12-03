@@ -1,16 +1,34 @@
 <?php
-$databases['default']['default'] = array(
-  'database' => 'aed',
-  'username' => 'aed',
-  'password' => 'aed',
-  'prefix' => '',
-  'host' => 'localhost',
-  'port' => '3306',
-  'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
-  'driver' => 'mysql',
-);
+
+// If you are using your own L/M/W-AMP version, otherwise default to "ddev".
+// $databases['default']['default'] = array(
+//   'database' => 'aed',
+//   'username' => 'aed',
+//   'password' => 'aed',
+//   'prefix' => '',
+//   'host' => 'localhost',
+//   'port' => '3306',
+//   'namespace' => 'Drupal\\Core\\Database\\Driver\\mysql',
+//   'driver' => 'mysql',
+// );
 
 $config['stage_file_proxy.settings']['origin'] = 'https://asociaciondrupal.es';
+
+// Paypal settings should be set at server level. If you need credentials for
+// "sandbox" or "live" environments, contact the AED to get them and put them
+// in your "settings.local.php" file, which will override these settings.
+$config['paypal_sdk.settings']['environment'] = 'sandbox';
+$config['paypal_sdk.settings']['live_client_id'] = 'AED-XXX';
+$config['paypal_sdk.settings']['live_client_secret'] = 'AED-XXX';
+$config['paypal_sdk.settings']['sandbox_client_id'] = 'AED-XXX';
+$config['paypal_sdk.settings']['sandbox_client_secret'] = 'AED-XXX';
+
+// Switfmailer settings. If you need credentials for "sandbox" or "live"
+// environments, contact the AED to get them and put them in your
+// "settings.local.php" file, which will override these settings.
+$config['swiftmailer.transport']['smtp_credentials']['swiftmailer']['username'] = 'aed-xxx@aed-xxx.es';
+$config['swiftmailer.transport']['smtp_credentials']['swiftmailer']['password'] = 'AED-XXX';
+
 
 //$settings['trusted_host_patterns'] = array(
 //  '^dev\.asociaciondrupal\.es$',

@@ -1,4 +1,0 @@
-[submodule "vendor/behat/mink"]
-    path = vendor/behat/mink
-    url = https://github.com/minkphp/Mink.git
-    ignore = dirty

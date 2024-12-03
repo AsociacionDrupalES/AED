@@ -802,7 +802,7 @@ $settings['migrate_node_migrate_type_classic'] = FALSE;
 // Include settings required for Redis cache.
 # (sbitio) We want this redis config in all environments.
 #if ((file_exists(__DIR__ . '/settings.ddev.redis.php') && getenv('IS_DDEV_PROJECT') == 'true')) {
-if (file_exists(__DIR__ . '/settings.ddev.redis.php') && $_SERVER['REDIS_ENABLED'] == 'true') {
+if (file_exists(__DIR__ . '/settings.ddev.redis.php') && isset($_SERVER['REDIS_ENABLED']) && $_SERVER['REDIS_ENABLED'] == 'true') {
   include __DIR__ . '/settings.ddev.redis.php';
 }
 

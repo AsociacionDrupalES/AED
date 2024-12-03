@@ -23,47 +23,47 @@ third_party_settings:
         - language
         - contact
         - timezone
+      label: 'Basic data'
+      region: content
       parent_name: group_data_accordion
       weight: 1
-      label: 'Basic data'
       format_type: accordion_item
       format_settings:
-        description: ''
         classes: ''
         id: ''
-        required_fields: true
         formatter: closed
-      region: content
+        description: ''
+        required_fields: true
     group_personal_data:
       children:
         - user_picture
         - field_name
         - field_social_links
         - field_expose_my_profile
+      label: 'Personal data'
+      region: content
       parent_name: group_data_accordion
       weight: 2
-      label: 'Personal data'
       format_type: accordion_item
       format_settings:
         label: 'Personal data'
+        classes: perdonal-data
+        id: ''
         formatter: open
         required_fields: true
-        id: ''
-        classes: perdonal-data
-      region: content
     group_data_accordion:
       children:
         - group_basic_data
         - group_personal_data
+      label: Data
+      region: content
       parent_name: ''
       weight: 0
-      label: Data
       format_type: accordion
       format_settings:
-        effect: none
         classes: ''
         id: ''
-      region: content
+        effect: none
 _core:
   default_config_hash: LLAieeozVsoZDb-2PbFxRJpQqnKmpR7-4OoRJnduz-U
 id: user.user.default
@@ -73,47 +73,47 @@ mode: default
 content:
   account:
     weight: 1
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   contact:
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   field_expose_my_profile:
+    type: boolean_checkbox
     weight: 5
+    region: content
     settings:
       display_label: true
     third_party_settings: {  }
-    type: boolean_checkbox
-    region: content
   field_name:
+    type: string_textfield
     weight: 3
+    region: content
     settings:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-    type: string_textfield
-    region: content
   field_social_links:
+    type: link_default
     weight: 4
+    region: content
     settings:
       placeholder_url: ''
       placeholder_title: ''
     third_party_settings: {  }
-    type: link_default
-    region: content
   google_analytics:
     weight: 3
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   language:
     weight: 2
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   path:
     type: path
     weight: 30
@@ -122,16 +122,16 @@ content:
     third_party_settings: {  }
   timezone:
     weight: 4
+    region: content
     settings: {  }
     third_party_settings: {  }
-    region: content
   user_picture:
+    type: image_image
+    weight: 2
+    region: content
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
-    type: image_image
-    weight: 2
     third_party_settings: {  }
-    region: content
 hidden:
   field_paypal_agreement_id: true

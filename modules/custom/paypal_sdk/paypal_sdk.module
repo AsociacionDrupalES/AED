@@ -71,14 +71,14 @@ function paypal_sdk_paypal_agreement_response_ok($agreement, $plan, $payer) {
 
       _user_mail_notify('register_no_approval_required', $user);
       // user_login_finalize($user);
-      drupal_set_message(t('Subscription successful. We sent you an activation email.'));
+      \Drupal::messenger()->addMessage(t('Subscription successful. We sent you an activation email.'));
     }
     else {
       $user = $existingUser;
       $user->set($agreementField, $agreement_id);
       $user->addRole('socio_' . date("Y"));
       $user->save();
-      drupal_set_message(t('Subscription successful. Since your email exist in this site we associated the subscription to your account.'));
+      \Drupal::messenger()->addMessage(t('Subscription successful. Since your email exist in this site we associated the subscription to your account.'));
     }
 
   }
@@ -88,7 +88,7 @@ function paypal_sdk_paypal_agreement_response_ok($agreement, $plan, $payer) {
     $user->set($agreementField, $agreement_id);
     $user->addRole('socio_' . date("Y"));
     $user->save();
-    drupal_set_message(t('Subscription successful.'));
+    \Drupal::messenger()->addMessage(t('Subscription successful.'));
   }
 
 }

@@ -25,7 +25,7 @@ function aed_th_form_alter(&$form, $form_state, $form_id) {
 
   if ($form_id == "user_login_form") {
 
-    $request_password = \Drupal::l(t('Have you forgotten?'), new \Drupal\Core\Url('user.pass', array(), array(
+    $request_password = \Drupal::linkGenerator()->generate(t('Have you forgotten?'), new \Drupal\Core\Url('user.pass', array(), array(
       'attributes' => array(
         'title' => t('Send password reset instructions via email.'),
         'class' => array('request-password-link'),

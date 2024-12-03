@@ -10,13 +10,13 @@ type: 'canonical_entities:node'
 pattern: 'video/[node:title]'
 selection_criteria:
   22bd9514-49f5-4290-a70f-a4598a52eeab:
-    id: node_type
-    bundles:
-      videos: videos
+    id: 'entity_bundle:node'
     negate: false
+    uuid: 22bd9514-49f5-4290-a70f-a4598a52eeab
     context_mapping:
       node: node
-    uuid: 22bd9514-49f5-4290-a70f-a4598a52eeab
+    bundles:
+      videos: videos
 selection_logic: and
 weight: -5
 relationships: {  }

@@ -16,84 +16,84 @@ dependencies:
     - views
 id: block_page
 label: 'Block page'
+weight: 0
 variant: block_display
 variant_settings:
+  id: block_display
+  label: null
+  weight: 0
+  uuid: 771e2bac-f9a6-45da-bfbf-bdf16aa19d96
   blocks:
     18a7f664-5c9c-42d7-90f7-47bab17c8b32:
       id: 'views_block:articles-block_articles'
       label: ''
-      provider: views
       label_display: '0'
+      provider: views
+      context_mapping: {  }
       views_label: ''
       items_per_page: none
       region: top
       weight: -9
       uuid: 18a7f664-5c9c-42d7-90f7-47bab17c8b32
-      context_mapping: {  }
     198ebb9d-a881-421d-bbcd-c4c09dff8ed0:
       id: 'views_block:home_slider-block_1'
       label: ''
-      provider: views
       label_display: '0'
+      provider: views
+      context_mapping: {  }
       views_label: ''
       items_per_page: none
       region: top
       weight: -10
       uuid: 198ebb9d-a881-421d-bbcd-c4c09dff8ed0
-      context_mapping: {  }
     c3106c23-c549-4043-90d0-e64b9de5c11c:
       id: 'views_block:partners-block_1'
       label: ''
-      provider: views
       label_display: visible
+      provider: views
+      context_mapping: {  }
       views_label: ''
       items_per_page: none
       region: top
       weight: -7
       uuid: c3106c23-c549-4043-90d0-e64b9de5c11c
-      context_mapping: {  }
     b5268ce0-c398-4b40-93d6-add82a95954c:
       id: 'block_content:2b37f509-0b02-42f4-ae53-2e717974cbc7'
       label: 'Hazte socio call to action'
-      provider: block_content
       label_display: '0'
+      provider: block_content
       status: true
       info: ''
       view_mode: full
+      context_mapping: {  }
       region: top
       weight: -6
       uuid: b5268ce0-c398-4b40-93d6-add82a95954c
-      context_mapping: {  }
     16d4c366-5cbd-4ded-8a95-875d972c25ad:
       id: 'block_content:45f8374d-0894-41f3-a347-66fa860ff729'
       label: Vídeos
-      provider: block_content
       label_display: visible
+      provider: block_content
       status: true
       info: ''
       view_mode: full
+      context_mapping: {  }
       region: top
       weight: -5
       uuid: 16d4c366-5cbd-4ded-8a95-875d972c25ad
-      context_mapping: {  }
     aa427ba5-08b9-4595-a7a8-17ba8923c7c9:
       id: 'views_block:local_groups-block_1'
       label: ''
-      provider: views
       label_display: '0'
+      provider: views
+      context_mapping: {  }
       views_label: ''
       items_per_page: none
       region: top
       weight: -8
       uuid: aa427ba5-08b9-4595-a7a8-17ba8923c7c9
-      context_mapping: {  }
-  id: block_display
-  label: null
-  uuid: 771e2bac-f9a6-45da-bfbf-bdf16aa19d96
-  weight: 0
   page_title: Home
 page: home
-weight: 0
 selection_criteria: {  }
 selection_logic: and
 static_context: {  }

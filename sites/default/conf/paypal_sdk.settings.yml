@@ -1,0 +1,5 @@
+environment: live
+live_client_id: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
+live_client_secret: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
+sandbox_client_id: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
+sandbox_client_secret: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE

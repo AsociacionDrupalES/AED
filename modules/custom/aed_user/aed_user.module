@@ -35,13 +35,13 @@ function aed_user_tokens($type, $tokens, array $data, array $options, Bubbleable
 
           if ($currentUser->isAnonymous()) {
             /** @var \Drupal\Core\GeneratedUrl $result */
-            $result = \Drupal::url('user.page', [], [], TRUE);
+            $result = \Drupal::urlGenerator()->generateFromRoute('user.page', [], [], TRUE);
             $bubbleable_metadata->addCacheableDependency($result);
             $replacements[$original] = $result->getGeneratedUrl();
           }
           else {
             $account = User::load($currentUser->id());
-            $replacements[$original] = $account->url('edit-form', []);
+            $replacements[$original] = $account->toUrl('edit-form', []);
           }
 
 
