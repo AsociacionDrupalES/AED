@@ -1,6 +1,6 @@
 <?php
 
-$settings['config_sync_directory'] = 'sites/default/conf';
+$settings['config_sync_directory'] = '../config';
 
 # Tweak ddev redis config.
 $settings['redis.connection']['interface'] = 'PhpRedis';
