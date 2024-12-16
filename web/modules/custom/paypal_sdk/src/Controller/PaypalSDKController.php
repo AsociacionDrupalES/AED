@@ -226,41 +226,41 @@ class PaypalSDKController extends ControllerBase {
 
       $table['contacts'][$k]['name'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getName()
+        '#markup' => $agreement->getName() ?: 'undefined'
       );
 
       $table['contacts'][$k]['desc'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getDescription()
+        '#markup' => $agreement->getDescription() ?: 'undefined'
       );
 
       $table['contacts'][$k]['agreement_id'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getId()
+        '#markup' => $agreement->getId() ?: 'undefined'
       );
 
       $table['contacts'][$k]['state'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getState()
+        '#markup' => $agreement->getState() ?: 'undefined'
       );
 
       $table['contacts'][$k]['start_date'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getStartDate()
+        '#markup' => $agreement->getStartDate() ?: 'undefined'
       );
 
       $table['contacts'][$k]['plan'] = array(
         '#type' => 'markup',
-        '#markup' => $agreement->getPlan()
+        '#markup' => $agreement->getPlan() ?: 'undefined'
       );
 
       $table['contacts'][$k]['operations'] = array(
         '#type' => 'operations',
         '#links' => [
-          'edit' => [
-            'title' => t('Edit'),
-            'url' => Url::fromRoute('paypal_sdk.agreement_edit_form', ['agreemen_id' => $agreement->getId()])
-          ],
+          // 'edit' => [
+          //   'title' => t('Edit'),
+          //   'url' => Url::fromRoute('paypal_sdk.agreement_edit_form', ['agreemen_id' => $agreement->getId()])
+          // ],
         ],
       );
 

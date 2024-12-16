@@ -12,6 +12,7 @@ dependencies:
     - taxonomy.vocabulary.anios
   content:
     - 'taxonomy_term:anios:605cbb9d-6eb9-446f-958b-53fac7cff9d2'
+    - 'taxonomy_term:anios:d672b20e-6861-40c8-a43c-646e6f83f17e'
   module:
     - image
     - link
@@ -444,7 +445,7 @@ display:
           plugin_id: taxonomy_index_tid
           operator: or
           value:
-            432: 432
+            435: 435
           group: 1
           exposed: true
           expose:
