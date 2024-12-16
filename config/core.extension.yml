@@ -28,6 +28,7 @@ module:
   facets: 0
   field: 0
   field_group: 0
+  field_group_accordion: 0
   field_permissions: 0
   field_ui: 0
   file: 0
@@ -36,6 +37,8 @@ module:
   history: 0
   honeypot: 0
   image: 0
+  jquery_ui: 0
+  jquery_ui_accordion: 0
   layout_discovery: 0
   link: 0
   linked_image_field: 0

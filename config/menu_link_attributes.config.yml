@@ -2,11 +2,14 @@ _core:
   default_config_hash: 9nRDOclwSlz2Os9mJXM1LXNbV2q-bADV0zipiWPXymk
 attributes:
   class:
-    label: ''
-    description: ''
+    label: 'Link class(es)'
+    description: 'CSS class for the link (&lt;a href&gt;). Separate multiple classes by space.'
   target:
-    label: ''
+    label: 'Link target'
     description: ''
     options:
       _blank: 'New window (_blank)'
       _self: 'Same window (_self)'
+  container_class:
+    label: 'Container class(es)'
+    description: 'CSS class for the menu list item (&lt;li&gt;). Separate multiple classes by space.'
