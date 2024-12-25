@@ -5,6 +5,10 @@
     "license": "GPL-2.0-or-later",
     "repositories": [
         {
+            "type": "git",
+            "url": "https://github.com/imlolman/PayPal-PHP-SDK.git"
+        },
+        {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         }
@@ -19,9 +23,9 @@
         "drupal/config_filter": "^2.0",
         "drupal/config_ignore": "^2.0",
         "drupal/contact_storage": "^1.0",
-        "drupal/core-composer-scaffold": "^9",
-        "drupal/core-project-message": "^9",
-        "drupal/core-recommended": "^9",
+        "drupal/core-composer-scaffold": "^10",
+        "drupal/core-project-message": "^10",
+        "drupal/core-recommended": "^10",
         "drupal/core-vendor-hardening": "^10.1",
         "drupal/email_registration": "^1.0",
         "drupal/facets": "^3",
@@ -40,8 +44,8 @@
         "drupal/stage_file_proxy": "^2.1",
         "drupal/swiftmailer": "^2.0",
         "drupal/video_embed_field": "^2.0",
-        "drush/drush": "^11.6",
-        "paypal/rest-api-sdk-php": "^1.14",
+        "drush/drush": "^12",
+        "paypal/rest-api-sdk-php": "dev-master",
         "vlucas/phpdotenv": "^5.4"
     },
     "conflict": {
@@ -54,10 +58,11 @@
         "allow-plugins": {
             "composer/installers": true,
             "cweagans/composer-patches": true,
-            "drupal/core-composer-scaffold": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
-            "drupal/core-vendor-hardening": true
+            "drupal/core-vendor-hardening": true,
+            "phpstan/extension-installer": true
         }
     },
     "extra": {
@@ -111,7 +116,7 @@
     "scripts": {
     },
     "require-dev": {
-        "drupal/upgrade_status": "*",
-        "drupal/core-dev": "^9"
+        "drupal/core-dev": "^10",
+        "drupal/upgrade_status": "*"
     }
 }

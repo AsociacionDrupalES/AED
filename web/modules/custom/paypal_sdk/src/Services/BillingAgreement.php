@@ -27,46 +27,14 @@ use PayPal\Rest\ApiContext;
  */
 class BillingAgreement {
 
-  /**
-   *
-   */
   const PLAN_ACTIVE = 'ACTIVE';
-
-  /**
-   *
-   */
   const PLAN_INACTIVE = 'INACTIVE';
-
-  /**
-   *
-   */
   const PLAN_CREATED = 'CREATED';
-
-  /**
-   *
-   */
   const AGREEMENT_PENDING = 'PENDING';
-
-  /**
-   *
-   */
   const AGREEMENT_ACTIVE = 'Active';
-
-  /**
-   *
-   */
   const AGREEMENT_SUSPENDED = 'Suspended';
-
-  /**
-   *
-   */
   const AGREEMENT_CANCELED = 'Canceled';
-
-  /**
-   *
-   */
   const AGREEMENT_EXPIRED = 'Expired';
-
   const AGREEMENT_REACTIVE = 'Re Active';
 
   /**
