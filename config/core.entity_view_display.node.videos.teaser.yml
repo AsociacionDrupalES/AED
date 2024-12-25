@@ -46,3 +46,4 @@ hidden:
   field_videos_nivel: true
   field_videos_version: true
   links: true
+  search_api_excerpt: true

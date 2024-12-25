@@ -1,9 +1,12 @@
 uuid: 44aeed4e-566a-4f1b-9a2e-f2a938027982
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file
 id: socio_2021
 label: 'Socio 2021'
 weight: 3
 is_admin: null
-permissions: {  }
+permissions:
+  - 'delete own files'

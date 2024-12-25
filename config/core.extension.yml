@@ -55,6 +55,7 @@ module:
   path: 0
   path_alias: 0
   paypal_sdk: 0
+  phpass: 0
   redis: 0
   search_api: 0
   search_api_db: 0

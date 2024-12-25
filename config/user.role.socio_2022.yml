@@ -1,9 +1,12 @@
 uuid: ffaf7a33-eb4a-4f05-a6e1-dd5c99191b72
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file
 id: socio_2022
 label: 'Socio 2022'
 weight: 4
 is_admin: null
-permissions: {  }
+permissions:
+  - 'delete own files'

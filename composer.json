@@ -42,7 +42,6 @@
         "drupal/slick": "^2.9",
         "drupal/slick_views": "^2.7",
         "drupal/stage_file_proxy": "^2.1",
-        "drupal/swiftmailer": "^2.0",
         "drupal/symfony_mailer_lite": "^2.0",
         "drupal/video_embed_field": "^2.0",
         "drush/drush": "^12",
@@ -63,7 +62,9 @@
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "drupal/core-vendor-hardening": true,
-            "phpstan/extension-installer": true
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "tbachert/spi": true
         }
     },
     "extra": {

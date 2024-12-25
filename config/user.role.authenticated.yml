@@ -10,6 +10,7 @@ dependencies:
     - comment
     - contact
     - field_permissions
+    - file
     - filter
     - media
     - node
@@ -26,6 +27,7 @@ permissions:
   - 'access content'
   - 'access site-wide contact form'
   - 'access user profiles'
+  - 'delete own files'
   - 'edit own comments'
   - 'edit own groups content'
   - 'edit own partner content'

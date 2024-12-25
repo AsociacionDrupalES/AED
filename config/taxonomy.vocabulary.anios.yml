@@ -6,3 +6,4 @@ name: Años
 vid: anios
 description: 'Utilizado internamente para indicar los periodos en los que una empresa ha participado.'
 weight: 0
+new_revision: false

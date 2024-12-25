@@ -107,3 +107,4 @@ hidden:
   comment_node_videos: true
   field_videos_ano: true
   links: true
+  search_api_excerpt: true
