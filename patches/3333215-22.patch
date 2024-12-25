@@ -1,0 +1,54 @@
+diff --git a/core/modules/syslog/src/Logger/SysLog.php b/core/modules/syslog/src/Logger/SysLog.php
+index 5e1b4eded3..93edfd917b 100644
+--- a/core/modules/syslog/src/Logger/SysLog.php
++++ b/core/modules/syslog/src/Logger/SysLog.php
+@@ -52,8 +52,13 @@ public function __construct(ConfigFactoryInterface $config_factory, LogMessagePa
+    */
+   protected function openConnection() {
+     if (!$this->connectionOpened) {
++      // Do not connect if identity or facility are not configured.
++      $identity = $this->config->get('identity');
+       $facility = $this->config->get('facility');
+-      $this->connectionOpened = openlog($this->config->get('identity'), LOG_NDELAY, $facility);
++      if ($identity === NULL || $facility === NULL) {
++        return;
++      }
++      $this->connectionOpened = openlog($identity, LOG_NDELAY, $facility);
+     }
+   }
+ 
+@@ -73,6 +78,9 @@ public function log($level, string|\Stringable $message, array $context = []): v
+ 
+     // Ensure we have a connection available.
+     $this->openConnection();
++    if (!$this->connectionOpened) {
++      return;
++    }
+ 
+     // Populate the message placeholders and then replace them in the message.
+     $message_placeholders = $this->parser->parseMessagePlaceholders($message, $context);
+diff --git a/core/modules/syslog/tests/src/Kernel/SyslogTest.php b/core/modules/syslog/tests/src/Kernel/SyslogTest.php
+index ceb1845c9c..14137c73ef 100644
+--- a/core/modules/syslog/tests/src/Kernel/SyslogTest.php
++++ b/core/modules/syslog/tests/src/Kernel/SyslogTest.php
+@@ -62,6 +62,20 @@ public function testSyslogWriting() {
+     $this->assertFileDoesNotExist($log_filename);
+   }
+ 
++  /**
++   * Tests that missing facility prevents writing to the syslog.
++   *
++   * @covers ::openConnection
++   */
++  public function testSyslogMissingFacility() {
++    $config = $this->container->get('config.factory')->getEditable('syslog.settings');
++    $config->clear('facility');
++    $config->save();
++    \Drupal::logger('my_module')->warning('My warning message.');
++    $log_filename = $this->container->get('file_system')->realpath('public://syslog.log');
++    $this->assertFileDoesNotExist($log_filename);
++  }
++
+   /**
+    * Tests severity level logging.
+    *

@@ -43,6 +43,7 @@
         "drupal/slick_views": "^2.7",
         "drupal/stage_file_proxy": "^2.1",
         "drupal/swiftmailer": "^2.0",
+        "drupal/symfony_mailer_lite": "^2.0",
         "drupal/video_embed_field": "^2.0",
         "drush/drush": "^12",
         "paypal/rest-api-sdk-php": "dev-master",
@@ -101,7 +102,10 @@
         },
         "patches": {
             "drupal/core": {
-                "Syslog error": "https://www.drupal.org/files/issues/2023-07-12/3333215-22.patch"
+                "Syslog error": "patches/3333215-22.patch"
+            },
+            "paypal/rest-api-sdk-php": {
+                "Compatibility": "patches/paypal-compatibility.patch"
             }
         },
         "drupal-scaffold": {
