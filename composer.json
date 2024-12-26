@@ -6,7 +6,7 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/imlolman/PayPal-PHP-SDK.git"
+            "url": "https://github.com/fjgarlin/PayPal-PHP-SDK.git"
         },
         {
             "type": "composer",
@@ -102,12 +102,6 @@
             ]
         },
         "patches": {
-            "drupal/core": {
-                "Syslog error": "patches/3333215-22.patch"
-            },
-            "paypal/rest-api-sdk-php": {
-                "Compatibility": "patches/paypal-compatibility.patch"
-            }
         },
         "drupal-scaffold": {
             "locations": {
