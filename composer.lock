@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "adbbd180f2832987d473a91a972f5deb",
+    "content-hash": "b197c9142af1da6a449f871f05b28171",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1613,27 +1613,30 @@
         },
         {
             "name": "drupal/config_ignore",
-            "version": "2.4.0",
+            "version": "3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/config_ignore.git",
-                "reference": "8.x-2.4"
+                "reference": "8.x-3.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/config_ignore-8.x-2.4.zip",
-                "reference": "8.x-2.4",
-                "shasum": "e0e45dde2d6927c5d26de59f352792fb6cf26554"
+                "url": "https://ftp.drupal.org/files/projects/config_ignore-8.x-3.3.zip",
+                "reference": "8.x-3.3",
+                "shasum": "4446811ecb023820a57c227d35c034e0d4363a70"
             },
             "require": {
-                "drupal/config_filter": "^1 || ^2",
-                "drupal/core": "^8 || ^9 || ^10"
+                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
+            },
+            "require-dev": {
+                "drupal/config_filter": "^1.8||^2.2",
+                "drush/drush": "^10 || ^11 || ^12"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "8.x-2.4",
-                    "datestamp": "1676045435",
+                    "version": "8.x-3.3",
+                    "datestamp": "1713299496",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1661,12 +1664,11 @@
                     "homepage": "https://www.drupal.org/user/413139"
                 }
             ],
-            "description": "Ignore certain configuration during import.",
+            "description": "Ignore certain configuration during import and export.",
             "homepage": "http://drupal.org/project/config_ignore",
             "support": {
                 "source": "https://git.drupalcode.org/project/config_ignore",
-                "issues": "https://drupal.org/project/config_ignore",
-                "irc": "irc://irc.freenode.org/drupal-contribute"
+                "issues": "http://drupal.org/project/config_ignore"
             }
         },
         {
@@ -3371,39 +3373,37 @@
         },
         {
             "name": "drupal/stage_file_proxy",
-            "version": "2.1.5",
+            "version": "3.1.4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/stage_file_proxy.git",
-                "reference": "2.1.5"
+                "reference": "3.1.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-2.1.5.zip",
-                "reference": "2.1.5",
-                "shasum": "6f5974c106d45211e54945e4d9f5bbf8ec6699de"
+                "url": "https://ftp.drupal.org/files/projects/stage_file_proxy-3.1.4.zip",
+                "reference": "3.1.4",
+                "shasum": "57be6bfd1a429d41852e049e047b3ac0e277d277"
             },
             "require": {
-                "drupal/core": "^9 || ^10",
-                "php": ">=8"
+                "drupal/core": "^10.3 || ^11",
+                "php": ">=8.1"
+            },
+            "conflict": {
+                "drush/drush": "<12"
             },
             "require-dev": {
                 "drupal/coder": "^8.3",
-                "drush/drush": "^11 || ^12"
+                "drush/drush": ">=12"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.5",
-                    "datestamp": "1719499510",
+                    "version": "3.1.4",
+                    "datestamp": "1733151924",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "drush": {
-                    "services": {
-                        "stage_file_proxy.drush.services.yml": "^11"
                     }
                 }
             },
