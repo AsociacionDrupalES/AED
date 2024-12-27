@@ -5,7 +5,6 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
-    - field.field.node.page.comment_node_page
     - node.type.page
   module:
     - text
@@ -31,5 +30,4 @@ content:
     weight: 101
     region: content
 hidden:
-  comment_node_page: true
   search_api_excerpt: true
