@@ -35,6 +35,7 @@
         "cweagans/composer-patches": "^1.6",
         "drupal/admin_toolbar": "^3",
         "drupal/blazy": "^3.0",
+        "drupal/captcha": "^2.0",
         "drupal/chosen": "^4.0",
         "drupal/classy": "^1.0",
         "drupal/config_filter": "^2.0",

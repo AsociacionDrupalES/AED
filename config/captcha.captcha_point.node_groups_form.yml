@@ -1,0 +1,7 @@
+uuid: 773ce342-7e9a-4a5d-9759-e68cf7a58827
+langcode: en
+status: false
+dependencies: {  }
+formId: node_groups_form
+captchaType: default
+label: node_groups_form
