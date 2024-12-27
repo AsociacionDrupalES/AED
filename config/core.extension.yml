@@ -12,7 +12,6 @@ module:
   chosen: 0
   chosen_lib: 0
   ckeditor5: 0
-  comment: 0
   config: 0
   config_filter: 0
   config_ignore: 0

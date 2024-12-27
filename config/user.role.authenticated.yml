@@ -8,7 +8,6 @@ dependencies:
     - node.type.partner
   module:
     - captcha
-    - comment
     - contact
     - field_permissions
     - file
@@ -24,17 +23,13 @@ label: 'usuario autenticado'
 weight: -9
 is_admin: false
 permissions:
-  - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
   - 'access user profiles'
   - 'delete own files'
-  - 'edit own comments'
   - 'edit own groups content'
   - 'edit own partner content'
-  - 'post comments'
   - 'skip CAPTCHA'
-  - 'skip comment approval'
   - 'subscribe paypal products'
   - 'use text format filtered_html'
   - 'user view agreement plan on profile'
