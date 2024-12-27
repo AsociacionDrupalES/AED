@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - field.field.node.videos.body
+    - field.field.node.videos.comment_node_videos
     - field.field.node.videos.field_slides
     - field.field.node.videos.field_video_ponente
     - field.field.node.videos.field_video_url
@@ -114,6 +115,7 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
+  comment_node_videos: true
   created: true
   path: true
   promote: true

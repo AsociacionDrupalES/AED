@@ -5,6 +5,7 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.videos.body
+    - field.field.node.videos.comment_node_videos
     - field.field.node.videos.field_slides
     - field.field.node.videos.field_video_ponente
     - field.field.node.videos.field_video_url
@@ -35,6 +36,7 @@ content:
     region: content
 hidden:
   body: true
+  comment_node_videos: true
   field_slides: true
   field_video_ponente: true
   field_videos_ano: true
