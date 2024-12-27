@@ -1,0 +1,32 @@
+ASOCIACIÓN ESPAÑOLA DE DRUPAL
+_______________________________________________________________________________
+
+PEOPLE
+Per https://github.com/AsociacionDrupalES/AED/graphs/contributors
+
+Fran Garcia-Linares
+https://github.com/fjgarlin
+
+Jonathan Araña Cruz
+https://github.com/jonhattan
+
+Marcelo Tosco
+https://github.com/capynet
+
+Alvaro J. Hurtado Villegas
+https://github.com/alvar0hurtad0
+
+Pedro González Serrano
+https://github.com/NITEMAN
+
+Ignacio Sánchez
+https://github.com/isholgueras
+
+Interdruper
+https://github.com/interdruper
+
+Javier Villarroya
+https://github.com/javivf
+
+KrisMagjistari
+https://github.com/KrisMagjistari
