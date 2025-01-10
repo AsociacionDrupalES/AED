@@ -28,6 +28,7 @@ module:
   facets: 0
   field: 0
   field_group: 0
+  field_group_accordion: 0
   field_permissions: 0
   field_ui: 0
   file: 0
@@ -36,6 +37,8 @@ module:
   history: 0
   honeypot: 0
   image: 0
+  jquery_ui: 0
+  jquery_ui_accordion: 0
   layout_discovery: 0
   link: 0
   linked_image_field: 0
@@ -60,7 +63,7 @@ module:
   slick_ui: 0
   slick_views: 0
   social_links_simple: 0
-  swiftmailer: 0
+  symfony_mailer_lite: 0
   syslog: 0
   system: 0
   taxonomy: 0

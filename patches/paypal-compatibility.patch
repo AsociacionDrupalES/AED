@@ -1,0 +1,13 @@
+diff --git a/lib/PayPal/Log/PayPalLogger.php b/lib/PayPal/Log/PayPalLogger.php
+index 6be02ec..9f033e2 100644
+--- a/lib/PayPal/Log/PayPalLogger.php
++++ b/lib/PayPal/Log/PayPalLogger.php
+@@ -72,7 +72,7 @@ class PayPalLogger extends AbstractLogger
+         }
+     }
+ 
+-    public function log($level, $message, array $context = array())
++    public function log($level, $message, array $context = array()) : void
+     {
+         if ($this->isLoggingEnabled) {
+             // Checks if the message is at level below configured logging level

@@ -1,0 +1,18 @@
+uuid: bfaabe31-65e3-4927-aef4-6f66b335b6f1
+langcode: en
+status: true
+dependencies: {  }
+id: smtp
+label: SMTP
+plugin: smtp
+configuration:
+  user: CHANGE-ME
+  pass: CHANGE-ME
+  host: smtp.mailgun.org
+  port: 25
+  query:
+    verify_peer: true
+    local_domain: ''
+    restart_threshold: null
+    restart_threshold_sleep: null
+    ping_threshold: null
