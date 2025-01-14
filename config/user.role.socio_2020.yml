@@ -1,9 +1,12 @@
 uuid: 14702b14-b0fc-422a-94c4-3e7e8926bb6d
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file
 id: socio_2020
 label: 'Socio 2020'
 weight: 2
 is_admin: null
-permissions: {  }
+permissions:
+  - 'delete own files'

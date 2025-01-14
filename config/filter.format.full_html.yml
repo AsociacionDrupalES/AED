@@ -11,25 +11,27 @@ name: 'Full HTML'
 format: full_html
 weight: 1
 filters:
-  filter_htmlcorrector:
-    id: filter_htmlcorrector
-    provider: filter
-    status: true
-    weight: 10
-    settings: {  }
+  blazy_filter:
+    id: blazy_filter
+    provider: blazy
+    status: false
+    weight: 3
+    settings:
+      filter_tags:
+        img: img
+        iframe: iframe
+      media_switch: ''
+      box_style: ''
+      box_media_style: ''
+      hybrid_style: ''
+      use_data_uri: '0'
+      box_caption: ''
   filter_autop:
     id: filter_autop
     provider: filter
     status: true
     weight: 1
     settings: {  }
-  filter_url:
-    id: filter_url
-    provider: filter
-    status: true
-    weight: 0
-    settings:
-      filter_url_length: 72
   filter_html:
     id: filter_html
     provider: filter
@@ -39,20 +41,19 @@ filters:
       allowed_html: '<a class="btn-black">'
       filter_html_help: true
       filter_html_nofollow: false
-  blazy_filter:
-    id: blazy_filter
-    provider: blazy
-    status: false
-    weight: 3
+  filter_htmlcorrector:
+    id: filter_htmlcorrector
+    provider: filter
+    status: true
+    weight: 10
+    settings: {  }
+  filter_url:
+    id: filter_url
+    provider: filter
+    status: true
+    weight: 0
     settings:
-      media_switch: ''
-      hybrid_style: ''
-      box_style: ''
-      box_caption: ''
-      filter_tags:
-        img: img
-        iframe: iframe
-      use_data_uri: '0'
+      filter_url_length: 72
   slick_filter:
     id: slick_filter
     provider: slick
@@ -60,12 +61,12 @@ filters:
     weight: 4
     settings:
       optionset: default
+      media_switch: ''
       layout: ''
       background: false
       loading: ''
       preload: false
       image_style: ''
-      media_switch: ''
       ratio: ''
       thumbnail_style: ''
       skin: ''

@@ -1,9 +1,12 @@
 uuid: f9c97831-4f1d-4505-86b3-5e9196ce0cdc
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file
 id: socio_2016
 label: 'Socio 2016'
 weight: -2
 is_admin: null
-permissions: {  }
+permissions:
+  - 'delete own files'

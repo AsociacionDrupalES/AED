@@ -1,6 +1,7 @@
 _core:
   default_config_hash: UVH1aJ4b44UM-VdPVN7hNNuuVqfReJxwfVeDQH1Hvsk
+mode: simple
 ignored_config_entities:
   - paypal_sdk.settings
-  - symfony_mailer_lite.symfony_mailer_lite_transport.smtp.configuration.user
   - symfony_mailer_lite.symfony_mailer_lite_transport.smtp.configuration.pass
+  - symfony_mailer_lite.symfony_mailer_lite_transport.smtp.configuration.user

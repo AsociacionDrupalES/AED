@@ -1,10 +1,13 @@
 uuid: 986b6e70-3b5a-496c-ada9-81867ad20cc0
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - file
 id: socio
 label: Socio
 weight: -6
 is_admin: null
 permissions:
   - 'change own username'
+  - 'delete own files'

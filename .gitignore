@@ -64,7 +64,7 @@
 /web/modules/contrib/
 /web/themes/contrib/
 /web/profiles/contrib/
-# /web/libraries/
+/web/libraries/
 
 # Generally you should only ignore the root vendor directory. It's important
 # that core/assets/vendor and any other vendor directories within contrib or

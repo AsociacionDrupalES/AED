@@ -6,3 +6,4 @@ name: 'Países y regiones'
 vid: paises
 description: 'Estructura todos los países, comunidades, provincias'
 weight: 0
+new_revision: false

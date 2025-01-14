@@ -1,8 +1,0 @@
-uuid: 53c652e2-c659-4d79-8279-9fb86c75e00d
-langcode: en
-status: true
-dependencies: {  }
-id: comment_node_videos
-label: 'Videos comment'
-target_entity_type_id: node
-description: null

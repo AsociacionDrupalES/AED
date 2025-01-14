@@ -3,18 +3,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.storage.node.field_video_ponente
-    - field.storage.node.field_videos_audiencia
-    - field.storage.node.field_videos_version
-    - field.storage.node.field_videos_nivel
-    - field.storage.node.field_videos_idioma
-    - field.storage.node.field_videos_evento
-    - field.storage.node.field_videos_ano
     - field.storage.node.body
+    - field.storage.node.field_video_ponente
+    - field.storage.node.field_videos_ano
+    - field.storage.node.field_videos_audiencia
+    - field.storage.node.field_videos_evento
+    - field.storage.node.field_videos_idioma
+    - field.storage.node.field_videos_nivel
+    - field.storage.node.field_videos_version
     - search_api.server.videos
   module:
     - node
-    - search_api
 id: ct_videos
 name: 'CT Videos'
 description: ''

@@ -1,4 +1,4 @@
-environment: live
+environment: sandbox
 live_client_id: CHANGE-ME
 live_client_secret: CHANGE-ME
 sandbox_client_id: CHANGE-ME

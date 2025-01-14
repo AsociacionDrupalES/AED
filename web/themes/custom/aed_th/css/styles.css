@@ -1610,6 +1610,11 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   margin: 0;
 }
 
+.contact-message-form .captcha #edit-captcha-response {
+  display: inline-block;
+  width: auto;
+}
+
 .user-login-overlay > div {
   text-align: center;
   position: relative;

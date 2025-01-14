@@ -5,7 +5,6 @@ dependencies:
   config:
     - filter.format.filtered_html
   module:
-    - comment
     - contact
     - filter
     - media
@@ -18,7 +17,6 @@ label: 'usuario anónimo'
 weight: -10
 is_admin: false
 permissions:
-  - 'access comments'
   - 'access content'
   - 'access site-wide contact form'
   - 'access user profiles'

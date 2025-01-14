@@ -1,5 +1,5 @@
 name: aed_user
 type: module
 description: Gestion de usuarios
-core_version_requirement: ^8 || ^9 || ^10
+core_version_requirement: ^8 || ^9 || ^10 || ^11
 package: Custom

@@ -1,0 +1,7 @@
+uuid: f2b4995c-de8c-4c54-b4c0-b029e789b3ce
+langcode: en
+status: false
+dependencies: {  }
+formId: node_subscriptions_form
+captchaType: default
+label: node_subscriptions_form
