@@ -6,3 +6,4 @@ name: Versión
 vid: videos_version
 description: 'Vídeos - versión'
 weight: 0
+new_revision: false

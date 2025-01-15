@@ -6,7 +6,24 @@
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/imlolman/PayPal-PHP-SDK.git"
+            "url": "https://github.com/fjgarlin/PayPal-PHP-SDK.git"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "jjj/chosen",
+                "version": "2.2.1",
+                "type": "drupal-library",
+                "source": {
+                    "url": "https://github.com/JJJ/chosen.git",
+                    "type": "git",
+                    "reference": "2.2.1"
+                }
+            }
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         },
         {
             "type": "composer",
@@ -17,11 +34,12 @@
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.6",
         "drupal/admin_toolbar": "^3",
-        "drupal/blazy": "^2.0",
-        "drupal/chosen": "^3.0",
+        "drupal/blazy": "^3.0",
+        "drupal/captcha": "^2.0",
+        "drupal/chosen": "^4.0",
         "drupal/classy": "^1.0",
         "drupal/config_filter": "^2.0",
-        "drupal/config_ignore": "^2.0",
+        "drupal/config_ignore": "^3.3",
         "drupal/contact_storage": "^1.0",
         "drupal/core-composer-scaffold": "^10.1",
         "drupal/core-project-message": "^10.1",
@@ -39,13 +57,19 @@
         "drupal/pathauto": "^1",
         "drupal/redis": "^1.5",
         "drupal/search_api": "^1.14",
-        "drupal/slick": "^2.9",
-        "drupal/slick_views": "^2.7",
-        "drupal/stage_file_proxy": "^2.1",
-        "drupal/swiftmailer": "^2.0",
+        "drupal/slick": "^3.0",
+        "drupal/slick_extras": "^2.0",
+        "drupal/slick_views": "^3.0",
+        "drupal/stage_file_proxy": "^3.1",
         "drupal/symfony_mailer_lite": "^2.0",
         "drupal/video_embed_field": "^2.0",
-        "drush/drush": "^12",
+        "drush/drush": "^12.5",
+        "enshrined/svg-sanitize": "^0.20.0",
+        "jjj/chosen": "2.2.1",
+        "league/commonmark": "^2.6",
+        "npm-asset/dompurify": "^3.2",
+        "npm-asset/slick-carousel": "1.8.0",
+        "oomphinc/composer-installers-extender": "^2.0",
         "paypal/rest-api-sdk-php": "dev-master",
         "vlucas/phpdotenv": "^5.4"
     },
@@ -63,7 +87,10 @@
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "drupal/core-vendor-hardening": true,
-            "phpstan/extension-installer": true
+            "oomphinc/composer-installers-extender": true,
+            "php-http/discovery": true,
+            "phpstan/extension-installer": true,
+            "tbachert/spi": true
         }
     },
     "extra": {
@@ -71,12 +98,18 @@
         "patchLevel": {
             "drupal/core": "-p2"
         },
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
             "web/core": [
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -101,12 +134,6 @@
             ]
         },
         "patches": {
-            "drupal/core": {
-                "Syslog error": "patches/3333215-22.patch"
-            },
-            "paypal/rest-api-sdk-php": {
-                "Compatibility": "patches/paypal-compatibility.patch"
-            }
         },
         "drupal-scaffold": {
             "locations": {

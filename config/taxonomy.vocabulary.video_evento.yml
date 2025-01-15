@@ -6,3 +6,4 @@ name: Evento
 vid: video_evento
 description: 'Video - evento'
 weight: 0
+new_revision: false

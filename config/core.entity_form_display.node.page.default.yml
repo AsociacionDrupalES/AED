@@ -4,7 +4,6 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
-    - field.field.node.page.comment_node_page
     - node.type.page
   module:
     - path
@@ -82,5 +81,4 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
-hidden:
-  comment_node_page: true
+hidden: {  }

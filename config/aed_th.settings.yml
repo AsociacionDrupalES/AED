@@ -7,4 +7,6 @@ logo:
   use_default: 0
   path: 'public://isologo-aed-black-145x41_0.png'
 favicon:
-  use_default: 1
+  use_default: 0
+  path: themes/custom/aed_th/images/favicon.png
+  mimetype: image/png
