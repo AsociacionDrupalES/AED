@@ -145,6 +145,7 @@
         }
     },
     "scripts": {
+        "compile-css": ["bash UTIL/compile-css.sh"]
     },
     "require-dev": {
         "drupal/core-dev": "^10.1",
