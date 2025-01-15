@@ -1,9 +1,0 @@
-transport: smtp
-smtp_host: smtp.mailgun.org
-smtp_port: 25
-smtp_encryption: '0'
-smtp_credential_provider: swiftmailer
-smtp_credentials:
-  swiftmailer:
-    username: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
-    password: XXXX-VALUE-SHOULD-BE-SET-VIA-ENV-VARIABLE
