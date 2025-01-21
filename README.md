@@ -1,5 +1,18 @@
 # Web de la Asociación española de Drupal
 
+## Compilar CSS
+
+Short version:
+`composer compile-css`
+
+Long version:
+```
+nvm use 8
+cd web/themes/custom/aed_th
+yarn install
+yarn build
+```
+
 ## Contribuir
 
 Cualquiera que tenga un momento puede contribuir. Mira en [https://github.com/AsociacionDrupalES/AED/issues](https://github.com/AsociacionDrupalES/AED/issues) para poder ver todas las tareas pendientes.
