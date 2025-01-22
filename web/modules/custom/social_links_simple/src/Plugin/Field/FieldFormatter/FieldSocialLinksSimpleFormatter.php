@@ -34,7 +34,6 @@ class FieldSocialLinksSimpleFormatter extends LinkFormatter {
    */
   public function settingsSummary() {
     $summary = parent::settingsSummary();
-
     foreach ($summary as $k => $summary_line) {
       if ($summary_line->getUntranslatedString() == "Link text trimmed to @limit characters") {
         unset($summary[$k]);
@@ -49,11 +48,9 @@ class FieldSocialLinksSimpleFormatter extends LinkFormatter {
    */
   public function viewElements(FieldItemListInterface $items, $langcode) {
     $elements = parent::viewElements($items, $langcode);
-
     foreach ($elements as &$element) {
       /** @var  $url \Drupal\Core\URL */
       $url = $element['#url'];
-
       $social_link_labels = [
         'google' => 'Google+',
         'twitter' => 'Twitter',
@@ -68,11 +65,9 @@ class FieldSocialLinksSimpleFormatter extends LinkFormatter {
           $element['#options']['attributes']['class'] = 'social-' . $social_link_label_k . '-plus';
         }
       }
-
     }
 
     return $elements;
   }
-
 
 }

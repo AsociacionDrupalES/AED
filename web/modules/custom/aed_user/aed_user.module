@@ -7,7 +7,7 @@ use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 
 function aed_user_token_info() {
-  return array(
+  return [
     'tokens' => [
       'site' => [
         'login-url-or-user-url' => [
@@ -16,7 +16,7 @@ function aed_user_token_info() {
         ]
       ]
     ],
-  );
+  ];
 }
 
 
@@ -24,15 +24,12 @@ function aed_user_token_info() {
  * Implements hook_tokens().
  */
 function aed_user_tokens($type, $tokens, array $data, array $options, BubbleableMetadata $bubbleable_metadata) {
-  $replacements = array();
-
+  $replacements = [];
   if ($type == 'site') {
     foreach ($tokens as $name => $original) {
       switch ($name) {
         case 'login-url-or-user-url':
-
           $currentUser = \Drupal::currentUser();
-
           if ($currentUser->isAnonymous()) {
             /** @var \Drupal\Core\GeneratedUrl $result */
             $result = \Drupal::urlGenerator()->generateFromRoute('user.page', [], [], TRUE);
@@ -43,9 +40,8 @@ function aed_user_tokens($type, $tokens, array $data, array $options, Bubbleable
             $account = User::load($currentUser->id());
             $replacements[$original] = $account->toUrl('edit-form', []);
           }
-
-
           break;
+
       }
     }
   }
@@ -72,17 +68,14 @@ function aed_user_entity_extra_field_info() {
  */
 function aed_user_user_view(array &$build, UserInterface $account, EntityViewDisplayInterface $display) {
   if ($display->getComponent('member_years')) {
-
     $roles = $account->getRoles(TRUE);
     $years = [];
-
     foreach ($roles as $role_id) {
       if (strpos($role_id, 'socio_') !== FALSE) {
         $full_role = Role::load($role_id);
         $years[] = explode(' ', $full_role->get('label'))[1];
       }
     }
-
 
     $build['member_years'] = [
       '#type' => 'item',

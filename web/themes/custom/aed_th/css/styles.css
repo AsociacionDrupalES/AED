@@ -1615,6 +1615,10 @@ div.form-select.chosen-enable .chosen-drop li.no-results {
   width: auto;
 }
 
+.user-login-overlay.hidden {
+  display: none;
+}
+
 .user-login-overlay > div {
   text-align: center;
   position: relative;

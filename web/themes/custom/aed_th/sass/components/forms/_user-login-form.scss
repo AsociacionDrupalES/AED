@@ -1,4 +1,7 @@
 .user-login-overlay {
+  &.hidden {
+    display: none;
+  }
 
   > div {
     text-align: center;
