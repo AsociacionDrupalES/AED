@@ -20,7 +20,7 @@
       position: relative;
       padding-top: 35px;
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         width: 485px;
       }
 
@@ -87,7 +87,7 @@
     padding: 18px 34px 17px;
     margin: 0;
 
-    @include media ($tab) {
+    @media screen and (min-width: $tab) {
       text-align: left;
     }
 
@@ -97,7 +97,7 @@
       padding: 15px 75px 13px;
       margin-bottom: 15px;
 
-      @include media ($tab) {
+      @media screen and (min-width: $tab) {
         margin-bottom: 0;
       }
 
@@ -113,7 +113,7 @@
       font-weight: 700;
       display: block;
 
-      @include media ($tab) {
+      @media screen and (min-width: $tab) {
         display: inline-block;
         margin-left: 46px;
       }

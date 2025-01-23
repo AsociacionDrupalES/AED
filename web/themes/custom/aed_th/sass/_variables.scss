@@ -19,9 +19,9 @@ $color-blue-e: #0092cd;
 // ------------------------------------------
 // Breakpoints
 // ------------------------------------------
-$mob: new-breakpoint(min-width 320px);
-$tab: new-breakpoint(min-width 768px);
-$desk: new-breakpoint(min-width 1100px);
+$mob: 320px;
+$tab: 768px;
+$desk: 1100px;
 
 // ------------------------------------------
 // Fonts

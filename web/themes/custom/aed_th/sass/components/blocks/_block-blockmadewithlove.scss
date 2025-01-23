@@ -1,6 +1,6 @@
 #block-blockmadewithlove {
 
-  @include media ($desk) {
+  @media screen and (min-width: $desk) {
     width: 49%;
     float: right;
     clear: right;

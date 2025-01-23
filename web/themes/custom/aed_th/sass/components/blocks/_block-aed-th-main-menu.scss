@@ -15,7 +15,7 @@
       display: inline-block;
       margin-left: 15px;
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         margin-left: 30px;
       }
 
@@ -27,7 +27,7 @@
         font-size: 14px;
         text-transform: uppercase;
 
-        @include media ($desk) {
+        @media screen and (min-width: $desk) {
           font-size: 12px;
           font-weight: 100;
           letter-spacing: 1px;
@@ -47,7 +47,7 @@
     padding: 11px 22px;
     margin-left: 25px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       margin-left: 35px;
     }
 
@@ -65,13 +65,14 @@
   .hidden-menu {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
     width: 100%;
     height: 100%;
     background: #000;
     color: #fff;
     display: none;
     z-index: 1000;
+    max-width: 800px;
 
     &.open {
       border-top: 7px solid $color-blue-c;
@@ -86,7 +87,7 @@
       padding-left: 10px;
       padding-right: 10px;
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         padding-left: 40px;
         padding-right: 40px;
       }
@@ -98,14 +99,14 @@
       display: block;
 
       &:not(.menu-close) {
-        font-size: 26px;
+        font-size: 1.5rem;
         font-weight: 300;
         border-bottom: 1px solid $color-grey-d;
         position: relative;
         padding: 7px 10px 10px;
 
-        @include media ($desk) {
-          font-size: 33px;
+        @media screen and (min-width: $desk) {
+          font-size: 2rem;
           padding: 25px 15px 23px;
         }
 
@@ -132,7 +133,7 @@
         text-indent: -10000em;
         margin: 10px 10px 20px;
 
-        @include media ($desk) {
+        @media screen and (min-width: $desk) {
           width: 33px;
           height: 59px;
           margin: 0 40px 35px;
@@ -191,7 +192,7 @@
           background: url(image-url("icon-chevron-up-21x11.png")) no-repeat center;
           background-size: 30px;
 
-          @include media ($desk) {
+          @media screen and (min-width: $desk) {
             background-size: 40px;
           }
 
@@ -206,7 +207,7 @@
           > a {
             padding: 0 25px 8px;
 
-            @include media ($desk) {
+            @media screen and (min-width: $desk) {
               border-bottom: none;
               padding: 10px 48px 13px;
 
@@ -232,7 +233,7 @@
       background: url(image-url("icon-chevron-up-21x11.png")) no-repeat center;
       background-size: 30px;
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         background-size: 40px;
       }
 
@@ -247,7 +248,7 @@
       > a {
         padding: 0 25px 8px;
 
-        @include media ($desk) {
+        @media screen and (min-width: $desk) {
           border-bottom: none;
           padding: 10px 48px 13px;
 
@@ -277,7 +278,7 @@
     top: 9px;
     right: 2px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       width: 40px;
       background-size: 40px;
       top: 33px;

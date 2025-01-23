@@ -12,13 +12,11 @@
   "license": "ISC",
   "devDependencies": {
     "gulp": "^3.9.1",
-    "gulp-util": "*",
     "gulp-filter": "*",
     "gulp-sass": "*",
     "gulp-sass-glob": "*",
     "gulp-shell": "*",
     "gulp-sourcemaps": "*",
-    "node-bourbon": "*",
-    "node-neat": "*"
+    "gulp-util": "*"
   }
 }

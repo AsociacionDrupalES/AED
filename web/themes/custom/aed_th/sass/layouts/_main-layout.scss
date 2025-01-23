@@ -1,8 +1,14 @@
-.region-wrapper {
-  > * {
-    @include outer-container;
-    max-width: 1100px;
-  }
+.region-wrapper > * {
+  max-width: 68em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1100px;
+}
+
+.region-wrapper > *::after {
+  clear: both;
+  content: "";
+  display: table;
 }
 
 > .region--header {
@@ -13,7 +19,7 @@ body .region--content-wrapper > .region--content > div {
   padding-right: 10px;
   margin-bottom: 30px;
 
-  @include media($desk) {
+  @media screen and (min-width: $desk) {
     padding-left: 0;
     padding-right: 0;
     margin-bottom: 80px;
@@ -25,15 +31,27 @@ body .region--content-wrapper > .region--content > div {
 
   .region--left-wrapper {
 
-    @include media($desk) {
-      @include span-columns(3);
+    @media screen and (min-width: $desk) {
+      float: left;
+      display: block;
+      margin-right: 2.35765%;
+      width: 23.23176%;
+      &:last-child {
+        margin-right: 0;
+      }
     }
 
     + .region-content {
 
-      @include media($desk) {
-        @include span-columns(9);
-        @include omega;
+      @media screen and (min-width: $desk) {
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 74.41059%;
+        margin-right: 0;
+        &:last-child {
+          margin-right: 0;
+        }
       }
 
     }

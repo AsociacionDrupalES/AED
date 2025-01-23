@@ -8,16 +8,22 @@
     margin-left: auto;
     margin-right: auto;
 
-    @include media ($tab) {
+    @media screen and (min-width: $tab) {
       padding: 0;
     }
 
     .views-row {
       margin-bottom: 30px;
 
-      @include media ($tab) {
-        @include span-columns(6);
+      @media screen and (min-width: $tab) {
+        float: left;
+        display: block;
+        margin-right: 2.35765%;
+        width: 48.82117%;
         margin-bottom: 0;
+        &:last-child {
+          margin-right: 0;
+        }
       }
 
     }
@@ -27,11 +33,11 @@
   .more-link {
     text-align: center;
 
-    @include media ($tab) {
+    @media screen and (min-width: $tab) {
       margin-top: 50px;
     }
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       margin-top: 121px;
     }
 
