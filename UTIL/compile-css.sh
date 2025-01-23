@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-nvm install 8
+nvm install 22
 cd web/themes/custom/aed_th
 # rm -rf node_modules
 npm rebuild node-sass
