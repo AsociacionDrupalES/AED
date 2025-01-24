@@ -5,14 +5,14 @@
   text-align: center;
   margin-bottom: 30px;
 
-  @include media ($desk) {
+  @media screen and (min-width: $desk) {
     margin-bottom: 110px;
   }
 
   .field--name-body {
     padding: 50px 0 50px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       padding: 174px 0 113px;
     }
 

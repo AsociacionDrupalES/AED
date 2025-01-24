@@ -5,14 +5,14 @@
   &.view-display-id-page_1 {
     margin-bottom: 30px;
 
-    @include media($desk) {
+    @media screen and (min-width: $desk) {
       margin-bottom: 139px;
     }
 
     .view-header {
       margin-bottom: 30px;
 
-      @include media($desk) {
+      @media screen and (min-width: $desk) {
         line-height: 1.7;
         margin-bottom: 66px;
       }
@@ -36,7 +36,7 @@
       display: table;
       margin-bottom: 30px;
 
-      @include media($desk) {
+      @media screen and (min-width: $desk) {
         margin-bottom: 100px;
       }
 
@@ -88,7 +88,7 @@
     .item-list {
       margin-bottom: 30px;
 
-      @include media($desk) {
+      @media screen and (min-width: $desk) {
         margin-bottom: 80px;
       }
 
@@ -105,7 +105,7 @@
           // Litle reset
           margin: 0 0 20px;
 
-          @include media($desk) {
+          @media screen and (min-width: $desk) {
             width: 25%;
             float: left;
             text-align: left;
@@ -223,7 +223,7 @@
       text-align: center;
       margin-top: 20px;
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         margin-top: 80px;
       }
 

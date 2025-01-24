@@ -2,14 +2,14 @@
   text-align: center;
   margin-bottom: 30px;
 
-  @include media ($desk) {
+  @media screen and (min-width: $desk) {
     margin-bottom: 250px;
   }
 
   h2 {
     margin-bottom: 20px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       margin-bottom: 40px;
     }
 
@@ -30,7 +30,7 @@
     padding: 0;
     margin: 30px auto 0;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       width: 1050px;
       margin: 113px auto 77px;
     }
@@ -38,12 +38,12 @@
     li {
       margin-bottom: 40px;
 
-      @include media ($tab) {
+      @media screen and (min-width: $tab) {
         width: 33.33333%;
         float: left;
       }
 
-      @include media ($desk) {
+      @media screen and (min-width: $desk) {
         margin-bottom: 0;
       }
 
@@ -54,7 +54,7 @@
         padding-top: 215px;
         padding-bottom: 14px;
 
-        @include media ($desk) {
+        @media screen and (min-width: $desk) {
           width: 298px;
           padding-top: 330px;
         }
@@ -67,7 +67,7 @@
           background: url(image-url("circle-video-001.png")) no-repeat top center;
           background-size: contain;
 
-          @include media ($desk) {
+          @media screen and (min-width: $desk) {
             background-size: auto;
           }
 
@@ -77,7 +77,7 @@
           background: url(image-url("circle-video-002.png")) no-repeat top center;
           background-size: contain;
 
-          @include media ($desk) {
+          @media screen and (min-width: $desk) {
             background-size: auto;
           }
 
@@ -87,7 +87,7 @@
           background: url(image-url("circle-video-003.png")) no-repeat top center;
           background-size: contain;
 
-          @include media ($desk) {
+          @media screen and (min-width: $desk) {
             background-size: auto;
           }
 
@@ -106,7 +106,7 @@
           margin-left: -50px;
           margin-top: -75px;
 
-          @include media ($desk) {
+          @media screen and (min-width: $desk) {
             margin-top: -85px;
           }
 

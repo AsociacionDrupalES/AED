@@ -3,7 +3,7 @@ body.path-videos {
   .region--content {
     margin-bottom: 30px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       margin-bottom: 80px;
     }
 
@@ -20,14 +20,14 @@ body.path-videos {
       cursor: pointer;
       padding: 10px 15px;
 
-      @include media($tab) {
+      @media screen and (min-width: $tab) {
         background-position: 98% center;
       }
 
       &.active {
         background: black url(image-url('icon-chevron-up-21x11.png')) no-repeat 94% center;
 
-        @include media($tab) {
+        @media screen and (min-width: $tab) {
           background-position: 98% center;
         }
 
@@ -36,7 +36,7 @@ body.path-videos {
       &:first-child {
         display: block;
 
-        @include media($desk) {
+        @media screen and (min-width: $desk) {
           display: none;
         }
 
@@ -47,7 +47,7 @@ body.path-videos {
     .facet-wrapper {
       display: none;
 
-      @include media($desk) {
+      @media screen and (min-width: $desk) {
         display: block;
       }
 

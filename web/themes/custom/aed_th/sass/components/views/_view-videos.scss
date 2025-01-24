@@ -42,7 +42,7 @@
     .views-row {
       margin-bottom: 30px;
 
-      @include media($tab) {
+      @media screen and (min-width: $tab) {
         width: calc(33.333333333% - 26.666666667px);
         float: left;
         margin-right: 40px;

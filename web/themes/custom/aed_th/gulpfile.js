@@ -1,27 +1,20 @@
 'use strict';
-// @todo when we create a new partial and gulp is watching. It will not take care about that file until gulp task get re-run.
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var sourcemaps = require('gulp-sourcemaps');
-// neat includes bourbon.
-var neat = require('node-neat').includePaths;
+
+const gulp = require('gulp');
+const sass = require('gulp-sass')(require('sass'));
+const sourcemaps = require('gulp-sourcemaps');
 var sassGlob = require('gulp-sass-glob');
 
-gulp.task('sass', function () {
+function buildStyles() {
   return gulp.src('./sass/**/*.scss')
-    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe(sourcemaps.init())
     .pipe(sassGlob())
-    .pipe(sass({includePaths: neat}))
     .pipe(sass().on('error', sass.logError))
-    .pipe(sass({outputStyle: 'expanded'}))
-    .pipe(sourcemaps.write('.'))
+    .pipe(sourcemaps.write())
     .pipe(gulp.dest('./css'));
-});
+}
 
-// sass:watch
-gulp.task('sw', function () {
-  gulp.watch('./sass/**/*.scss', ['sass']);
-});
-
-// sass:watch
-gulp.task('build', ['sass']);
+exports.build = buildStyles;
+exports.watch = function () {
+  gulp.watch('./sass/**/*.scss', buildStyles);
+};

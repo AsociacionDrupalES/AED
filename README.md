@@ -2,16 +2,8 @@
 
 ## Compilar CSS
 
-Short version:
-`composer compile-css`
-
-Long version:
-```
-nvm use 8
-cd web/themes/custom/aed_th
-yarn install
-yarn build
-```
+Usa el `script` de `composer` creador para compilar CSS:
+`ddev composer compile-css`
 
 ## Contribuir
 

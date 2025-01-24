@@ -45,12 +45,12 @@
 
         $a.on('click', function (e) {
           e.preventDefault();
-          $loginBlock.removeClass('visually-hidden');
+          $loginBlock.removeClass('hidden');
         });
 
         $closeLoginBlock.on('click', function (e) {
           e.preventDefault();
-          $loginBlock.addClass('visually-hidden');
+          $loginBlock.addClass('hidden');
         });
 
         $(document).keyup(function (e) {

@@ -34,7 +34,6 @@ class FieldLinkedImageFormatter extends ImageFormatter {
    */
   public function settingsSummary() {
     $summary = parent::settingsSummary();
-
     $link_types = array(
       'content' => t('Linked to content'),
       'file' => t('Linked to file'),
@@ -58,12 +57,10 @@ class FieldLinkedImageFormatter extends ImageFormatter {
     $element = parent::viewElements($items, $langcode);
     $image_link_setting = $this->getSetting('image_link');
 
-
     // If the field is configurated to take a field as link we proceed:
     if (strpos($image_link_setting, 'field_') === 0) {
       $entity = $items->getEntity();
       $value = $entity->get($image_link_setting)->getValue();
-
       if ($value) {
         $url = $value[0]['uri'];
         $element[0]['#url'] = $url;
@@ -81,7 +78,6 @@ class FieldLinkedImageFormatter extends ImageFormatter {
    */
   private function fillWithLinkableFields(&$arr) {
     $fields = \Drupal::service('entity_field.manager')->getFieldDefinitions($this->fieldDefinition->getTargetEntityTypeId(), $this->fieldDefinition->getTargetBundle());
-
     foreach ($fields as $field_def) {
       if ($field_def instanceof FieldConfig && $field_def->getType() == 'link') {
         $arr[$field_def->getName()] = t('Linked to field ' . $field_def->getLabel());
