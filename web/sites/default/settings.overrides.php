@@ -2,6 +2,9 @@
 
 $settings['config_sync_directory'] = '../config';
 
+// Drupal 11 will default to having state cache enabled.
+$settings['state_cache'] = TRUE;
+
 # Tweak ddev redis config.
 $settings['redis.connection']['interface'] = 'PhpRedis';
 $settings['queue']['default'] = 'queue.redis';
