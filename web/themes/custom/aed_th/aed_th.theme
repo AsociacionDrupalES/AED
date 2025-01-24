@@ -18,13 +18,11 @@ function aed_th_preprocess_block(array &$variables) {
  * Implements hook_preprocess_form().
  */
 function aed_th_form_alter(&$form, $form_state, $form_id) {
-
   if ($form_id == 'views_exposed_form' && $form['#id'] == 'views-exposed-form-partners-page-1') {
     $form['anyos_patrocinados']['#chosen'] = TRUE;
   }
 
   if ($form_id == "user_login_form") {
-
     $request_password = \Drupal::linkGenerator()->generate(t('Have you forgotten?'), new \Drupal\Core\Url('user.pass', array(), array(
       'attributes' => array(
         'title' => t('Send password reset instructions via email.'),

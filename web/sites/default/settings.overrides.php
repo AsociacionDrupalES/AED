@@ -21,6 +21,12 @@ $settings['config_exclude_modules'] = [
   'upgrade_rector',
 ];
 
+// Do not allow config changes unless they are via `drush` or `local` setup.
+$settings['config_readonly'] = TRUE;
+if (PHP_SAPI === 'cli' || getenv('IS_DDEV_PROJECT') === 'true') {
+  $settings['config_readonly'] = FALSE;
+}
+
 // Paypal settings should be set at server level. If you need credentials for
 // "sandbox" or "live" environments, contact the AED to get them and put them
 // in your "settings.local.php" file, which will override these settings.

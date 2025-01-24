@@ -2,12 +2,12 @@
 @mixin font-size($mob, $tab: $mob, $desk: $tab) {
   font-size: $mob;
 
-  @include media($tab) {
+  @media screen and (min-width: $tab) {
     // tablet
     font-size: $tab;
   }
 
-  @include media($desk) {
+  @media screen and (min-width: $desk) {
     // desktop
     font-size: $desk;
   }

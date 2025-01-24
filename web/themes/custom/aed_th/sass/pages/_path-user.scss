@@ -4,7 +4,7 @@
     min-height: 240px;
     padding-bottom: 30px;
 
-    @include media ($desk) {
+    @media screen and (min-width: $desk) {
       padding-bottom: 80px;
     }
 
@@ -47,7 +47,7 @@
 
           > .form-item {
 
-            @include media($desk) {
+            @media screen and (min-width: $desk) {
               width: 50%;
 
               &:nth-child(odd) {
@@ -76,7 +76,7 @@
 
         .image-widget {
 
-          @include media($desk) {
+          @media screen and (min-width: $desk) {
             width: 100%;
             display: table;
 
@@ -139,7 +139,7 @@
     .field--name-user-picture {
       margin-bottom: 20px;
 
-      @include media($tab) {
+      @media screen and (min-width: $tab) {
         width: 200px;
         float: left;
         margin-right: 20px;
