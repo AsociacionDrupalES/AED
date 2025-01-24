@@ -4,6 +4,7 @@ status: true
 dependencies: {  }
 id: home
 label: Home
+description: null
 use_admin_theme: null
 path: /node
 access_logic: and

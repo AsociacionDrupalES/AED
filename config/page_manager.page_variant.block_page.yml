@@ -10,7 +10,6 @@ dependencies:
     - views.view.partners
   content:
     - 'block_content:basic:2b37f509-0b02-42f4-ae53-2e717974cbc7'
-    - 'block_content:basic:45f8374d-0894-41f3-a347-66fa860ff729'
   module:
     - block_content
     - views
@@ -69,18 +68,6 @@ variant_settings:
       region: top
       weight: -6
       uuid: b5268ce0-c398-4b40-93d6-add82a95954c
-    16d4c366-5cbd-4ded-8a95-875d972c25ad:
-      id: 'block_content:45f8374d-0894-41f3-a347-66fa860ff729'
-      label: Vídeos
-      label_display: visible
-      provider: block_content
-      status: true
-      info: ''
-      view_mode: full
-      context_mapping: {  }
-      region: top
-      weight: -5
-      uuid: 16d4c366-5cbd-4ded-8a95-875d972c25ad
     aa427ba5-08b9-4595-a7a8-17ba8923c7c9:
       id: 'views_block:local_groups-block_1'
       label: ''
