@@ -1,3 +1,34 @@
+.video-listing {
+  ul {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  li {
+    width: 200px;
+    height: 150px;
+    border: 1px solid grey;
+    text-align: center;
+    box-sizing: border-box;
+    background: lightgray;
+    padding-top: 10px;
+    &:hover {
+      background: #eaeaea;
+    }
+    &::before {
+      display: none !important;
+    }
+    a {
+      display: inline-block;
+      font-weight: bold;
+      width: 100%;
+      height: 100%;
+      background: transparent url(image-url("icon-play-103x104.png")) no-repeat -14px 58px;
+    }
+  }
+}
+
 body.path-videos {
 
   .region--content {

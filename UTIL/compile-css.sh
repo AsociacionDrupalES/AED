@@ -7,3 +7,5 @@ npm rebuild node-sass
 yarn install
 yarn build
 cd ../../../..
+
+drush cr
