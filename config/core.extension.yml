@@ -1,6 +1,7 @@
 _core:
   default_config_hash: m2GVq11UAOVuNgj8x0t5fMOPujpvQQ_zxLoaly1BMEU
 module:
+  aed: 0
   aed_user: 0
   automated_cron: 0
   blazy: 0
@@ -24,7 +25,6 @@ module:
   dynamic_page_cache: 0
   editor: 0
   email_registration: 0
-  facets: 0
   field: 0
   field_group: 0
   field_group_accordion: 0
@@ -58,8 +58,6 @@ module:
   paypal_sdk: 0
   phpass: 0
   redis: 0
-  search_api: 0
-  search_api_db: 0
   shortcut: 0
   slick: 0
   slick_ui: 0

@@ -1,0 +1,5 @@
+name: aed
+type: module
+description: AED related helpers
+core_version_requirement: ^10 || ^11
+package: Custom
