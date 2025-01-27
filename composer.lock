@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "53237720cb0f0632c6769f37c5597786",
+    "content-hash": "0eda6b2952a5b2389dd24160666c8614",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1532,75 +1532,6 @@
             }
         },
         {
-            "name": "drupal/config_filter",
-            "version": "2.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/config_filter.git",
-                "reference": "8.x-2.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/config_filter-8.x-2.7.zip",
-                "reference": "8.x-2.7",
-                "shasum": "7fe7161b93c7e24c6db135f1cf82d144bef66e50"
-            },
-            "require": {
-                "drupal/core": "^8.8 || ^9 || ^10 || ^11"
-            },
-            "conflict": {
-                "drush/drush": "<10"
-            },
-            "suggest": {
-                "drupal/config_split": "Split site configuration for different environments."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-2.7",
-                    "datestamp": "1727472458",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Fabian Bircher",
-                    "homepage": "https://www.drupal.org/u/bircher",
-                    "email": "opensource@fabianbircher.com",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "Nuvole Web",
-                    "homepage": "http://nuvole.org",
-                    "email": "info@nuvole.org",
-                    "role": "Maintainer"
-                },
-                {
-                    "name": "pescetti",
-                    "homepage": "https://www.drupal.org/user/436244"
-                }
-            ],
-            "description": "Config Filter allows other modules to interact with a ConfigStorage through filter plugins.",
-            "homepage": "https://www.drupal.org/project/config_filter",
-            "keywords": [
-                "Drupal",
-                "configuration",
-                "configuration management"
-            ],
-            "support": {
-                "source": "https://git.drupalcode.org/project/config_filter",
-                "issues": "https://www.drupal.org/project/issues/config_filter",
-                "slack": "https://drupal.slack.com/archives/C45342CDD"
-            }
-        },
-        {
             "name": "drupal/config_ignore",
             "version": "3.3.0",
             "source": {
@@ -2340,83 +2271,6 @@
             }
         },
         {
-            "name": "drupal/facets",
-            "version": "3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "3.0.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/facets-3.0.0.zip",
-                "reference": "3.0.0",
-                "shasum": "9fa44774d43aa065989cdf26b3992fa4029ae63e"
-            },
-            "require": {
-                "drupal/core": "^10.1 || ^11"
-            },
-            "conflict": {
-                "drupal/core": "<10.1.0",
-                "drupal/search_api": "<1.14"
-            },
-            "require-dev": {
-                "drupal/better_exposed_filters": "~7.0",
-                "drupal/jquery_ui_slider": "~2.1",
-                "drupal/jquery_ui_touch_punch": "~1.1",
-                "drupal/search_api": "1.x-dev"
-            },
-            "suggest": {
-                "drupal/better_exposed_filters": "Required for AJAX support for facets rendered as views exposed filters",
-                "drupal/jquery_ui_slider": "Required for the 'Facets Range Widget' module to work",
-                "drupal/jquery_ui_touch_punch": "Required for the 'Facets Range Widget' module to work"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "3.0.0",
-                    "datestamp": "1735915197",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "See all contributors",
-                    "homepage": "https://www.drupal.org/node/2348769/committers"
-                },
-                {
-                    "name": "drunken monkey",
-                    "homepage": "https://www.drupal.org/user/205582"
-                },
-                {
-                    "name": "mkalkbrenner",
-                    "homepage": "https://www.drupal.org/user/124705"
-                },
-                {
-                    "name": "nick_vh",
-                    "homepage": "https://www.drupal.org/user/122682"
-                },
-                {
-                    "name": "strykaizer",
-                    "homepage": "https://www.drupal.org/user/462700"
-                }
-            ],
-            "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
-            "homepage": "https://www.drupal.org/project/facets",
-            "support": {
-                "source": "https://git.drupalcode.org/project/facets.git",
-                "issues": "https://www.drupal.org/project/issues/facets",
-                "irc": "irc://irc.freenode.org/drupal-search-api"
-            }
-        },
-        {
             "name": "drupal/field_group",
             "version": "3.6.0",
             "source": {
@@ -3120,73 +2974,6 @@
             "homepage": "https://www.drupal.org/project/redis",
             "support": {
                 "source": "https://git.drupalcode.org/project/redis"
-            }
-        },
-        {
-            "name": "drupal/search_api",
-            "version": "1.37.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.37"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.37.zip",
-                "reference": "8.x-1.37",
-                "shasum": "76d9b5850d7fce9df8fc6cf8c49450ab541f455d"
-            },
-            "require": {
-                "drupal/core": "^10.2 || ^11"
-            },
-            "conflict": {
-                "drupal/search_api_solr": "2.* || 3.0 || 3.1"
-            },
-            "require-dev": {
-                "drupal/language_fallback_fix": "@dev",
-                "drupal/search_api_autocomplete": "@dev",
-                "drupal/search_api_db": "*"
-            },
-            "suggest": {
-                "drupal/facets": "Adds the ability to create faceted searches.",
-                "drupal/search_api_autocomplete": "Allows adding autocomplete suggestions to search fields.",
-                "drupal/search_api_solr": "Adds support for using Apache Solr as a backend."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "drupal": {
-                    "version": "8.x-1.37",
-                    "datestamp": "1732727356",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Thomas Seidl",
-                    "homepage": "https://www.drupal.org/u/drunken-monkey"
-                },
-                {
-                    "name": "Nick Veenhof",
-                    "homepage": "https://www.drupal.org/u/nick_vh"
-                },
-                {
-                    "name": "See other contributors",
-                    "homepage": "https://www.drupal.org/node/790418/committers"
-                }
-            ],
-            "description": "Provides a generic framework for modules offering search capabilities.",
-            "homepage": "https://www.drupal.org/project/search_api",
-            "support": {
-                "source": "https://git.drupalcode.org/project/search_api",
-                "issues": "https://www.drupal.org/project/issues/search_api",
-                "irc": "irc://irc.freenode.org/drupal-search-api"
             }
         },
         {
