@@ -1,0 +1,5 @@
+services:
+  aed.path_processor_inbound:
+    class: Drupal\aed\PathProcessor\InboundPathProcessor
+    tags:
+      - { name: path_processor_inbound, priority: 200 }
