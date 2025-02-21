@@ -57,13 +57,19 @@ class FieldSocialLinksSimpleFormatter extends LinkFormatter {
         'facebook' => 'Facebook',
         'linkedin' => 'Linkedin',
         'drupal' => 'Drupal.org',
+        'github' => 'GitHub',
       ];
 
+      $found = FALSE;
       foreach ($social_link_labels as $social_link_label_k => $social_link_label) {
         if (strpos($url->getUri(), $social_link_label_k) !== FALSE) {
           $element['#title'] = $social_link_label;
           $element['#options']['attributes']['class'] = 'social-' . $social_link_label_k . '-plus';
+          $found = TRUE;
         }
+      }
+      if (!$found) {
+        $element['#options']['attributes']['class'] = 'social-other';
       }
     }
 
