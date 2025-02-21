@@ -57,6 +57,7 @@ class FieldSocialLinksSimpleFormatter extends LinkFormatter {
         'facebook' => 'Facebook',
         'linkedin' => 'Linkedin',
         'drupal' => 'Drupal.org',
+        'github' => 'GitHub',
       ];
 
       $found = FALSE;

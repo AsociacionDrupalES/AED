@@ -94,6 +94,12 @@
             background: url(image-url("icon-chevron-right.png")) no-repeat center;
           }
 
+          &.social-github-plus:before {
+            background: url(image-url("icon-github-45x40.png")) no-repeat center;
+            background-size: 16px 16px;
+            filter: brightness(30%);
+          }
+
           &.social-google-plus:before {
             background: url(image-url("icon-bo-18x16.png")) no-repeat center;
           }
