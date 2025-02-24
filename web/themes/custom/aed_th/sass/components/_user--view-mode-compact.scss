@@ -20,6 +20,8 @@
 
     a {
       display: block;
+      max-height: 60px;
+      overflow: hidden;
     }
 
     img {
@@ -31,10 +33,18 @@
 
   }
 
+  .field--name-user-picture + .user-details {
+    padding-left: 0px;
+  }
+
   .user-details {
     width: 100%;
     position: relative;
     vertical-align: top;
+    padding-left: 60px;
+    @media screen and (min-width: $desk) {
+      padding-left: 80px;
+    }
 
     .field--name-field-name {
       font-size: 26px;
@@ -53,9 +63,6 @@
 
       @media screen and (min-width: $desk) {
         width: 100%;
-        position: absolute;
-        left: 0;
-        bottom: 0;
       }
 
       .field__item {
@@ -81,6 +88,16 @@
             vertical-align: middle;
             margin-top: -5px;
             margin-right: 6px;
+          }
+
+          &.social-other:before {
+            background: url(image-url("icon-chevron-right.png")) no-repeat center;
+          }
+
+          &.social-github-plus:before {
+            background: url(image-url("icon-github-45x40.png")) no-repeat center;
+            background-size: 16px 16px;
+            filter: brightness(30%);
           }
 
           &.social-google-plus:before {
