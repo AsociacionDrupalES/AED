@@ -46,6 +46,7 @@
         "drupal/core-recommended": "^10.1",
         "drupal/core-vendor-hardening": "^10.1",
         "drupal/custom_breadcrumbs": "^1.1",
+        "drupal/devel": "^5.3",
         "drupal/email_registration": "^1.0",
         "drupal/field_group": "^3.0",
         "drupal/field_permissions": "^1.0",

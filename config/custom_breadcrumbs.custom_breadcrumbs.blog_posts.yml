@@ -1,0 +1,15 @@
+uuid: 65c85481-f5f4-496f-a555-d7cc0193297f
+langcode: en
+status: true
+dependencies: {  }
+id: blog_posts
+label: 'Blog posts'
+description: ''
+entityType: node
+entityBundle: article
+language: und
+breadcrumbPaths: /articles
+breadcrumbTitles: Blog
+type: '1'
+pathPattern: ''
+extraCacheContexts: ''
