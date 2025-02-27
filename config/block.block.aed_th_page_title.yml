@@ -3,7 +3,7 @@ langcode: en
 status: true
 dependencies:
   module:
-    - ctools
+    - node
     - system
   theme:
     - aed_th
@@ -12,7 +12,7 @@ _core:
 id: aed_th_page_title
 theme: aed_th
 region: content
-weight: -13
+weight: -8
 provider: null
 plugin: page_title_block
 settings:

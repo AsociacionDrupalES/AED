@@ -13,7 +13,7 @@ _core:
 id: aed_th_account_menu
 theme: aed_th
 region: header
-weight: -7
+weight: -9
 provider: null
 plugin: 'system_menu_block:account'
 settings:

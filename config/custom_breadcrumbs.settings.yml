@@ -1,0 +1,9 @@
+_core:
+  default_config_hash: 1UhmOSvn6ZsaqBRRQ9VNQ3RrPKNpv3Mv-8S1V3ETTOE
+home: true
+home_link: Home
+current_page: true
+current_page_link: false
+trim_title: 0
+admin_pages_disable: false
+site_wide: false

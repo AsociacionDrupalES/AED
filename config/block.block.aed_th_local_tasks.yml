@@ -9,7 +9,7 @@ _core:
 id: aed_th_local_tasks
 theme: aed_th
 region: content
-weight: -14
+weight: -9
 provider: null
 plugin: local_tasks_block
 settings:

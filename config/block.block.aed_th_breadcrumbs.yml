@@ -1,9 +1,9 @@
 uuid: 1b608898-d27c-42d7-84e6-69d3e6e4f33d
 langcode: en
-status: false
+status: true
 dependencies:
   module:
-    - ctools
+    - node
     - system
   theme:
     - aed_th
@@ -11,8 +11,8 @@ _core:
   default_config_hash: oXUb3JZR2WW5VOdw4HrhRicCsq51mCgLfRyvheG68ck
 id: aed_th_breadcrumbs
 theme: aed_th
-region: header
-weight: -13
+region: content
+weight: -10
 provider: null
 plugin: system_breadcrumb_block
 settings:
@@ -21,15 +21,9 @@ settings:
   label_display: '0'
   provider: system
 visibility:
-  request_path:
-    id: request_path
-    negate: true
-    context_mapping: {  }
-    pages: "/contact\r\n/contact/*\r\n/videos"
   'entity_bundle:node':
     id: 'entity_bundle:node'
     negate: true
     context_mapping:
       node: '@node.node_route_context:node'
-    bundles:
-      videos: videos
+    bundles: {  }

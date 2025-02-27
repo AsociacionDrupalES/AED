@@ -1,0 +1,15 @@
+uuid: e5a23530-ffc8-4092-8bea-cfd5c0c25c37
+langcode: en
+status: true
+dependencies: {  }
+id: partners
+label: Partners
+description: ''
+entityType: node
+entityBundle: partner
+language: und
+breadcrumbPaths: /partners
+breadcrumbTitles: 'Empresas colaboradoras'
+type: '1'
+pathPattern: ''
+extraCacheContexts: ''
