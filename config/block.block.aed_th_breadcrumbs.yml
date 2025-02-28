@@ -20,10 +20,4 @@ settings:
   label: Breadcrumbs
   label_display: '0'
   provider: system
-visibility:
-  'entity_bundle:node':
-    id: 'entity_bundle:node'
-    negate: true
-    context_mapping:
-      node: '@node.node_route_context:node'
-    bundles: {  }
+visibility: {  }

@@ -1,8 +1,14 @@
 // Listado de articles en /articles.
 .view-display-id-page_articles {
   .view-content {
+    display: flex;
+    flex-wrap: wrap;
     .views-row {
       margin-bottom: 30px;
+      @media (min-width:1100px) {
+        width: 48%;
+        margin-right: 20px;
+      }
     }
   }
 }

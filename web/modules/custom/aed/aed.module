@@ -1,7 +1,1 @@
 <?php
-
-function aed_system_breadcrumb_alter(\Drupal\Core\Breadcrumb\Breadcrumb &$breadcrumb, \Drupal\Core\Routing\RouteMatchInterface $route_match, array $context) {
-  dump('here');
-  // Add an item to the end of the breadcrumb.
-  // $breadcrumb->addLink(\Drupal\Core\Link::createFromRoute(t('Text'), 'example_route_name'));
-}
