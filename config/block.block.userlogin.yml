@@ -9,7 +9,7 @@ dependencies:
 id: userlogin
 theme: aed_th
 region: header
-weight: -14
+weight: -8
 provider: null
 plugin: user_login_block
 settings:

@@ -11,7 +11,7 @@ _core:
 id: aed_th_aed_system_main
 theme: aed_th
 region: content
-weight: -9
+weight: -4
 provider: null
 plugin: system_main_block
 settings:

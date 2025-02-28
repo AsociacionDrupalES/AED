@@ -7,6 +7,7 @@ dependencies:
     - core.entity_view_mode.node.teaser
     - core.entity_view_mode.node.views_teaser
     - node.type.article
+    - system.menu.main
   module:
     - node
     - user
@@ -26,7 +27,7 @@ display:
     display_plugin: default
     position: 0
     display_options:
-      title: Articles
+      title: Blog
       fields: {  }
       pager:
         type: some
@@ -360,6 +361,15 @@ display:
       display_description: ''
       display_extenders: {  }
       path: articles
+      menu:
+        type: normal
+        title: Blog
+        description: ''
+        weight: -46
+        expanded: false
+        menu_name: main
+        parent: ''
+        context: '0'
     cache_metadata:
       max-age: -1
       contexts:

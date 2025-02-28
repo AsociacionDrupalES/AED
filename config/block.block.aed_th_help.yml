@@ -11,7 +11,7 @@ _core:
 id: aed_th_help
 theme: aed_th
 region: content
-weight: -12
+weight: -7
 provider: null
 plugin: help_block
 settings:
