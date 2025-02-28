@@ -9,7 +9,7 @@ _core:
 id: aed_th_local_actions
 theme: aed_th
 region: content
-weight: -11
+weight: -6
 provider: null
 plugin: local_actions_block
 settings:

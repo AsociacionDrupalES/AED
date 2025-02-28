@@ -20,6 +20,7 @@ module:
   contact_storage: 0
   contextual: 0
   ctools: 0
+  custom_breadcrumbs: 0
   datetime: 0
   dblog: 0
   dynamic_page_cache: 0
@@ -44,6 +45,7 @@ module:
   linked_image_field: 0
   mailsystem: 0
   media: 0
+  menu_breadcrumb: 0
   menu_link_attributes: 0
   menu_ui: 0
   mysql: 0

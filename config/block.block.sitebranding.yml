@@ -9,7 +9,7 @@ dependencies:
 id: sitebranding
 theme: aed_th
 region: header
-weight: -9
+weight: -11
 provider: null
 plugin: system_branding_block
 settings:

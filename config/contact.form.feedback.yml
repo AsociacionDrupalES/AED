@@ -10,10 +10,11 @@ third_party_settings:
     show_preview: true
     disabled_form_message: 'This contact form has been disabled.'
     maximum_submissions_user: 0
+    page_autoreply_format: plain_text
 _core:
   default_config_hash: c4zaT5cyPxuTXI6JOWt3qRtMvICT9tHB6d9a5VG-CmQ
 id: feedback
-label: Contact
+label: Contacto
 recipients:
   - asociacion@drupal.es
 reply: ''

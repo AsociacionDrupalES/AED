@@ -114,7 +114,20 @@ display:
       cache:
         type: tag
         options: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          plugin_id: text
+          empty: true
+          content:
+            value: "No hay empresas colaboradoras aún para este año.\r\n\r\n"
+            format: basic_html
+          tokenize: false
       sorts:
         random:
           id: random
@@ -532,11 +545,9 @@ display:
           group_type: group
           admin_label: Intro
           plugin_id: text
-          empty: false
+          empty: true
           content:
-            value: |-
-              <h2>Empresas colaboradoras</h2>
-              <p>La Asociación Española de Drupal y las empresas colaboradoras participan juntas en la expansión de Drupal en la comunidad de habla hispana y principalmente de España promoviendo su uso, organizando todo tipo de eventos y sprints. Convirtiéndote en una empresa colaboradora, ayudas a la Asociación a que podamos seguir organizando la Drupal Camp y el Drupal Day entre otros eventos un año más. Contacta con nosotros para más detalles de qué incluye el paquete de colaboración.</p>
+            value: "<h2>Empresas colaboradoras</h2>\r\n<p>La Asociación Española de Drupal y las empresas colaboradoras participan juntas en la expansión de Drupal en la comunidad de habla hispana y principalmente de España promoviendo su uso, organizando todo tipo de eventos y sprints. Convirtiéndote en una empresa colaboradora, ayudas a la Asociación a que podamos seguir organizando la Drupal Camp y el Drupal Day entre otros eventos un año más. Contacta con nosotros para más detalles de qué incluye el paquete de colaboración.</p>"
             format: full_html
           tokenize: false
       footer:
@@ -548,22 +559,9 @@ display:
           group_type: group
           admin_label: 'Footing text'
           plugin_id: text
-          empty: false
+          empty: true
           content:
-            value: |-
-              <p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>
-              <ul>
-                  <li>Presencia del logo en la web corporativa de la AED</li>
-                  <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>
-                  <li>Patrocinio Bronce en la <a href="http://drupalcamp.es/">Drupalcamp Spain</a> y acceso preferente al modo Plata u Oro en caso de desearlo.</li>
-                  <li>Patrocinio Drupal Day.</li>
-                  <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante el año. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>
-                  <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>
-                  <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>
-                  <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>
-                  <li>Acceso al grupo de Linkedin: <a href="https://www.linkedin.com/grp/home?gid=8125102">linkedin</a></li>
-              </ul>
-              <a class="btn-black" href="/contact/feedback">Colabora con nosotros</a>.
+            value: "<p>Ya es posible iniciar una suscripción como empresa colaboradora de la Asociación o renovar su suscripción actual. El ser empresa colaboradora ayudará al desarrollo de la comunidad e implica interesantes ventajas:</p>\r\n<ul>\r\n    <li>Presencia del logo en la web corporativa de la AED</li>\r\n    <li>Posibilidad de colocar badges como empresa colaboradora en su web corporativa, información institucional, redes sociales, ofertas y cualquier otro medio de comunicación en que sea beneficiosa la publicación de la colaboración.</li>\r\n    <li>Patrocinio Bronce en la <a href=\"http://drupalcamp.es/\">Drupalcamp Spain</a> y acceso preferente al modo Plata u Oro en caso de desearlo.</li>\r\n    <li>Patrocinio Drupal Day.</li>\r\n    <li>Patrocinio y presencia en todas las actividades promovidas por la AED durante el año. Por ejemplo, sprints de código o colaboraciones de la AED en otros eventos.</li>\r\n    <li>Posibilidad de descuento en el patrocinio de aquellos eventos internacionales en cuya organización colabore la asociación (dependerá del acuerdo al que se llegue con la organización en cada caso).</li>\r\n    <li>Difusión de las actividades de la empresa desde nuestra cuenta oficial de Twitter.</li>\r\n    <li>Perfil completo de la empresa en nuestra web, en la que se podrán publicar casos de éxito, ofertas de empleo, etc.</li>\r\n    <li>Acceso al grupo de Linkedin: <a href=\"https://www.linkedin.com/grp/home?gid=8125102\">linkedin</a></li>\r\n</ul>\r\n<a class=\"btn-black\" href=\"/contact/feedback\">Colabora con nosotros</a>."
             format: full_html
           tokenize: false
       display_extenders: {  }
@@ -572,7 +570,7 @@ display:
         type: normal
         title: 'Empresas colaboradoras'
         description: ''
-        weight: -46
+        weight: -45
         expanded: false
         menu_name: main
         parent: ''
