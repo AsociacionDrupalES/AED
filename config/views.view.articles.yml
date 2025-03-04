@@ -335,7 +335,7 @@ display:
     position: 2
     display_options:
       pager:
-        type: full
+        type: mini
         options:
           offset: 0
           pagination_heading_level: h4
@@ -343,10 +343,8 @@ display:
           total_pages: null
           id: 0
           tags:
-            next: 'Next ›'
-            previous: '‹ Previous'
-            first: '« First'
-            last: 'Last »'
+            next: ››
+            previous: ‹‹
           expose:
             items_per_page: false
             items_per_page_label: 'Items per page'
@@ -355,7 +353,6 @@ display:
             items_per_page_options_all_label: '- All -'
             offset: false
             offset_label: Offset
-          quantity: 9
       defaults:
         pager: false
       display_description: ''

@@ -13,7 +13,7 @@ entity_type: node
 bundle: slider
 label: Image
 description: ''
-required: false
+required: true
 translatable: false
 default_value: {  }
 default_value_callback: ''
@@ -23,7 +23,7 @@ settings:
   file_directory: slides
   file_extensions: 'png gif jpg jpeg'
   max_filesize: ''
-  max_resolution: ''
+  max_resolution: 800x800
   min_resolution: ''
   alt_field: false
   alt_field_required: true

@@ -5,6 +5,7 @@ dependencies:
   config:
     - field.field.node.slider.body
     - field.field.node.slider.field_image_slide
+    - image.style.620_auto
     - node.type.slider
   module:
     - image
@@ -27,12 +28,13 @@ content:
     label: hidden
     settings:
       image_link: ''
-      image_style: ''
+      image_style: 620_auto
       image_loading:
         attribute: lazy
     third_party_settings: {  }
     weight: 2
     region: content
 hidden:
+  breadcrumbs: true
   links: true
   search_api_excerpt: true
