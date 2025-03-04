@@ -33,15 +33,10 @@
   }
 
   .field--name-field-image-slide {
-    z-index: 0;
-    opacity: .4;
-    position: absolute;
-    top: 0;
-    left: 0;
-
     @media screen and (min-width: $tab) {
       float: right;
       position: relative;
+      width: 50%;
     }
 
     @media screen and (min-width: $desk) {

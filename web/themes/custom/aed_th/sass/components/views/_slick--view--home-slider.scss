@@ -2,6 +2,9 @@
   position: relative;
 
   .slick-dots {
+    @media screen and (max-width: $tab) {
+      top: -20px;
+    }
     width: auto;
     position: absolute;
     top: 0;
