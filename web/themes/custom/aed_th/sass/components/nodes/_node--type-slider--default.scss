@@ -71,9 +71,11 @@
     }
 
     p {
-      font-size: 14px;
+      font-size: 24px;
+      text-align: center;
       font-weight: 500;
       margin: 0;
+      padding: 5px;
 
       @media screen and (min-width: $desk) {
         line-height: 1.8;
