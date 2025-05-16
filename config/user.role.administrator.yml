@@ -1,11 +1,18 @@
 uuid: 333aa2a2-bd15-471a-a986-a6521f5fa095
 langcode: en
 status: true
-dependencies: {  }
+dependencies:
+  module:
+    - field_permissions
 _core:
   default_config_hash: Om6FEO7vZZMkPIbVvfxtdkWerQ2PvQM4sWUd6Q3ZnfI
 id: administrator
 label: Administrator
 weight: -8
 is_admin: true
-permissions: {  }
+permissions:
+  - 'create field_paypal_agreement_id'
+  - 'edit field_paypal_agreement_id'
+  - 'edit own field_paypal_agreement_id'
+  - 'view field_paypal_agreement_id'
+  - 'view own field_paypal_agreement_id'
