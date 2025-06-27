@@ -74,7 +74,8 @@
         "vlucas/phpdotenv": "^5.4"
     },
     "conflict": {
-        "drupal/drupal": "*"
+        "drupal/drupal": "*",
+        "dealerdirect/phpcodesniffer-composer-installer": "1.1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
