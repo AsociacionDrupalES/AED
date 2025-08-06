@@ -4,6 +4,7 @@ status: true
 dependencies:
   config:
     - filter.format.filtered_html
+    - filter.format.webform_default
     - node.type.groups
     - node.type.partner
   module:
@@ -32,6 +33,7 @@ permissions:
   - 'skip CAPTCHA'
   - 'subscribe paypal products'
   - 'use text format filtered_html'
+  - 'use text format webform_default'
   - 'user view agreement plan on profile'
   - 'view media'
   - 'view own field_paypal_agreement_id'
