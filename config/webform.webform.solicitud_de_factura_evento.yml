@@ -52,7 +52,7 @@ settings:
   ajax_effect: ''
   ajax_speed: null
   page: true
-  page_submit_path: ''
+  page_submit_path: /solicitud-de-factura-evento
   page_confirm_path: ''
   page_theme_name: ''
   form_title: both
