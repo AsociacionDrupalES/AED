@@ -9,11 +9,12 @@ html {
 html body {
   color: black;
   font-family: $base-font-family;
-  font-size: 16px;
+  font-size: $font-size-small;
   line-height: $base-line-height;
+  font-weight: 200;
 
   @media screen and (min-width: $desk) {
-    font-size: 14px;
+    font-size: $font-size-base;
   }
 
   * {
@@ -57,19 +58,19 @@ h2 {
 }
 
 h3 {
-  font-size: 24px;
+  font-size: 26px;
 }
 
 h4 {
-  font-size: 20px;
+  font-size: 22px;
 }
 
 h5 {
-  font-size: 16px;
+  font-size: 18x;
 }
 
 h6 {
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .page-title {

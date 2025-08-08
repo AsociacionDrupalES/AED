@@ -44,7 +44,7 @@
     a {
       @include simple-button;
       @include black-button;
-      font-size: 12px;
+      font-size: $font-size-small;
       font-weight: 700;
       padding: 18px 18px 16px;
     }
