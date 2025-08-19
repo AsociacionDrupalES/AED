@@ -39,31 +39,10 @@ settings:
   plugins:
     ckeditor5_alignment:
       enabled_alignments:
-        - left
         - center
-        - right
         - justify
-    ckeditor5_heading:
-      enabled_headings:
-        - heading2
-        - heading3
-        - heading4
-        - heading5
-        - heading6
-    ckeditor5_imageResize:
-      allow_resize: true
-    ckeditor5_list:
-      properties:
-        reversed: true
-        startIndex: true
-      multiBlock: true
-    ckeditor5_sourceEditing:
-      allowed_tags: {  }
-    ckeditor5_style:
-      styles:
-        -
-          label: 'Button black'
-          element: '<a class="btn-black">'
+        - left
+        - right
     ckeditor5_codeBlock:
       languages:
         -
@@ -108,6 +87,27 @@ settings:
         -
           label: XML
           language: xml
+    ckeditor5_heading:
+      enabled_headings:
+        - heading2
+        - heading3
+        - heading4
+        - heading5
+        - heading6
+    ckeditor5_imageResize:
+      allow_resize: true
+    ckeditor5_list:
+      properties:
+        reversed: true
+        startIndex: true
+      multiBlock: true
+    ckeditor5_sourceEditing:
+      allowed_tags: {  }
+    ckeditor5_style:
+      styles:
+        -
+          label: 'Button black'
+          element: '<a class="btn-black">'
 image_upload:
   status: true
   scheme: public
