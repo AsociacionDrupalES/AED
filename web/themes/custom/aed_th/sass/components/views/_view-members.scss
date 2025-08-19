@@ -1,7 +1,7 @@
 .view-members {
 
   .view-header {
-    font-size: 16px;
+    font-size: $font-size-base;
     margin-bottom: 30px;
 
     @media screen and (min-width: $desk) {

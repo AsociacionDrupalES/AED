@@ -34,7 +34,7 @@ textarea {
 
   a {
     @include simple-button;
-    font-size: 12px;
+    font-size: $font-size-small;
     font-weight: 700;
     padding: 18px 30px 16px;
   }
@@ -44,7 +44,7 @@ textarea {
 .see-all {
   @include simple-button;
   @include black-button;
-  font-size: 12px;
+  font-size: $font-size-small;
   font-weight: 700;
   padding: 18px 18px 16px;
 }
@@ -52,7 +52,7 @@ textarea {
 input[type="submit"] {
   @include simple-button;
   @include black-button;
-  font-size: 12px;
+  font-size: $font-size-small;
   font-weight: 700;
   border: none;
   padding: 18px 22px 16px;
@@ -61,7 +61,7 @@ input[type="submit"] {
 input[value="Apply"] {
   @include simple-button;
   @include black-button;
-  font-size: 12px;
+  font-size: $font-size-small;
   font-weight: 700;
 }
 

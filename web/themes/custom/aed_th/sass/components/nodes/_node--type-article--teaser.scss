@@ -10,7 +10,7 @@
     }
 
     .field--name-node-post-date {
-      font-size: 18px;
+      font-size: $font-size-base;
       color: white;
       font-weight: 700;
       background: rgba(0, 0, 0, 0.71);
@@ -23,7 +23,7 @@
   }
 
   h2 {
-    font-size: 26px;
+    font-size: $font-size-big;
     font-weight: 700;
     margin: 0;
 
@@ -38,7 +38,7 @@
 
   .field--name-node-submitted-by {
     color: white;
-    font-size: 16px;
+    font-size: $font-size-base;
     background: #007382;
     padding: 16px 10px 17px;
     float: right;

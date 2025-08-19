@@ -8,7 +8,7 @@
   }
 
   .field--name-node-post-date {
-    font-size: 16px;
+    font-size: $font-size-base;
     font-weight: 300;
     margin-bottom: 7px;
   }
@@ -61,8 +61,6 @@
     }
 
     p {
-      line-height: 1.8;
-      font-weight: 300;
       margin: 0 0 15px;
     }
 
@@ -88,7 +86,7 @@
     }
 
     .field__label {
-      font-size: 13px;
+      font-size: $font-size-small;
       text-transform: uppercase;
       font-weight: 700;
       margin-bottom: 22px;

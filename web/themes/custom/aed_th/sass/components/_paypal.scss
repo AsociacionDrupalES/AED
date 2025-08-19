@@ -31,14 +31,18 @@
 
 .paypal-subscribe-link-container {
   margin: 0 auto;
-  width: 40%;
+  width: 55%;
+
+  @media screen and (min-width: $desk) {
+    width: 40%;
+  }
 
   .paypal-subscribe-link {
     padding: 30px;
     text-align: center;
     background: #16165f;
     color: white;
-    font-size: 22px;
+    font-size: $font-size-big;
     border-radius: 4px;
     display: block;
 

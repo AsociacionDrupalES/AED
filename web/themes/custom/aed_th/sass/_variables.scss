@@ -21,7 +21,14 @@ $color-blue-e: #0092cd;
 // ------------------------------------------
 $mob: 320px;
 $tab: 768px;
-$desk: 1100px;
+$desk: 1400px;
+
+// ------------------------------------------
+// Font sizes
+// ------------------------------------------
+$font-size-base: 18px;
+$font-size-small: 14px;
+$font-size-big: 24px;
 
 // ------------------------------------------
 // Fonts
@@ -89,7 +96,7 @@ $desk: 1100px;
 }
 
 $base-font-family: 'MuseoSans', sans-serif;
-$base-line-height: normal;
+$base-line-height: 1.5em;
 
 // Image path
 $image_base_path: '/themes/custom/aed_th/images/';
