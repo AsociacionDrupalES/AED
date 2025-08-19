@@ -3,6 +3,7 @@
   li {
 
     a {
+      font-size: $font-size-small;
       background: $color-grey-a;
 
       &:focus, &:hover {

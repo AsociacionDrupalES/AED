@@ -25,7 +25,6 @@
       }
 
       p {
-        font-weight: 300;
         margin: 0;
       }
 
@@ -134,9 +133,6 @@
     }
 
     .view-footer {
-      font-weight: 300;
-      line-height: 1.7;
-
       ul {
         @include ul-li-reset;
 
