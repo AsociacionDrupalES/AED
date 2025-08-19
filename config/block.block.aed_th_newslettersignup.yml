@@ -1,0 +1,30 @@
+uuid: 864fab04-052e-4b42-bf18-99e60db13378
+langcode: en
+status: true
+dependencies:
+  content:
+    - 'block_content:basic:843d546b-1436-44a9-a602-301de1ff26aa'
+  module:
+    - block_content
+    - system
+  theme:
+    - aed_th
+id: aed_th_newslettersignup
+theme: aed_th
+region: content
+weight: 0
+provider: null
+plugin: 'block_content:843d546b-1436-44a9-a602-301de1ff26aa'
+settings:
+  id: 'block_content:843d546b-1436-44a9-a602-301de1ff26aa'
+  label: 'Newsletter signup'
+  label_display: '0'
+  provider: block_content
+  status: true
+  info: ''
+  view_mode: full
+visibility:
+  request_path:
+    id: request_path
+    negate: false
+    pages: '<front>'
