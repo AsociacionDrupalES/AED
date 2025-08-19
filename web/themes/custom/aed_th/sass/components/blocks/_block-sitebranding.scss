@@ -1,8 +1,8 @@
 #block-sitebranding {
-
-  @media screen and (min-width: $desk) {
+  @media screen and (min-width: $mob) {
     width: 200px;
     float: left;
+    margin-top: 15px;
+    margin-bottom: 15px;
   }
-
 }

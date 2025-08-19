@@ -47,7 +47,7 @@
     }
 
     .field--name-field-name {
-      font-size: 26px;
+      font-size: $font-size-big;
       font-weight: 100;
       line-height: 26px;
       margin-bottom: 10px;
@@ -75,7 +75,7 @@
         }
 
         a {
-          font-size: 12px;
+          font-size: $font-size-small;
           font-weight: 400;
           text-transform: uppercase;
           position: relative;

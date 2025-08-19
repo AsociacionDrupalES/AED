@@ -25,7 +25,6 @@
       }
 
       p {
-        font-weight: 300;
         margin: 0;
       }
 
@@ -55,7 +54,7 @@
         margin: 0;
 
         .chosen-container {
-          font-size: 16px;
+          font-size: $font-size-base;
 
           .chosen-single {
             color: white;
@@ -134,9 +133,6 @@
     }
 
     .view-footer {
-      font-weight: 300;
-      line-height: 1.7;
-
       ul {
         @include ul-li-reset;
 
@@ -160,7 +156,7 @@
 
       p a {
         @include simple-button;
-        font-size: 12px;
+        font-size: $font-size-small;
         font-weight: 700;
         border: none;
         padding: 14px 22px 15px;

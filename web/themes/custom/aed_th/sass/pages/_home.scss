@@ -14,7 +14,7 @@
   }
 
   .view-header {
-    font-size: 22px;
+    font-size: $font-size-big;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -22,7 +22,6 @@
     margin-bottom: 30px;
 
     @media screen and (min-width: $desk) {
-      font-size: 17px;
       margin-bottom: 75px;
     }
 
