@@ -1,0 +1,18 @@
+uuid: c5e0a11b-1796-428b-96ba-0bd115f67175
+langcode: es
+status: true
+dependencies: {  }
+id: splash_awards_categories
+label: 'Categorías Splash Awards'
+category: General
+likert: false
+options: |-
+  1: Diseño/UX
+  2: 'Social / Sin ánimo de lucro'
+  3: Tecnología
+  4: Herramientas/Apps
+  5: Gubernamental
+  6: Tienda
+  7: 'Medios de comunicación'
+  8: Educación
+  9: Multiidioma
