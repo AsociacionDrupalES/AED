@@ -20,6 +20,7 @@
 # Ignore paths that contain user-generated content.
 /web/sites/*/files
 /web/sites/*/private
+/private-files/webform/
 
 # Ignore SimpleTest multi-site environment.
 /web/sites/simpletest
