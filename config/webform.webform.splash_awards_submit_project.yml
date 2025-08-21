@@ -47,26 +47,26 @@ elements: |-
       '#type': text_format
       '#title': 'Descripción del proyecto'
       '#description': '<p>Explica los objetivos del proyecto, el público objetivo, la funcionalidad, ...</p>'
-      '#allowed_formats':
-        webform: webform
-      '#hide_help': true
       '#required': true
+      '#allowed_formats':
+        plain_text: plain_text
+      '#hide_help': true
     challenges:
       '#type': text_format
       '#title': Desafíos
       '#description': '<p>Describe los mayores desafíos técnicos o funcionales del proyecto y cómo los resolviste</p>'
-      '#allowed_formats':
-        webform: webform
-      '#hide_help': true
       '#required': true
+      '#allowed_formats':
+        plain_text: plain_text
+      '#hide_help': true
     community_contributions:
       '#type': text_format
       '#title': 'Contribuciones a la comunidad'
       '#description': '<p>¿Este proyecto ha generado contribuciones al ecosistema de Drupal? Por ejemplo: módulos, parches, documentación, traducciones...</p>'
-      '#allowed_formats':
-        webform: webform
-      '#hide_help': true
       '#required': true
+      '#allowed_formats':
+        plain_text: plain_text
+      '#hide_help': true
     project_url:
       '#type': url
       '#title': URL
@@ -228,7 +228,7 @@ settings:
   draft_loaded_message: ''
   draft_pending_single_message: ''
   draft_pending_multiple_message: ''
-  confirmation_type: page
+  confirmation_type: inline
   confirmation_url: ''
   confirmation_title: ''
   confirmation_message: '<p>Se ha registrado correctamente tu proyecto.</p>'
@@ -321,7 +321,7 @@ handlers:
         - completed
       to_mail: _default
       to_options: {  }
-      bcc_mail: drupal.galicia@gmail.com
+      bcc_mail: ''
       bcc_options: {  }
       cc_mail: ''
       cc_options: {  }
