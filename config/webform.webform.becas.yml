@@ -1,7 +1,12 @@
 uuid: 490b8f17-3092-4ff8-bd2a-6932625c885a
 langcode: en
 status: open
-dependencies: {  }
+dependencies:
+  module:
+    - honeypot
+third_party_settings:
+  honeypot:
+    honeypot: true
 weight: 0
 open: null
 close: null
@@ -10,12 +15,12 @@ template: false
 archive: false
 id: becas
 title: Becas
-description: ''
+description: '<p>Programa de becas para eventos.</p>'
 categories: {  }
 elements: |-
   markup:
     '#type': webform_markup
-    '#markup': '<h2>Programa de Becas de la Asociación Española de Drupal</h2><p>Desde la Asociación Española de Drupal queremos apoyar a quienes desean participar activamente en la comunidad. Por eso ponemos en marcha este programa de becas, pensado para facilitar el acceso a diferentes eventos relacionados con Drupal.</p><p>La beca cubre la entrada al evento al que se conceda, pero es importante tener en cuenta que no incluye otros gastos como transporte, alojamiento o manutención, que deberán ser asumidos por la persona beneficiaria.</p>'
+    '#markup': '<h2>Programa de Becas de la Asociación Española de Drupal</h2><p>Desde la Asociación Española de Drupal queremos apoyar a quienes desean participar activamente en la comunidad. Por eso ponemos en marcha este programa de becas, pensado para facilitar el acceso a diferentes eventos relacionados con Drupal.</p><p>La beca cubre la entrada al evento al que se conceda, pero es importante tener en cuenta que no incluye otros gastos como transporte, alojamiento o manutención, que deberán ser asumidos por la persona beneficiaria.</p><p><strong>No hay becas activas por el momento. El formulario está cerrado.</strong></p>'
   nombre_completo:
     '#type': textfield
     '#title': 'Nombre completo'
@@ -31,12 +36,16 @@ elements: |-
   evento:
     '#type': textfield
     '#title': 'Evento al que se solicita la beca'
-    '#description': '<p>Activas:</p><ul><li>DrupalCon Vienna 2025</li></ul>'
+    '#description': '<p>Activas:</p><ul><li>No hay becas activas</li></ul><p><em>Pasadas:</em></p><ul><li><em>DrupalCon Vienna 2025</em></li></ul>'
     '#required': true
   motivacion:
     '#type': textarea
     '#title': Motivación
     '#required': true
+  actions:
+    '#type': webform_actions
+    '#title': 'Submit button(s)'
+    '#submit_hide': true
 css: ''
 javascript: ''
 settings:
@@ -49,7 +58,7 @@ settings:
   page_submit_path: /becas
   page_confirm_path: ''
   page_theme_name: ''
-  form_title: both
+  form_title: source_entity_webform
   form_submit_once: false
   form_open_message: ''
   form_close_message: ''
