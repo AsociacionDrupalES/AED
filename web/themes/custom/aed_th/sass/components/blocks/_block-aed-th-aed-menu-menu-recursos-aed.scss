@@ -62,6 +62,14 @@
           background: url(image-url("icon-github-45x40.png")) no-repeat center rgba(233, 233, 243, 1);
         }
 
+        &.linkedin {
+          background: url(image-url("icon-linkedin-45x40.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
+        &.mastodon {
+          background: url(image-url("icon-mastodon-45x40.png")) no-repeat center rgba(233, 233, 243, 1);
+        }
+
         &:hover, &:focus {
           background-color: rgba(233, 233, 243, 0.7);
         }
