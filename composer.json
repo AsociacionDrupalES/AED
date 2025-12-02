@@ -66,7 +66,7 @@
         "drupal/video_embed_field": "^2.0",
         "drupal/webform": "^6.2",
         "drush/drush": "^12.5",
-        "enshrined/svg-sanitize": "^0.20.0",
+        "enshrined/svg-sanitize": "^0.22.0",
         "jjj/chosen": "2.2.1",
         "league/commonmark": "^2.6",
         "npm-asset/dompurify": "^3.2",
