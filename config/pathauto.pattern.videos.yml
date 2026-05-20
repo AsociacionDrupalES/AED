@@ -7,12 +7,11 @@ dependencies:
 id: videos
 label: Videos
 type: 'canonical_entities:node'
-pattern: 'video/[node:title]'
+pattern: '/video/[node:title]'
 selection_criteria:
   22bd9514-49f5-4290-a70f-a4598a52eeab:
     id: 'entity_bundle:node'
     negate: false
-    uuid: 22bd9514-49f5-4290-a70f-a4598a52eeab
     context_mapping:
       node: node
     bundles:

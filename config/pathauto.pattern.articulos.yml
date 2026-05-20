@@ -2,17 +2,18 @@ uuid: 1b207704-562c-4854-925e-e7445639ea4d
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.article
   module:
     - node
 id: articulos
 label: Articulos
 type: 'canonical_entities:node'
-pattern: 'article/[node:title]'
+pattern: '/article/[node:title]'
 selection_criteria:
   f8b2e35c-2406-4869-897a-3284d7e3d74f:
     id: 'entity_bundle:node'
     negate: false
-    uuid: f8b2e35c-2406-4869-897a-3284d7e3d74f
     context_mapping:
       node: node
     bundles:
