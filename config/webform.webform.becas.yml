@@ -36,7 +36,7 @@ elements: |-
   evento:
     '#type': textfield
     '#title': 'Evento al que se solicita la beca'
-    '#description': '<p>Activas:</p><ul><li>No hay becas activas</li></ul><p><em>Pasadas:</em></p><ul><li><em>DrupalCon Vienna 2025</em></li></ul>'
+    '#description': '<p>Activas:</p><ul><li data-list-item-id="e3fe0c54207e9838cf8309cbca89ea9c1">DrupalCamp Spain 2026</li></ul><p><em>Pasadas:</em></p><ul><li class="ck-list-marker-italic" data-list-item-id="e19e3c4ffd4a1f40b89b921ada6bd62f5"><em>DrupalCon Vienna 2025</em></li></ul>'
     '#required': true
   motivacion:
     '#type': textarea
