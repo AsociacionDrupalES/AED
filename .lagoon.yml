@@ -1,0 +1,41 @@
+docker-compose-yaml: docker-compose.yml
+
+project: aed
+
+environment_variables:
+  git_sha: 'true'
+
+tasks:
+  post-rollout:
+    - run:
+        name: drush deploy
+        command: drush -y deploy
+        service: cli
+        shell: bash
+
+routes:
+  insecure: Redirect
+
+_route: &ROUTE
+ tls-acme: 'true'
+ insecure: Redirect
+ hsts: max-age=31536000;includeSubDomains;preload
+
+environments:
+  main:
+    routes:
+      - nginx:
+          - asociaciondrupal.es:  *ROUTE
+          - www.asociaciondrupal.es: *ROUTE
+
+    cronjobs:
+      - name: drush cron
+        schedule: "H * * * *" # This will run the cron once per hour.
+        command: drush cron
+        service: cli
+  dev:
+    cronjobs:
+      - name: drush cron
+        schedule: "H * * * *" # This will run the cron once per hour.
+        command: drush cron
+        service: cli
