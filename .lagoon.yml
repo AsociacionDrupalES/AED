@@ -25,15 +25,17 @@ environments:
   main:
     routes:
       - nginx:
-          - asociaciondrupal.es:  *ROUTE
+          - asociaciondrupal.es: *ROUTE
           - www.asociaciondrupal.es: *ROUTE
-
     cronjobs:
       - name: drush cron
         schedule: "H * * * *" # This will run the cron once per hour.
         command: drush cron
         service: cli
   dev:
+    routes:
+      - nginx:
+          - dev.asociaciondrupal.es: *ROUTE
     cronjobs:
       - name: drush cron
         schedule: "H * * * *" # This will run the cron once per hour.
