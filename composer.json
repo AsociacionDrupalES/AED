@@ -31,6 +31,7 @@
         }
     ],
     "require": {
+        "amazeeio/drupal_integrations": "^0.5.0",
         "composer/installers": "^2.3",
         "cweagans/composer-patches": "^1.6",
         "drupal/antibot": "^2.0",
@@ -53,11 +54,12 @@
         "drupal/field_permissions": "^1.0",
         "drupal/honeypot": "^2.0",
         "drupal/jquery_ui_accordion": "^2.1",
+        "drupal/lagoon_logs": "^3.0",
         "drupal/menu_breadcrumb": "^2.0",
         "drupal/menu_link_attributes": "^1.0",
         "drupal/page_manager": "^4.0",
         "drupal/pathauto": "^1",
-        "drupal/redis": "^1.5",
+        "drupal/redis": "^1.11",
         "drupal/slick": "^3.0",
         "drupal/slick_extras": "^2.0",
         "drupal/slick_views": "^3.0",
@@ -143,8 +145,12 @@
                 "web-root": "web/"
             },
             "file-mapping": {
-                "[web-root]/sites/development.services.yml": false
-            }
+                "[web-root]/sites/default/all.settings.php": "assets/all.settings.php",
+                "[web-root]/sites/redis-unavailable.services.yml": "assets/redis-unavailable.services.yml"
+            },
+            "allowed-packages": [
+                "amazeeio/drupal_integrations"
+            ]
         }
     },
     "scripts": {
