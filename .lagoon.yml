@@ -22,7 +22,7 @@ _route: &ROUTE
  hsts: max-age=31536000;includeSubDomains;preload
 
 environments:
-  main:
+  master:
     routes:
       - nginx:
           - asociaciondrupal.es: *ROUTE
