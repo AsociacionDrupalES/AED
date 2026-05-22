@@ -16,15 +16,18 @@ tasks:
 routes:
   insecure: Redirect
 
+_route: &ROUTE
+ tls-acme: 'true'
+ insecure: Redirect
+ hsts: max-age=31536000;includeSubDomains;preload
+
 environments:
   main:
     routes:
       - nginx:
-          - asociaciondrupal.es:
-              tls-acme: 'false'
-              wildcard: true
-              insecure: Redirect
-              hsts: max-age=31536000;includeSubDomains;preload
+          - asociaciondrupal.es:  *ROUTE
+          - www.asociaciondrupal.es: *ROUTE
+
     cronjobs:
       - name: drush cron
         schedule: "H * * * *" # This will run the cron once per hour.
