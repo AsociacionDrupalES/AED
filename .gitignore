@@ -148,3 +148,4 @@ test.php
 # NO dbs.
 *.sql
 *.sql.gz
+/.drush-lock-update
