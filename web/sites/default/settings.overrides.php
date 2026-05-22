@@ -1,6 +1,6 @@
 <?php
 
-$settings['config_sync_directory'] = '../config';
+$settings['config_sync_directory'] = '../config/sync';
 
 // Drupal 11 will default to having state cache enabled.
 $settings['state_cache'] = TRUE;
