@@ -20,7 +20,7 @@ categories: {  }
 elements: |-
   markup:
     '#type': webform_markup
-    '#markup': '<h2>Programa de Becas de la Asociación Española de Drupal</h2><p>Desde la Asociación Española de Drupal queremos apoyar a quienes desean participar activamente en la comunidad. Por eso ponemos en marcha este programa de becas, pensado para facilitar el acceso a diferentes eventos relacionados con Drupal.</p><p>La beca cubre la entrada al evento al que se conceda, pero es importante tener en cuenta que no incluye otros gastos como transporte, alojamiento o manutención, que deberán ser asumidos por la persona beneficiaria.</p><p><strong>No hay becas activas por el momento. El formulario está cerrado.</strong></p>'
+    '#markup': '<h2>Programa de Becas de la Asociación Española de Drupal</h2><p>Desde la Asociación Española de Drupal queremos apoyar a quienes desean participar activamente en la comunidad. Por eso ponemos en marcha este programa de becas, pensado para facilitar el acceso a diferentes eventos relacionados con Drupal.</p><p>La beca cubre la entrada al evento al que se conceda, pero es importante tener en cuenta que no incluye otros gastos como transporte, alojamiento o manutención, que deberán ser asumidos por la persona beneficiaria.</p>'
   nombre_completo:
     '#type': textfield
     '#title': 'Nombre completo'
@@ -45,7 +45,7 @@ elements: |-
   actions:
     '#type': webform_actions
     '#title': 'Submit button(s)'
-    '#submit_hide': true
+    '#submit_hide': false
 css: ''
 javascript: ''
 settings:
