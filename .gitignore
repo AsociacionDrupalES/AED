@@ -149,3 +149,8 @@ test.php
 *.sql
 *.sql.gz
 /.drush-lock-update
+
+# Lagoon generated files.
+web/sites/default/all.settings.php
+web/sites/default/default.development.services.yml
+web/sites/default/settings.lagoon.php
