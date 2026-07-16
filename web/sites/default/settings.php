@@ -823,4 +823,6 @@ if (getenv('IS_DDEV_PROJECT') == 'true' && is_readable($ddev_settings)) {
 }
 
 // Lagoon settings.
-include __DIR__ . "/settings.lagoon.php";
+if (file_exists(__DIR__ . '/settings.lagoon.php')) {
+  include __DIR__ . "/settings.lagoon.php";
+}
